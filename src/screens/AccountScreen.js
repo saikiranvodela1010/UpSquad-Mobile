@@ -19,28 +19,34 @@ class AccountScreen extends React.Component {
         >
           <View style={{alignItems:'flex-end'}}>
          <Image source={ImagesWrapper.toppng}
-                     resizeMode="cover" style={{opacity:Platform.OS === "ios" ?0.1:0.3}} tintColor="#58C4C6" ></Image>
+                     resizeMode="cover" style={{opacity:Platform.OS === "ios" ?0.1:0.3,}} tintColor="#58C4C6" ></Image>
                      
                      </View>
-                        <View style={{alignItems:"center",justifyContent:'center'}}>
+                        <View style={{alignItems:"center",justifyContent:'center',marginTop:Platform.OS === "ios" ?-40:null}}>
                         <Image source={ImagesWrapper.vector}
                         resizeMode="contain" ></Image>
                         <View style={{alignItems:'center',paddingTop:'10%'}}>
                         <Text style={styles.text}>You’ve got yourself an </Text>
                         <Text style={styles.text}>blooming account</Text>
                         </View>
-                        <View style={{alignItems:'center',paddingTop:Platform.OS === "ios" ?'20%':'30%'}}>
+                        <View style={{alignItems:'center',paddingTop:Platform.OS === "ios" ?'32%':'35%'}}>
                         <Text style={styles.text1}>Let’s start by creating a profile that helps  </Text>
                         <Text style={[styles.text1]}>the right people find you</Text>
+                         {/* <Text style={styles.text1}>Let’s start by creating a profile that helps the right people find you</Text> */}
                         </View>
-                        <LinearGradient start={{x: 0, y: 0}} end={{x: 1, y: 0}} colors={['rgba(33, 43, 104, 1)','rgba(88, 196, 198, 1)']} style={[styles.linearGradient1,Platform.OS === "ios" ? {marginTop:'5%'}:{marginTop:'5%'}]}>
+                        </View>
                         <TouchableOpacity>
+                        <View style={{alignItems:"center",justifyContent:'center',paddingTop:'2%'}}>
+
+                        <LinearGradient start={{x: 0, y: 0}} end={{x: 1, y: 0}} colors={['rgba(33, 43, 104, 1)','rgba(88, 196, 198, 1)']} style={[styles.linearGradient1,Platform.OS === "ios" ? {marginTop:'5%'}:{marginTop:'5%'}]}>
+                        
                         <Text style={styles.buttontext}>
                             Let's do it
                         </Text>
-                        </TouchableOpacity>
+                        
                        </LinearGradient>
-           </View>
+                  </View>
+                  </TouchableOpacity>
             
       </LinearGradient>
       {/* </ScrollView> */}
@@ -68,7 +74,7 @@ const styles = StyleSheet.create({
     },
     buttontext: {
       color: '#F9F9FB',
-      fontSize:18,
+      fontSize:16,
       fontFamily:Fonts.mulishRegular,
       textAlign: 'center',
       fontWeight:'600',
@@ -84,15 +90,16 @@ const styles = StyleSheet.create({
     },
     text:{
       color:'#1E1C24',
-      fontSize:25,
+      fontSize:20,
       fontFamily:Fonts.mulishSemiBold,
       fontWeight:'600',
+      textAlign:'center',
     },
     text1:{
       color:'#868585',
-      fontSize:15,
+      fontSize:14,
       fontFamily:Fonts.mulishRegular,
-
+      textAlign:'center',
     }
     
   });

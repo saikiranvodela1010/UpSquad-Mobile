@@ -57,74 +57,91 @@ class TeamScreen extends React.Component {
     }
     render() {
         return (
-            <SafeAreaView style={{ flex: 1 }}>
+            <SafeAreaView style={{ flex: 1,backgroundColor:'#FFFFFF' }}>
                 <Text style={styles.title}>What's your role?</Text>
-                <View style={{ flexDirection: 'row', marginTop: 25 }}>
-                    {this.state.rectbox ? 
-                    <View style ={{flexDirection: 'row'}}>
-                        <View style={styles.recBox1}>
+                <View style={{ flexDirection: 'row', marginTop: 25, }}>
+                    
+                    
+                    {this.state.rectbox ?
+                        <View style={{ flexDirection: 'row',}}>
+                            
+                            <View style={styles.recBox1}>
 
-                        <Image
-                            source={ImagesWrapper.image}
-                            style={{
-                                width: '95%',
-                                marginBottom: 25
-                            }}
+                                <Image
+                                   source={ImagesWrapper.image}
+                                    style={{
+                                        width: '95%',
+                                        marginBottom: 30
+                                    }}
 
-                        />
-                        <Text style={styles.playertext}>Get inspired by{"\n"}others and{"\n"}learn more.</Text>
-                        <View style={{ flexDirection: 'row', marginTop: 20, marginBottom: 15 }}>
-                            <Text style={{ borderWidth: 3, width: '12%', height: 20, borderColor: '#ffffff', borderRadius: 20, marginRight: 10, marginLeft: 10 }}></Text>
-                            <Text style={styles.player}>Player</Text>
-                        </View>
-                        </View>
-                        <View style={[styles.recBox2,Platform.OS === "ios" ? {marginLeft:20}:{marginLeft:25}]}>
-                        <Text style={styles.coachtext}>Share your{"\n"}knowledge and{"\n"}help others to{"\n"}grow.</Text>
-                        <View style={{ flexDirection: 'row', marginTop: 20, marginBottom: 15 }}>
-                            <TouchableOpacity onPress={() => this.PlayerRole()}>
-                                <Text style={{ borderWidth: 1, width: '90%', height: 20, backgroundColor: '#F1F1F1', borderRadius: 20, marginRight: 10, marginLeft: 10, borderColor: '#B1AAAA' }}></Text>
+                                />
+                                <Text style={styles.playertext}>Get inspired by</Text>
+                                <Text style={styles.playertext}>others and</Text>
+                                <Text style={styles.playertext}>learn more.</Text>
+                                <View style={{ flexDirection: 'row', marginTop: 20, marginBottom: 15 }}>
+                                    <Text style={{ borderWidth: 3, width: Platform.OS?'12%':'15%', height: 20, borderColor: '#ffffff', borderRadius: 20, marginRight: 10, marginLeft: 10 }}></Text>
+                                    <Text style={styles.player}>Player</Text>
+                                </View>
+                            </View>
+                            <TouchableOpacity onPress={() => this.PlayerRole()} style={styles.recBox2}>
+                            <View >
+                                <Text style={styles.coachtext}>Share your</Text>
+                                <Text style={styles.coachtext}>knowledge and</Text>
+                                <Text style={styles.coachtext}>help others to</Text>
+                                <Text style={styles.coachtext}>grow.</Text>
+                                <View style={{ flexDirection: 'row', marginTop: 20, marginBottom: 15 }}>
+                                    {/* <TouchableOpacity onPress={() => this.PlayerRole()}> */}
+                                        <Text style={{ borderWidth: 1, width: '12%', height: 20, backgroundColor: '#F1F1F1', borderRadius: 20, marginRight: 10, marginLeft: 10, borderColor: '#B1AAAA' }}></Text>
+                                    {/* </TouchableOpacity> */}
+                                    <Text style={styles.coach}>Coach</Text>
+
+                                </View>
+
+                            </View>
                             </TouchableOpacity>
-                            <Text style={styles.coach}>Coach</Text>
-
                         </View>
 
-                        </View>
-                       </View> 
-                        
                         :
-                        <View style ={{flexDirection: 'row'}}>
-                            <View style={[styles.recBox2,Platform.OS === "ios" ? {marginLeft:20}:{marginLeft:25}]}>
-                        <Text style={styles.playertext1}>Get inspired by{"\n"}others and{"\n"}learn more.</Text>
-                        <View style={{ flexDirection: 'row', marginTop: 20, marginBottom: 15 }}>
-                            <TouchableOpacity onPress={() => this.PlayerRole()}>
-                                <Text style={{ borderWidth: 1, width: '90%', height: 20, backgroundColor: '#F1F1F1', borderRadius: 20, marginRight: 10, marginLeft: 10, borderColor: '#B1AAAA' }}></Text>
+                        <View style={{ flexDirection: 'row',marginLeft:25 }}>
+                            <TouchableOpacity onPress={() => this.PlayerRole()} style={[styles.recBox2,{marginLeft:5,width:'45%'}]}>
+                            <View>
+                                <Text style={styles.playertext1}>Get inspired by</Text>
+                                <Text style={styles.playertext1}>others and</Text>
+                                <Text style={styles.playertext1}>learn more.</Text>
+                                <View style={{ flexDirection: 'row', marginTop: 20, marginBottom: 15 }}>
+                                    {/* <TouchableOpacity onPress={() => this.PlayerRole()}> */}
+                                        <Text style={{ borderWidth: 1, width: '12%', height: 20, backgroundColor: '#F1F1F1', borderRadius: 20, marginRight: 10, marginLeft: 10, borderColor: '#B1AAAA' }}></Text>
+                                    {/* </TouchableOpacity> */}
+                                    <Text style={styles.player1}>Player</Text>
+
+                                </View>
+
+                            </View>
                             </TouchableOpacity>
-                            <Text style={styles.player1}>Player</Text>
+                            <View style={[styles.recBox1,{width:'44%'}]}>
+
+                                <Image
+                                    source={ImagesWrapper.image}
+                                    style={{
+                                        width: '95%',
+                                        marginBottom: 7
+                                    }}
+
+                                />
+                                <Text style={styles.coachtext1}>Share your</Text>
+                                <Text style={styles.coachtext1}>knowledge and</Text>
+                                <Text style={styles.coachtext1}>help others to</Text>
+                                <Text style={styles.coachtext1}>grow.</Text>
+
+                                <View style={{ flexDirection: 'row', marginTop: 20, marginBottom: 15 }}>
+                                    <Text style={{ borderWidth: 3, width: '12%', height: 20, borderColor: '#ffffff', borderRadius: 20, marginRight: 10, marginLeft: 10 }}></Text>
+                                    <Text style={styles.coach1}>Coach</Text>
+                                </View>
+                            </View>
 
                         </View>
-
-                        </View>
-                        <View style={styles.recBox1}>
-
-                        <Image
-                              source={ImagesWrapper.image}
-                            style={{
-                                width: '95%',
-                                marginBottom: 5
-                            }}
-
-                        />
-                        <Text style={styles.coachtext1}>Share your{"\n"}knowledge and{"\n"}help others to{"\n"}grow.</Text>
-                        <View style={{ flexDirection: 'row', marginTop: 20, marginBottom: 15 }}>
-                            <Text style={{ borderWidth: 3, width: '12%', height: 20, borderColor: '#ffffff', borderRadius: 20, marginRight: 10, marginLeft: 10 }}></Text>
-                            <Text style={styles.coach1}>Coach</Text>
-                        </View>
-                        </View>
-                        
-                       </View>
 
                     }
-                    
 
                    
 
@@ -146,7 +163,7 @@ class TeamScreen extends React.Component {
                                 /> */}
                             </TouchableOpacity>
                             {/* <TouchableOpacity  onPress={()=>this.onCheckBoxPressed()}> */}
-                            <Text style={[styles.checkboxtxt1, this.state.checkmarkName  ==='mark-on' ? {color: '#000000'} : {color: '#868585'}]}>DesignTeam</Text>
+                            <Text style={[styles.checkboxtxt1, this.state.checkmarkName  ==='mark-on' ? {color: '#000000',fontFamily:Fonts.mulishSemiBold} : {color: '#868585'}]}>DesignTeam</Text>
                             {/* </TouchableOpacity> */}
                             {/* <TouchableOpacity
                         onPress={() => {
@@ -189,6 +206,15 @@ class TeamScreen extends React.Component {
 
                             <Text style={styles.checkboxtxt}>TechTeam</Text>
                         </View>
+                        <View style={styles.text}>
+                            <Image
+                                source={this.state.checkmark2 ? ImagesWrapper.checkmark : ImagesWrapper.checkbox}
+                                style={[this.state.checkmark2 ? styles.checkmark : styles.checkbox]}
+                            />
+
+                            <Text style={styles.checkboxtxt}>CoordinatorsTeam</Text>
+                        </View>
+
 
                         {this.state.status ?
                             null :
@@ -243,7 +269,7 @@ class TeamScreen extends React.Component {
                                 this.props.navigation.navigate('Account')
                             }}
                         >
-                            <LinearGradient start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }} colors={['rgba(33, 43, 104, 1)', 'rgba(88, 196, 198, 1)']} style={[styles.linearGradient1, Platform.OS === "ios" ? { marginTop: '5%' } : { marginTop: '5%' }]}>
+                            <LinearGradient start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }} colors={['rgba(33, 43, 104, 1)', 'rgba(88, 196, 198, 1)']} style={[styles.linearGradient1, Platform.OS === "ios" ? { marginTop: '6%' } : { marginTop: '6%' }]}>
 
                                 <Text style={styles.nextbtn}>
                                     Next
@@ -268,12 +294,12 @@ class TeamScreen extends React.Component {
 
 const styles = StyleSheet.create({
     title: {
-        fontFamily: Fonts.mulishRegular,
+        fontFamily: Fonts.mulishSemiBold,
         fontWeight: '600',
         color: '#1E1C24',
-        fontSize: 19,
-        marginLeft: 30,
-        marginTop: 50,
+        fontSize: 16,
+        marginLeft: '6%',
+        marginTop: '10%',
     },
     recBox1: {
         borderWidth: 1,
@@ -282,7 +308,7 @@ const styles = StyleSheet.create({
         borderRadius: 5,
         backgroundColor: '#58C4C6',
         borderColor: '#58C4C6',
-        marginLeft: 30,
+        marginLeft: 25,
         justifyContent: 'flex-end',
 
     },
@@ -293,27 +319,27 @@ const styles = StyleSheet.create({
         borderRadius: 5,
         borderStyle: 'dashed',
         justifyContent: 'flex-end',
-
+        marginLeft: 25,
 
     },
     checkbox: {
-        marginLeft: 10,
+        // marginLeft: 10,
         marginTop: 5,
-        height: 25,
-        width: 25
+        height: 20,
+        width: 20
     },
     checkmark: {
-        marginLeft: 10,
+        // marginLeft: 10,
         marginTop: 5,
         backgroundColor: '#58C4C6',
         borderRadius: 2,
-        height: 25,
-        width: 25
+        height: 20,
+        width: 20
 
     },
     checkboxtxt: {
-        marginLeft: 25,
-        fontSize: 18,
+        marginLeft: 12,
+        fontSize: 14,
         color: '#868585',
         marginTop: 5,
         fontFamily: Fonts.mulishRegular, 
@@ -321,8 +347,8 @@ const styles = StyleSheet.create({
 
     },
     checkboxtxt1: {
-        marginLeft: 25,
-        fontSize: 18,
+        marginLeft: 12,
+        fontSize: 14,
         // color: '#000000',
         marginTop: 5,
         fontFamily: Fonts.mulishRegular,
@@ -335,19 +361,30 @@ const styles = StyleSheet.create({
     },
     linearGradient1: {
         width: '85%',
-        height: 60,
+        height: 55,
         borderRadius: 30,
         alignItems: "center",
         justifyContent: 'center',
         marginLeft: 'auto',
         marginRight: 'auto',
-        marginBottom: 20
+        marginBottom: 55
+        // width:'85%',
+        // height:60,
+        // borderRadius:30,
+        // alignItems:"center",
+        // justifyContent:'center',
+        // // paddingLeft: 15,
+        // // paddingRight: 15,
+        // // borderRadius: 25,
+        // marginLeft: 30,
+        // // height: 48,
+        // marginRight: 30
 
 
     },
     nextbtn: {
         color: '#FFFFFF',
-        fontSize: 20,
+        fontSize: 16,
         fontFamily: 'Mulish',
         textAlign: 'center',
         backgroundColor: 'transparent',
@@ -362,75 +399,81 @@ const styles = StyleSheet.create({
 
     },
     playertext:{
-        fontSize: 17, 
+        fontSize: 14, 
         color: '#EBEBEB', 
         marginLeft: 15,
         fontFamily: Fonts.mulishRegular,
         fontWeight: '600'
     },
     player: {
-        fontSize: 18, 
+        fontSize: 16, 
         color: '#EBEBEB', 
         fontFamily: Fonts.mulishRegular,
-        fontWeight: '600'
+        fontWeight: '600',
+        marginTop:-2,
     },
     coachtext: {
-        fontSize: 17, 
+        fontSize: 14, 
         color: '#868585', 
         marginLeft: 15, 
         fontFamily: Fonts.mulishRegular,
         fontWeight: '600' 
     },
     coach: {
-        fontSize: 18, 
+        fontSize: 16, 
         color: '#868585', 
-        marginLeft: 20,
+        // marginLeft: 20,
         fontFamily: Fonts.mulishRegular,
-        fontWeight: '600' 
+        fontWeight: '600' ,
+        marginTop:-2,
     },
     playertext1: {
-        fontSize: 17, 
+        fontSize: 14, 
         color: '#868585', 
         marginLeft: 15,
         fontFamily: Fonts.mulishRegular,
         fontWeight: '600' 
+
     },
     player1: {
-        fontSize: 18, 
+        fontSize: 16, 
         color: '#868585', 
-        marginLeft: 20, 
+        // marginLeft: 20, 
         fontFamily: Fonts.mulishRegular,
-        fontWeight: '600'
+        fontWeight: '600',
+        marginTop:-2,
     },
     coachtext1: {
-        fontSize: 17, 
+        fontSize: 14, 
         color: '#EBEBEB', 
         marginLeft: 15, 
         fontFamily: Fonts.mulishRegular,
         fontWeight: '600'
     },
     coach1: {
-        fontSize: 18, 
+        fontSize: 16, 
         color: '#EBEBEB', 
         fontFamily: Fonts.mulishRegular,
-        fontWeight: '600'
+        fontWeight: '600',
+        marginTop:-2,
     },
     selecteam: {
-        fontSize: 19, 
+        fontSize: 16, 
         color: '#1E1C24', 
-        marginLeft: 30, 
+        marginLeft: '6%', 
         marginTop: 30,
         fontFamily: Fonts.mulishRegular,
         fontWeight: '600' 
     },
     viewlink: {
-        marginLeft: 40, 
+        marginLeft: '7%', 
         // marginTop: 10, 
         fontSize: 16, 
         color: '#58C4C6',
         marginBottom: 25,
         fontFamily: Fonts.mulishRegular,
-        fontWeight: '600'
+        fontWeight: '600',
+        marginBottom:30
 
     }
 });

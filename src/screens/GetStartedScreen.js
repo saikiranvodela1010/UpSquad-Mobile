@@ -20,24 +20,33 @@ class GetStartedScreen extends React.Component {
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 1 }} >
             
-           <View style={{paddingTop:'48%'}}><Image source={ImagesWrapper.blooming} style={{resizeMode:'contain'}}></Image></View>
+           <View style={{alignItems:'center',paddingTop:'48%'}}><Image source={ImagesWrapper.blooming} style={{resizeMode:'contain'}}></Image></View>
             <View style={{paddingBottom:'3%',alignItems:'center',justifyContent:'center',paddingTop:'10%'}}>
             <Text style={styles.text}>The network that helps</Text>
             <Text style={styles.text}>you grow</Text>
             </View>
-           
-            <LinearGradient start={{x: 0, y: 0}} end={{x: 1, y: 0}} colors={['rgba(33, 43, 104, 1)','rgba(88, 196, 198, 1)']} style={[styles.linearGradient1,Platform.OS === "ios" ? {marginTop:'5%'}:{marginTop:'5%'}]}>
             <TouchableOpacity onPress={()=>{
                 this.props.navigation.navigate('SignUp')
             }}>
+            <LinearGradient start={{x: 0, y: 0}} end={{x: 1, y: 0}} colors={['rgba(33, 43, 104, 1)','rgba(88, 196, 198, 1)']} style={[styles.linearGradient1,Platform.OS === "ios" ? {marginTop:'5%'}:{marginTop:'5%'}]}>
+            
                         <Text style={styles.buttontext}>
                             Get Started
                         </Text>
-                        </TouchableOpacity>
+                        
                     </LinearGradient>
-                    
-                    <View style={{paddingTop:'4%'}}>
-                    <Text style={styles.text2}>I already have an account?<Text style={{color:'#58C4C6'}}> Sign in</Text></Text>
+                    </TouchableOpacity>
+                    <View style={{paddingTop:'4%',alignItems:'center'}}>
+                    <Text style={styles.text2}>I already have an account?
+                    <TouchableOpacity 
+                      onPress={()=>{
+                        this.props.navigation.navigate('Login')
+                      }}
+                     
+                    >
+                    <Text style={[{color:'#58C4C6',marginBottom:-3}]}> Sign in</Text>
+                    </TouchableOpacity>
+                    </Text>
                     </View>
       </LinearGradient>
 </ImageBackground>
@@ -64,12 +73,12 @@ const styles = StyleSheet.create({
       height: '100%',
       opacity: 0.9,
       justifyContent: 'center',
-      alignItems: 'center',
+      // alignItems: 'center',
       
     },
     buttontext: {
       color: '#F9F9FB',
-      fontSize:18,
+      fontSize:16,
       fontFamily:Fonts.mulishRegular,
       textAlign: 'center',
       fontWeight:'600',
@@ -77,23 +86,25 @@ const styles = StyleSheet.create({
     },
     text:{
       color:'#1E1C24',
-      fontSize:25,
+      fontSize:20,
       fontFamily:Fonts.mulishRegular,
       fontWeight:"600"
     },
     text2:{
-      fontSize:18,
+      fontSize:14,
       color:'#868585',
       fontFamily:Fonts.mulishRegular,
 
       //marginBottom:20
     },
     linearGradient1:{
-        width:'85%',
-        height:'7%',
-        borderRadius:30,
-        alignItems:"center",
-        justifyContent:'center',
+      width:'85%',
+      height:55,
+      borderRadius:30,
+      alignItems:"center",
+      justifyContent:'center',
+      marginLeft:'auto',
+      marginRight:'auto'
         
     }
   });

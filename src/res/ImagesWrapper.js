@@ -11,12 +11,41 @@ const ImagesWrapper = {
     toppng:require('../Images/toppng.png'),
     vector:require('../Images/Vector.png'),
     image:require('../Images/image.png'),
-    
-
-
-
-
-
+    vectorplus:require('../Images/Vectorplus.png'),
+    girlimg:require('../Images/girlimg.png'),
+    back:require('../Images/back-arrow.png'),
+    gallery:require('../Images/gallery.png'),
+    camera:require('../Images/camera.png'),
+    manpic:require('../Images/manpic.png'),
+    // choosebox:require('../Images/choosebox.png'),
+    attachment:require('../Images/attachment.png'),
+    camerablack:require('../Images/camerablack.png'),
+    chatimage:require('../Images/chatimage.png'),
+    chatimage1:require('../Images/chatimage1.png'),
+    contactimage:require('../Images/contactimage.png'),
+    displayimage:require('../Images/displayimage.png'),
+    editimage:require('../Images/editimage.png'),
+    emoji:require('../Images/emoji.png'),
+    frontarrow:require('../Images/frontarrow.png'),
+    groupimage:require('../Images/groupimage.png'),
+    groupimage1:require('../Images/groupimage1.png'),
+    groupimage2:require('../Images/groupimage2.png'),
+    menuimage:require('../Images/menuimage.png'),
+    mic:require('../Images/mic.png'),
+    notification:require('../Images/notification.png'),
+    notification1:require('../Images/notification1.png'),
+    notification2:require('../Images/notification2.png'),
+    plusimage:require('../Images/plusimage.png'),
+    search:require('../Images/search.png'),
+    chat:require('../Images/chat.png'),
+    feed:require('../Images/Feed.png'),
+    notification3:require('../Images/notification3.png'),
+    profile:require('../Images/profile.png'),
+    meetings:require('../Images/Meetings.png'),
+    events:require('../Images/Events.png'),
+    stories:require('../Images/Stories.png'),
+    people:require('../Images/People.png'),
+    checkcircle:require('../Images/CheckCircle.png'),
     
 
 }
