@@ -30,7 +30,7 @@ export default class CreateChatScreen extends React.Component {
                         <TextInput
                             placeholder='Search contact'
                             value=''
-                            style={{ color: '#868585', fontSize: 14, fontFamily: Fonts.mulishRegular, marginLeft: 20, marginTop: -10, fontWeight: '400' }}
+                            style={{ color: '#868585', fontSize: 14, fontFamily: Fonts.mulishRegular, marginLeft: 20, marginTop: -10, fontWeight: '400' ,width:'60%'}}
                         >
                         </TextInput>
                     </View>
@@ -39,65 +39,47 @@ export default class CreateChatScreen extends React.Component {
                 <ScrollView>
 
                     <View style={{ flexDirection: 'row', marginTop: 20, marginBottom: 20, marginLeft: 30 }}>
-                        <Image
-                            source={ImagesWrapper.chatimage}
-                        />
+                    <View style={styles.displayimage}></View>
                         <Text style={styles.name}>Kannie Sils</Text>
                     </View>
                     <View style={styles.border}></View>
                     <View style={{ flexDirection: 'row', marginTop: 20, marginBottom: 20, marginLeft: 30 }}>
-                        <Image
-                            source={ImagesWrapper.chatimage1}
-                        />
+                    <View style={styles.displayimage}></View>
                         <Text style={styles.name}>Jay Jay</Text>
                     </View>
                     <View style={styles.border}></View>
                     <View style={{ flexDirection: 'row', marginTop: 20, marginBottom: 20, marginLeft: 30 }}>
-                        <Image
-                            source={ImagesWrapper.notification}
-                        />
+                    <View style={styles.displayimage}></View>
                         <Text style={styles.name}>Katy Brown</Text>
                     </View>
                     <View style={styles.border}></View>
                     <View style={{ flexDirection: 'row', marginTop: 20, marginBottom: 20, marginLeft: 30 }}>
-                        <Image
-                            source={ImagesWrapper.notification1}
-                        />
+                    <View style={styles.displayimage}></View>
                         <Text style={styles.name}>Thomas White  </Text>
                     </View>
                     <View style={styles.border}></View>
                     <View style={{ flexDirection: 'row', marginTop: 20, marginBottom: 20, marginLeft: 30 }}>
-                        <Image
-                            source={ImagesWrapper.chatimage}
-                        />
+                    <View style={styles.displayimage}></View>
                         <Text style={styles.name}>Kannie Sils</Text>
                     </View>
                     <View style={styles.border}></View>
                     <View style={{ flexDirection: 'row', marginTop: 20, marginBottom: 20, marginLeft: 30 }}>
-                        <Image
-                            source={ImagesWrapper.chatimage1}
-                        />
+                    <View style={styles.displayimage}></View>
                         <Text style={styles.name}>Jay Jay</Text>
                     </View>
                     <View style={styles.border}></View>
                     <View style={{ flexDirection: 'row', marginTop: 20, marginBottom: 20, marginLeft: 30 }}>
-                        <Image
-                            source={ImagesWrapper.notification}
-                        />
+                    <View style={styles.displayimage}></View>
                         <Text style={styles.name}>Katy Brown</Text>
                     </View>
                     <View style={styles.border}></View>
                     <View style={{ flexDirection: 'row', marginTop: 20, marginBottom: 20, marginLeft: 30 }}>
-                        <Image
-                            source={ImagesWrapper.notification1}
-                        />
+                    <View style={styles.displayimage}></View>
                         <Text style={styles.name}>Thomas White</Text>
                     </View>
                     <View style={styles.border}></View>
                     <View style={{ flexDirection: 'row', marginTop: 20, marginBottom: 20, marginLeft: 30 }}>
-                        <Image
-                            source={ImagesWrapper.chatimage}
-                        />
+                    <View style={styles.displayimage}></View>
                         <Text style={styles.name}>Kannie Sils</Text>
                     </View>
                     <View style={styles.border}></View>
@@ -152,5 +134,13 @@ const styles = StyleSheet.create({
         marginRight: 'auto',
         marginTop: 30,
         borderColor: '#F1F1F1',
+        backgroundColor:'#F1F1F1'
     },
+    displayimage: {
+        borderWidth: 1,
+        height: 45,
+        width: 45,
+        borderRadius: 25,
+        // marginLeft:30
+    }
 })

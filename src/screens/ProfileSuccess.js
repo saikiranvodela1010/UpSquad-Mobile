@@ -16,12 +16,14 @@ class ProfileSuccess extends React.Component {
         <View style={styles.header}>
           <Image source={ImagesWrapper.profile}
           ></Image>
-          <Text style={{ fontSize: 20, fontFamily: Fonts.mulishRegular, fontWeight: '600', marginLeft: '5%' }}>Memphis Talks</Text>
+          <Text style={{ fontSize: 20, fontFamily: Fonts.mulishSemiBold, fontWeight: '600', marginLeft: '5%',color:'#1E1C24' }}>Memphis Talks</Text>
           <TouchableOpacity style={{ marginLeft: '20%' }} onPress={() => this.props.navigation.navigate('Notification')}>
             <Image source={ImagesWrapper.notification3}
             ></Image>
           </TouchableOpacity>
-          <TouchableOpacity style={{ marginLeft: '7%' }}>
+          <TouchableOpacity style={{ marginLeft: '7%' }}
+            onPress={() => this.props.navigation.navigate('ChatScreen')}
+          >
             <Image source={ImagesWrapper.chat}
             ></Image>
           </TouchableOpacity>
@@ -154,14 +156,16 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     fontFamily: Fonts.mulishRegular,
     fontSize: 20,
-    padding: '5%',
+    padding: '7%',
     lineHeight: 25
   },
   text1: {
     color: '#1E1C24',
-    fontFamily: Fonts.mulishRegular,
+    fontFamily: Fonts.mulishSemiBold,
     fontSize: 14,
-    fontWeight: '600'
+    fontWeight: '600',
+    
+    
   },
   tabLabels: {
     fontFamily: Fonts.mulishRegular,

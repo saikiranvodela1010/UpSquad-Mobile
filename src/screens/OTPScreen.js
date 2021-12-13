@@ -20,7 +20,8 @@ export default class OTPScreen extends React.Component {
            otp2:'',
            otp3:'',
            boxcolor:'',
-           otperr:''
+           otperr:'',
+           color:'#868585'
         }
        
     }
@@ -52,29 +53,34 @@ export default class OTPScreen extends React.Component {
             <View style={styles.mainContainer}>
                     <Image
                       source={ImagesWrapper.component}
-                   
+                      style={{width:220,height:220}}
                     />
-                    <Text style={[styles.welcome,Platform.OS === "ios" ? {marginTop:'-40%'}:{marginTop:'-30%'}]}>Verification</Text>
-                    <Text style={styles.create}> Please enter verification code we sent to {"\n"} your email address </Text>
+                    <Text style={[styles.welcome,Platform.OS === "ios" ? {marginTop:'-40%'}:{marginTop:'-40%'}]}>Verification</Text>
+                    <Text style={styles.create}> Please enter verification code we sent to {"\n"} your email address. </Text>
 
                    
                     <View style={styles.card}>
-                   <KeyboardAvoidingView >
+                   {/* <KeyboardAvoidingView > */}
                     <View style={{flexDirection:'row'}}> 
                     <TextInput
-                        style={[styles.textinput,this.state.otp ?{borderColor:'#58C4C6'} :{borderColor:'#868585'} ]}
+                        style={[styles.textinput,{borderColor:this.state.color} ]}
                         onChangeText={(Otp) => {
                             this.setState({otp:Otp})
                             this.setState({otperr:''})   
-                               
+                            this.setState({color:'#58C4C6'})
                         }}
+                        maxLength={1}
                         value={this.state.otp}
                         returnKeyType={"next"}
                         keyboardType={'number-pad'}
                         // ref={(input) => { this.thirdTextInput = input; }}
                         onSubmitEditing={() => { this.secondTextInput.focus(); }}
                         importantForAutofill="no" 
-                        maxLength={63}
+                        onKeyPress={() => {
+                            console.log('hello')
+                            
+                          }}
+                       
                        
                     />
                    <TextInput
@@ -89,7 +95,7 @@ export default class OTPScreen extends React.Component {
                         ref={(input) => { this.secondTextInput = input; }}
                         onSubmitEditing={() => { this.thirdTextInput.focus(); }}
                         importantForAutofill="no" 
-                        maxLength={63}
+                        maxLength={1}
                        
                     />
                     <TextInput
@@ -105,7 +111,7 @@ export default class OTPScreen extends React.Component {
                         ref={(input) => { this.thirdTextInput = input; }}
                         onSubmitEditing={() => { this.fourTextInput.focus(); }}
                         importantForAutofill="no" 
-                        maxLength={63}
+                        maxLength={1}
                        
                     />
                     <TextInput
@@ -121,7 +127,7 @@ export default class OTPScreen extends React.Component {
                         ref={(input) => { this.fourTextInput = input; }}
                         // onSubmitEditing={() => { this.fourTextInput.focus(); }}
                         importantForAutofill="no" 
-                        maxLength={63}
+                        maxLength={1}
                        
                     />
                    </View>  
@@ -141,21 +147,23 @@ export default class OTPScreen extends React.Component {
                     </View>
                    
                     {/* Next Button view */}
-
+                    <View  style={{flex:1,justifyContent:'flex-end',marginBottom:'12%'}}>
                     <TouchableOpacity 
                         onPress={()=>{
                             this.onSubmit();
                          }}
-                         style={{marginTop:'85%'}}
+                        //  style={{flex:1,justifyContent:'flex-end',}}
                     >
+                        
                     <LinearGradient start={{x: 0, y: 0}} end={{x: 1, y: 0}} colors={this.state.otp && this.state.otp1&&this.state.otp2&&this.state.otp3 ?['#212B68', '#58C4C6']:['#F1F1F1','#F1F1F1']} style={[styles.linearGradient,Platform.OS === "ios" ? {marginTop:'5%'}:{marginTop:'4%'}]}>
                         <Text style={[styles.buttonText,this.state.otp && this.state.otp1&&this.state.otp2&&this.state.otp3?{color: '#ffffff'}:{color: '#868585',}]}>
                             Verify Code
                         </Text>
                     </LinearGradient>
-                    </TouchableOpacity>
                     
-                    </KeyboardAvoidingView>
+                    </TouchableOpacity>
+                    </View>
+                    {/* </KeyboardAvoidingView> */}
                    
                     
                 </View>

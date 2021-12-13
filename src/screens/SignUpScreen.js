@@ -144,9 +144,9 @@ export default class SignUpScreen extends React.Component {
             <View style={styles.mainContainer}>
                     <Image
                       source={ImagesWrapper.component}
-                   
+                      style={{width:220,height:220}}
                     />
-                    <Text style={[styles.welcome,Platform.OS === "ios" ? {marginTop:'-40%'}:{marginTop:'-30%'}]}>Welcome!</Text>
+                    <Text style={[styles.welcome,Platform.OS === "ios" ? {marginTop:'-40%'}:{marginTop:'-40%'}]}>Welcome!</Text>
                     <Text style={styles.create}> Create an account to continue</Text>
 
                    
@@ -357,7 +357,7 @@ const styles = StyleSheet.create({
     create:{
         fontSize:14,
         fontWeight:'400',
-        paddingLeft:20,
+        paddingLeft:18,
         paddingTop:5,
         color:'#1E1C24',
         fontFamily:Fonts.mulishRegular
@@ -410,7 +410,8 @@ const styles = StyleSheet.create({
         marginLeft:25,
         height:Platform.OS==='ios' ? 30:40,
         fontFamily:Fonts.mulishSemiBold,
-        fontSize:16
+        fontSize:16,
+        color:'#1E1C24',
     },
     underline:{
         borderBottomColor: '#959494',

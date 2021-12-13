@@ -15,6 +15,7 @@ export default class ChatScreen extends React.Component {
         return (
             <View style={{ flex: 1, backgroundColor: '#FFFFFF' }}>
                 <View style={{ flexDirection: 'row', marginTop: 20, marginBottom: 20 }}>
+                    <TouchableOpacity onPress={()=> this.props.navigation.navigate('ProfileSucess')}>
                     <Image
                         source={ImagesWrapper.back}
                         style={{
@@ -23,6 +24,7 @@ export default class ChatScreen extends React.Component {
                             tintColor: '#000000',
                         }}
                     />
+                    </TouchableOpacity>
                     <Text style={styles.title}>Memphis Talks</Text>
                 </View>
                 <View style={{ borderWidth: 1, borderColor: '#F1F1F1' }}></View>
@@ -30,11 +32,14 @@ export default class ChatScreen extends React.Component {
                 <Tab.Navigator
                     screenOptions={{
                         tabBarLabelStyle: { fontSize: 16, fontFamily: Fonts.mulishSemiBold, fontWeight: "600", textTransform: 'capitalize', },
-                        tabBarItemStyle: { width: 100, },
+                        tabBarItemStyle: { width: 100 },
 
                         tabBarActiveTintColor: '#1E1C24',
+                        
 
-
+                    }}
+                    tabBarOptions={{
+                        indicatorStyle: {backgroundColor: '#58C4C6', width: '30%', marginLeft: 20, height: 4}
                     }}
 
                 >
@@ -81,6 +86,7 @@ const styles = StyleSheet.create({
         fontWeight: '600',
         color: '#1E1C24',
         fontSize: 20,
-        marginLeft: 20
+        marginLeft: 20,
+        marginTop:5
     },
 })

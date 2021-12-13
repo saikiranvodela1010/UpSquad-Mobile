@@ -17,8 +17,8 @@ import NotificationScreen from '../screens/NotificationScreen';
 import ChatScreen from '../screens/ChatScreen';
 import CreateChatScreen from '../screens/CreateChatScreen';
 import GroupScreen1 from '../screens/GroupScreen1'
-
-
+import ChatScreen2 from "../screens/ChatScreen2";
+import Bio from '../screens/Bio'
 
 
 const Navigator = () =>{
@@ -31,7 +31,7 @@ const Navigator = () =>{
                 gestureEnabled: false,
                 animationEnabled: false
             }}
-            initialRouteName='ChatScreen'
+            initialRouteName='GetStarted'
         >
         <Stack.Screen 
         name="GetStarted" 
@@ -79,7 +79,12 @@ const Navigator = () =>{
         name="Group1" 
         component={GroupScreen1} />
 
-
+    <Stack.Screen 
+        name="ChatScreen2" 
+        component={ChatScreen2} />
+        <Stack.Screen 
+        name="Bio" 
+        component={Bio} />
        </Stack.Navigator>
        </NavigationContainer>
     );

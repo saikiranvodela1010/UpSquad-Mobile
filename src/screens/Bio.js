@@ -17,33 +17,34 @@ const BioDataScreen = (props) => {
     const [writeTop, setWriteTop] = useState('-42%');
     const [choose, setChoose] = useState(false);
     const [addCard, setAddCard] = useState([
-        {text:'bhanu',id:'bhanu',isSelect:false,
-        selectedClass:'notselected'},
+        // {text:'bhanu',id:'bhanu'},
     ]);
-    const[getTouch,setGetTouch]=useState(false)
 
+    const [chooseChange,setChooseChange]=useState(false);
+    const[isChecked,setisChecked]=useState(false);
 
-
-
-
-    const onCheckBoxPressed = (item) => {
-        console.log('item',item.item.isSelect,item.item.selectedClass)
-        item.item.isSelect = true;
-        console.log('item1',item.item.isSelect)
-
-        item.item.selectedClass = item.item.isSelect ? 'selected' : 'notselected';
-        console.log('selectedclass',item.item.selectedClass)
-        return [
-            { isSelect:item.item.isSelect,selectedClass:item.item.selectedClass },
-           
-        ]
-        // setAddCard((prevAddCard) => {
-        //     return [
-        //         { text:item.item.text,isSelect:item.item.isSelect,selectedClass:item.item.selectedClass },
-        //         ...prevAddCard
-        //     ]
-        // })
+    const onCheckBoxPressed = (id,text) => {
+        // console.log('id',id)
         // checkmarkName !== "mark-off" ? setCheckmarkName("mark-off") : setCheckmarkName("mark-on");
+        addCard[id]===isChecked ? addCard[id]===setisChecked(true): addCard[id] ===setisChecked(true)
+        // addCard[id].isChecked === false ?
+        //                         setAddCard((prevAddCard) => {
+        //                             return [
+        //                                 { text: text, id:id,isChecked:true},
+        //                                 ...prevAddCard
+        //                             ]
+        //                         })
+        //                         :
+        //                         setAddCard((prevAddCard) => {
+        //                             return [
+        //                                 { text: text, id:id,isChecked:false},
+        //                                 ...prevAddCard
+        //                             ]
+        //                         })
+
+        // // addCard[id].isChecked === false ? setBioText(false): setBioText(true);
+
+        // console.log('ischecked', addCard[id].isChecked)
     }
     const onCheckBoxPressed1 = () => {
         checkmarkName1 !== "mark-off1" ? setCheckmarkName1("mark-off1") : setCheckmarkName1("mark-on")
@@ -51,25 +52,25 @@ const BioDataScreen = (props) => {
     
     const add = (text) => {
         console.log('add', text,Math.random().toString());
+        
         setAddCard((prevAddCard) => {
             return [
-                { text: text, id: Math.random().toString(),isSelect:false,selectedClass:'notselected' },
+                { text: text, id: Math.random().toString(),isChecked:false},
                 ...prevAddCard
             ]
         })
-
+        setChooseChange(true);
+        setWriteText('');
     }
 
     return (
         <View style={{ flex: 1, backgroundColor: 'white' }}>
-            
-            <TouchableOpacity onPress={() =>props.navigation.navigate('ProfilePic')}>
-              
-                <Image style={styles.backarrow} source={ImagesWrapper.back}  />
-               
+            <TouchableOpacity onPress={() => {
+                props.navigation.navigate('ProfilePic')
+            }}>
+                <Image style={styles.backarrow} source={ImagesWrapper.back} />
             </TouchableOpacity>
-            <Text onPress={() =>props.navigation.navigate('ProfilePic')}></Text>
-            <Progress.Bar progress={2} width={150} style={styles.bar} color={'#212B68'} />
+            <Progress.Bar progress={2} width={200} style={styles.bar} color={'#212B68'} />
             <ImageBackground source={ImagesWrapper.manpic}
                 style={styles.imgBackground} >
 
@@ -83,15 +84,20 @@ const BioDataScreen = (props) => {
                         <View style={{ justifyContent: 'flex-start', flex: 1 }}>
                             <Text style={[styles.biotext, { marginTop: '20%' }]}>Let's write a short but {"\n"}colorful Bio</Text>
                             <View style={{ flexDirection: 'row' }}>
-                                <Text style={[styles.biotext, { marginTop: '9%', fontSize: 20 }]}>I'm</Text>
+                                <Text style={[styles.biotext, { marginTop: '8%', fontSize: 20 }]}>I'm</Text>
                                 <Text style={[styles.biotext, { marginTop: '8%', marginLeft: 10 }]}>Ben Thompson</Text>
                             </View>
                             <View style={styles.underline} />
                             <TouchableOpacity onPress={() => {
                                 setChoose(true);
                             }}>
-                                <Text style={[styles.biotext, { marginTop: '3%',fontSize:21 }]}>I'm here to
-                                 <Text style={[styles.biotext, styles.choosetext]}> Choose what{'\n'}your or here for.</Text>
+                                <Text style={[styles.biotext, { marginTop: '3%' }]}>I'm here to
+                                {writeText && chooseChange=== true?
+                                    <Text style={[styles.biotext, styles.choosetext,{color:'#FFFFFF'}]}> {addCard[0].text}</Text>
+                                    :
+                                    <Text style={[styles.biotext, styles.choosetext]}> Choose what{'\n'}your or here for.</Text>
+                                }
+                                 
                                 </Text>
 
                                 {/* <View style={[styles.underline, { marginLeft: '36%', width: '30%' }]} />
@@ -103,11 +109,14 @@ const BioDataScreen = (props) => {
                                 <Text style={[styles.biotext, { marginTop: '0%' }]}>me for</Text>
                                 <Text style={[styles.biotext, styles.choosetext, { marginTop: 1, marginLeft: 3 }]}> Choose what you want</Text>
                             </View>
-                            {/* <View style={[styles.underline, { marginLeft: '27%', width: '52%' }]} /> */}
+                           
 
                             {choose === true ?
 
-                                <ScrollView horizontal={true} style={{marginTop:'20%'}}>
+                                <ScrollView 
+                                horizontal={true} 
+                                style={{marginTop:'20%'}}
+                                >
 
                                            
                                             <View style={[styles.dashedbiocard]}>
@@ -143,41 +152,44 @@ const BioDataScreen = (props) => {
                                                     />
                                                 </View>
                                             
-                                <View style={{ flexDirection: 'row' }}>
+                               
                                     <FlatList
                                         horizontal
                                         data={addCard}
-                                        renderItem={item => (
-                                                
-                                                <View style={styles.biocard}>
+                                        renderItem={({item,index })=> (
+                                               
+
+                                                     <View style={styles.biocard}>
 
                                                     <TouchableOpacity
-                                                        onPress={()=>{onCheckBoxPressed(item)}}
+                                                        onPress={()=>onCheckBoxPressed(index,item.text)}
                                                     >
                                                         <Image
                                                             resizeMode='contain'
-                                                            source={item.item.selectedClass === 'selected' ? ImagesWrapper.checkmark : ImagesWrapper.checkbox}
-                                                            style={[item.item.selectedClass === 'selected' ? styles.checkmark : styles.checkbox]}
+                                                            source={addCard[index] ===isChecked  ? ImagesWrapper.checkmark : ImagesWrapper.checkbox}
+                                                            style={[addCard[index]===isChecked ? styles.checkmark : styles.checkbox]}
                                                         />
                                                     </TouchableOpacity>
-                                                    <Text style={[styles.get]}>{item.item.text}</Text>
-                                                </View>
+                                                    <Text style={[styles.get]}>{item.text}</Text>
+                                                    </View>
+                                      
+                                               
                                                
                                           
                                         )}
                                     />
-                                </View>
+                             
 
                                         
                                  {/* <View style={styles.biocard}>
                                     <TouchableOpacity
                                         onPress={
-                                            onCheckBoxPressed}
+                                            onCheckBoxPressed1}
                                     >
                                         <Image
                                             resizeMode='contain'
-                                            source={checkmarkName === 'mark-on' ? ImagesWrapper.checkmark : ImagesWrapper.checkbox}
-                                            style={[checkmarkName === 'mark-on' ? styles.checkmark : styles.checkbox]}
+                                            source={checkmarkName1 === 'mark-on' ? ImagesWrapper.checkmark : ImagesWrapper.checkbox}
+                                            style={[checkmarkName1 === 'mark-on' ? styles.checkmark : styles.checkbox]}
                                         />
 
 
@@ -208,7 +220,7 @@ const BioDataScreen = (props) => {
 
 
 
-                            {/* </View> */}
+                           
                             <TouchableOpacity
                                 onPress={() => {
                                     props.navigation.navigate('ProfileSucess')
@@ -239,7 +251,6 @@ const styles = StyleSheet.create({
         height: '100%',
         opacity: 1,
         justifyContent: 'center',
-       
         // marginTop:-10
         // alignItems: 'center',
 
@@ -250,14 +261,13 @@ const styles = StyleSheet.create({
         height: '100%',
         alignItems: "center",
         // marginTop:-10
-        // marginBottom:10
     },
     bar: {
         height: 3.5,
         // width:'100%',
         // borderColor:'black',
-        borderWidth: 0.1,
-        // marginTop: 5,
+        borderWidth: 0.2,
+        marginTop: 20,
         backgroundColor: '#F1F1F1'
         //  color:'red',
         // flexGrow: 1
@@ -267,7 +277,7 @@ const styles = StyleSheet.create({
         width: 30,
         height: 30,
         marginLeft: 30,
-        marginTop: 15
+        marginTop: 20
     },
     biotext: {
         fontFamily: Fonts.mulishSemiBold,

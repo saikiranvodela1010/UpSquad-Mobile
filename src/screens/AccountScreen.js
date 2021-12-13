@@ -19,12 +19,15 @@ class AccountScreen extends React.Component {
         >
           <View style={{alignItems:'flex-end'}}>
          <Image source={ImagesWrapper.toppng}
-                     resizeMode="cover" style={{opacity:Platform.OS === "ios" ?0.1:0.3,}} tintColor="#58C4C6" ></Image>
+                     resizeMode="cover" style={{opacity:Platform.OS === "ios" ?0.1:0.2}} tintColor="#58C4C6" ></Image>
                      
                      </View>
-                        <View style={{alignItems:"center",justifyContent:'center',marginTop:Platform.OS === "ios" ?-40:null}}>
+                        <View style={{alignItems:"center",marginTop:Platform.OS === "ios" ?-40:null}}>
                         <Image source={ImagesWrapper.vector}
-                        resizeMode="contain" ></Image>
+                        // style={{width:'25%',height:'15%'}}
+                        resizeMode="contain"
+                       
+                         ></Image>
                         <View style={{alignItems:'center',paddingTop:'10%'}}>
                         <Text style={styles.text}>You’ve got yourself an </Text>
                         <Text style={styles.text}>blooming account</Text>
@@ -35,7 +38,11 @@ class AccountScreen extends React.Component {
                          {/* <Text style={styles.text1}>Let’s start by creating a profile that helps the right people find you</Text> */}
                         </View>
                         </View>
-                        <TouchableOpacity>
+                        <TouchableOpacity
+                          onPress={()=>{
+                            this.props.navigation.navigate('ProfilePic')
+                          }}
+                        >
                         <View style={{alignItems:"center",justifyContent:'center',paddingTop:'2%'}}>
 
                         <LinearGradient start={{x: 0, y: 0}} end={{x: 1, y: 0}} colors={['rgba(33, 43, 104, 1)','rgba(88, 196, 198, 1)']} style={[styles.linearGradient1,Platform.OS === "ios" ? {marginTop:'5%'}:{marginTop:'5%'}]}>

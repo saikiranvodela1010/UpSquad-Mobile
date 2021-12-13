@@ -1,5 +1,5 @@
 import React from 'react';
-import { View ,StyleSheet,Text,Image, TouchableOpacity,Platform,ScrollView,Dimensions} from 'react-native';
+import { View ,StyleSheet,Text,Image, TouchableOpacity,Platform,ScrollView,Dimensions,KeyboardAvoidingView} from 'react-native';
 import { TextInput } from 'react-native-gesture-handler';
 import LinearGradient from 'react-native-linear-gradient'
 import ImagesWrapper from '../res/ImagesWrapper';
@@ -56,16 +56,16 @@ export default class ForgotPwdScreen extends React.Component {
             <View style={styles.mainContainer}>
                     <Image
                       source={ImagesWrapper.component}
-                   
+                      style={{width:220,height:220}}
                     />
-                    <Text style={[styles.welcome,Platform.OS === "ios" ? {marginTop:'-40%'}:{marginTop:'-30%'}]}>Forgot your Password?</Text>
+                    <Text style={[styles.welcome,Platform.OS === "ios" ? {marginTop:'-40%'}:{marginTop:'-40%'}]}>Forgot your Password?</Text>
                     <Text style={styles.create}> Please enter the e-mail address you used when {"\n"} creating your account
                     we'll send you {"\n"} instructions to reset your password. </Text>
 
-                   
-                    <View style={styles.card}>
-                    <ScrollView >
                     
+                    <View style={styles.card}>
+                   
+                    {/* <ScrollView> */}
                     <Text style={styles.bio}>Email ID</Text>
                     <TextInput
                         style={styles.textinput}
@@ -75,11 +75,12 @@ export default class ForgotPwdScreen extends React.Component {
                         }}
                         value={this.state.email}
                         returnKeyType={"done"}
-                        keyboardType={'email-address'}
+                        keyboardType={'ascii-capable'}
                         // ref={(input) => { this.thirdTextInput = input; }}
                         // onSubmitEditing={() => { this.fourTextInput.focus(); }}
-                        importantForAutofill="no" 
+                        // importantForAutofill="no" 
                         maxLength={63}
+                        // blurOnSubmit={false}
                     />
                    
                     <View style={styles.underline}/>
@@ -88,26 +89,29 @@ export default class ForgotPwdScreen extends React.Component {
 
 
                     {/* Next Button view */}
-
+                   <View style={{marginBottom:'10%',flex:1,justifyContent:'flex-end'}}>
                     <TouchableOpacity 
                         onPress={()=>{
                             this.onSubmit();
                          }}
-                         style={{marginTop:'78%',flex:1,justifyContent:'flex-end'}}
+                         
                     >
+                       
                     <LinearGradient start={{x: 0, y: 0}} end={{x: 1, y: 0}} colors={['#212B68', '#58C4C6']} style={[styles.linearGradient,Platform.OS === "ios" ? {marginTop:'5%'}:{marginTop:'4%'}]}>
                         <Text style={styles.buttonText}>
                             Send
                         </Text>
                     </LinearGradient>
+                    
                     </TouchableOpacity>
                     
                     
-                   
-                   </ScrollView>
+                    {/* </ScrollView> */}
+                    </View>
                 </View>
                 
             </View>
+           
         );
     }
 }
@@ -141,12 +145,13 @@ const styles = StyleSheet.create({
     card:{
         backgroundColor:'#FFFFFF',
         flex:1,
-        width:Dimensions.get('window').width,
-        height: Dimensions.get('window').height,
+        // width:Dimensions.get('window').width,
+        // height: Dimensions.get('window').height,
         marginTop:30,
         borderTopLeftRadius:30,
         borderTopRightRadius:30,
-        shadowOpacity:0.05
+        shadowOpacity:0.05,
+        // justifyContent:'flex-end'
     },
     bio:{
         fontSize:16,
@@ -173,7 +178,8 @@ const styles = StyleSheet.create({
         marginLeft:25,
         height:Platform.OS==='ios' ? 30:40,
         fontFamily:Fonts.mulishSemiBold,
-        fontSize:16
+        fontSize:16,
+        color:'#1E1C24',
     },
     underline:{
         borderBottomColor: '#959494',

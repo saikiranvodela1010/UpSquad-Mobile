@@ -7,27 +7,24 @@ export default class ChatScreen1 extends React.Component {
     render() {
         return (
             <View style={{ flex: 1, backgroundColor: '#FFFFFF' }}>
+                 <TouchableOpacity onPress={() => this.props.navigation.navigate('ChatScreen2')}>
                 <View style={styles.searchBorder}>
+               
                     <View style={{ flexDirection: 'row', marginLeft: 20, marginTop: 10 }}>
                         <Image
                             source={ImagesWrapper.search}
                             style={{ marginTop: 4, marginRight: 5 }}
                         />
-                        {/* <TouchableOpacity onPress={() => this.props.navigation.navigate('chatscreen2')}> */}
-                            <TextInput
-                                placeholder='Search message'
-
-                                style={{ color: '#868585', fontSize: 14, fontFamily: Fonts.mulishRegular, fontWeight: '400', marginLeft: 4, marginBottom: 2 }}
-                            >
-                            </TextInput>
-                        {/* </TouchableOpacity> */}
+                       
+                       <Text style={{ color: '#868585', fontSize: 14, fontFamily: 'Mulish-Regular', fontWeight: '400', marginLeft: 5,marginTop:5}}>Search message</Text>
+                        
                     </View>
+                    
                 </View>
+                </TouchableOpacity>
                 <ScrollView>
                     <View style={{ flexDirection: 'row', marginTop: 20, marginBottom: 20, marginLeft: 30 }}>
-                        <Image
-                            source={ImagesWrapper.chatimage}
-                        />
+                    <View style={styles.displayimage}></View>
                         <View style={{ flexDirection: 'column', marginTop: 'auto', marginBottom: 'auto' }}>
                             {/* <TouchableOpacity onPress={() => this.props.navigation.navigate('chatscreen3')}> */}
                                 <Text style={styles.name}>Kannie Sils</Text>
@@ -36,32 +33,28 @@ export default class ChatScreen1 extends React.Component {
                         </View>
                         <View style={styles.time}>
                             <Text style={{ color: '#212B68', }}>3:00</Text>
-                            <View style={styles.number}>
+                            <View style={[styles.number,{marginLeft:10}]}>
                                 <Text style={{ color: '#FFFFFF' }}>1</Text>
                             </View>
                         </View>
                     </View>
                     <View style={styles.border}></View>
                     <View style={{ flexDirection: 'row', marginTop: 20, marginBottom: 20, marginLeft: 30 }}>
-                        <Image
-                            source={ImagesWrapper.chatimage1}
-                        />
+                    <View style={styles.displayimage}></View>
                         <View style={{ flexDirection: 'column', marginTop: 'auto', marginBottom: 'auto' }}>
                             <Text style={styles.name}>Jay Jay</Text>
                             <Text style={styles.nameText}>Hey! just wanna share with...</Text>
                         </View>
                         <View style={styles.time}>
                             <Text style={{ color: '#212B68', }}>3:00</Text>
-                            <View style={styles.number}>
+                            <View style={[styles.number,{marginLeft:10}]}>
                                 <Text style={{ color: '#FFFFFF' }}>1</Text>
                             </View>
                         </View>
                     </View>
                     <View style={styles.border}></View>
                     <View style={{ flexDirection: 'row', marginTop: 20, marginBottom: 20, marginLeft: 30 }}>
-                        <Image
-                            source={ImagesWrapper.chatimage1}
-                        />
+                    <View style={styles.displayimage}></View>
                         <View style={{ flexDirection: 'column', marginTop: 'auto', marginBottom: 'auto' }}>
                             <Text style={styles.name}>Jay Jay</Text>
                             <Text style={styles.nameText}>Hey! just wanna share with...</Text>
@@ -73,7 +66,7 @@ export default class ChatScreen1 extends React.Component {
                     <TouchableOpacity onPress={() => this.props.navigation.navigate('CreateChat')} style={{ bottom: 40, right: 30, position: 'absolute' }} activeOpacity={0.5}>
                         <Image
                             source={ImagesWrapper.editimage}
-                            style={{ marginBottom: 20, marginRight: 20 }}
+                            style={{ height:70,width:70 }}
                         />
                     </TouchableOpacity>
                 </View>
@@ -100,7 +93,7 @@ const styles = StyleSheet.create({
         fontWeight: '600',
         marginLeft: 20,
         color: '#1E1C24',
-        fontFamily: Fonts.mulishRegular
+        fontFamily: Fonts.mulishSemiBold
     },
     nameText: {
         fontFamily: Fonts.mulishRegular,
@@ -134,5 +127,12 @@ const styles = StyleSheet.create({
         backgroundColor: '#212B68',
         borderColor: '#212B68',
         marginTop: 5
+    },
+    displayimage: {
+        borderWidth: 1,
+        height: 45,
+        width: 45,
+        borderRadius: 25,
+        // marginLeft:30
     }
 })

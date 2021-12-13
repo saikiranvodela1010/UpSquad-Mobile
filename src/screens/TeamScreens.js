@@ -467,13 +467,13 @@ const styles = StyleSheet.create({
     },
     viewlink: {
         marginLeft: '7%', 
-        // marginTop: 10, 
+        // marginTop: , 
         fontSize: 16, 
         color: '#58C4C6',
         marginBottom: 25,
         fontFamily: Fonts.mulishRegular,
         fontWeight: '600',
-        marginBottom:30
+        marginBottom:'5%'
 
     }
 });

@@ -31,7 +31,9 @@ const ProfilePicScreen = (props) => {
  const [{cameraRef},{takePicture}] = useCamera(null);
  const[file,setFile]=useState(null);
 const[camerfile,setCamerafile] = useState(null);
-const [data, setData] = useState('');
+const [data, setData] = useState([
+    {text:'camera'}
+]);
 const[gallerypopup,setGallerypopup]=useState(false);
 const[lastCursor,setLastCursor]=useState(null);
 const[height1,setHeight1]=useState(380);
@@ -55,8 +57,35 @@ const getPhotos = () => {
   })
     .then((res) => {
         console.log('photos1',res.edges)
-      setData(res.edges);
-     
+        // setData({});
+        setData(res.edges);
+        // photolist.push(null)
+        // length.push('hello')
+        // length.push('')
+        // length.push(res.edges)
+        // const photolist =res.edges
+        // setData(photolist);
+
+        // setData((prevData)=>{
+        //     return [
+        //         {text:res.edges.node.image.uri},
+        //         ...prevData
+        //     ]
+        // })
+        // setData((prevData)=>{
+        //     return [
+        //         res.edges,
+        //         ...prevData
+        //     ]
+        // })
+        // setData(res.edges);
+        // setData([...data,res.edges]);
+
+    // data.push('hii');
+    // data.push(res.edges);
+    //  console.log("list",res.edges.node)
+    //  console.log("list",photolist)
+
     })
     .catch((error) => {
       console.log(error);
@@ -77,11 +106,9 @@ const askPermission = async () => {
       if (result !== 'granted') {
         console.log('Access to pictures was denied');
         return;
-      } else {
+      } 
+    } else{
         getPhotos();
-      }
-    } else {
-      getPhotos();
     }
   };
 const handleScroll=()=>{
@@ -101,18 +128,30 @@ const handleScroll=()=>{
           
          
         <View style={{flexDirection:"row"}}>
+            <View>
+               <TouchableOpacity onPress={()=>props.navigation.navigate('Account')}>
                 <Image style={styles.backarrow} source={ImagesWrapper.back} />
-                <Text style={styles.skip}>Skip</Text>
+                </TouchableOpacity>
+                </View>
+                <View>
+                {/* <TouchableOpacity onPress={()=>props.navigation.navigate('BioData')}> */}
+                             
+                <Text style={styles.skip} onPress={()=>props.navigation.navigate('BioData')} >Skip</Text>
+                
+                {/* </TouchableOpacity> */}
+                </View>
+               
 
         </View>
-        <Progress.Bar progress={0.3} width={415} style={styles.bar} color={'#212B68'}/>
+        <Progress.Bar useNativeDriver={false} progress={2} width={150} style={styles.bar} color={'#212B68'}/>
         <Text style={styles.text}>Let's start by setting a great</Text>
         <Text style={[styles.text,{marginTop:5}]}> profile pic</Text>
     
         <ScrollView
             horizontal={true}
-        //    style={{marginTop:50}}
-        onScroll={Animated.event([], {listener: (event) => {
+            showsHorizontalScrollIndicator={false}
+            // useNativeDriver= {true}
+        onScroll={Animated.event([], { useNativeDriver: true },{listener: (event) => {
             console.log('scroll',event.nativeEvent.contentOffset.x);
             if(event.nativeEvent.contentOffset.x > 10 || event.nativeEvent.contentOffset.x === 0){
                 // console.log('177')
@@ -123,7 +162,7 @@ const handleScroll=()=>{
                 setHeight5(340);setTop5(50)
                 
             }
-            if(event.nativeEvent.contentOffset.x > 188){
+            if(event.nativeEvent.contentOffset.x > 140 || event.nativeEvent.contentOffset.x === 300){
                 // console.log('177')
                 setHeight1(340);setTop1(50)
                 setHeight2(400);setTop2('3%')
@@ -133,7 +172,7 @@ const handleScroll=()=>{
 
                 
             }
-            if(event.nativeEvent.contentOffset.x > 475){
+            if(event.nativeEvent.contentOffset.x > 300 || event.nativeEvent.contentOffset.x === 650){
                 // console.log('177')
                 setHeight1(340);setTop1(50)
                 setHeight2(340);setTop2(50)
@@ -143,7 +182,7 @@ const handleScroll=()=>{
 
                 
             }
-            if(event.nativeEvent.contentOffset.x > 735){
+            if(event.nativeEvent.contentOffset.x > 650 || event.nativeEvent.contentOffset.x === 850){
                 // console.log('177')
                 setHeight1(340);setTop1(50)
                 setHeight2(340);setTop2(50)
@@ -153,7 +192,7 @@ const handleScroll=()=>{
 
                 
             }
-            if(event.nativeEvent.contentOffset.x === 938){
+            if(event.nativeEvent.contentOffset.x >850){
                 // console.log('177')
                 setHeight1(340);setTop1(50)
                 setHeight2(340);setTop2(50)
@@ -175,7 +214,7 @@ const handleScroll=()=>{
             {/* <Text style={styles.choose}>Choose from Gallery</Text> */}
             </LinearGradient>
             :
-            <LinearGradient colors={['#ECF8F8','white']} style={[styles.card,{height:height1,marginTop:top1}]} >
+            <LinearGradient colors={['#ECF8F8','white']} style={[styles.card,{height:height1,marginTop:top1,}]} >
             <TouchableOpacity onPress={()=>setShow(true)}> 
             <Image style={styles.plus} source={ImagesWrapper.vectorplus} />
             </TouchableOpacity>
@@ -183,20 +222,20 @@ const handleScroll=()=>{
             </LinearGradient>
             }
         
-            <LinearGradient colors={['white','white']} style={[styles.card,{height:height2,marginTop:top2}]} >
-            <Image  source={ImagesWrapper.girlimg} style={{width:'100%',height:'100%',alignItems:'center',marginTop:10}}/>
+            <LinearGradient colors={['white','white']} style={[styles.card,{height:height2,marginTop:top2,marginLeft:10}]} >
+            <Image  source={ImagesWrapper.girlimg} style={{width:'100%',height:'97%',alignItems:'center',marginTop:30,}}/>
 
             </LinearGradient> 
-            <LinearGradient colors={['white','white']} style={[styles.card,{height:height3,marginTop:top3}]} >
-            <Image  source={ImagesWrapper.girlimg} style={{width:'100%',height:'100%',marginTop:10}}/>
+            <LinearGradient colors={['white','white']} style={[styles.card,{height:height3,marginTop:top3,marginLeft:10}]} >
+            <Image  source={ImagesWrapper.girlimg} style={{width:'100%',height:'97%',marginTop:30}}/>
 
             </LinearGradient>
-            <LinearGradient colors={['white','white']} style={[styles.card,{height:height4,marginTop:top4}]} >
-            <Image  source={ImagesWrapper.girlimg} style={{width:'100%',height:'100%',marginTop:10}}/>
+            <LinearGradient colors={['white','white']} style={[styles.card,{height:height4,marginTop:top4,marginLeft:10}]} >
+            <Image  source={ImagesWrapper.girlimg} style={{width:'100%',height:'97%',marginTop:30}}/>
 
             </LinearGradient> 
-            <LinearGradient colors={['white','white']} style={[styles.card,{height:height5,marginTop:top5}]} >
-            <Image  source={ImagesWrapper.girlimg} style={{width:'100%',height:'100%',marginTop:10}}/>
+            <LinearGradient colors={['white','white']} style={[styles.card,{height:height5,marginTop:top5,marginLeft:10,marginRight:15}]} >
+            <Image  source={ImagesWrapper.girlimg} style={{width:'100%',height:'97%',marginTop:30}}/>
 
             </LinearGradient>
 
@@ -207,9 +246,9 @@ const handleScroll=()=>{
                         onPress={()=>{
                             props.navigation.navigate('BioData')
                          }}
-                         style={{marginTop:'5%'}}
+                         style={{marginTop:'7%',marginBottom:'10%'}}
                     >
-                    <LinearGradient start={{x: 0, y: 0}} end={{x: 1, y: 0}} colors={['#212B68', '#58C4C6']} style={[styles.linearGradient,Platform.OS === "ios" ? {marginTop:'5%'}:{marginTop:'4%'}]}>
+                    <LinearGradient start={{x: 0, y: 0}} end={{x: 1, y: 0}} colors={['#212B68', '#58C4C6']} style={[styles.linearGradient,Platform.OS === "ios" ? {marginTop:'5%'}:{marginTop:'8%'}]}>
                         <Text style={styles.buttonText}>
                             Next
                         </Text>
@@ -270,6 +309,7 @@ const handleScroll=()=>{
                         //  }}
                         onPress={()=>{
                             // setShow(false);
+                            getPhotos();
                             setGallerypopup(true);
                             setShow(true);
                            
@@ -290,32 +330,58 @@ const handleScroll=()=>{
                                 }}
                             >
                                 <View style={{backgroundColor:'white',borderTopLeftRadius: 20,borderTopRightRadius:20,height:'153%',marginTop:550,width:'110%',marginLeft:-20}}>
-                                     <Text style={{fontSize:18,margin:30}}>Gallery</Text>
+                                     <Text style={{fontSize:18,margin:30,fontFamily:Fonts.mulishSemiBold,color:'#1E1C24'}}>Gallery</Text>
                                      <View style={styles.underline}/>
                                      <View>
+                                    
                                         <FlatList
+                                       
                                             data={data}
                                             numColumns={3}
 
-                                            renderItem={({item}) => (
-                                            <TouchableOpacity onPress={()=>{
-                                                setFile(item.node.image.uri),
-                                                setGallerypopup(false);
-                                                setShow(false);
-                                               
-                                            }}>
-                                            <Image
-                                                style={{
-                                                width: Platform.OS === "ios" ? 127:100,
-                                                height: 150,
-                                                margin:Platform.OS === "ios" ? 5:10,
-                                                borderRadius:10
-                                                }}
-                                                source={{uri: item.node.image.uri}}
-                                                
-                                                // source={require('../src/images/img.png')}
-                                            />
-                                            </TouchableOpacity>
+                                            renderItem={({item,index}) => (
+                                               console.log("index",index),
+                                                <View>
+                                                   {index === 0 ? 
+                                                        <View style={{
+                                                            width: Platform.OS === "ios" ? 100:100,
+                                                            height: 100,
+                                                            margin:Platform.OS === "ios" ? 5:10,
+                                                            borderRadius:10,
+                                                            backgroundColor:'#FFFFFF'
+                                                            }}>
+                                                                <Image
+                                                                source={ImagesWrapper.camera}
+                                                                />
+                                                            </View>
+                                                      : 
+                                                    
+                                                      <TouchableOpacity onPress={()=>{
+                                                        setFile(item.node.image.uri),
+                                                        setGallerypopup(false);
+                                                        setShow(false);
+                                                       
+                                                    }}>
+                                                        
+                                                    <Image
+                                                        style={{
+                                                        width: Platform.OS === "ios" ? 100:100,
+                                                        height: 100,
+                                                        margin:Platform.OS === "ios" ? 5:10,
+                                                        borderRadius:10
+                                                        }}
+                                                        // source={{uri: item.node.image.uri}}
+                                                        source={{uri:data[index].node.image.uri}}
+                                                        
+                                                        // source={require('../src/images/img.png')}
+                                                    />
+                                                    </TouchableOpacity>
+                                                       
+                                                      
+                                                  
+                                                        } 
+                                           
+                                            </View>
                                             )}
                                         />
                                     </View>
@@ -339,22 +405,23 @@ const styles = StyleSheet.create({
         width: 30,
         height: 30,
         marginLeft: 30,
-        marginTop: 30
+        marginTop: 20
     },
     skip: {
-        marginLeft: '70%',
-        marginTop: 40,
+        marginLeft: '80%',
+        marginTop: 30,
         fontSize: 18,
         color: '#58C4C6',
         fontWeight: '700',
-        fontFamily:Fonts.mulishRegular
+        fontFamily:Fonts.mulishRegular,
+        // textAlign:'center'
     },
     bar: {
-        height: 5,
+        height: 3.5,
         // width:'100%',
         // borderColor:'black',
-        borderWidth: 0.2,
-        marginTop: 15,
+        borderWidth: 0.1,
+        marginTop: 5,
         backgroundColor:'#F1F1F1'
         //  color:'red',
         // flexGrow: 1
@@ -371,12 +438,16 @@ const styles = StyleSheet.create({
         // height: 330,
         width: 250,
         borderColor: '#F0F3F2',
-        borderWidth: 5,
-        borderRadius: 15,
+        borderWidth: 0.8,
+        borderRadius: 20,
         marginTop: '3%',
-        shadowOpacity: 3,
+        shadowOpacity: 5,
         marginLeft: 20,
-        opacity: 1,
+        shadowOpacity: 1,
+        elevation: 7,
+        marginBottom:10
+        // shadowColor:'#F0F3F2',
+        // shadowOffset:0.2
         // borderColor:'#1E1C24'
 
     },
@@ -421,7 +492,7 @@ const styles = StyleSheet.create({
     },
     plus: {
         width: '30%',
-        height: '28%',
+        height: '29%',
         marginLeft: 80,
         marginTop: '60%',
         justifyContent: 'center',
@@ -468,8 +539,9 @@ const styles = StyleSheet.create({
       uripath: {
         width: '100%',
         height: '100%',
+        borderRadius:20,
         // marginLeft: 80,
-        // marginTop: 120,
+        // marginTop:10,
         // justifyContent: 'center',
         // alignItems: 'center'
     },

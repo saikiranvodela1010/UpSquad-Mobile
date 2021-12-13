@@ -16,48 +16,42 @@ export default class GroupScreen extends React.Component {
                         />
                         <TextInput
                             placeholder='Search message'
-                            style={{ color: '#868585', fontSize: 14, fontFamily: Fonts.mulishRegular, marginLeft: 4, marginBottom: 2, fontWeight: '400' }}
+                            style={{ color: '#868585', fontSize: 14, fontFamily: Fonts.mulishRegular, marginLeft: 4, marginBottom: 2, fontWeight: '400',width:'60%' }}
                         >
                         </TextInput>
                     </View>
                 </View>
                 <ScrollView>
                     <View style={{ flexDirection: 'row', marginTop: 20, marginBottom: 20, marginLeft: 30 }}>
-                        <Image
-                            source={ImagesWrapper.groupimage}
-                        />
+                    <View style={styles.displayimage}></View>
                         <View style={{ flexDirection: 'column', marginTop: 'auto', marginBottom: 'auto' }}>
                             <Text style={styles.name}>Friends</Text>
                             <Text style={styles.nameText}>202-555-0197: Hey! Just wan...</Text>
                         </View>
                         <View style={styles.time}>
                             <Text style={{ color: '#212B68', }}>19:16</Text>
-                            <View style={styles.number}>
+                            <View style={[styles.number,{marginLeft:10}]}>
                                 <Text style={{ color: '#FFFFFF' }}>2</Text>
                             </View>
                         </View>
                     </View>
                     <View style={styles.border}></View>
                     <View style={{ flexDirection: 'row', marginTop: 20, marginBottom: 20, marginLeft: 30 }}>
-                        <Image
-                            source={ImagesWrapper.groupimage1}
-                        />
+                    <View style={styles.displayimage}></View>
                         <View style={{ flexDirection: 'column', marginTop: 'auto', marginBottom: 'auto' }}>
                             <Text style={styles.name}>Fund raising strategies</Text>
                             <Text style={styles.nameText}>202-555-0197: May I ask you...</Text>
                         </View>
                         <View style={styles.time}>
                             <Text style={{ color: '#212B68', }}>18:48</Text>
-                            <View style={styles.number}>
+                            <View style={[styles.number,{marginLeft:10}]}>
                                 <Text style={{ color: '#FFFFFF' }}>1</Text>
                             </View>
                         </View>
                     </View>
                     <View style={styles.border}></View>
                     <View style={{ flexDirection: 'row', marginTop: 20, marginBottom: 20, marginLeft: 30 }}>
-                        <Image
-                            source={ImagesWrapper.groupimage2}
-                        />
+                    <View style={styles.displayimage}></View>
                         <View style={{ flexDirection: 'column', marginTop: 'auto', marginBottom: 'auto' }}>
                             <Text style={styles.name}>Business goals for 2021</Text>
                             <Text style={styles.nameText}>202-555-0197: You were lit!...</Text>
@@ -67,7 +61,9 @@ export default class GroupScreen extends React.Component {
                 </ScrollView>
                 <View style={{ flex: 1, justifyContent: 'flex-end', alignItems: 'flex-end' }}>
                     <TouchableOpacity style={{ borderWidth: 1, height: 50, width: '40%', borderRadius: 30, backgroundColor: '#58C4C6', borderColor: '#58C4C6', bottom: 40, right: 30, position: 'absolute' }}
-                     activeOpacity={0.5} >
+                     activeOpacity={0.5} onPress={()=>{
+                        //  this.props.navigation.navigate('Group1')
+                     }}>
                         <View style={{ marginTop: 'auto', marginBottom: 'auto' }}>
                             <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
                                 <Image
@@ -103,7 +99,7 @@ const styles = StyleSheet.create({
         fontWeight: '600',
         marginLeft: 20,
         color: '#1E1C24',
-        fontFamily: Fonts.mulishRegular
+        fontFamily: Fonts.mulishSemiBold
     },
     nameText: {
         fontFamily: Fonts.mulishRegular,
@@ -137,5 +133,12 @@ const styles = StyleSheet.create({
         backgroundColor: '#212B68',
         borderColor: '#212B68',
         marginTop: 5
+    },
+    displayimage: {
+        borderWidth: 1,
+        height: 45,
+        width: 45,
+        borderRadius: 25,
+        // marginLeft:30
     }
 })

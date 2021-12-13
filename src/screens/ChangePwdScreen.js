@@ -34,7 +34,7 @@ export default class ChangePwdScreen extends React.Component {
         if(this.state.password === ''){
             this.setState({passworderr:'Please create a password'})
         }else{
-            this.props.navigation.navigate('Otp')
+            this.props.navigation.navigate('Login')
         }
        
 
@@ -48,14 +48,14 @@ export default class ChangePwdScreen extends React.Component {
             <View style={styles.mainContainer}>
                     <Image
                       source={ImagesWrapper.component}
-                   
+                      style={{width:220,height:220}}
                     />
-                    <Text style={[styles.welcome,Platform.OS === "ios" ? {marginTop:'-40%'}:{marginTop:'-30%'}]}>Create new password</Text>
+                    <Text style={[styles.welcome,Platform.OS === "ios" ? {marginTop:'-40%'}:{marginTop:'-40%'}]}>Create new password</Text>
                     <Text style={styles.create}> Your new password must be different form{"\n"} previously used passwords</Text>
 
                    
                     <View style={styles.card}>
-                    <ScrollView >
+                    {/* <ScrollView > */}
                     
                     <View style={{flexDirection:'row'}}>
                     <Text style={styles.biofirst}>Choose a Password</Text>
@@ -81,7 +81,7 @@ export default class ChangePwdScreen extends React.Component {
                             this.setState({passworderr:''})
                         }}
                         value={this.state.password}
-                        returnKeyType={"done"}
+                        // returnKeyType={"done"}
                         secureTextEntry={this.state.hidePassword}
                         // ref={(input) => { this.fourTextInput = input; }}
                         // onSubmitEditing={() => { this.fiveTextInput.focus(); }}
@@ -93,12 +93,12 @@ export default class ChangePwdScreen extends React.Component {
 
 
                     {/* Next Button view */}
-
+                        <View  style={{marginBottom:'12%',flex:1,justifyContent:'flex-end'}}>
                     <TouchableOpacity 
                         onPress={()=>{
                             this.onSubmit();
                          }}
-                         style={{marginTop:'80%',flex:1,justifyContent:'flex-end'}}
+                         
                     >
                     <LinearGradient start={{x: 0, y: 0}} end={{x: 1, y: 0}} colors={this.state.password?['#212B68', '#58C4C6']:['#F1F1F1','#F1F1F1']} style={[styles.linearGradient,Platform.OS === "ios" ? {marginTop:'5%'}:{marginTop:'4%'}]}>
                         <Text style={[styles.buttonText,this.state.password ? {color: '#ffffff'}:{color: '#868585',}]}>
@@ -106,10 +106,10 @@ export default class ChangePwdScreen extends React.Component {
                         </Text>
                     </LinearGradient>
                     </TouchableOpacity>
-                    
+                    </View>
                     
                    
-                   </ScrollView>
+                   {/* </ScrollView> */}
                 </View>
                 
             </View>
@@ -178,7 +178,8 @@ const styles = StyleSheet.create({
         marginLeft:25,
         height:Platform.OS==='ios' ? 30:40,
         fontFamily:Fonts.mulishSemiBold,
-        fontSize:16
+        fontSize:16,
+        color:'#1E1C24',
     },
     underline:{
         borderBottomColor: '#959494',

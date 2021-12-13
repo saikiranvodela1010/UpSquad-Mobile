@@ -4,6 +4,9 @@ import { TextInput } from 'react-native-gesture-handler';
 import LinearGradient from 'react-native-linear-gradient'
 import ImagesWrapper from '../res/ImagesWrapper';
 import Fonts from '../res/Fonts';
+// import { FloatingLabelInput } from 'react-native-floating-label-input';
+
+
 
 export default class LoginScreen extends React.Component {
 
@@ -18,14 +21,14 @@ export default class LoginScreen extends React.Component {
             passworderr:'',
             hidePassword:true,
             iconName:'ios-eye-off',
+            cont:'',
+            show:false,
            
         }
        
     }
-    // componentDidMount() {
-    //     this.textInput.current.focusTextInput();  
-    // }
-
+   
+   
      onCheckBoxPressed ()  {
         // this.setState({checkmark:false)});
         this.setState({ checkmark: false})
@@ -89,6 +92,8 @@ export default class LoginScreen extends React.Component {
          && nameReg.test(this.state.firstname)
          )
           {
+              this.setState({email:''})
+              this.setState({password:''})
             this.props.navigation.navigate('ProfilePic')
         } 
         
@@ -100,14 +105,15 @@ export default class LoginScreen extends React.Component {
             <View style={styles.mainContainer}>
                     <Image
                       source={ImagesWrapper.component}
+                      style={{width:220,height:220}}
                    
                     />
-                    <Text style={[styles.welcome,Platform.OS === "ios" ? {marginTop:'-40%'}:{marginTop:'-30%'}]}>Hello!</Text>
+                    <Text style={[styles.welcome,Platform.OS === "ios" ? {marginTop:'-40%'}:{marginTop:'-40%'}]}>Hello!</Text>
                     <Text style={styles.create}> Let's login to access your UpSquad account </Text>
 
                    
                     <View style={styles.card}>
-                    <ScrollView >
+                    {/* <ScrollView > */}
                     
                     <Text style={styles.bio}>Email ID</Text>
                     <TextInput
@@ -119,10 +125,12 @@ export default class LoginScreen extends React.Component {
                         value={this.state.email}
                         returnKeyType={"next"}
                         keyboardType={'email-address'}
-                        // ref={(input) => { this.thirdTextInput = input; }}
+                        ref={(input) => { this.thirdTextInput = input; }}
                         onSubmitEditing={() => { this.fourTextInput.focus(); }}
                         importantForAutofill="no" 
                         maxLength={63}
+                        // keyboardType={Platform.OS === 'ios' ? 'ascii-capable' : 'visible-password'}
+                        blurOnSubmit={false}
                     />
                    
                     <View style={styles.underline}/>
@@ -173,12 +181,12 @@ export default class LoginScreen extends React.Component {
 
 
                     {/* Next Button view */}
-
+                   <View style={{flex:1,justifyContent:'flex-end'}}>
                     <TouchableOpacity 
                         onPress={()=>{
                             this.onSubmit();
                          }}
-                         style={{marginTop:'52%'}}
+                         
                     >
                     <LinearGradient start={{x: 0, y: 0}} end={{x: 1, y: 0}} colors={['#212B68', '#58C4C6']} style={[styles.linearGradient,Platform.OS === "ios" ? {marginTop:'5%'}:{marginTop:'4%'}]}>
                         <Text style={styles.buttonText}>
@@ -186,7 +194,7 @@ export default class LoginScreen extends React.Component {
                         </Text>
                     </LinearGradient>
                     </TouchableOpacity>
-                    
+                    </View>
                     
                     <View style={{alignItems:'center'}}>
                     <Text style={styles.text2}>Don't have an account?
@@ -201,7 +209,7 @@ export default class LoginScreen extends React.Component {
                     </Text>
                     </View>
                    
-                   </ScrollView>
+                   {/* </ScrollView> */}
                 </View>
                 
             </View>
@@ -227,7 +235,7 @@ const styles = StyleSheet.create({
     create:{
         fontSize:15,
         fontWeight:'400',
-        paddingLeft:20,
+        paddingLeft:15,
         paddingTop:5,
         color:'#1E1C24',
         fontFamily:Fonts.mulishRegular
@@ -267,7 +275,8 @@ const styles = StyleSheet.create({
         marginLeft:25,
         height:Platform.OS==='ios' ? 30:40,
         fontFamily:Fonts.mulishSemiBold,
-        fontSize:16
+        fontSize:16,
+        color:'#1E1C24',
     },
     underline:{
         borderBottomColor: '#959494',
@@ -324,8 +333,8 @@ const styles = StyleSheet.create({
         fontSize:14,
         color:'#868585',
         fontFamily:Fonts.mulishRegular,
-        marginTop:5
-        //marginBottom:20
+        marginTop:5,
+        marginBottom:'10%'
     },
     forgot:{
         color:'#58C4C6',

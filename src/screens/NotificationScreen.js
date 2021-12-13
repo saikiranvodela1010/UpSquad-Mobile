@@ -23,10 +23,7 @@ export default class NotificationScreen extends React.Component {
                 <View style={{ borderWidth: 1, borderColor: '#F1F1F1' }}></View>
                 <ScrollView>
                 <View style={{ flexDirection: 'row', marginTop: 20, marginBottom: 20 }}>
-                    <Image
-                        source={ImagesWrapper.notification}
-                        style={{ marginLeft: 30 }}
-                    />
+                <View style={styles.displayimage}></View>
                     <View style={{ flexDirection: 'column', marginTop: 'auto', marginBottom: 'auto' }}>
                         <Text style={styles.text1}>You have an upcoming meeting</Text>
                         <Text style={styles.text1}>with <Text style={styles.text2}>Katy Brown</Text></Text>
@@ -35,10 +32,7 @@ export default class NotificationScreen extends React.Component {
                 </View>
                 <View style={styles.border}></View>
                 <View style={{ flexDirection: 'row', marginTop: 20, marginBottom: 20 }}>
-                    <Image
-                        source={ImagesWrapper.notification1}
-                        style={{ marginLeft: 30 }}
-                    />
+                <View style={styles.displayimage}></View>
                     <View style={{ flexDirection: 'column', marginTop: 'auto', marginBottom: 'auto' }}>
                         <Text style={[styles.text2, { marginLeft: 20 }]}>Thomas White <Text style={styles.text1}>commented on </Text></Text>
                         <Text style={styles.text1}>your post </Text>
@@ -47,10 +41,7 @@ export default class NotificationScreen extends React.Component {
                 </View>
                 <View style={styles.border}></View>
                 <View style={{ flexDirection: 'row', marginTop: 20, marginBottom: 20 }}>
-                    <Image
-                        source={ImagesWrapper.notification}
-                        style={{ marginLeft: 30 }}
-                    />
+                <View style={styles.displayimage}></View>
                     <View style={{ flexDirection: 'column', marginTop: 'auto', marginBottom: 'auto' }}>
                         <Text style={styles.text1}>You have an upcoming meeting</Text>
                         <Text style={styles.text1}>with <Text style={styles.text2}>Ann Marie</Text></Text>
@@ -59,10 +50,7 @@ export default class NotificationScreen extends React.Component {
                 </View>
                 <View style={styles.border}></View>
                 <View style={{ flexDirection: 'row', marginTop: 20, marginBottom: 20 }}>
-                    <Image
-                        source={ImagesWrapper.notification}
-                        style={{ marginLeft: 30 }}
-                    />
+                <View style={styles.displayimage}></View>
                     <View style={{ flexDirection: 'column', marginTop: 'auto', marginBottom: 'auto' }}>
                         <Text style={[styles.text2, { marginLeft: 20 }]}>Annie Marie <Text style={styles.text1}>liked your post</Text></Text>
                     </View>
@@ -70,10 +58,7 @@ export default class NotificationScreen extends React.Component {
                 </View>
                 <View style={styles.border}></View>
                 <View style={{ flexDirection: 'row', marginTop: 20, marginBottom: 20 }}>
-                    <Image
-                        source={ImagesWrapper.notification}
-                        style={{ marginLeft: 30 }}
-                    />
+                <View style={styles.displayimage}></View>
                     <View style={{ flexDirection: 'column', marginTop: 'auto', marginBottom: 'auto' }}>
                         <Text style={[styles.text2, { marginLeft: 20 }]}>Pooja Rathod <Text style={styles.text1}>commented on </Text></Text>
                         <Text style={styles.text1}>your post </Text>
@@ -82,10 +67,7 @@ export default class NotificationScreen extends React.Component {
                 </View>
                 <View style={styles.border}></View>
                 <View style={{ flexDirection: 'row', marginTop: 20, marginBottom: 20 }}>
-                    <Image
-                        source={ImagesWrapper.notification}
-                        style={{ marginLeft: 30 }}
-                    />
+                <View style={styles.displayimage}></View>
                     <View style={{ flexDirection: 'column', marginTop: 'auto', marginBottom: 'auto' }}>
                         <Text style={[styles.text2, { marginLeft: 20 }]}>Pooja Rathod <Text style={styles.text1}>liked your post</Text></Text>
                     </View>
@@ -93,10 +75,7 @@ export default class NotificationScreen extends React.Component {
                 </View>
                 <View style={styles.border}></View>
                 <View style={{ flexDirection: 'row', marginTop: 20, marginBottom: 20 }}>
-                    <Image
-                        source={ImagesWrapper.notification2}
-                        style={{ marginLeft: 30 }}
-                    />
+                <View style={styles.displayimage}></View>
                     <View style={{ flexDirection: 'column', marginTop: 'auto', marginBottom: 'auto' }}>
                         <Text style={styles.text1}>You have an upcoming event</Text>
                     </View>
@@ -104,10 +83,7 @@ export default class NotificationScreen extends React.Component {
                 </View>
                 <View style={styles.border}></View>
                 <View style={{ flexDirection: 'row', marginTop: 20, marginBottom: 20 }}>
-                    <Image
-                        source={ImagesWrapper.notification}
-                        style={{ marginLeft: 30 }}
-                    />
+                <View style={styles.displayimage}></View>
                     <View style={{ flexDirection: 'column', marginTop: 'auto', marginBottom: 'auto' }}>
                         <Text style={styles.text1}>You have an upcoming meeting</Text>
                         <Text style={styles.text1}>with <Text style={styles.text2}>Kesha Rice</Text></Text>
@@ -138,9 +114,10 @@ const styles = StyleSheet.create({
         fontFamily: Fonts.mulishRegular
     },
     text2: {
-        fontFamily: Fonts.mulishBold,
+        fontFamily: Fonts.mulishSemiBold,
         fontSize: 14,
         fontWeight: '400',
+        color:"#1E1C24"
 
     },
     minutes: {
@@ -156,5 +133,12 @@ const styles = StyleSheet.create({
         width: '85%',
         marginLeft: 'auto',
         marginRight: 'auto'
+    },
+    displayimage: {
+        borderWidth: 1,
+        height: 45,
+        width: 45,
+        borderRadius: 25,
+        marginLeft:30
     }
 })
