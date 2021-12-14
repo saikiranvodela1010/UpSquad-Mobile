@@ -46,7 +46,13 @@ const ImagesWrapper = {
     stories:require('../Images/Stories.png'),
     people:require('../Images/People.png'),
     checkcircle:require('../Images/CheckCircle.png'),
-    
-
+    attachment:require('../Images/attachment.png'),
+    audio:require('../Images/audio.png'),
+    camerablack:require('../Images/camerablack.png'),
+    document:require('../Images/document.png'),
+    emoji:require('../Images/emoji.png'),
+    sendimage:require('../Images/sendimage.png'),
+    menuimage:require('../Images/menuimage.png'),
+    mic:require('../Images/mic.png'),
 }
 export default ImagesWrapper;

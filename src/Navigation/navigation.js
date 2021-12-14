@@ -19,7 +19,7 @@ import CreateChatScreen from '../screens/CreateChatScreen';
 import GroupScreen1 from '../screens/GroupScreen1'
 import ChatScreen2 from "../screens/ChatScreen2";
 import Bio from '../screens/Bio'
-
+import MessageScreen from '../screens/MessageScreen';
 
 const Navigator = () =>{
     const Stack = createStackNavigator();
@@ -31,7 +31,7 @@ const Navigator = () =>{
                 gestureEnabled: false,
                 animationEnabled: false
             }}
-            initialRouteName='GetStarted'
+            initialRouteName='BioData'
         >
         <Stack.Screen 
         name="GetStarted" 
@@ -82,9 +82,16 @@ const Navigator = () =>{
     <Stack.Screen 
         name="ChatScreen2" 
         component={ChatScreen2} />
-        <Stack.Screen 
+    <Stack.Screen 
         name="Bio" 
         component={Bio} />
+     <Stack.Screen 
+        name="Message" 
+        component={MessageScreen} />
+
+
+
+
        </Stack.Navigator>
        </NavigationContainer>
     );

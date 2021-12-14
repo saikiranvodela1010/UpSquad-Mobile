@@ -46,9 +46,12 @@ const[top2,setTop2]=useState(50)
 const[top3,setTop3]=useState(50)
 const[top4,setTop4]=useState(50)
 const[top5,setTop5]=useState(50)
-
+const Photolist=[
+    {type:'camera'}
+]
 
 const getPhotos = () => {
+    console.log('data',data);
     console.log('photos')
    
   CameraRoll.getPhotos({
@@ -56,9 +59,19 @@ const getPhotos = () => {
     assetType: 'Photos',
   })
     .then((res) => {
-        console.log('photos1',res.edges)
+        console.log('photos1',res.edges,res.edges.length)
         // setData({});
-        setData(res.edges);
+        Photolist.push({type:"bhanu"})
+        Photolist.push({type:"bhanupro"})
+        res.edges.map((number) =>
+        //   Photolist.push(number),
+          data.push(number)
+);
+        // Photolist.push(res.edges)
+        // alert(photolist.length.toString())
+        console.log('photolist ren',Photolist.length)
+        //setData(res.edges);
+        
         // photolist.push(null)
         // length.push('hello')
         // length.push('')
@@ -84,7 +97,7 @@ const getPhotos = () => {
     // data.push('hii');
     // data.push(res.edges);
     //  console.log("list",res.edges.node)
-    //  console.log("list",photolist)
+     console.log("list",data.length)
 
     })
     .catch((error) => {
@@ -107,9 +120,7 @@ const askPermission = async () => {
         console.log('Access to pictures was denied');
         return;
       } 
-    } else{
-        getPhotos();
-    }
+    } 
   };
 const handleScroll=()=>{
     console.log('hello')
@@ -133,7 +144,7 @@ const handleScroll=()=>{
                 <Image style={styles.backarrow} source={ImagesWrapper.back} />
                 </TouchableOpacity>
                 </View>
-                <View>
+                <View style={{marginRight:'10%'}}>
                 {/* <TouchableOpacity onPress={()=>props.navigation.navigate('BioData')}> */}
                              
                 <Text style={styles.skip} onPress={()=>props.navigation.navigate('BioData')} >Skip</Text>
@@ -143,15 +154,16 @@ const handleScroll=()=>{
                
 
         </View>
-        <Progress.Bar useNativeDriver={false} progress={2} width={150} style={styles.bar} color={'#212B68'}/>
+        <Progress.Bar useNativeDriver={false} progress={2} width={450} style={styles.bar} color={'#212B68'}/>
         <Text style={styles.text}>Let's start by setting a great</Text>
         <Text style={[styles.text,{marginTop:5}]}> profile pic</Text>
     
         <ScrollView
+        // style={{marginBottom:'50%'}}
             horizontal={true}
             showsHorizontalScrollIndicator={false}
             // useNativeDriver= {true}
-        onScroll={Animated.event([], { useNativeDriver: true },{listener: (event) => {
+        onScroll={Animated.event([], {listener: (event) => {
             console.log('scroll',event.nativeEvent.contentOffset.x);
             if(event.nativeEvent.contentOffset.x > 10 || event.nativeEvent.contentOffset.x === 0){
                 // console.log('177')
@@ -209,7 +221,12 @@ const handleScroll=()=>{
         {file || camerfile?
             <LinearGradient colors={['#ECF8F8','white']} style={[styles.card,{height:height1,marginTop:top1}]} >
             <TouchableOpacity onPress={()=>setShow(true)}> 
-            <Image style={styles.uripath} source={{uri:file || camerfile?.path}} />
+            {file ?
+                 <Image style={styles.uripath} source={{uri:file}} />
+                 :
+                 <Image style={styles.uripath} source={{uri:camerfile?.path}} />
+            }
+           
             </TouchableOpacity>
             {/* <Text style={styles.choose}>Choose from Gallery</Text> */}
             </LinearGradient>
@@ -241,19 +258,20 @@ const handleScroll=()=>{
 
 
         </ScrollView>
-
+        <View  style={{marginTop:'10%',marginBottom:'17%'}}>
         <TouchableOpacity 
                         onPress={()=>{
                             props.navigation.navigate('BioData')
                          }}
-                         style={{marginTop:'7%',marginBottom:'10%'}}
+                        
                     >
                     <LinearGradient start={{x: 0, y: 0}} end={{x: 1, y: 0}} colors={['#212B68', '#58C4C6']} style={[styles.linearGradient,Platform.OS === "ios" ? {marginTop:'5%'}:{marginTop:'8%'}]}>
                         <Text style={styles.buttonText}>
                             Next
                         </Text>
                     </LinearGradient>
-                    </TouchableOpacity>    
+                    </TouchableOpacity>   
+                    </View> 
     <Modal
          transparent={true}
          isVisible={show}
@@ -274,6 +292,7 @@ const handleScroll=()=>{
                         })
                         .then((image)=>{
                             console.log('images',image);
+                            setFile('');
                           setCamerafile(image);
                           setShow(false)
                         })
@@ -340,20 +359,45 @@ const handleScroll=()=>{
                                             numColumns={3}
 
                                             renderItem={({item,index}) => (
-                                               console.log("index",index),
-                                                <View>
+                                               
+                                                <View style={{marginLeft:'2%'}}>
                                                    {index === 0 ? 
+                                                    <TouchableOpacity 
+                                                    onPress={()=>{
+                                                        ImagePickerCropper.openCamera({
+                                                            width:300,
+                                                            height:300,
+                                                            cropping:true,
+                                                            freeStyleCropEnabled:true,
+                                                            // multiple:true
+                                                        })
+                                                        .then((image)=>{
+                                                            console.log('images',image);
+                                                          setCamerafile(image);
+                                                          setShow(false)
+                                                        })
+                                                        .catch((error)=>{
+                                                            console.log('error',error)
+                                                            
+                                                        });
+                                                        
+                                                    }}
+                                                    >
                                                         <View style={{
                                                             width: Platform.OS === "ios" ? 100:100,
                                                             height: 100,
                                                             margin:Platform.OS === "ios" ? 5:10,
                                                             borderRadius:10,
-                                                            backgroundColor:'#FFFFFF'
+                                                            backgroundColor:'#FFFFFF',
+                                                            paddingLeft:20,
+                                                            paddingTop:5
                                                             }}>
                                                                 <Image
                                                                 source={ImagesWrapper.camera}
+                                                               
                                                                 />
                                                             </View>
+                                                            </TouchableOpacity>
                                                       : 
                                                     
                                                       <TouchableOpacity onPress={()=>{
@@ -405,11 +449,11 @@ const styles = StyleSheet.create({
         width: 30,
         height: 30,
         marginLeft: 30,
-        marginTop: 20
+        marginTop: 15
     },
     skip: {
         marginLeft: '80%',
-        marginTop: 30,
+        marginTop: '5%',
         fontSize: 18,
         color: '#58C4C6',
         fontWeight: '700',
@@ -421,7 +465,7 @@ const styles = StyleSheet.create({
         // width:'100%',
         // borderColor:'black',
         borderWidth: 0.1,
-        marginTop: 5,
+        marginTop: 7,
         backgroundColor:'#F1F1F1'
         //  color:'red',
         // flexGrow: 1

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, ImageBackground, Text, Image, ScrollView, FlatList, } from 'react-native';
+import { View, StyleSheet, ImageBackground, Text, Image, ScrollView, FlatList,Alert } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient'
 import ImagesWrapper from '../res/ImagesWrapper';
 import * as Progress from 'react-native-progress';
@@ -16,27 +16,46 @@ const BioDataScreen = (props) => {
     const [writeText, setWriteText] = useState('');
     const [writeTop, setWriteTop] = useState('-42%');
     const [choose, setChoose] = useState(false);
-    const [addCard, setAddCard] = useState([
-        {text:'bhanu',id:'bhanu',isSelect:false,
-        selectedClass:'notselected'},
-    ]);
-    const[getTouch,setGetTouch]=useState(false)
+    const [addCard, setAddCard] = useState([]);
+    const [selectedItems,setSelectedItems]=useState([]);
+    const[ selectedBox,setSelectedBox]=useState([]);
+   
 
-
-
+console.log('databox',selectedBox.length)
+const  getListViewItem =(data)=>{
+    // const filteredItems = this.state.selectedItems.filter(item => item.id == data.id)
+    selectedItems.push(data);
+        // this.setState({selectedParticipants:this.state.selectedItems})
+    setSelectedBox(selectedItems);
+    console.log('selectedItems',selectedItems);
+    console.log('selectedBox',selectedBox);
+}
 
 
     const onCheckBoxPressed = (item) => {
-        console.log('item',item.item.isSelect,item.item.selectedClass)
-        item.item.isSelect = true;
+     
+    
+   
+  
+        console.log('item',item,item.item.selectedClass)
+        item.item.isSelect = !item.item.isSelect;
         console.log('item1',item.item.isSelect)
 
         item.item.selectedClass = item.item.isSelect ? 'selected' : 'notselected';
         console.log('selectedclass',item.item.selectedClass)
-        return [
-            { isSelect:item.item.isSelect,selectedClass:item.item.selectedClass },
-           
-        ]
+       let newArr =[...addCard];
+       newArr[item.index]={
+           text:item.item.text,
+           isSelect:item.item.isSelect,
+           selectedClass:item.item.selectedClass
+       }
+       console.log('newArr',newArr[item.index]);
+       setAddCard(newArr);
+       console.log('setArr',newArr);
+
+       getListViewItem(item);
+      
+    //    console.log('cardtext',cardtext)
         // setAddCard((prevAddCard) => {
         //     return [
         //         { text:item.item.text,isSelect:item.item.isSelect,selectedClass:item.item.selectedClass },
@@ -51,6 +70,7 @@ const BioDataScreen = (props) => {
     
     const add = (text) => {
         console.log('add', text,Math.random().toString());
+        setWriteText('')
         setAddCard((prevAddCard) => {
             return [
                 { text: text, id: Math.random().toString(),isSelect:false,selectedClass:'notselected' },
@@ -79,26 +99,37 @@ const BioDataScreen = (props) => {
                     style={styles.linearGradient}
                     start={{ x: 0, y: 0 }}
                     end={{ x: 0, y: 0.65 }} >
-                    <ScrollView >
+                    <ScrollView style={{marginBottom:'5%'}}>
                         <View style={{ justifyContent: 'flex-start', flex: 1 }}>
                             <Text style={[styles.biotext, { marginTop: '20%' }]}>Let's write a short but {"\n"}colorful Bio</Text>
                             <View style={{ flexDirection: 'row' }}>
                                 <Text style={[styles.biotext, { marginTop: '9%', fontSize: 20 }]}>I'm</Text>
-                                <Text style={[styles.biotext, { marginTop: '8%', marginLeft: 10 }]}>Ben Thompson</Text>
+                                <Text style={[styles.biotext, { marginTop: '8%', marginLeft: 10, textDecorationLine: 'underline',textDecorationColor: '#F1F1F1',textDecorationStyle: 'solid' }]}>Ben Thompson</Text>
                             </View>
-                            <View style={styles.underline} />
+                            {/* <View style={styles.underline} /> */}
                             <TouchableOpacity onPress={() => {
                                 setChoose(true);
                             }}>
                                 <Text style={[styles.biotext, { marginTop: '3%',fontSize:21 }]}>I'm here to
+                                {selectedBox.length >=1 ?
+                                 selectedBox.map((item,index)=>{
+                                     return(
+                                    <Text style={[styles.biotext, styles.choosetext]}>{item.item.text}{",\n"}</Text>
+                                     )
+                                 })
+                                 :
                                  <Text style={[styles.biotext, styles.choosetext]}> Choose what{'\n'}your or here for.</Text>
+                                }
                                 </Text>
 
                                 {/* <View style={[styles.underline, { marginLeft: '36%', width: '30%' }]} />
                                 <Text style={[styles.biotext, { marginTop: '2%', marginLeft: 23, color: '#58C4C6', fontSize: 20 }]}> your or here for.</Text>
                                 <View style={[styles.underline, { marginLeft: '7%', width: '35%' }]} /> */}
                             </TouchableOpacity>
+                           
                             <Text style={[styles.biotext, { marginTop: '4%' }]}>Get in touch with</Text>
+                           
+                            
                             <View style={{ flexDirection: 'row' }}>
                                 <Text style={[styles.biotext, { marginTop: '0%' }]}>me for</Text>
                                 <Text style={[styles.biotext, styles.choosetext, { marginTop: 1, marginLeft: 3 }]}> Choose what you want</Text>
@@ -125,6 +156,10 @@ const BioDataScreen = (props) => {
                                                             setWriteText(Text);
                                                             // setWrite(true);
                                                         }}
+                                                        enablesReturnKeyAutomatically={true}
+                                                        keyboardType='default'
+                                                        multiline={true}
+                                                        blurOnSubmit={true}
                                                         value={writeText}
                                                         onSubmitEditing={() => add(writeText)}
                                                         onKeyPress={() => {
@@ -169,36 +204,7 @@ const BioDataScreen = (props) => {
                                 </View>
 
                                         
-                                 {/* <View style={styles.biocard}>
-                                    <TouchableOpacity
-                                        onPress={
-                                            onCheckBoxPressed}
-                                    >
-                                        <Image
-                                            resizeMode='contain'
-                                            source={checkmarkName === 'mark-on' ? ImagesWrapper.checkmark : ImagesWrapper.checkbox}
-                                            style={[checkmarkName === 'mark-on' ? styles.checkmark : styles.checkbox]}
-                                        />
-
-
-                                    </TouchableOpacity>
-                                    <Text style={styles.get}>Get to know new people</Text>
-                                </View>
-                                <View style={styles.biocard}>
-                                    <TouchableOpacity
-                                        onPress={
-                                            onCheckBoxPressed1}
-                                    >
-                                        <Image
-                                            resizeMode='contain'
-                                            source={checkmarkName1 === 'mark-on' ? ImagesWrapper.checkmark : ImagesWrapper.checkbox}
-                                            style={[checkmarkName1 === 'mark-on' ? styles.checkmark : styles.checkbox]}
-                                        />
-
-
-                                    </TouchableOpacity>
-                                    <Text style={styles.get}>Get to know new people</Text>
-                                </View>  */}
+                                
                                  </ScrollView>
                                 // </View>
                                 :
@@ -209,12 +215,13 @@ const BioDataScreen = (props) => {
 
 
                             {/* </View> */}
+                            <View  style={{ flex: 1, justifyContent: 'flex-end' }, choose === false ? { marginTop: '60%' } : { marginTop: '3%' }}>
                             <TouchableOpacity
                                 onPress={() => {
                                     props.navigation.navigate('ProfileSucess')
                                     // alert('length'+addCard[0].id)
                                 }}
-                                style={{ flex: 1, justifyContent: 'flex-end' }, choose === false ? { marginTop: '55%' } : { marginTop: '3%' }}
+                               
                             >
                                 <LinearGradient start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }} colors={['#F1F1F1', '#F1F1F1']} style={[styles.linearGradientButton, Platform.OS === "ios" ? { marginTop: '5%' } : { marginTop: '4%' }]}>
                                     <Text style={[styles.buttonText, { color: '#868585', }]}>
@@ -222,6 +229,7 @@ const BioDataScreen = (props) => {
                         </Text>
                                 </LinearGradient>
                             </TouchableOpacity>
+                            </View>
                         </View>
                     </ScrollView>
 
@@ -356,7 +364,7 @@ const styles = StyleSheet.create({
         marginLeft: 15,
         marginTop: 15,
         backgroundColor: '#58C4C6',
-        borderRadius: 5,
+        borderRadius: 10,
 
     },
     get: {
