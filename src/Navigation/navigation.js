@@ -16,10 +16,15 @@ import ProfileSuccess from '../screens/ProfileSuccess';
 import NotificationScreen from '../screens/NotificationScreen';
 import ChatScreen from '../screens/ChatScreen';
 import CreateChatScreen from '../screens/CreateChatScreen';
-import GroupScreen1 from '../screens/GroupScreen1'
-import ChatScreen2 from "../screens/ChatScreen2";
-import Bio from '../screens/Bio'
+import Bio from '../screens/Bio';
+import ChatSearch from '../screens/ChatSearch';
+import GroupSearch from '../screens/GroupSearch';
 import MessageScreen from '../screens/MessageScreen';
+import RemoveUser from '../screens/RemoveUser';
+import GroupScreen1 from '../screens/GroupScreen1';
+import GroupScreen2 from '../screens/GroupScreen2';
+
+
 
 const Navigator = () =>{
     const Stack = createStackNavigator();
@@ -31,7 +36,7 @@ const Navigator = () =>{
                 gestureEnabled: false,
                 animationEnabled: false
             }}
-            initialRouteName='BioData'
+            initialRouteName='GetStarted'
         >
         <Stack.Screen 
         name="GetStarted" 
@@ -75,19 +80,43 @@ const Navigator = () =>{
      <Stack.Screen 
         name="CreateChat" 
         component={CreateChatScreen} />
-    <Stack.Screen 
-        name="Group1" 
-        component={GroupScreen1} />
-
-    <Stack.Screen 
-        name="ChatScreen2" 
-        component={ChatScreen2} />
+  
     <Stack.Screen 
         name="Bio" 
         component={Bio} />
-     <Stack.Screen 
-        name="Message" 
-        component={MessageScreen} />
+     <Stack.Screen
+        name="chatsearch"
+        component={ChatSearch}
+
+      />
+
+      <Stack.Screen
+        name="groupsearch"
+        component={GroupSearch}
+
+      />
+ <Stack.Screen
+        name="groupscreen1"
+        component={GroupScreen1}
+
+      />
+
+      <Stack.Screen
+        name="groupscreen2"
+        component={GroupScreen2}
+
+      />
+
+      <Stack.Screen
+        name="removeuser"
+        component={RemoveUser}
+
+      />
+ <Stack.Screen
+        name="messagescreen"
+        component={MessageScreen}
+
+      />
 
 
 

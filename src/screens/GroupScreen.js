@@ -8,19 +8,18 @@ export default class GroupScreen extends React.Component {
         return (
 
             <View style={{ flex: 1, backgroundColor: '#FFFFFF' }}>
+                <TouchableOpacity onPress = {() => this.props.navigation.navigate('groupsearch')}>
                 <View style={styles.searchBorder}>
-                    <View style={{ flexDirection: 'row', marginLeft: 20, marginTop: 10 }}>
+                    <View style={{ flexDirection: 'row', marginLeft: 20, marginTop: 10, alignItems: 'center' }}>
                         <Image
                             source={ImagesWrapper.search}
-                            style={{ marginTop: 4 }}
+                            style={{marginTop:4,marginRight:5}}
                         />
-                        <TextInput
-                            placeholder='Search message'
-                            style={{ color: '#868585', fontSize: 14, fontFamily: Fonts.mulishRegular, marginLeft: 4, marginBottom: 2, fontWeight: '400',width:'60%' }}
-                        >
-                        </TextInput>
+                        
+                        <Text style={{ color: '#868585', fontSize: 14, fontFamily: 'Mulish-Regular', fontWeight: '400', marginLeft: 5}}>Search message</Text>
                     </View>
                 </View>
+                </TouchableOpacity>
                 <ScrollView>
                     <View style={{ flexDirection: 'row', marginTop: 20, marginBottom: 20, marginLeft: 30 }}>
                     <View style={styles.displayimage}></View>
@@ -62,7 +61,7 @@ export default class GroupScreen extends React.Component {
                 <View style={{ flex: 1, justifyContent: 'flex-end', alignItems: 'flex-end' }}>
                     <TouchableOpacity style={{ borderWidth: 1, height: 50, width: '40%', borderRadius: 30, backgroundColor: '#58C4C6', borderColor: '#58C4C6', bottom: 40, right: 30, position: 'absolute' }}
                      activeOpacity={0.5} onPress={()=>{
-                        //  this.props.navigation.navigate('Group1')
+                         this.props.navigation.navigate('Bio');
                      }}>
                         <View style={{ marginTop: 'auto', marginBottom: 'auto' }}>
                             <View style={{ flexDirection: 'row', justifyContent: 'center' }}>

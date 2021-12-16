@@ -14,21 +14,64 @@ const BioDataScreen = (props) => {
     const [checkmarkName1, setCheckmarkName1] = useState('mark-off1');
     const [write, setWrite] = useState(false);
     const [writeText, setWriteText] = useState('');
-    const [writeTop, setWriteTop] = useState('-42%');
+    const [writeTop, setWriteTop] = useState('0%');
     const [choose, setChoose] = useState(false);
+    const [choosewant, setChooseWant] = useState(false);
     const [addCard, setAddCard] = useState([]);
     const [selectedItems,setSelectedItems]=useState([]);
     const[ selectedBox,setSelectedBox]=useState([]);
-   
+    const [choosewantItems,setChooseWantItems]=useState([]);
+    const[ choosewantBox,setChooseWantBox]=useState([]);
+    const[barwidth,setBarWidth]=useState(150);
 
-console.log('databox',selectedBox.length)
+
+
+const remove = (data) =>{
+    if(choosewant === false){
+       
+        let index = selectedBox.indexOf(data)
+    let nextBox = selectedBox
+        nextBox.splice(index,1)
+        setSelectedBox(nextBox);
+        selectedBox.length === 0 ? setBarWidth(200) : barwidth;
+         console.log('slect1:',selectedBox)
+    }else{
+        
+        let index = choosewantBox.indexOf(data)
+    let nextBox = choosewantBox
+        nextBox.splice(index,1)
+        setChooseWantBox(nextBox);
+        choosewantBox.length === 0 ? setBarWidth(300) : barwidth;
+         console.log('choosewantBoxslect1:',choosewantBox)
+    }
+    choosewantBox.length=== 0 && selectedBox.length ===0 ? setBarWidth(150) : barwidth;
+    
+}
 const  getListViewItem =(data)=>{
     // const filteredItems = this.state.selectedItems.filter(item => item.id == data.id)
-    selectedItems.push(data);
-        // this.setState({selectedParticipants:this.state.selectedItems})
-    setSelectedBox(selectedItems);
-    console.log('selectedItems',selectedItems);
-    console.log('selectedBox',selectedBox);
+    
+    if(choosewant === false){
+        if(data.item.isSelect === false){
+            remove(data);
+        }else{
+            setBarWidth(250);
+            selectedItems.push(data);
+                // this.setState({selectedParticipants:this.state.selectedItems})
+            setSelectedBox(selectedItems);
+        }
+        console.log('selectedBox',selectedBox);
+    }else{
+        if(data.item.isSelect === false){
+            remove(data);
+        }else{
+        setBarWidth(350);
+        choosewantItems.push(data);
+        setChooseWantBox(choosewantItems);
+        }
+        console.log('choosewantItems',choosewantBox);
+    }
+   
+    
 }
 
 
@@ -55,22 +98,14 @@ const  getListViewItem =(data)=>{
 
        getListViewItem(item);
       
-    //    console.log('cardtext',cardtext)
-        // setAddCard((prevAddCard) => {
-        //     return [
-        //         { text:item.item.text,isSelect:item.item.isSelect,selectedClass:item.item.selectedClass },
-        //         ...prevAddCard
-        //     ]
-        // })
-        // checkmarkName !== "mark-off" ? setCheckmarkName("mark-off") : setCheckmarkName("mark-on");
+  
     }
-    const onCheckBoxPressed1 = () => {
-        checkmarkName1 !== "mark-off1" ? setCheckmarkName1("mark-off1") : setCheckmarkName1("mark-on")
-    }
+    
     
     const add = (text) => {
         console.log('add', text,Math.random().toString());
         setWriteText('')
+        // setWrite(false);
         setAddCard((prevAddCard) => {
             return [
                 { text: text, id: Math.random().toString(),isSelect:false,selectedClass:'notselected' },
@@ -89,7 +124,7 @@ const  getListViewItem =(data)=>{
                
             </TouchableOpacity>
             <Text onPress={() =>props.navigation.navigate('ProfilePic')}></Text>
-            <Progress.Bar progress={2} width={150} style={styles.bar} color={'#212B68'} />
+            <Progress.Bar progress={2} width={barwidth} style={styles.bar} color={'#212B68'} />
             <ImageBackground source={ImagesWrapper.manpic}
                 style={styles.imgBackground} >
 
@@ -99,8 +134,9 @@ const  getListViewItem =(data)=>{
                     style={styles.linearGradient}
                     start={{ x: 0, y: 0 }}
                     end={{ x: 0, y: 0.65 }} >
-                    <ScrollView style={{marginBottom:'5%'}}>
+                   
                         <View style={{ justifyContent: 'flex-start', flex: 1 }}>
+                        <ScrollView style={{marginBottom:'5%'}}>
                             <Text style={[styles.biotext, { marginTop: '20%' }]}>Let's write a short but {"\n"}colorful Bio</Text>
                             <View style={{ flexDirection: 'row' }}>
                                 <Text style={[styles.biotext, { marginTop: '9%', fontSize: 20 }]}>I'm</Text>
@@ -114,11 +150,12 @@ const  getListViewItem =(data)=>{
                                 {selectedBox.length >=1 ?
                                  selectedBox.map((item,index)=>{
                                      return(
-                                    <Text style={[styles.biotext, styles.choosetext]}>{item.item.text}{",\n"}</Text>
+
+                                    <Text style={[styles.biotext, styles.choosetext,{color:'#FFFFFF'}]}> {item.item.text}{index<selectedBox.length-1 ? ",":""}</Text>
                                      )
                                  })
                                  :
-                                 <Text style={[styles.biotext, styles.choosetext]}> Choose what{'\n'}your or here for.</Text>
+                                 <Text style={[styles.biotext, styles.choosetext,]}> Choose what{'\n'}your or here for.</Text>
                                 }
                                 </Text>
 
@@ -127,12 +164,30 @@ const  getListViewItem =(data)=>{
                                 <View style={[styles.underline, { marginLeft: '7%', width: '35%' }]} /> */}
                             </TouchableOpacity>
                            
-                            <Text style={[styles.biotext, { marginTop: '4%' }]}>Get in touch with</Text>
+                            <Text style={[styles.biotext, selectedBox.length >=1 ?{ marginTop: '7%' }:{ marginTop: '4%' }]}>Get in touch with</Text>
                            
                             
                             <View style={{ flexDirection: 'row' }}>
-                                <Text style={[styles.biotext, { marginTop: '0%' }]}>me for</Text>
-                                <Text style={[styles.biotext, styles.choosetext, { marginTop: 1, marginLeft: 3 }]}> Choose what you want</Text>
+                                <Text style={[styles.biotext, { marginTop: '1%' }]}>me for</Text>
+                                {choosewantBox.length >=1 ?
+                                choosewantBox.map((item,index)=>{
+                                    return(
+                                 <Text style={[styles.biotext, styles.choosetext, { marginTop: '2%', marginLeft: 3 ,color:'#FFFFFF'}]}> {item.item.text}{index<choosewantBox.length-1 ? ",":""}</Text>
+
+                                    )
+                                })
+                                :
+                                <TouchableOpacity onPress={()=>{
+                                   
+                                    setChooseWant(true);
+                                    setAddCard('');
+                                    setChoose(true);
+                                    // setWrite(false);
+                                }}>
+                                <Text style={[styles.biotext, styles.choosetext, { marginTop: '4%', marginLeft: 3 }]}> Choose what you want</Text>
+                                </TouchableOpacity>
+                                }
+                                
                             </View>
                             {/* <View style={[styles.underline, { marginLeft: '27%', width: '52%' }]} /> */}
 
@@ -142,16 +197,17 @@ const  getListViewItem =(data)=>{
 
                                            
                                             <View style={[styles.dashedbiocard]}>
-                                                    {write === false ?
+                                                    {/* {write === false ?
                                                         <Text style={[styles.biotext, { marginTop: '35%', color: '#58C4C6', fontSize: 16, textAlign: 'center', marginLeft: -5 }]}>Write your{'\n'} Own</Text>
                                                         :
                                                         null
-                                                    }
+                                                    } */}
 
                                                     <TextInput
-                                                        style={[styles.writeText, { marginTop: writeTop }]}
+                                                        style={[styles.writeText, { marginTop:5 }]}
                                                         returnKeyType={"done"}
-
+                                                        placeholder="Write your Own"
+                                                        placeholderTextColor='#58C4C6'
                                                         onChangeText={(Text) => {
                                                             setWriteText(Text);
                                                             // setWrite(true);
@@ -167,7 +223,7 @@ const  getListViewItem =(data)=>{
                                                             if (writeText === '') {
                                                                 console.log('false')
                                                                 setWrite(false);
-                                                                setWriteTop('-42%')
+                                                                // setWriteTop('-42%')
                                                             } else {
                                                                 console.log('true1')
                                                                 setWrite(true);
@@ -211,11 +267,13 @@ const  getListViewItem =(data)=>{
                                 null
                             }
 
-
-
+                           
+</ScrollView>
 
                             {/* </View> */}
-                            <View  style={{ flex: 1, justifyContent: 'flex-end' }, choose === false ? { marginTop: '60%' } : { marginTop: '3%' }}>
+                            <View  style={{ flex: 1, justifyContent: 'flex-end' ,marginBottom:'10%'}}> 
+                             {/* choose === false && choosewant === false ? { marginTop: '60%' } : selectedBox.length >=1? { marginTop: '10%'}: { marginTop: '3%'} */}
+                            
                             <TouchableOpacity
                                 onPress={() => {
                                     props.navigation.navigate('ProfileSucess')
@@ -223,15 +281,16 @@ const  getListViewItem =(data)=>{
                                 }}
                                
                             >
-                                <LinearGradient start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }} colors={['#F1F1F1', '#F1F1F1']} style={[styles.linearGradientButton, Platform.OS === "ios" ? { marginTop: '5%' } : { marginTop: '4%' }]}>
+                                <LinearGradient start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }} colors={barwidth === 350?['#212B68', '#58C4C6']:['#F1F1F1', '#F1F1F1']} style={[styles.linearGradientButton, Platform.OS === "ios" ? { marginTop: '5%' } : { marginTop: '4%' }]}>
                                     <Text style={[styles.buttonText, { color: '#868585', }]}>
                                         Done
                         </Text>
                                 </LinearGradient>
                             </TouchableOpacity>
                             </View>
+                            
                         </View>
-                    </ScrollView>
+                   
 
                 </LinearGradient>
             </ImageBackground>
@@ -380,6 +439,8 @@ const styles = StyleSheet.create({
         fontSize: 14,
         fontWeight: '600',
         marginLeft: 15,
+        width:100,
+        height:125
 
     },
     choosetext: {

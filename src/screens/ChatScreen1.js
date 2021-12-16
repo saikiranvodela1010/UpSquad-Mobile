@@ -7,7 +7,7 @@ export default class ChatScreen1 extends React.Component {
     render() {
         return (
             <View style={{ flex: 1, backgroundColor: '#FFFFFF' }}>
-                 <TouchableOpacity onPress={() => this.props.navigation.navigate('ChatScreen2')}>
+                 <TouchableOpacity onPress={() => this.props.navigation.navigate('chatsearch')}>
                 <View style={styles.searchBorder}>
                
                     <View style={{ flexDirection: 'row', marginLeft: 20, marginTop: 10 }}>
@@ -23,21 +23,27 @@ export default class ChatScreen1 extends React.Component {
                 </View>
                 </TouchableOpacity>
                 <ScrollView>
-                    <View style={{ flexDirection: 'row', marginTop: 20, marginBottom: 20, marginLeft: 30 }}>
-                    <View style={styles.displayimage}></View>
-                        <View style={{ flexDirection: 'column', marginTop: 'auto', marginBottom: 'auto' }}>
-                            {/* <TouchableOpacity onPress={() => this.props.navigation.navigate('chatscreen3')}> */}
-                                <Text style={styles.name}>Kannie Sils</Text>
-                            {/* </TouchableOpacity> */}
-                            <Text style={styles.nameText}>Hey! just wanna share with...</Text>
-                        </View>
-                        <View style={styles.time}>
-                            <Text style={{ color: '#212B68', }}>3:00</Text>
-                            <View style={[styles.number,{marginLeft:10}]}>
-                                <Text style={{ color: '#FFFFFF' }}>1</Text>
-                            </View>
+                <TouchableOpacity onPress = {() => this.props.navigation.navigate('messagescreen')}>
+
+                <View style={{ flexDirection: 'row', marginTop: 20, marginBottom: 20, marginLeft: 30 }}>
+                    {/* <Image
+                        source={require('./images/chatimage.png')}
+                    /> */}
+                    <View style = {styles.displayimage}></View>
+                    <View style={{ flexDirection: 'column', marginTop: 'auto', marginBottom: 'auto' }}>
+                    
+                        <Text style={styles.name}>Kannie Sils</Text>
+                    
+                        <Text style={styles.nameText}>Hey! just wanna share with...</Text>
+                    </View>
+                    <View style={styles.time}>
+                        <Text style={{ color: '#212B68', }}>3:00</Text>
+                        <View style={[styles.number, {marginLeft: 10}]}>
+                            <Text style={{ color: '#FFFFFF' }}>1</Text>
                         </View>
                     </View>
+                </View>
+                </TouchableOpacity>
                     <View style={styles.border}></View>
                     <View style={{ flexDirection: 'row', marginTop: 20, marginBottom: 20, marginLeft: 30 }}>
                     <View style={styles.displayimage}></View>
@@ -63,7 +69,9 @@ export default class ChatScreen1 extends React.Component {
                     <View style={styles.border}></View>
                 </ScrollView>
                 <View style={{ flex: 1, justifyContent: 'flex-end', alignItems: 'flex-end' }}>
-                    <TouchableOpacity onPress={() => this.props.navigation.navigate('CreateChat')} style={{ bottom: 40, right: 30, position: 'absolute' }} activeOpacity={0.5}>
+                    <TouchableOpacity onPress={()=>{
+                         this.props.navigation.navigate('Bio');
+                     }} style={{ bottom: 40, right: 30, position: 'absolute' }} activeOpacity={0.5}>
                         <Image
                             source={ImagesWrapper.editimage}
                             style={{ height:70,width:70 }}

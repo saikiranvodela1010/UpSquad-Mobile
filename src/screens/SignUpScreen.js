@@ -265,6 +265,7 @@ export default class SignUpScreen extends React.Component {
                     
                     <TextInput
                       style={styles.textinput}
+                      autoCapitalize='characters'
                       onChangeText={(Code) => {
                         this.setState({code:Code})
                         this.setState({passworderr:''})
@@ -276,7 +277,7 @@ export default class SignUpScreen extends React.Component {
                       maxLength={63}
                       keyboardType={Platform.OS === 'ios' ? 'ascii-capable' : 'visible-password'}
                       blurOnSubmit={false}
-                      autoCapitalize='characters'
+                     
                       onKeyPress={() => {
                        
                         if(this.state.code === ''){

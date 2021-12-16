@@ -154,9 +154,9 @@ const handleScroll=()=>{
                
 
         </View>
-        <Progress.Bar useNativeDriver={false} progress={2} width={450} style={styles.bar} color={'#212B68'}/>
-        <Text style={styles.text}>Let's start by setting a great</Text>
-        <Text style={[styles.text,{marginTop:5}]}> profile pic</Text>
+        <Progress.Bar useNativeDriver={false} progress={2} width={150} style={styles.bar} color={'#212B68'}/>
+        <Text style={styles.text}>Let's start by setting a great profile pic</Text>
+        {/* <Text style={[styles.text,{marginTop:5}]}> profile pic</Text> */}
     
         <ScrollView
         // style={{marginBottom:'50%'}}

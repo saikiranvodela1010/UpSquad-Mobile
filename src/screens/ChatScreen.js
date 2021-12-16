@@ -1,8 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet, SafeAreaView, Image, TouchableOpacity, ImageBackground, ListView } from 'react-native';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
-import NotificationScreen from './NotificationScreen';
-// import TeamScreen from './TeamScreen';
+import { NavigationContainer } from '@react-navigation/native';
 import ChatScreen1 from './ChatScreen1';
 import GroupScreen from './GroupScreen';
 import ImagesWrapper from '../res/ImagesWrapper';
@@ -43,6 +42,14 @@ export default class ChatScreen extends React.Component {
                     }}
 
                 >
+                     <Tab.Screen
+                        name="groupscreen"
+                        component={GroupScreen}
+                        options={{
+                            tabBarLabel: 'Groups',
+                            //tabBarOptions:{upperCaseLabel:'false'}
+
+                        }} />
                     <Tab.Screen
                         name="chatscreen1"
                         component={ChatScreen1}
@@ -51,31 +58,22 @@ export default class ChatScreen extends React.Component {
                             //tabBarOptions:{upperCaseLabel:'false'}
 
                         }} />
-                    <Tab.Screen
-                        name="groupscreen"
-                        component={GroupScreen}
+                        <Tab.Screen
+                        name="chatscreen2"
+                        component={ChatScreen1}
                         options={{
-                            tabBarLabel: 'Groups',
+                            tabBarLabel: 'Chats',
+                            //tabBarOptions:{upperCaseLabel:'false'}
 
                         }} />
+                        
+                   
+                        
                 </Tab.Navigator>
+               
             </View>
 
-            // <View style = {{flex: 1, backgroundColor: '#FFFFFF'}}>
-            //      <View style = {{flexDirection: 'row', marginTop: 20, marginBottom: 20}}>
-            //     <Image
-            //         source={require('./images/backarrow.png')}
-            //         style ={{
-            //             marginTop: 6,
-            //             marginLeft: 20,
-            //             tintColor: '#000000',
-            //         }}
-            //     />
-            //     <Text style = {styles.title}>Memphis Talks</Text>
-            //     </View>
-            //     <View style = {{borderWidth: 1, borderColor: '#F1F1F1'}}></View> 
-
-            // </View>
+            
         )
     }
 }
@@ -90,3 +88,4 @@ const styles = StyleSheet.create({
         marginTop:5
     },
 })
+

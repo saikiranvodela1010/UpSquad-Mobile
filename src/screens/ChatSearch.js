@@ -3,63 +3,70 @@ import { View, Text, StyleSheet, TextInput, Image, TouchableOpacity, ScrollView 
 import ImagesWrapper from '../res/ImagesWrapper';
 import Fonts from '../res/Fonts';
 
-export default class ChatScreen2 extends React.Component {
+
+export default class ChatSearch extends React.Component {
     render() {
         return (
 
             <View style={{ flex: 1, backgroundColor: '#FFFFFF' }}>
                 <View style={{ flexDirection: 'row', marginTop: 20 }}>
-                    <TouchableOpacity onPress={() => this.props.navigation.navigate('chatscreen1')}>
-                        <Image
-                            source={ImagesWrapper.back}
-                            style={{
-                                marginTop: 6,
-                                marginLeft: 20,
-                                tintColor: '#000000',
-                            }}
-                        />
+                    <TouchableOpacity onPress = {() => this.props.navigation.navigate('chatscreen1')}>
+                    <Image
+                        source={ImagesWrapper.back}
+                        style={{
+                            marginTop: 6,
+                            marginLeft: 20,
+                            tintColor: '#000000',
+                        }}
+                    />
                     </TouchableOpacity>
                     <TextInput
                         placeholder="Search..."
                         style={styles.title}
-                        autoFocus={true}
                     >
                     </TextInput>
                 </View>
                 <ScrollView>
                     <View style={{ borderWidth: 1, borderColor: '#F1F1F1' }}></View>
                     <View style={{ flexDirection: 'row', marginTop: 20, marginBottom: 20, marginLeft: 30 }}>
-                    <View style={styles.displayimage}></View>
+                        {/* <Image
+                            source={require('./images/chatimage.png')}
+                        /> */}
+                        <View style = {styles.displayimage}></View>
                         <View style={{ flexDirection: 'column', marginTop: 'auto', marginBottom: 'auto' }}>
                             <Text style={styles.name}>Kannie Sils</Text>
                             <Text style={styles.nameText}>Hey! just wanna share with...</Text>
                         </View>
                         <View style={styles.time}>
                             <Text style={{ color: '#212B68', }}>3:00</Text>
-                            <View style={[styles.number,{marginLeft:10}]}>
+                            <View style={[styles.number, {marginLeft: 10}]}>
                                 <Text style={{ color: '#FFFFFF' }}>1</Text>
                             </View>
                         </View>
                     </View>
                     <View style={styles.border}></View>
                     <View style={{ flexDirection: 'row', marginTop: 20, marginBottom: 20, marginLeft: 30 }}>
-                    <View style={styles.displayimage}></View>
-
+                        {/* <Image
+                            source={require('./images/chatimage1.png')}
+                        /> */}
+                        <View style = {styles.displayimage}></View>
                         <View style={{ flexDirection: 'column', marginTop: 'auto', marginBottom: 'auto' }}>
                             <Text style={styles.name}>Jay Jay</Text>
                             <Text style={styles.nameText}>Hey! just wanna share with...</Text>
                         </View>
                         <View style={styles.time}>
                             <Text style={{ color: '#212B68', }}>3:00</Text>
-                            <View style={[styles.number,{marginLeft:10}]}>
+                            <View style={[styles.number, {marginLeft: 10}]}>
                                 <Text style={{ color: '#FFFFFF' }}>1</Text>
                             </View>
                         </View>
                     </View>
                     <View style={styles.border}></View>
                     <View style={{ flexDirection: 'row', marginTop: 20, marginBottom: 20, marginLeft: 30 }}>
-                    <View style={styles.displayimage}></View>
-
+                        {/* <Image
+                            source={require('./images/chatimage1.png')}
+                        /> */}
+                        <View style = {styles.displayimage}></View>
                         <View style={{ flexDirection: 'column', marginTop: 'auto', marginBottom: 'auto' }}>
                             <Text style={styles.name}>Jay Jay</Text>
                             <Text style={styles.nameText}>Hey! just wanna share with...</Text>
@@ -67,8 +74,10 @@ export default class ChatScreen2 extends React.Component {
                     </View>
                     <View style={styles.border}></View>
                     <View style={{ flexDirection: 'row', marginTop: 20, marginBottom: 20, marginLeft: 30 }}>
-                    <View style={styles.displayimage}></View>
-
+                        {/* <Image
+                            source={require('./images/chatimage.png')}
+                        /> */}
+                        <View style = {styles.displayimage}></View>
                         <View style={{ flexDirection: 'column', marginTop: 'auto', marginBottom: 'auto' }}>
                             <Text style={styles.name}>Kannie Sils</Text>
                             <Text style={styles.nameText}>Hey! just wanna share with...</Text>
@@ -76,8 +85,10 @@ export default class ChatScreen2 extends React.Component {
                     </View>
                     <View style={styles.border}></View>
                     <View style={{ flexDirection: 'row', marginTop: 20, marginBottom: 20, marginLeft: 30 }}>
-                    <View style={styles.displayimage}></View>
-
+                        {/* <Image
+                            source={require('./images/chatimage1.png')}
+                        /> */}
+                        <View style = {styles.displayimage}></View>
                         <View style={{ flexDirection: 'column', marginTop: 'auto', marginBottom: 'auto' }}>
                             <Text style={styles.name}>Jay Jay</Text>
                             <Text style={styles.nameText}>Hey! just wanna share with...</Text>
@@ -85,8 +96,10 @@ export default class ChatScreen2 extends React.Component {
                     </View>
                     <View style={styles.border}></View>
                     <View style={{ flexDirection: 'row', marginTop: 20, marginBottom: 20, marginLeft: 30 }}>
-                    <View style={styles.displayimage}></View>
-
+                        {/* <Image
+                            source={require('./images/chatimage1.png')}
+                        /> */}
+                        <View style = {styles.displayimage}></View>
                         <View style={{ flexDirection: 'column', marginTop: 'auto', marginBottom: 'auto' }}>
                             <Text style={styles.name}>Jay Jay</Text>
                             <Text style={styles.nameText}>Hey! just wanna share with...</Text>
@@ -94,8 +107,10 @@ export default class ChatScreen2 extends React.Component {
                     </View>
                     <View style={styles.border}></View>
                     <View style={{ flexDirection: 'row', marginTop: 20, marginBottom: 20, marginLeft: 30 }}>
-                    <View style={styles.displayimage}></View>
-
+                        {/* <Image
+                            source={require('./images/chatimage.png')}
+                        /> */}
+                        <View style = {styles.displayimage}></View>
                         <View style={{ flexDirection: 'column', marginTop: 'auto', marginBottom: 'auto' }}>
                             <Text style={styles.name}>Kannie Sils</Text>
                             <Text style={styles.nameText}>Hey! just wanna share with...</Text>
@@ -103,8 +118,10 @@ export default class ChatScreen2 extends React.Component {
                     </View>
                     <View style={styles.border}></View>
                     <View style={{ flexDirection: 'row', marginTop: 20, marginBottom: 20, marginLeft: 30 }}>
-                    <View style={styles.displayimage}></View>
-
+                        {/* <Image
+                            source={require('./images/chatimage1.png')}
+                        /> */}
+                        <View style = {styles.displayimage}></View>
                         <View style={{ flexDirection: 'column', marginTop: 'auto', marginBottom: 'auto' }}>
                             <Text style={styles.name}>Jay Jay</Text>
                             <Text style={styles.nameText}>Hey! just wanna share with...</Text>
@@ -112,8 +129,10 @@ export default class ChatScreen2 extends React.Component {
                     </View>
                     <View style={styles.border}></View>
                     <View style={{ flexDirection: 'row', marginTop: 20, marginBottom: 20, marginLeft: 30 }}>
-                    <View style={styles.displayimage}></View>
-
+                        {/* <Image
+                            source={require('./images/chatimage1.png')}
+                        /> */}
+                        <View style = {styles.displayimage}></View>
                         <View style={{ flexDirection: 'column', marginTop: 'auto', marginBottom: 'auto' }}>
                             <Text style={styles.name}>Jay Jay</Text>
                             <Text style={styles.nameText}>Hey! just wanna share with...</Text>
@@ -134,7 +153,7 @@ const styles = StyleSheet.create({
         color: '#868585',
         fontSize: 14,
         marginLeft: 20,
-        marginTop: -5
+        marginTop: -10
     },
     name: {
         fontSize: 14,
@@ -177,10 +196,9 @@ const styles = StyleSheet.create({
         marginTop: 5
     },
     displayimage: {
-        borderWidth: 1,
-        height: 45,
-        width: 45,
-        borderRadius: 25,
-        // marginLeft:10
+        borderWidth: 1, 
+        height: 45, 
+        width: 45, 
+        borderRadius: 25
     }
 })

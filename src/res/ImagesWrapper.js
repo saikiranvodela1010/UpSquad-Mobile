@@ -49,10 +49,17 @@ const ImagesWrapper = {
     attachment:require('../Images/attachment.png'),
     audio:require('../Images/audio.png'),
     camerablack:require('../Images/camerablack.png'),
+    cameraimage:require('../Images/cameraimage.png'),
+    galleryimage:require('../Images/galleryimage.png'),
     document:require('../Images/document.png'),
     emoji:require('../Images/emoji.png'),
     sendimage:require('../Images/sendimage.png'),
     menuimage:require('../Images/menuimage.png'),
     mic:require('../Images/mic.png'),
+    profileimage:require('../Images/profileimage.png'),
+    select:require('../Images/select.png'),
+    tick:require('../Images/tick.png'),
+    remove:require('../Images/remove.png'),
+    pcamera:require('../Images/pcamera.png'),
 }
 export default ImagesWrapper;

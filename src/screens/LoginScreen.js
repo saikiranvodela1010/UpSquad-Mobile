@@ -94,7 +94,7 @@ export default class LoginScreen extends React.Component {
           {
               this.setState({email:''})
               this.setState({password:''})
-            this.props.navigation.navigate('ProfilePic')
+            this.props.navigation.navigate('ProfileSucess')
         } 
         
     }
@@ -124,7 +124,7 @@ export default class LoginScreen extends React.Component {
                         }}
                         value={this.state.email}
                         returnKeyType={"next"}
-                        keyboardType={'email-address'}
+                        keyboardType={Platform.OS === 'ios' ? 'ascii-capable' : 'visible-password'}
                         ref={(input) => { this.thirdTextInput = input; }}
                         onSubmitEditing={() => { this.fourTextInput.focus(); }}
                         importantForAutofill="no" 

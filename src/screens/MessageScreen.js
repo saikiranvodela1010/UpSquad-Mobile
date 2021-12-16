@@ -1,13 +1,15 @@
 import React from 'react';
-import { View, Text, StyleSheet, TextInput, Image, TouchableOpacity, ScrollView, TouchableHighlightBase } from 'react-native';
+import { View, Text, StyleSheet, TextInput, Image, TouchableOpacity, ScrollView, TouchableHighlightBase, FlatList, SafeAreaView, KeyboardAvoidingView, Dimensions } from 'react-native';
 import Modal from 'react-native-modal';
-import ImagePicker from 'react-native-image-crop-picker';
 import DocumentPicker from 'react-native-document-picker';
+import ImagePicker from 'react-native-image-crop-picker';
 import ImagesWrapper from '../res/ImagesWrapper';
 import Fonts from '../res/Fonts';
 
+
+// var SampleArray = [{type: "msg", timE: "time", message: "hai"}];
 var SampleArray = [];
-export default class ChatScreen3 extends React.Component {
+export default class MessageScreen extends React.Component {
     constructor() {
         super();
         this.state = {
@@ -17,41 +19,47 @@ export default class ChatScreen3 extends React.Component {
             value: 0,
             sendButton: false,
             scrollText: false,
+            today: false,
+            cameraImage: '',
         }
     }
 
+
+
     AddItemsToArray = () => {
         console.log("testing")
-
+        if (SampleArray.length === 0) {
+            var newobj = {
+                type: "today",
+            }
+            SampleArray.push(newobj);
+        }
         var today = new Date(),
-            //  time = today.getHours() + ':' + today.getMinutes() + ':' + today.getSeconds();
             time = today.getHours() + ':' + today.getMinutes();
 
 
         var obj = {
-            type: this.state.tapText!= '' ? "tapText" : "msg",
+            type: this.state.tapText != '' ? "holderText" : "msg",
             id: this.state.value + 1,
             timE: time,
-            message: this.state.tapText!= '' ? this.state.tapText : this.state.Holder,
+            message: this.state.tapText != '' ? this.state.tapText : this.state.Holder,
         }
-        //Adding Items To Array.
         SampleArray.push(obj);
-        // Showing the complete Array on Screen Using Alert.
-        // Alert.alert(SampleArray.toString());
         console.log("array:", SampleArray)
         this.setState({ test: SampleArray })
         this.setState({ value: this.state.value + 1 })
         console.log("Value: " + (this.state.value + 1))
-        // this.state.tapText = ''
+        console.log("NewTest:", SampleArray.length)
         this.state.Holder = ''
 
     }
 
     async PdfFile() {
+        
         console.log("Working")
         try {
             const results = await DocumentPicker.pick({
-                type: [DocumentPicker.types.allFiles],
+                type: [DocumentPicker.types.pdf],
 
             });
 
@@ -105,7 +113,6 @@ export default class ChatScreen3 extends React.Component {
     };
 
     async ImageFile() {
-        //Opening Document Picker for selection of multiple file
         console.log("1")
         try {
             const results = await DocumentPicker.pick({
@@ -126,33 +133,19 @@ export default class ChatScreen3 extends React.Component {
             console.log("Type:", this.state.Type)
             this.setState({ Size: results[0].size })
             console.log("Size:", this.state.Size)
-
-            // var files = {
-            //     uri: this.state.URI,
-            //     type: this.state.Type,
-            // }
-            // console.log("filedata :", files)
-            // FileArray.push( files );
-            // console.log("filedata :", files)
             var today = new Date(),
-                //  time = today.getHours() + ':' + today.getMinutes() + ':' + today.getSeconds();
                 time = today.getHours() + ':' + today.getMinutes();
 
 
             var obj = {
-                // type: this.state.document == false ? "msg" : "doc",
                 type: "img",
                 name: results[0].name,
                 id: SampleArray.length + 1,
-                // id : this.state.value + 1,
                 uri: this.state.URI,
                 timE: time,
-                // message:this.state.Holder.toString()
             }
 
-            //Adding Items To Array.
             SampleArray.push(obj);
-
 
             console.log("array:", SampleArray)
             this.setState({ test: SampleArray })
@@ -174,42 +167,292 @@ export default class ChatScreen3 extends React.Component {
         }
     };
 
+
+    async cameraOnpress() {
+        ImagePicker.openCamera({
+            width: 300,
+            height: 300,
+            cropping: true,
+            freeStyleCropEnabled: true,
+            // multiple:true
+        })
+            .then((image) => {
+                console.log('images', image);
+                this.setState({ cameraImage: image })
+            })
+            .catch((error) => {
+                console.log('error', error)
+            });
+
+        var obj = {
+            id: SampleArray.length + 1,
+            type: "cameraimg",
+            uri: this.state.cameraImage?.path,
+
+        }
+
+        SampleArray.push(obj);
+        console.log("array:", SampleArray)
+        this.setState({ test: SampleArray })
+        this.setState({ value: this.state.value + 1 })
+        console.log("Value: " + (this.state.value + 1))
+
+    }
+
+
+
     render() {
+
+
+        // const DATA = [
+        //     {
+        //       id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
+        //       title: 'First Item',
+        //     },
+        //     {
+        //       id: '3ac68afc-c605-48d3-a4f8-fbd91aa97f63',
+        //       title: 'Second Item',
+        //     },
+        //     {
+        //       id: '58694a0f-3da1-471f-bd96-145571e29d72',
+        //       title: 'Third Item',
+        //     },
+        //   ];
+
+        const renderItem = ({ item }) => {
+            if (item.type == "doc") {
+                return (
+                    <View style={{ flexDirection: 'column', alignItems: item.id % 2 == 0 ? 'flex-end' : 'flex-start', justifyContent: item.id % 2 == 0 ? 'flex-end' : 'flex-start' }}>
+
+                        <View style={{ flexDirection: 'row', borderWidth: 1, paddingTop: 10, width: 'auto', height: 50, borderRadius: 10, backgroundColor: item.id % 2 == 0 ? "#E1EEC7" : "#ffffff", borderColor: item.id % 2 == 0 ? "#E1EEC7" : "#ffffff", fontWeight: 'bold', fontSize: 16, marginLeft: 20, marginTop: 20 }}>
+
+                            <Text style={{ color: '#1E1C24', fontSize: 14, fontWeight: '400', fontFamily: Fonts.mulishRegular }}>{item.name}</Text>
+
+                            {/* <View>
+                                <Text style={{ marginLeft: 80, marginTop: 5 }}>{item.timE.toString()}</Text>
+                            </View> */}
+
+
+                        </View>
+                    </View>
+
+
+                )
+
+
+            }
+            else if (item.type == "img") {
+                return (
+                    <View style={{ flexDirection: 'column', alignItems: item.id % 2 == 0 ? 'flex-end' : 'flex-start', justifyContent: item.id % 2 == 0 ? 'flex-end' : 'flex-start' }}>
+
+                        <Image source={{ uri: item.uri }}
+                            style={{
+                                width: '60%',
+                                height: 120,
+                                marginTop: 20,
+                            }}
+                        />
+                        <View style={{ flexDirection: 'row', borderWidth: 1, paddingTop: 10, width: '60%', height: 'auto', borderBottomRadius: 10, backgroundColor: item.id % 2 == 0 ? "#E1EEC7" : "#ffffff", borderColor: '#ffffff', fontWeight: 'bold', fontSize: 16 }}>
+                            {/* <View>
+                                <Text style={{ fontSize: 18 }}>{item.name}<Text style={{ marginLeft: 20 }}>{item.timE.toString()}</Text></Text>
+
+                            </View>
+
+                            <View>
+                                <Image source={require('./images/sendimage.png')}
+                                    style={{
+                                        tintColor: '#00bfff',
+
+                                        height: 15,
+                                        width: 20,
+                                        paddingTop: 10
+
+                                    }}
+                                />
+                            </View> */}
+                        </View>
+
+
+                    </View>
+
+                )
+            }
+            else if (item.type == "msg") {
+                return (
+
+                    <View
+                        style={{
+                            flexDirection: 'row',
+                            justifyContent: item.id % 2 != 0 ? 'flex-start' : 'flex-end',
+                            borderWidth: 1,
+                            padding: 5,
+                            // borderRadius: 10, 
+                            borderTopLeftRadius: 10,
+                            borderBottomLeftRadius: 10,
+                            borderTopRightRadius: 10,
+                            backgroundColor: item.id % 2 == 0 ? "#E1EEC7" : "#ffffff",
+                            borderColor: item.id % 2 == 0 ? "#E1EEC7" : "#ffffff",
+                            marginLeft: item.id % 2 != 0 ? 120 : 10,
+                            marginRight: item.id % 2 != 0 ? 10 : 120,
+                            marginTop: 10
+                        }}
+                    >
+
+                        <View style={{ marginTop: 5, flexDirection: 'row' }}>
+                            {/* <Text  style={{color: '#1E1C24', fontSize: 14, fontWeight: '400', fontFamily: Fonts.mulishRegular}}>{getNumberOfLines(item.message, 14, 1.2, Dimensions.get('window').width-120)}</Text> */}
+                            <Text style={{ color: '#1E1C24', fontSize: 14, fontWeight: '400', fontFamily: Fonts.mulishRegular }}>{item.message}</Text>
+                        </View>
+
+                    </View>
+
+
+
+
+                )
+
+
+            }
+            else if (item.type == "holderText") {
+                return (
+
+                    <View style={{
+                        flexDirection: 'row',
+                        alignItems: item.id % 2 != 0 ? 'flex-end' : 'flex-start',
+                        justifyContent: item.id % 2 == 0 ? 'flex-end' : 'flex-start',
+                        borderWidth: 1,
+                        padding: 5,
+                        borderRadius: 10,
+                        backgroundColor: item.id % 2 == 0 ? "#E1EEC7" : "#ffffff",
+                        borderColor: item.id % 2 == 0 ? "#E1EEC7" : "#ffffff",
+                        marginTop: 10,
+                        marginLeft: item.id % 2 != 0 ? 120 : 10,
+                        marginRight: item.id % 2 != 0 ? 10 : 120
+                    }}
+
+                    >
+
+                        <Text style={{ color: '#1E1C24', fontSize: 14, fontWeight: '400', fontFamily: Fonts.mulishRegular }}>{item.message}</Text>
+
+                    </View>
+
+                )
+
+
+            }
+            else if (item.type == "today") {
+                return (
+                    <View style={{ borderWidth: 1, height: 30, width: '20%', alignItems: 'center', marginRight: 'auto', marginLeft: 'auto', marginTop: 10, borderColor: '#FFFFFF', backgroundColor: '#FFFFFF', borderRadius: 12, justifyContent: 'center' }}>
+                        <Text style={{ color: '#868585', fontSize: 12, fontWeight: '400', fontFamily: Fonts.mulishRegular }}>TODAY</Text>
+                    </View>
+                )
+            }
+            else if (item.type == "cameraimg") {
+                return (
+
+                    <View
+                    style={{
+                        flexDirection: 'row',
+                        alignItems: item.id % 2 == 0 ? 'flex-end' : 'flex-start',
+                        justifyContent: item.id % 2 == 0 ? 'flex-end' : 'flex-start',
+                        
+                        borderRadius: 10,
+                        
+                        marginTop: 10,
+                        marginLeft: item.id % 2 != 0 ? 120 : 10,
+                        marginRight: item.id % 2 != 0 ? 10 : 120
+                    }}
+>
+
+                        <Image source={{ uri: item.uri }}
+                            style={{
+                                width: '60%',
+                                height: 120,
+                                marginTop: 20,
+                            }}
+                        />
+                    </View>
+
+
+
+
+                )
+
+
+            }
+        };
+
+        function getNumberOfLines(text, fontSize, fontConstant, containerWidth) {
+            // const windowWidth = Dimensions.get('window').width;
+            let cpl = Math.floor(containerWidth / (fontSize / fontConstant));
+            const words = text.split(' ');
+            const elements = [];
+            let line = '';
+
+            while (words.length > 0) {
+                if (line.length + words[0].length + 1 <= cpl || line.length === 0 && words[0].length + 1 >= cpl) {
+                    let word = words.splice(0, 1);
+                    if (line.length === 0) {
+                        line = word;
+                    } else {
+                        line = line + " " + word;
+                    }
+                    if (words.length === 0) {
+                        elements.push(line);
+                    }
+                }
+                else {
+                    elements.push(line);
+                    line = "";
+                }
+            }
+            return elements.length;
+        }
+
+        // onLayout = e => {
+        //     const { height } = e.nativeEvent.layout;
+        //     this.count = Math.floor(height / styles.text.lineHeight)
+        // }
 
         return (
 
-            <View style={{ flex: 1, backgroundColor: '#FFFFFF' }}>
-                <View style={{ flexDirection: 'row', borderWidth: 1, height: 70, width: '100%', alignItems: 'center', borderColor: '#F1F1F1' }}>
-                    <TouchableOpacity onPress={() => this.props.navigation.navigate('chatscreen')}>
+            <SafeAreaView >
+                <View style={{ width: '100%', height: '8%', backgroundColor: '#FFFFFF' }}>
+                    <View style={{ flexDirection: 'row', borderWidth: 1, height: 70, width: '100%', alignItems: 'center', borderColor: '#F1F1F1' }}>
+                        <TouchableOpacity onPress={() => this.props.navigation.navigate('chatscreen')}>
+                            <Image
+                                source={ImagesWrapper.back}
+                                style={{
+                                    tintColor: '#000000',
+                                    marginLeft: 20
+                                }}
+                            />
+                        </TouchableOpacity>
+                        <View style={{ borderWidth: 1, height: 30, width: 30, borderRadius: 25, marginLeft: 20 }}></View>
+                        <View style={{ flexDirection: 'column' }}>
+                            <Text style={styles.text}>John Croft</Text>
+                            <Text style={{ fontFamily: Fonts.mulishRegular, fontSize: 12, fontWeight: '400', marginLeft: 10, color: '#868585' }}>last seen 1 hour ago</Text>
+                        </View>
                         <Image
-                            source={ImagesWrapper.back}
+                            source={ImagesWrapper.contactimage}
                             style={{
-                                tintColor: '#000000',
+                                marginLeft: '25%'
+                            }}
+                        />
+                        <Image
+                            source={ImagesWrapper.menuimage}
+                            style={{
                                 marginLeft: 20
                             }}
                         />
-                    </TouchableOpacity>
-                    <View style={{ borderWidth: 1, height: 30, width: 30, borderRadius: 25, marginLeft: 20 }}></View>
-                    <View style={{ flexDirection: 'column' }}>
-                        <Text style={styles.text}>John Croft</Text>
-                        <Text style={{ fontFamily: Fonts.mulishRegular, fontSize: 12, fontWeight: '400', marginLeft: 10, color: '#868585' }}>last seen 1 hour ago</Text>
-                    </View>
-                    <Image
-                        source={ImagesWrapper.contactimage}
-                        style={{
-                            marginLeft: '25%'
-                        }}
-                    />
-                    <Image
-                        source={ImagesWrapper.menuimage}
-                        style={{
-                            marginLeft: 20
-                        }}
-                    />
 
+                    </View>
                 </View>
-                <ScrollView >
-                <View style={{ flex: 1, backgroundColor: '#EBF8F8',height:'100%' }}>
+
+                <View style={{ height: '92%', backgroundColor: '#EBF8F8' }}>
+                    {/* <Text>hai</Text> */}
+                    {/* <View style={{ height: '10%' }}>
+                        <Text>hai</Text>
+                    </View> */}
                     {this.state.scrollText === false ?
                         <View>
                             <Text style={[styles.text, { marginTop: 20, marginLeft: 20 }]}>Ice-breakers to start a conversation</Text>
@@ -246,9 +489,10 @@ export default class ChatScreen3 extends React.Component {
                                             <Text style={styles.borderText}>Hey! John Croft. It seems we have similar interests. Want to meet up?</Text>
                                         </View>
                                         <TouchableOpacity onPress={() => {
+                                            // this.setState({tapText: ''})
                                             this.setState({ scrollText: true }),
-                                            this.setState({ sendButton: true }),
-                                            this.setState({ Holder: 'Hey! John Croft. It seems we have similar interests. Want to meet up?' })
+                                                this.setState({ sendButton: true }),
+                                                this.setState({ Holder: 'Hey! John Croft. It seems we have similar interests. Want to meet up?' })
                                         }
                                         }>
                                             <Text style={styles.tapText}>Tap & write</Text>
@@ -259,9 +503,10 @@ export default class ChatScreen3 extends React.Component {
                                             <Text style={styles.borderText}>Hey! Kannie Sils. It seems we have similar interests. Want to meet up?</Text>
                                         </View>
                                         <TouchableOpacity onPress={() => {
+                                            // this.setState({tapText: ''})
                                             this.setState({ scrollText: true }),
-                                            this.setState({ sendButton: true }),
-                                            this.setState({ Holder: 'Hey! Kannie Sils. It seems we have similar interests. Want to meet up?' })
+                                                this.setState({ sendButton: true }),
+                                                this.setState({ Holder: 'Hey! Kannie Sils. It seems we have similar interests. Want to meet up?' })
                                         }
                                         }>
                                             <Text style={styles.tapText}>Tap & write</Text>
@@ -273,295 +518,162 @@ export default class ChatScreen3 extends React.Component {
                         :
                         null
                     }
-                    
-            <View style={{ flex: 6, alignItems: 'flex-start', justifyContent: 'flex-start' }}>
+                    {/* <FlatList
+                        style={{ height: '80%' }}
+                    /> */}
+                    <FlatList
+                        //    contentContainerStyle={{ flexDirection: 'column-reverse' }}
+                        // initialScrollIndex={SampleArray.length - 1}
+                        style={{ height: '80%' }}
+                        // data={DATA}
+                        data={SampleArray}
+                        // renderItem={getListItem}
+                        renderItem={renderItem}
+                    // keyExtractor={item => item.id}
+                    />
+                    <View style={{ height: '10%' }}>
+                        <View style={{ flexDirection: 'row', minHeight: 50 }}>
+                            <View style={styles.chatText}>
+                                <Image
+                                   source={ImagesWrapper.emoji}
+                                    style={{
+                                        marginRight: 15
+                                    }}
+                                />
 
-                    {this.state.test.map((item, key) => {
-                        if (item.type == "doc") {
-                            return (
-                                <View style={{ flexDirection: 'column', alignItems: item.id % 2 == 0 ? 'flex-end' : 'flex-start', justifyContent: item.id % 2 == 0 ? 'flex-end' : 'flex-start' }}>
+                                <TextInput
 
-                                    <View style={{ flexDirection: 'row', borderWidth: 1, paddingTop: 10, width: 'auto', height: 50, borderRadius: 10, backgroundColor: item.id % 2 == 0 ? "#E1EEC7" : "#ffffff", borderColor: '#ffffff', fontWeight: 'bold', fontSize: 16, marginLeft: 20, marginTop: 20 }}>
-                                        <Image source={ImagesWrapper.sendimage}
-                                            style={{ height: 20, width: 20, marginLeft: 10, marginRight: 10 }}
-                                        />
-                                        <Text style={{ fontSize: 18, fontWeight: 'bold' }}>{item.name}</Text>
+                                    placeholder="Type a message"
+                                    onChangeText={TextInputValue => this.setState({ Holder: TextInputValue })}
+                                    multiline={true}
+                                    // value={this.state.ScrollView === true ? this.state.Holder : this.state.tapText}
+                                    value={this.state.Holder}
+                                    style={{
+                                        fontFamily: Fonts.mulishRegular,
+                                        fontSize: 14,
+                                        fontWeight: '400',
+                                        color: '#868585',
+                                        width: '40%',
 
-                                        <View>
-                                            <Text style={{ marginLeft: 80, marginTop: 5 }}>{item.timE.toString()}</Text>
-                                        </View>
-                                        <View>
-                                            <Image source={ImagesWrapper.image}
-                                                style={{
-                                                    tintColor: '#00bfff',
-                                                    marginLeft: 8,
-                                                    height: 15,
-                                                    width: 20,
-                                                    alignItems: 'flex-end'
-                                                }}
-                                            />
-                                        </View>
-
-                                    </View>
-                                </View>
-
-                            )
-
-
-                        }
-                        else if (item.type == "img") {
-                            return (
-                                <View style={{ flexDirection: 'column', alignItems: item.id % 2 == 0 ? 'flex-end' : 'flex-start', justifyContent: item.id % 2 == 0 ? 'flex-end' : 'flex-start' }}>
-
-                                    <Image source={{ uri: item.uri }}
+                                    }}
+                                />
+                                <TouchableOpacity onPress={() => this.setState({ show: true })}>
+                                    <Image
+                                        source={ImagesWrapper.attachment}
                                         style={{
-                                            width: '60%',
-                                            height: 120,
-                                            marginTop: 20,
+                                            marginRight: 10
                                         }}
                                     />
-                                    <View style={{ flexDirection: 'row', borderWidth: 1, paddingTop: 10, width: '60%', height: 'auto', borderBottomRadius: 10, backgroundColor: item.id % 2 == 0 ? "#E1EEC7" : "#ffffff", borderColor: '#ffffff', fontWeight: 'bold', fontSize: 16 }}>
-                                        <View>
-                                            <Text style={{ fontSize: 18 }}>{item.name}<Text style={{ marginLeft: 20 }}>{item.timE.toString()}</Text></Text>
+                                </TouchableOpacity>
 
-                                        </View>
+                                <Modal
+                                    transparent={true}
+                                    isVisible={this.state.show}
+                                    onBackdropPress={() => this.setState({ show: false })}
+                                // backdropColor={'#000000'}
+                                // backdropOpacity={0.25}
+                                >
+                                    <View style={{ flex: 1, justifyContent: 'flex-end', marginTop: 20 }}>
+                                        <View style={{
+                                            backgroundColor: 'white', borderTopLeftRadius: 20, borderTopRightRadius: 22, height: '20%', marginBottom: -20, width: '110%', marginLeft: -20
+                                            // flex: 1, backgroundColor: '#FFFFFF', height: '30%', width: '110%', borderTopLeftRadius: 20, borderTopRightRadius: 20, alignItems: 'center', justifyContent: 'center' 
+                                        }}>
+                                            <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', marginTop: 20 }}>
+                                                <TouchableOpacity
+                                                    // onPress={() => this.cameraOnpress()}
+                                                >
+                                                    <View style={{ flexDirection: 'column' }}>
+                                                        <View style={styles.popupImage}>
+                                                            <Image
+                                                                source={ImagesWrapper.cameraimage}
 
-                                        <View>
-                                            <Image source={ImagesWrapper.sendimage}
-                                                style={{
-                                                    tintColor: '#00bfff',
+                                                            />
+                                                        </View>
+                                                        <Text style={[styles.popupText, { marginLeft: 10 }]}>Camera</Text>
+                                                    </View>
+                                                </TouchableOpacity>
+                                                <TouchableOpacity 
+                                                // onPress={() => this.ImageFile()}
+                                                >
+                                                    <View style={{ flexDirection: 'column' }}>
+                                                        <View style={styles.popupImage}>
+                                                            <Image
+                                                               source={ImagesWrapper.galleryimage}
 
-                                                    height: 15,
-                                                    width: 20,
-                                                    paddingTop: 10
+                                                            />
+                                                        </View>
+                                                        <Text style={[styles.popupText, { marginLeft: 10 }]}>Gallery</Text>
+                                                    </View>
+                                                </TouchableOpacity>
+                                                <TouchableOpacity>
+                                                <View style={{ flexDirection: 'column' }}>
+                                                    <View style={styles.popupImage}>
+                                                        <Image
+                                                            source={ImagesWrapper.audio}
 
-                                                }}
-                                            />
+                                                        />
+                                                    </View>
+                                                    <Text style={[styles.popupText, { marginLeft: 15 }]}>Audio</Text>
+                                                </View>
+                                                </TouchableOpacity>
+                                                <TouchableOpacity onPress={() => { 
+                                                    this.setState({ show: false })
+                                                    this.PdfFile()
+                                                }}>
+                                                    
+                                                    <View style={{ flexDirection: 'column' }}>
+                                                        <View style={styles.popupImage}>
+                                                            <Image
+                                                                source={ImagesWrapper.document}
+
+                                                            />
+                                                        </View>
+                                                        <Text style={styles.popupText}>Document</Text>
+                                                    </View>
+                                                </TouchableOpacity>
+                                            </View>
                                         </View>
                                     </View>
+                                </Modal>
 
-                                    {/* </View> */}
-                                </View>
-
-                            )
-                        }
-                        else if (item.type == "msg") {
-                            return (
-                                //     <View style={{ 
-                                //         // flexDirection: 'row', 
-                                //         // alignItems: item.id % 2 == 0 ? 'flex-start' : 'flex-end', 
-                                //         // justifyContent: item.id % 2 == 0 ? 'flex-start' : 'flex-end', 
-                                //         borderWidth: 1, 
-                                //         padding: 5, 
-                                //         borderRadius: 10, 
-                                //         backgroundColor: item.id % 2 == 0 ? "#E1EEC7" : "#ffffff", 
-                                //         borderColor: '#E1EEC7', 
-                                //         marginTop: 10, 
-                                //         marginLeft: item.id % 2 == 0 ? 120 : 10,
-                                //         marginRight: item.id % 2 == 0 ? 10 : 120
-                                //         }}
-                                //         >
-
-                                //     <Text style={{ fontWeight: 'bold', fontSize: 16, marginLeft: 20 }}>{item.message}</Text>
-
-                                // </View>
-                                <View style = {{flexDirection: 'row', justifyContent: item.id%2 == 0 ? 'flex-start' : 'flex-end', borderWidth: 1, padding: 5, borderRadius: 10, backgroundColor: item.id%2 ==0 ? "#E1EEC7" : "#ffffff", borderColor: '#E1EEC7'}}> 
-                        
-                          <View style = {{ marginTop: 5, flexDirection: 'row'}}>
-                             <Text style = {{padding: 5, marginLeft:10, marginRight: 10}}>{item.message}</Text>
-                        </View>
-                             
-                         </View>
-                         
-                        
-                         
-                               
-                            )
-
-
-                        }
-                        else if (item.type == "tapText") {
-                            return (
-                                    <View style={{ 
-                                        flexDirection: 'row', 
-                                        alignItems: item.id % 2 == 0 ? 'flex-end' : 'flex-start', 
-                                        justifyContent: item.id % 2 == 0 ? 'flex-end' : 'flex-start', 
-                                        borderWidth: 1, 
-                                        padding: 5, 
-                                        borderRadius: 10, 
-                                        backgroundColor: item.id % 2 == 0 ? "#E1EEC7" : "#ffffff", 
-                                        borderColor: '#E1EEC7', 
-                                        marginTop: 10, 
-                                        marginLeft: item.id % 2 == 0 ? 120 : 10,
-                                        marginRight: item.id % 2 == 0 ? 10 : 120
-                                        }}
-                                        >
-
-                                    <Text style={{ fontWeight: 'bold', fontSize: 16, marginLeft: 20 }}>{item.message}</Text>
-
-                                </View>
-                               
-                            )
-
-
-                        }
-
-
-                    }
-                   
-
-                    )}
-                     </View>
-
-
-                   
-
-                <View style={{flex:1,justifyContent:'flex-end'}}>
-                    <View style={{ flexDirection: 'row' }}>
-                        <View style={styles.chatText}>
-                            <Image
-                                source={ImagesWrapper.emoji}
-                                style={{
-                                    marginRight: 15
-                                }}
-                            />
-
-                            <TextInput
-                                
-                                placeholder="Type a message"
-                                onChangeText={TextInputValue => this.setState({ Holder: TextInputValue })}
-                                multiline = {true}
-                                value = {this.state.Holder}
-                                style={{
-                                    fontFamily: Fonts.mulishRegular,
-                                    fontSize: 14,
-                                    fontWeight: '400',
-                                    color: '#868585',
-                                    width: '40%',
-
-                                }}
-                            />
-                            <TouchableOpacity onPress={() => this.setState({ show: true })}>
                                 <Image
-                                    source={ImagesWrapper.attachment}
+                                    source={ImagesWrapper.camerablack}
                                     style={{
                                         marginRight: 10
                                     }}
                                 />
-                            </TouchableOpacity>
-
-                            <Modal
-                                transparent={true}
-                                isVisible={this.state.show}
-                                onBackdropPress={() => this.setState({ show: false })}
-                                // backdropColor={'#000000'}
-                                // backdropOpacity={0.25}
-                            >
-                                <View style={{ flex: 1, justifyContent: 'flex-end', marginTop: 20 }}>
-                                    <View style={{
-                                        backgroundColor: 'white', borderTopLeftRadius: 20, borderTopRightRadius: 22, height: '20%', marginBottom: -20, width: '110%', marginLeft: -20
-                                        // flex: 1, backgroundColor: '#FFFFFF', height: '30%', width: '110%', borderTopLeftRadius: 20, borderTopRightRadius: 20, alignItems: 'center', justifyContent: 'center' 
-                                    }}>
-                                        <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', marginTop: 20 }}>
-                                            <TouchableOpacity
-                                                onPress={() => {
-                                                    ImagePicker.openCamera({
-                                                        width: 300,
-                                                        height: 300,
-                                                        cropping: true,
-                                                        freeStyleCropEnabled: true,
-                                                        // multiple:true
-                                                    })
-                                                        .then((image) => {
-                                                            console.log('images', image);
-
-                                                        })
-                                                        .catch((error) => {
-                                                            console.log('error', error)
-                                                        });
-
-                                                }}
-                                            >
-                                                <View style={{ flexDirection: 'column' }}>
-                                                    <View>
-                                                        <Image
-                                                            source={ImagesWrapper.camera}
-
-                                                        />
-                                                    </View>
-                                                    {/* <Text style={[styles.popupText, { marginLeft: 10 }]}>Camera</Text> */}
-                                                </View>
-                                            </TouchableOpacity>
-                                            <TouchableOpacity onPress={() => this.ImageFile()}>
-                                                <View style={{ flexDirection: 'column' }}>
-                                                    <View >
-                                                        <Image
-                                                            source={ImagesWrapper.gallery}
-
-                                                        />
-                                                    </View>
-                                                    {/* <Text style={[styles.popupText, { marginLeft: 10 }]}>Gallery</Text> */}
-                                                </View>
-                                            </TouchableOpacity>
-                                            <View style={{ flexDirection: 'column' }}>
-                                                <View style={styles.popupImage}>
-                                                    <Image
-                                                       source={ImagesWrapper.audio}
-
-                                                    />
-                                                </View>
-                                                <Text style={[styles.popupText, { marginLeft: 15 }]}>Audio</Text>
-                                            </View>
-                                            <TouchableOpacity onPress={() => this.PdfFile()}>
-                                                <View style={{ flexDirection: 'column' }}>
-                                                    <View style={styles.popupImage}>
-                                                        <Image
-                                                            source={ImagesWrapper.document}
-
-                                                        />
-                                                    </View>
-                                                    <Text style={styles.popupText}>Document</Text>
-                                                </View>
-                                            </TouchableOpacity>
-                                        </View>
-                                    </View>
-                                </View>
-                            </Modal>
-
-                            <Image
-                                source={ImagesWrapper.cameraimage}
-                                style={{
-                                    marginRight: 10
-                                }}
-                            />
-                            <Image
-                                source={ImagesWrapper.mic}
-                                style={{
-                                    marginRight: 30
-                                }}
-                            />
-                        </View>
-                        <View style = {{justifyContent: 'center'}}>
-                        {this.state.sendButton === true || this.state.Holder != null?
-                            <TouchableOpacity onPress={this.AddItemsToArray}>
                                 <Image
-                                    source={ImagesWrapper.sendimage}
+                                    source={ImagesWrapper.mic}
                                     style={{
-                                        marginRight: 20,
-                                        marginTop: 5
+                                        marginRight: 30
                                     }}
                                 />
-                            </TouchableOpacity>
-                            :
-                            null
-                        }
+                            </View>
+                            <View >
+                                {this.state.sendButton === true || this.state.Holder != null ?
+                                    <TouchableOpacity onPress={this.AddItemsToArray}>
+                                        <Image
+                                            source={ImagesWrapper.sendimage}
+                                            style={{
+                                                marginRight: 20,
+                                                marginTop: 5
+                                            }}
+                                        />
+                                    </TouchableOpacity>
+                                    :
+                                    null
+                                }
+                            </View>
                         </View>
+
                     </View>
-                </View>
+
+
                 </View>
 
-                </ScrollView>
-            </View>
+
+
+            </SafeAreaView>
         )
     }
 }
@@ -613,7 +725,8 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'flex-end',
-        marginBottom: 20
+        marginBottom: 20,
+        // minHeight: 50,
     },
     popupText: {
         color: '#868585',
