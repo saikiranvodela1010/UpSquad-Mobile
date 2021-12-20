@@ -21,7 +21,11 @@ export default class OTPScreen extends React.Component {
            otp3:'',
            boxcolor:'',
            otperr:'',
-           color:'#868585'
+           color1:'#868585',
+           color2:'#868585',
+           color3:'#868585',
+           color4:'#868585',
+
         }
        
     }
@@ -63,7 +67,7 @@ export default class OTPScreen extends React.Component {
                    {/* <KeyboardAvoidingView > */}
                     <View style={{flexDirection:'row'}}> 
                     <TextInput
-                        style={[styles.textinput,{borderColor:this.state.color} ]}
+                        style={[styles.textinput,{borderColor:this.state.color1} ]}
                         onChangeText={(Otp) => {
                             this.setState({otp:Otp})
                             this.setState({otperr:''})   
@@ -76,20 +80,31 @@ export default class OTPScreen extends React.Component {
                         // ref={(input) => { this.thirdTextInput = input; }}
                         onSubmitEditing={() => { this.secondTextInput.focus(); }}
                         importantForAutofill="no" 
+                        onFocus={()=> this.setState({color1:'#58C4C6'})}
                         onKeyPress={() => {
-                            console.log('hello')
-                            
-                          }}
+                            console.log('true')
+                            // if (writeText === '') {
+                            //     console.log('false')
+                            //     setWrite(false);
+                            //     // setWriteTop('-42%')
+                            // } else {
+                            //     console.log('true1')
+                            //     setWrite(true);
+                            //     setWriteTop('25%')
+
+                            // }
+                        }}
                        
                        
                     />
                    <TextInput
-                        style={[styles.textinput,this.state.otp1 ?{borderColor:'#58C4C6'} :{borderColor:'#868585'} ]}
+                        style={[styles.textinput,{borderColor:this.state.color2} ]}
                         onChangeText={(Otp) => {
                             this.setState({otp1:Otp})
                             this.setState({otperr:''})
                            }}
                         value={this.state.otp1}
+                        onFocus={()=> this.setState({color2:'#58C4C6'})}
                         returnKeyType={"next"}
                         keyboardType={'number-pad'}
                         ref={(input) => { this.secondTextInput = input; }}
@@ -99,12 +114,13 @@ export default class OTPScreen extends React.Component {
                        
                     />
                     <TextInput
-                        style={[styles.textinput,this.state.otp2 ?{borderColor:'#58C4C6'} :{borderColor:'#868585'} ]}
+                        style={[styles.textinput,{borderColor:this.state.color3} ]}
                         onChangeText={(Otp) => {
                             this.setState({otp2:Otp})
                             this.setState({otperr:''})
                            
                         }}
+                        onFocus={()=> this.setState({color3:'#58C4C6'})}
                         value={this.state.otp2}
                         returnKeyType={"next"}
                         keyboardType={'number-pad'}
@@ -115,12 +131,13 @@ export default class OTPScreen extends React.Component {
                        
                     />
                     <TextInput
-                        style={[styles.textinput,this.state.otp3 ?{borderColor:'#58C4C6'} :{borderColor:'#868585'} ]}
+                        style={[styles.textinput,{borderColor:this.state.color4} ]}
                         onChangeText={(Otp) => {
                             this.setState({otp3:Otp})
                             this.setState({otperr:''})
                            
                         }}
+                        onFocus={()=> this.setState({color4:'#58C4C6'})}
                         value={this.state.otp3}
                         returnKeyType={"done"}
                         keyboardType={'number-pad'}

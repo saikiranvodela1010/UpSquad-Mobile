@@ -134,7 +134,7 @@ const styles = StyleSheet.create({
         marginRight: 'auto',
         marginTop: 30,
         borderColor: '#F1F1F1',
-        backgroundColor:'#F1F1F1'
+        backgroundColor: 'rgba(241, 241, 241, 0.25)'
     },
     displayimage: {
         borderWidth: 1,

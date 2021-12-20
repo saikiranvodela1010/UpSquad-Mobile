@@ -6,9 +6,9 @@ import ImagePicker from 'react-native-image-crop-picker';
 import ImagesWrapper from '../res/ImagesWrapper';
 import Fonts from '../res/Fonts';
 
-// var SampleArray = [{type: "msg", timE: "time", message: "hai"}];
+
 var SampleArray = [];
-export default class MessageScreen extends React.Component {
+export default class GroupChat extends React.Component {
     constructor() {
         super();
         this.state = {
@@ -20,6 +20,7 @@ export default class MessageScreen extends React.Component {
             scrollText: false,
             today: false,
             cameraImage: '',
+            show1: false
         }
     }
 
@@ -27,12 +28,7 @@ export default class MessageScreen extends React.Component {
 
     AddItemsToArray = () => {
         console.log("testing")
-        if (SampleArray.length === 0) {
-            var newobj = {
-                type: "today",
-            }
-            SampleArray.push(newobj);
-        }
+       
         var today = new Date(),
             time = today.getHours() + ':' + today.getMinutes();
 
@@ -56,7 +52,7 @@ export default class MessageScreen extends React.Component {
     async PdfFile() {
 
         console.log("Working")
-        
+
         try {
             const results = await DocumentPicker.pick({
                 type: [DocumentPicker.types.pdf],
@@ -113,12 +109,12 @@ export default class MessageScreen extends React.Component {
     };
 
     async ImageFile() {
-        
-       
+
+
         ImagePicker.openPicker({
             // multiple: true
             mediaType: "image",
-          })
+        })
             .then((image) => {
                 console.log('images', image);
                 //this.setState({ cameraImage: image })
@@ -126,27 +122,27 @@ export default class MessageScreen extends React.Component {
                     id: SampleArray.length + 1,
                     type: "cameraimg",
                     uri: image?.path,
-        
+
                 }
-                       
+
                 SampleArray.push(obj);
                 console.log("array:", SampleArray)
-            this.setState({ test: SampleArray })
-            this.setState({ value: this.state.value + 1 })
-            console.log("Value: " + (this.state.value + 1))
+                this.setState({ test: SampleArray })
+                this.setState({ value: this.state.value + 1 })
+                console.log("Value: " + (this.state.value + 1))
             })
             .catch((error) => {
                 console.log('error', error)
             });
 
-           // this.captureImage(this.state.cameraImage);
+        // this.captureImage(this.state.cameraImage);
     };
 
 
     async cameraOnpress() {
-        
 
-       
+
+
         ImagePicker.openCamera({
             width: 300,
             height: 300,
@@ -161,47 +157,34 @@ export default class MessageScreen extends React.Component {
                     id: SampleArray.length + 1,
                     type: "cameraimg",
                     uri: image?.path,
-        
+
                 }
-                       
+
                 SampleArray.push(obj);
                 console.log("array:", SampleArray)
-            this.setState({ test: SampleArray })
-            this.setState({ value: this.state.value + 1 })
-            console.log("Value: " + (this.state.value + 1))
+                this.setState({ test: SampleArray })
+                this.setState({ value: this.state.value + 1 })
+                console.log("Value: " + (this.state.value + 1))
             })
             .catch((error) => {
                 console.log('error', error)
             });
 
-           // this.captureImage(this.state.cameraImage);
-    
+        // this.captureImage(this.state.cameraImage);
+
 
     }
 
-   
-               
+
+
     //    if(this.state.cameraImage!=''){
-       
+
 
 
     render() {
 
 
-        // const DATA = [
-        //     {
-        //       id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
-        //       title: 'First Item',
-        //     },
-        //     {
-        //       id: '3ac68afc-c605-48d3-a4f8-fbd91aa97f63',
-        //       title: 'Second Item',
-        //     },
-        //     {
-        //       id: '58694a0f-3da1-471f-bd96-145571e29d72',
-        //       title: 'Third Item',
-        //     },
-        //   ];
+       
 
         const renderItem = ({ item }) => {
             if (item.type == "doc") {
@@ -212,14 +195,11 @@ export default class MessageScreen extends React.Component {
 
                             <Text style={{ color: '#1E1C24', fontSize: 14, fontWeight: '400', fontFamily: Fonts.mulishRegular }}>{item.name}</Text>
 
-                            {/* <View>
-                                <Text style={{ marginLeft: 80, marginTop: 5 }}>{item.timE.toString()}</Text>
-                            </View> */}
+                            
 
 
                         </View>
                     </View>
-
 
                 )
 
@@ -237,23 +217,7 @@ export default class MessageScreen extends React.Component {
                             }}
                         />
                         <View style={{ flexDirection: 'row', borderWidth: 1, paddingTop: 10, width: '60%', height: 'auto', borderBottomRadius: 10, backgroundColor: item.id % 2 == 0 ? "#E1EEC7" : "#ffffff", borderColor: '#ffffff', fontWeight: 'bold', fontSize: 16 }}>
-                            {/* <View>
-                                <Text style={{ fontSize: 18 }}>{item.name}<Text style={{ marginLeft: 20 }}>{item.timE.toString()}</Text></Text>
-
-                            </View>
-
-                            <View>
-                                <Image source={Imageswrapper.sendimage}
-                                    style={{
-                                        tintColor: '#00bfff',
-
-                                        height: 15,
-                                        width: 20,
-                                        paddingTop: 10
-
-                                    }}
-                                />
-                            </View> */}
+                        
                         </View>
 
 
@@ -264,46 +228,16 @@ export default class MessageScreen extends React.Component {
             else if (item.type == "msg") {
                 return (
 
-                    
 
-                    // <View style={{
-                    //     flexDirection: 'row',
-                    //     alignItems: item.id % 2 == 0 ? 'flex-end' : 'flex-start',
-                    //     justifyContent: item.id % 2 == 0 ? 'flex-end' : 'flex-start',
-                    //     borderWidth: 1,
-                    //     padding: 5,
-                    //     borderRadius: 10,
-                    //     backgroundColor: item.id % 2 == 0 ? "#E1EEC7" : "#ffffff",
-                    //     borderColor: item.id % 2 == 0 ? "#E1EEC7" : "#ffffff",
-                    //     marginTop: 10,
-                    //     // marginLeft: item.id % 2 == 0 ? 10 : 120,
-                    //     // marginRight: item.id % 2 == 0 ? 120 : 10,
-                        
-                    // }}
 
-                    // >
+                  
+                    <View style={{ alignItems: item.id % 2 != 0 ? 'flex-end' : 'flex-start', justifyContent: item.id % 2 != 0 ? 'flex-end' : 'flex-start', }}>
 
-                    //     <Text style={{ color: '#1E1C24',
-                    //         fontSize: 14,
-                    //         fontWeight: '400',
-                    //         fontFamily: Fonts.mulishRegular,
-                    //         justifyContent:'center',
-                    //         alignItems: 'center',
-                    //         marginLeft: item.id % 2 == 0 ? null : 'auto',
-                    //         marginRight: item.id % 2 != 0 ? null : 'auto'
+                        <View style={{ borderWidth: 1, padding: 10, width: 'auto', height: 'auto', borderTopLeftRadius: 10, borderTopRightRadius: 10, borderBottomLeftRadius: 10, backgroundColor: item.id % 2 != 0 ? "#ffffff" : "#E1EEC7", borderColor: item.id % 2 != 0 ? "#ffffff" : "#E1EEC7", fontWeight: 'bold', fontSize: 16, marginLeft: item.id % 2 == 0 ? 10 : 180, marginRight: item.id % 2 == 0 ? 180 : 10, marginTop: 20 }}>
+
+                            <Text style={{ color: '#1E1C24', fontSize: 14, fontWeight: '400', fontFamily: Fonts.mulishRegular }}>{item.message}</Text>
+
                            
-                    //         }}>{item.message}</Text>
-
-                    // </View>
-                    <View style={{ alignItems: item.id % 2 != 0 ? 'flex-end' : 'flex-start', justifyContent: item.id % 2 != 0 ? 'flex-end' : 'flex-start',  }}>
-
-                        <View style={{borderWidth: 1, padding: 10, width: 'auto', height: 'auto', borderTopLeftRadius: 10, borderTopRightRadius: 10, borderBottomLeftRadius: 10, backgroundColor: item.id % 2 != 0 ? "#ffffff" : "#E1EEC7", borderColor: item.id % 2 != 0 ? "#ffffff" : "#E1EEC7", fontWeight: 'bold', fontSize: 16, marginLeft: item.id % 2 == 0 ? 10 : 180,marginRight: item.id % 2 == 0 ? 180 : 10, marginTop: 20 }}>
-
-                            <Text style={{ color: '#1E1C24', fontSize: 14, fontWeight: '400', fontFamily: Fonts.mulishRegular}}>{item.message}</Text>
-
-                            {/* <View>
-                                <Text style={{ marginLeft: 80, marginTop: 5 }}>{item.timE.toString()}</Text>
-                            </View> */}
 
 
                         </View>
@@ -325,8 +259,8 @@ export default class MessageScreen extends React.Component {
                         justifyContent: item.id % 2 != 0 ? 'flex-end' : 'flex-start',
                         borderWidth: 1,
                         padding: 5,
-                        borderTopLeftRadius: 10, 
-                        borderTopRightRadius: 10, 
+                        borderTopLeftRadius: 10,
+                        borderTopRightRadius: 10,
                         borderBottomLeftRadius: 10,
                         backgroundColor: item.id % 2 == 0 ? "#E1EEC7" : "#ffffff",
                         borderColor: item.id % 2 == 0 ? "#E1EEC7" : "#ffffff",
@@ -341,7 +275,7 @@ export default class MessageScreen extends React.Component {
                             fontSize: 14,
                             fontWeight: '400',
                             fontFamily: Fonts.mulishRegular,
-                            justifyContent:'center',
+                            justifyContent: 'center',
                             alignItems: 'center',
                             backgroundColor: 'red',
                             textAlign: 'center'
@@ -357,7 +291,7 @@ export default class MessageScreen extends React.Component {
             }
             else if (item.type == "today") {
                 return (
-                    <View style={{ borderWidth: 1, height: 30, width: '20%', alignItems: 'center', marginRight: 'auto', marginLeft: 'auto', marginTop: 30, marginBottom: 10, borderColor: '#FFFFFF', backgroundColor: '#FFFFFF', borderRadius: 12, justifyContent: 'center' }}>
+                    <View style={{ borderWidth: 1, height: 30, width: '20%', alignItems: 'center', marginRight: 'auto', marginLeft: 'auto', marginTop: 30, marginBottom: 20, borderColor: '#FFFFFF', backgroundColor: '#FFFFFF', borderRadius: 12, justifyContent: 'center' }}>
                         <Text style={{ color: '#868585', fontSize: 12, fontWeight: '400', fontFamily: Fonts.mulishRegular }}>TODAY</Text>
                     </View>
                 )
@@ -422,14 +356,13 @@ export default class MessageScreen extends React.Component {
             return elements.length;
         }
 
-        // onLayout = e => {
-        //     const { height } = e.nativeEvent.layout;
-        //     this.count = Math.floor(height / styles.text.lineHeight)
-        // }
+       
 
         return (
+           
 
             <View style={{flex:1,backgroundColor: '#FFFFFF'}}>
+                 {/* <KeyboardAvoidingView > */}
                 {/* <View style={{ width: '100%', height: '9%', backgroundColor: '#FFFFFF' }}> */}
                     <View style={{ flexDirection: 'row', borderWidth: 1, height: 73, width: '100%', alignItems: 'center', borderColor: '#F1F1F1' }}>
                         <TouchableOpacity onPress={() => this.props.navigation.navigate('chatscreen')}>
@@ -442,106 +375,41 @@ export default class MessageScreen extends React.Component {
                             />
                         </TouchableOpacity>
                         <View style={{ borderWidth: 1, height: 30, width: 30, borderRadius: 25, marginLeft: 20 }}></View>
-                        <View style={{ flexDirection: 'column',  }}>
-                            <Text style={styles.text}>John Croft</Text>
-                            <Text style={{ fontFamily: Fonts.mulishRegular, fontSize: 12, fontWeight: '400', marginLeft: 10, color: '#868585' }}>last seen 1 hour ago</Text>
+                        <View style={{ flexDirection: 'column', marginRight: '35%' }}>
+                            <Text style={styles.text}>Friends</Text>
+                            <Text style={{ fontFamily: Fonts.mulishRegular, fontSize: 12, fontWeight: '400', marginLeft: 10, color: '#868585' }}>Ann,Thomas,Katy</Text>
                         </View>
-                        <View style = {{flexDirection: 'row', marginLeft: 60, marginTop: 5}}>
-                        <Image
-                           source={ImagesWrapper.contactimage}
-                            style={{
-                                marginLeft: '20%',
-                                marginBottom: 12
-                                
-                            }}
-                        />
-                        <Image
-                            source={ImagesWrapper.menuimage}
-                            style={{
-                                marginLeft: 20,
-                                marginTop: 2
-                                
-                            }}
-                        />
+                        <TouchableOpacity 
+                            onPress = {() => this.setState({show1: true})}
+                        >
+                        <View style = {{marginLeft: '2%'}}>
+                            <Image
+                                source={ImagesWrapper.menuimage}
+                                style={{
+                                    // marginLeft: 30,
+                                    // marginTop: 3,
+                                    // marginBottom: 2,
+                                    marginLeft: '2%'
+                                }}
+                            />
                         </View>
+                        </TouchableOpacity>
 
                     </View>
                 {/* </View> */}
 
-                <View style={{backgroundColor: '#EBF8F8',flex:1}}>
-                    {/* <Text>hai</Text> */}
-                    {/* <View style={{ height: '10%' }}>
-                        <Text>hai</Text>
-                    </View> */}
-                       {/* <ScrollView style={{marginBottom:10}}> */}
-                    {this.state.scrollText === false ?
-                        <View>
-                            <Text style={[styles.text, { marginTop: 20, marginLeft: 20 }]}>Ice-breakers to start a conversation</Text>
-
-                            <ScrollView
-                                horizontal={true}
-                                showsHorizontalScrollIndicator={false}
-                            // onScroll={Animated.event([], {listener: (event) => {
-                            //     console.log('scroll',event.nativeEvent.contentOffset.x);
-                            // }})}
-
-                            // scrollEventThrottle={16} 
-                            >
-                                <View style={{ flexDirection: 'row' }}>
-                                    <View style={{ flexDirection: 'column' }}>
-                                        <View style={styles.border}>
-                                            <Text style={styles.borderText}>Hello, Kannie Sils. So, what brings you to this app?</Text>
-                                        </View>
-                                        <TouchableOpacity
-
-                                            onPress={() => {
-                                                this.setState({ scrollText: true }),
-                                                    this.setState({ sendButton: true }),
-                                                    this.setState({ Holder: 'Hello, Kannie Sils. So, what brings you to this app?' })
-                                            }
-                                            }
-                                        >
-
-                                            <Text style={styles.tapText}>Tap & write</Text>
-                                        </TouchableOpacity>
-                                    </View>
-                                    <View style={{ flexDirection: 'column' }}>
-                                        <View style={styles.border}>
-                                            <Text style={styles.borderText}>Hey! John Croft. It seems we have similar interests. Want to meet up?</Text>
-                                        </View>
-                                        <TouchableOpacity onPress={() => {
-                                            // this.setState({tapText: ''})
-                                            this.setState({ scrollText: true }),
-                                                this.setState({ sendButton: true }),
-                                                this.setState({ Holder: 'Hey! John Croft. It seems we have similar interests. Want to meet up?' })
-                                        }
-                                        }>
-                                            <Text style={styles.tapText}>Tap & write</Text>
-                                        </TouchableOpacity>
-                                    </View>
-                                    <View style={{ flexDirection: 'column' }}>
-                                        <View style={[styles.border, { marginRight: 20 }]}>
-                                            <Text style={styles.borderText}>Hey! Kannie Sils. It seems we have similar interests. Want to meet up?</Text>
-                                        </View>
-                                        <TouchableOpacity onPress={() => {
-                                            // this.setState({tapText: ''})
-                                            this.setState({ scrollText: true }),
-                                                this.setState({ sendButton: true }),
-                                                this.setState({ Holder: 'Hey! Kannie Sils. It seems we have similar interests. Want to meet up?' })
-                                        }
-                                        }>
-                                            <Text style={styles.tapText}>Tap & write</Text>
-                                        </TouchableOpacity>
-                                    </View>
-                                </View>
-                            </ScrollView>
+                <View style={{ flex:1, backgroundColor: '#EBF8F8' }}>
+                <View style={{marginTop:'8%',alignItems:'center',justifyContent:'center'}}>
+                        <View style={styles.dayView}>
+                          <Text style={styles.day}>TODAY</Text>
                         </View>
-                        :
-                        null
-                    }
-                    {/* <FlatList
-                        style={{ height: '80%' }}
-                    /> */}
+                    </View>
+                    <View style={{marginTop:'5%',alignItems:'center',justifyContent:'center'}}>
+                        <View style={styles.groupView}>
+                          <Text style={styles.groupViewList}>You added Ann, Katy and Thomas </Text>
+                        </View>
+                    </View>
+
                     <FlatList
                         //    contentContainerStyle={{ flexDirection: 'column-reverse' }}
                         // initialScrollIndex={SampleArray.length - 1}
@@ -552,16 +420,13 @@ export default class MessageScreen extends React.Component {
                         renderItem={renderItem}
                     // keyExtractor={item => item.id}
                     />
-                    {/* </ScrollView> */}
                     <View style={{ height: '10%',flex:1,justifyContent:"flex-end"}}>
-                        <View style={{ flexDirection: 'row', minHeight: 50 }}>
-                        {/* <View style={{ flexDirection: 'row',  paddingLeft: 10, paddingTop: 10, paddingBottom: 10, minHeight: 50}}> */}
-                            <View style={styles.chatText}>
+                        <View style={{ flexDirection: 'row'}}>
+                            <View style={[styles.chatText]}>
                                 <Image
                                     source={ImagesWrapper.emoji}
                                     style={{
-                                        // marginRight: 15,
-                                        
+                                        // marginRight: 15
                                     }}
                                 />
 
@@ -570,6 +435,7 @@ export default class MessageScreen extends React.Component {
                                     placeholder="Type a message"
                                     onChangeText={TextInputValue => this.setState({ Holder: TextInputValue })}
                                     multiline={true}
+                                    // numberOfLines={3}
                                     // value={this.state.ScrollView === true ? this.state.Holder : this.state.tapText}
                                     value={this.state.Holder}
                                     style={{
@@ -579,8 +445,10 @@ export default class MessageScreen extends React.Component {
                                         color: '#868585',
                                         width: '40%',
                                         marginRight: 20,
-                                        marginLeft: 5
-
+                                        marginLeft: 5,
+                                        padding:5,
+                                        // height:100
+                                        
                                     }}
                                 />
                                 <TouchableOpacity onPress={() => this.setState({ show: true })}>
@@ -609,11 +477,11 @@ export default class MessageScreen extends React.Component {
                                         }}>
                                             <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', marginTop: 20 }}>
                                                 <TouchableOpacity
-                                                onPress={() => {
-                                                    this.setState({ show: false })
-                                                    this.cameraOnpress()
-                                                }
-                                                }
+                                                    onPress={() => {
+                                                        this.setState({ show: false })
+                                                        this.cameraOnpress()
+                                                    }
+                                                    }
                                                 >
                                                     <View style={{ flexDirection: 'column' }}>
                                                         <View style={styles.popupImage}>
@@ -626,11 +494,11 @@ export default class MessageScreen extends React.Component {
                                                     </View>
                                                 </TouchableOpacity>
                                                 <TouchableOpacity
-                                                onPress={() => {
-                                                    // this.setState({ show: false })
-                                                    // this.ImageFile()
-                                                }
-                                                }
+                                                    onPress={() => {
+                                                        // this.setState({ show: false })
+                                                        // this.ImageFile()
+                                                    }
+                                                    }
                                                 >
                                                     <View style={{ flexDirection: 'column' }}>
                                                         <View style={styles.popupImage}>
@@ -707,7 +575,7 @@ export default class MessageScreen extends React.Component {
                                             source={ImagesWrapper.sendimage}
                                             style={{
                                                 marginRight: 20,
-                                                marginTop: -15
+                                                marginTop: -75
                                             }}
                                         />
                                     </TouchableOpacity>
@@ -722,9 +590,53 @@ export default class MessageScreen extends React.Component {
 
                 </View>
 
+                <Modal
+                    //testID={'modal'}
+                    isVisible={this.state.show1}
+                    onBackdropPress={() => this.setState({ show1: false })}
+                    style={{
+                        justifyContent: 'flex-end',
+                        margin: 0
+                    }}
+                    transparent={true}
+                    onRequestClose={() => {
+                        this.setState({ show1: false })
+                      }}
+                >
 
+                    <View style={{
+                        height: 225, width: '100%', backgroundColor: 'white', borderTopLeftRadius: 10, borderTopRightRadius: 10, bottom: 0, position: 'absolute'
+                    }}>
 
+                        <TouchableOpacity>
+                            <View style={{ flexDirection: 'row', marginTop: '7%', marginLeft: '7%' }}>
+                                <Image source={ImagesWrapper.search1} />
+                                <Text style={styles.search}>Search</Text>
+                            </View>
+                        </TouchableOpacity>
+                        <TouchableOpacity onPress={() => this.props.navigation.navigate('removeuser')}>
+                        <View style={styles.modalView}>
+                            <Image source={ImagesWrapper.removeuser} />
+                            <Text style={styles.removeUser}>Remove Users</Text>
+                        </View>
+                        </TouchableOpacity>
+                        <TouchableOpacity>
+                            <View style={styles.modalView}>
+                                <Image source={ImagesWrapper.delete} />
+                                <Text style={styles.delete}>Delete group</Text>
+                            </View>
+                        </TouchableOpacity>
+                        <TouchableOpacity>
+                            <View style={styles.modalView}>
+                                <Image source={ImagesWrapper.chathistory} />
+                                <Text style={styles.chatHistory}>Clear chat history</Text>
+                            </View>
+                        </TouchableOpacity>
+                    </View>
+                </Modal>
+                {/* </KeyboardAvoidingView> */}
             </View>
+            
         )
     }
 }
@@ -744,8 +656,8 @@ const styles = StyleSheet.create({
         height: 68,
         width: 293,
         backgroundColor: '#FFFFFF',
-        borderTopLeftRadius: 10, 
-        borderTopRightRadius: 10, 
+        borderTopLeftRadius: 10,
+        borderTopRightRadius: 10,
         borderBottomLeftRadius: 10,
         borderStyle: 'dashed',
         borderColor: '#58C4C6',
@@ -778,9 +690,10 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'flex-end',
-        marginTop: -20,
-        height:50,
-        width: '80%'
+        marginTop: -80,
+        // minHeight: 50,
+        width: '80%',
+        height: 50
     },
     popupText: {
         color: '#868585',
@@ -800,5 +713,74 @@ const styles = StyleSheet.create({
         borderColor: '#EBF8F8',
         backgroundColor: '#EBF8F8',
         marginRight: '5%'
-    }
+    },
+    search:{
+        fontSize:14,
+        color:'#1E1C24',
+        fontWeight:'600',
+        fontFamily:Fonts.mulishRegular,
+        marginLeft:'2%',
+        marginTop:3
+    },
+    removeUser:{
+        fontSize:14,
+        color:'#1E1C24',
+        fontWeight:'600',
+        fontFamily:Fonts.mulishRegular,
+        marginLeft:'2%',
+        marginTop:3
+    },
+    delete:{
+        fontSize:14,
+        color:'#1E1C24',
+        fontWeight:'600',
+        fontFamily:Fonts.mulishRegular,
+        marginLeft:'3.5%',
+        marginTop:1
+    },
+    chatHistory:{
+        fontSize:14,
+        color:'#1E1C24',
+        fontWeight:'600',
+        fontFamily:Fonts.mulishRegular,
+        marginLeft:'2%',
+        marginTop:2
+    },
+    modalView:{
+        flexDirection:'row',
+        marginTop:'5%',
+        marginLeft:'7%'
+    },
+    day:{
+        color:'#868585',
+        fontSize:12,
+        fontFamily:Fonts.mulishRegular,
+        fontWeight:'400'
+    },
+    dayView:{
+        width:'25%',
+        height:30,
+        borderColor:'#F1F1F1',
+        borderRadius:25,
+        borderWidth:1,
+        backgroundColor:'#FFFFFF',
+        alignItems:'center',
+        justifyContent:'center'
+    },
+    groupView:{
+        width:'65%',
+        height:30,
+        borderColor:'#F1F1F1',
+        borderRadius:25,
+        borderWidth:1,
+        backgroundColor:'#FFFFFF',
+        alignItems:'center',
+        justifyContent:'center'
+    },
+    groupViewList:{
+        color:'#868585',
+        fontSize:12,
+        fontFamily:Fonts.mulishRegular,
+        fontWeight:'400'
+    },
 })

@@ -61,5 +61,9 @@ const ImagesWrapper = {
     tick:require('../Images/tick.png'),
     remove:require('../Images/remove.png'),
     pcamera:require('../Images/pcamera.png'),
+    search1:require('../Images/search1.png'),
+    removeuser:require('../Images/removeuser.png'),
+    delete:require('../Images/delete.png'),
+    chathistory:require('../Images/chathistory.png'),
 }
 export default ImagesWrapper;

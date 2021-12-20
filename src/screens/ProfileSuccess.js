@@ -17,12 +17,12 @@ class ProfileSuccess extends React.Component {
           <Image source={ImagesWrapper.profile}
           ></Image>
           <Text style={{ fontSize: 20, fontFamily: Fonts.mulishSemiBold, fontWeight: '600', marginLeft: '5%',color:'#1E1C24' }}>Memphis Talks</Text>
-          <TouchableOpacity style={{ marginLeft: '20%' }} onPress={() => this.props.navigation.navigate('Notification')}>
+          <TouchableOpacity style={{ marginLeft: '20%' }} onPress={() => this.props.navigation.navigate('notificationscreen')}>
             <Image source={ImagesWrapper.notification3}
             ></Image>
           </TouchableOpacity>
           <TouchableOpacity style={{ marginLeft: '7%' }}
-            onPress={() => this.props.navigation.navigate('ChatScreen')}
+            onPress={() => this.props.navigation.navigate('chatscreen')}
           >
             <Image source={ImagesWrapper.chat}
             ></Image>
@@ -146,7 +146,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent'
   },
   header: {
-    flex: 0.8,
+    flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
     paddingLeft: '9%'

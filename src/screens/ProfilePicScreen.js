@@ -11,7 +11,7 @@ import {
     PermissionsAndroid,
     Platform,
     Animated,
-    alert
+    BackHandler, Alert
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient'
 import * as Progress from 'react-native-progress';
@@ -122,15 +122,18 @@ const askPermission = async () => {
       } 
     } 
   };
-const handleScroll=()=>{
-    console.log('hello')
-    setHeight1(380);
-        setHeight2(330);
-    
-}
+  function handleBackButtonClick() {
+      console.log('back')
+    props.navigation.goback(null);
+    return true;
+  }
   useEffect(() => {
     askPermission();
-    // handleScroll();
+    // BackHandler.addEventListener('hardwareBackPress', handleBackButtonClick);
+    // return () => {
+    //   BackHandler.removeEventListener('hardwareBackPress', handleBackButtonClick);
+    // };
+    
   }, []);
 
   
@@ -276,6 +279,9 @@ const handleScroll=()=>{
          transparent={true}
          isVisible={show}
          onBackdropPress={() => setShow(false)}
+         onRequestClose={() => {
+            setShow(false)
+          }}
     >
         <View style={{flex:1,justifyContent:'flex-end',width:'110%',marginLeft:-18}}>
           
@@ -347,6 +353,10 @@ const handleScroll=()=>{
                                     setGallerypopup(false),
                                     setShow(false)
                                 }}
+                                onRequestClose={() => {
+                                    setGallerypopup(false),
+                                    setShow(false)
+                                  }}
                             >
                                 <View style={{backgroundColor:'white',borderTopLeftRadius: 20,borderTopRightRadius:20,height:'153%',marginTop:550,width:'110%',marginLeft:-20}}>
                                      <Text style={{fontSize:18,margin:30,fontFamily:Fonts.mulishSemiBold,color:'#1E1C24'}}>Gallery</Text>

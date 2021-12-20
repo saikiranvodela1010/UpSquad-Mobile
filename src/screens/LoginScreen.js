@@ -94,7 +94,7 @@ export default class LoginScreen extends React.Component {
           {
               this.setState({email:''})
               this.setState({password:''})
-            this.props.navigation.navigate('ProfileSucess')
+            this.props.navigation.navigate('profilesuccess')
         } 
         
     }
@@ -113,7 +113,7 @@ export default class LoginScreen extends React.Component {
 
                    
                     <View style={styles.card}>
-                    {/* <ScrollView > */}
+                    <ScrollView >
                     
                     <Text style={styles.bio}>Email ID</Text>
                     <TextInput
@@ -146,7 +146,7 @@ export default class LoginScreen extends React.Component {
                          }}
                          style={styles.eyeopen}
                     >
-                    <View >
+                    <View>
                     <Image
                             resizeMode='contain'
                             source={this.state.iconName === 'ios-eye' ? ImagesWrapper.eyeopen : ImagesWrapper.eyeoff}
@@ -178,7 +178,7 @@ export default class LoginScreen extends React.Component {
                     >
                     <Text style={styles.forgot}>Forgot Password? </Text>
                     </TouchableOpacity>
-
+                </ScrollView>
 
                     {/* Next Button view */}
                    <View style={{flex:1,justifyContent:'flex-end'}}>
@@ -209,7 +209,7 @@ export default class LoginScreen extends React.Component {
                     </Text>
                     </View>
                    
-                   {/* </ScrollView> */}
+                   
                 </View>
                 
             </View>

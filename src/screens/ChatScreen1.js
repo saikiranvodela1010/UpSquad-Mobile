@@ -16,7 +16,7 @@ export default class ChatScreen1 extends React.Component {
                             style={{ marginTop: 4, marginRight: 5 }}
                         />
                        
-                       <Text style={{ color: '#868585', fontSize: 14, fontFamily: 'Mulish-Regular', fontWeight: '400', marginLeft: 5,marginTop:5}}>Search message</Text>
+                       <Text style={{ color: '#868585', fontSize: 14, fontFamily: Fonts.mulishRegular, fontWeight: '400', marginLeft: 5,marginTop:5}}>Search message</Text>
                         
                     </View>
                     
@@ -27,7 +27,7 @@ export default class ChatScreen1 extends React.Component {
 
                 <View style={{ flexDirection: 'row', marginTop: 20, marginBottom: 20, marginLeft: 30 }}>
                     {/* <Image
-                        source={require('./images/chatimage.png')}
+                        source={ImagesWrapper.chatimage}
                     /> */}
                     <View style = {styles.displayimage}></View>
                     <View style={{ flexDirection: 'column', marginTop: 'auto', marginBottom: 'auto' }}>
@@ -37,9 +37,9 @@ export default class ChatScreen1 extends React.Component {
                         <Text style={styles.nameText}>Hey! just wanna share with...</Text>
                     </View>
                     <View style={styles.time}>
-                        <Text style={{ color: '#212B68', }}>3:00</Text>
+                        <Text style={{ color: '#212B68', fontFamily: Fonts.mulishRegular}}>3:00</Text>
                         <View style={[styles.number, {marginLeft: 10}]}>
-                            <Text style={{ color: '#FFFFFF' }}>1</Text>
+                            <Text style={{ color: '#FFFFFF', fontFamily: Fonts.mulishRegular }}>1</Text>
                         </View>
                     </View>
                 </View>
@@ -52,9 +52,9 @@ export default class ChatScreen1 extends React.Component {
                             <Text style={styles.nameText}>Hey! just wanna share with...</Text>
                         </View>
                         <View style={styles.time}>
-                            <Text style={{ color: '#212B68', }}>3:00</Text>
+                            <Text style={{ color: '#212B68', fontFamily: Fonts.mulishRegular }}>3:00</Text>
                             <View style={[styles.number,{marginLeft:10}]}>
-                                <Text style={{ color: '#FFFFFF' }}>1</Text>
+                                <Text style={{ color: '#FFFFFF', fontFamily: Fonts.mulishRegular }}>1</Text>
                             </View>
                         </View>
                     </View>
@@ -70,7 +70,7 @@ export default class ChatScreen1 extends React.Component {
                 </ScrollView>
                 <View style={{ flex: 1, justifyContent: 'flex-end', alignItems: 'flex-end' }}>
                     <TouchableOpacity onPress={()=>{
-                         this.props.navigation.navigate('Bio');
+                         this.props.navigation.navigate('createchatscreen');
                      }} style={{ bottom: 40, right: 30, position: 'absolute' }} activeOpacity={0.5}>
                         <Image
                             source={ImagesWrapper.editimage}
@@ -95,6 +95,7 @@ const styles = StyleSheet.create({
         marginRight: 'auto',
         marginTop: 30,
         borderColor: '#F1F1F1',
+        backgroundColor: 'rgba(241, 241, 241, 0.25)'
     },
     name: {
         fontSize: 14,

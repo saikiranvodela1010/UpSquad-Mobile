@@ -1,7 +1,9 @@
 import 'react-native-gesture-handler';
 import React from 'react';
+import {View,Text,TouchableOpacity,Image,StyleSheet} from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
+import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import GetStartedScreen from '../screens/GetStartedScreen';
 import SignUpScreen from '../screens/SignUpScreen';
 import AccountScreen from '../screens/AccountScreen';
@@ -23,11 +25,68 @@ import MessageScreen from '../screens/MessageScreen';
 import RemoveUser from '../screens/RemoveUser';
 import GroupScreen1 from '../screens/GroupScreen1';
 import GroupScreen2 from '../screens/GroupScreen2';
+import Fonts from '../res/Fonts';
+import ImagesWrapper from '../res/ImagesWrapper';
+import ChatScreen1 from '../screens/ChatScreen1';
+import GroupScreen from '../screens/GroupScreen';
 
+const Stack = createStackNavigator();
+const Tab = createMaterialTopTabNavigator();
+const  TabStack=()=> {
+  return (
+    <View style={{ flex: 1, backgroundColor: '#FFFFFF' }}>
+    <View style={{ flexDirection: 'row', marginTop: 20, marginBottom: 20 }}>
+        <TouchableOpacity onPress={()=> this.props.navigation.navigate('ProfileSucess')}>
+        <Image
+            source={ImagesWrapper.back}
+            style={{
+                marginTop: 6,
+                marginLeft: 20,
+                tintColor: '#000000',
+            }}
+        />
+        </TouchableOpacity>
+        <Text style={styles.title}>Memphis Talks</Text>
+    </View>
+    <View style={{ borderWidth: 1, borderColor: '#F1F1F1' }}></View>
+    <Tab.Navigator
+    screenOptions={{
+      tabBarLabelStyle: { fontSize: 16, fontFamily: Fonts.mulishSemiBold, 
+        fontWeight: "600", textTransform: 'capitalize', },
+      tabBarItemStyle: { width: 100 },
 
+      tabBarActiveTintColor: '#1E1C24',
+      
+
+  }}
+  tabBarOptions={{
+      indicatorStyle: {backgroundColor: '#58C4C6', width: '30%', marginLeft: 20, height: 4}
+  }}>
+
+                        <Tab.Screen
+                        name="chatscreen1"
+                        component={ChatScreen1}
+                        options={{
+                            tabBarLabel: 'Chats',
+                            //tabBarOptions:{upperCaseLabel:'false'}
+
+                        }} />
+                     <Tab.Screen
+                        name="groupscreen"
+                        component={GroupScreen}
+                        options={{
+                            tabBarLabel: 'Groups',
+                            //tabBarOptions:{upperCaseLabel:'false'}
+
+                        }} />
+                   
+    </Tab.Navigator>
+    </View>
+  );
+}
 
 const Navigator = () =>{
-    const Stack = createStackNavigator();
+    
     return(
         <NavigationContainer>
         <Stack.Navigator
@@ -36,7 +95,7 @@ const Navigator = () =>{
                 gestureEnabled: false,
                 animationEnabled: false
             }}
-            initialRouteName='GetStarted'
+            initialRouteName='ProfileSucess'
         >
         <Stack.Screen 
         name="GetStarted" 
@@ -118,6 +177,7 @@ const Navigator = () =>{
 
       />
 
+<Stack.Screen name="TabStack" component={TabStack} />
 
 
 
@@ -126,5 +186,15 @@ const Navigator = () =>{
     );
    
 }
+const styles = StyleSheet.create({
+  title: {
+      fontFamily: Fonts.mulishSemiBold,
+      fontWeight: '600',
+      color: '#1E1C24',
+      fontSize: 20,
+      marginLeft: 20,
+      marginTop:5
+  },
+})
 
 export default Navigator;

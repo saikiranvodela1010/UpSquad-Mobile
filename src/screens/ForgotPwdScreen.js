@@ -75,11 +75,12 @@ export default class ForgotPwdScreen extends React.Component {
                         }}
                         value={this.state.email}
                         returnKeyType={"done"}
-                        keyboardType={'ascii-capable'}
+                        keyboardType={Platform.OS === 'ios' ? 'ascii-capable' : 'visible-password'}
                         // ref={(input) => { this.thirdTextInput = input; }}
                         // onSubmitEditing={() => { this.fourTextInput.focus(); }}
                         // importantForAutofill="no" 
                         maxLength={63}
+                        
                         // blurOnSubmit={false}
                     />
                    

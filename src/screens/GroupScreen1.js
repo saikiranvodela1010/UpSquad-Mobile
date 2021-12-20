@@ -14,43 +14,43 @@ export default class GroupScreen1 extends React.Component {
       data: [
         {
           id: "1",
-          name: "Kannie Sils",
+          name: "Kannie",
           isSelect: false,
           selectedClass: 'notselected'
         },
         {
           id: "2",
-          name: "Jay Jay",
+          name: "Jay",
           isSelect: false,
           selectedClass: 'notselected'
         },
         {
           id: "3",
-          name: "Katy Brown",
+          name: "Katy",
           isSelect: false,
           selectedClass: 'notselected'
         },
         {
           id: "4",
-          name: "Thomas White",
+          name: "Thomas",
           isSelect: false,
           selectedClass: 'notselected'
         },
         {
           id: "5",
-          name: "Kannie Sils",
+          name: "Kannie",
           isSelect: false,
           selectedClass: 'notselected'
         },
         {
           id: "6",
-          name: "Jay Jay",
+          name: "Jay",
           isSelect: false,
           selectedClass: 'notselected'
         },
         {
           id: "7",
-          name: "Katy Brown",
+          name: "Katy",
           isSelect: false,
           selectedClass: 'notselected'
         },
@@ -149,7 +149,7 @@ export default class GroupScreen1 extends React.Component {
             />
 
             <TextInput
-              placeholder='Search message'
+              placeholder='Search contact'
               style={{ color: '#868585', fontSize: 14, fontFamily: Fonts.mulishRegular, fontWeight: '400', marginLeft: 4, marginBottom: 2, marginTop: 2, width: '60%' }}
             >
             </TextInput>
@@ -166,8 +166,8 @@ export default class GroupScreen1 extends React.Component {
 
               {this.state.selectedParticipants.map((item, index) => {
                 return (
-                  <View style={{ marginBottom: 30, alignItems: 'center', marginTop: 10 }}>
-                    <View style={{ width: 50, height: 50, borderRadius: 25, borderWidth: 1, borderColor: 'black', alignItems: 'flex-end', flexDirection: "row-reverse" }}>
+                  <View style={{ marginBottom: 40, alignItems: 'center', marginTop: 10 }}>
+                    <View style={{ marginLeft: 10, width: 50, height: 50, borderRadius: 25, borderWidth: 1, borderColor: 'black', alignItems: 'flex-end', flexDirection: "row-reverse" }}>
 
                       <TouchableOpacity onPress={() => this.deselectItem(item)}>
                         <Image source={ImagesWrapper.remove} />
@@ -262,12 +262,22 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     color: '#1E1C24',
     fontSize: 20,
-    marginLeft: 20
+    marginLeft: 20,
+    marginTop:5
   },
   name: {
     fontSize: 14,
     fontWeight: '600',
-    marginLeft: 20,
+    marginLeft: 15,
+    color: '#1E1C24',
+    fontFamily: Fonts.mulishSemiBold,
+    marginTop: 'auto',
+    marginBottom: 'auto',
+  },
+  selectedName: {
+    fontSize: 14,
+    fontWeight: '600',
+    marginLeft: 15,
     color: '#1E1C24',
     fontFamily: Fonts.mulishSemiBold,
     marginTop: 'auto',
@@ -299,6 +309,7 @@ const styles = StyleSheet.create({
     marginRight: 'auto',
     marginTop: 30,
     borderColor: '#F1F1F1',
+    backgroundColor: 'rgba(241, 241, 241, 0.25)'
   },
   toucahbleOpacity: {
     right: 30,
@@ -318,7 +329,7 @@ const styles = StyleSheet.create({
     color: '#1E1C24',
     fontFamily: Fonts.mulishSemiBold,
     marginTop: 5,
-    marginLeft: 10
+    // marginLeft: 10
 
 
 

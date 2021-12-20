@@ -6,6 +6,39 @@ import Fonts from '../res/Fonts';
 
 
 export default class GroupScreen2 extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            dpimage : '',
+        }
+    }
+
+    async cameraOnpress() {
+        
+
+       
+        ImagePicker.openCamera({
+            width: 300,
+            height: 300,
+            cropping: true,
+            freeStyleCropEnabled: true,
+            // multiple:true
+        })
+            .then((image) => {
+                console.log('images', image);
+              this.setState({ dpimage: image })
+                
+            })
+            .catch((error) => {
+                console.log('error', error)
+            });
+
+           // this.captureImage(this.state.cameraImage);
+    
+
+    }
+
+   
 
     render() {
         const { navigation } = this.props;  
@@ -29,45 +62,32 @@ export default class GroupScreen2 extends React.Component {
                 </View>
                 <View style={{ borderWidth: 1, borderColor: '#F1F1F1' }}></View>
                 <View style={{flexDirection:'row',alignItems:'center',marginTop:'5%',marginLeft:30}}>
-                    <TouchableOpacity
-                    // onPress={() => {
-                    //     ImagePicker.openCamera({
-                    //         width: 300,
-                    //         height: 300,
-                    //         cropping: true,
-                    //         freeStyleCropEnabled: true,
-                    //         // multiple:true
-                    //     })
-                    //         .then((image) => {
-                    //             console.log('images', image);
-
-                    //         })
-                    //         .catch((error) => {
-                    //             console.log('error', error)
-                    //         });
-
-                    // }}
-                    >
+                    
+                        
                 <ImageBackground source={ImagesWrapper.profileimage} style={{width:50,height:50,alignItems:'center',justifyContent:'center'}}>
+                    {/* <TouchableOpacity onPress = {() => this.cameraOnpress()}> */}
                     <Image source={ImagesWrapper.pcamera}></Image>
+                    {/* </TouchableOpacity> */}
+
                     </ImageBackground>
-                    </TouchableOpacity>
+                  
                     
                     
                     <View style={styles.underline}>
                     <TextInput
+                    multiline = {true}
                         style={styles.textinput} />
                    </View>
                    
-                    <View style={{marginLeft:25}}>
-                    <Image source={ImagesWrapper.smiley} ></Image> 
+                    <View style={{marginLeft:20}}>
+                    <Image source={ImagesWrapper.emoji} ></Image> 
                     </View>
                 </View>
                 <View style={{marginLeft:30,paddingTop:'4%',marginBottom:'7%'}}>
                     <Text style={styles.staticText}>Provide a group subject and optional group icon</Text>
                 </View>
                 <View style={{flexGrow:1,backgroundColor:'#E5E5E5'}}>
-                    <TouchableOpacity onPress={() => this.props.navigation.navigate('removeuser')}>
+                    {/* <TouchableOpacity onPress={() => this.props.navigation.navigate('removeuser')}> */}
                     <View style={{alignItems:'flex-end',right:15}}>
 
                 <Image
@@ -78,12 +98,14 @@ export default class GroupScreen2 extends React.Component {
         }} 
         />
         </View>
-        </TouchableOpacity>
+        {/* </TouchableOpacity> */}
                     <View style={{marginLeft:30,marginTop:'5%'}}>
                  <Text style={styles.participants}>Participants: {selectedList.length}</Text>
                  </View>
+                 {/* <ScrollView style = {{flex: 1}} horizontal = {true} showsHorizontalScrollIndicator = {false}> */}
                  {selectedList==''?null:
-            <View style={{flexDirection:'row',marginLeft:30,marginTop:'4%'}}>
+                 <ScrollView  horizontal = {true}>
+            <View style={{flexDirection:'row', marginLeft:15, marginTop:'4%'}}>
             { selectedList.map((item,index)=>
              {
                return(
@@ -100,7 +122,9 @@ export default class GroupScreen2 extends React.Component {
              })}
             
              </View>
+             </ScrollView>
             }
+            {/* </ScrollView> */}
                  
                 </View>
             </View>
@@ -116,14 +140,16 @@ const styles = StyleSheet.create({
         fontWeight: '600',
         color: '#1E1C24',
         fontSize: 20,
-        marginLeft: 20
+        marginLeft: 20,
+        marginTop:5
     },
     name: {
         color:'#1E1C24',
         fontFamily:Fonts.mulishRegular,
         fontSize:12,
         fontWeight:'400',
-        paddingTop:4
+        paddingTop:4, 
+        marginLeft: 20
     },
     
     
@@ -137,7 +163,7 @@ const styles = StyleSheet.create({
         fontWeight:'400',
         fontSize:14,
         color:'#1E1C24',
-        width:'40%'
+        width:'90%'
     },
     underline:{
         borderBottomColor: '#58C4C6',
@@ -164,8 +190,8 @@ const styles = StyleSheet.create({
         borderRadius:25,
         borderWidth:1,
         borderColor:'black',
-        marginLeft:'7%',
-        alignItems:'flex-end',
-        flexDirection:"row-reverse"
+        marginLeft: 15,
+        // alignItems:'flex-end',
+        // flexDirection:"row-reverse"
     }
 })

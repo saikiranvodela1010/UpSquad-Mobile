@@ -9,7 +9,7 @@ export default class ChatSearch extends React.Component {
         return (
 
             <View style={{ flex: 1, backgroundColor: '#FFFFFF' }}>
-                <View style={{ flexDirection: 'row', marginTop: 20 }}>
+                <View style={{ flexDirection: 'row', marginTop: 20, marginBottom: 5 }}>
                     <TouchableOpacity onPress = {() => this.props.navigation.navigate('chatscreen1')}>
                     <Image
                         source={ImagesWrapper.back}
@@ -38,9 +38,9 @@ export default class ChatSearch extends React.Component {
                             <Text style={styles.nameText}>Hey! just wanna share with...</Text>
                         </View>
                         <View style={styles.time}>
-                            <Text style={{ color: '#212B68', }}>3:00</Text>
+                            <Text style={{ color: '#212B68', fontFamily: 'Mulish-Regular' }}>3:00</Text>
                             <View style={[styles.number, {marginLeft: 10}]}>
-                                <Text style={{ color: '#FFFFFF' }}>1</Text>
+                                <Text style={{ color: '#FFFFFF', fontFamily: 'Mulish-Regular' }}>1</Text>
                             </View>
                         </View>
                     </View>
@@ -55,9 +55,9 @@ export default class ChatSearch extends React.Component {
                             <Text style={styles.nameText}>Hey! just wanna share with...</Text>
                         </View>
                         <View style={styles.time}>
-                            <Text style={{ color: '#212B68', }}>3:00</Text>
+                            <Text style={{ color: '#212B68', fontFamily: 'Mulish-Regular' }}>3:00</Text>
                             <View style={[styles.number, {marginLeft: 10}]}>
-                                <Text style={{ color: '#FFFFFF' }}>1</Text>
+                                <Text style={{ color: '#FFFFFF', fontFamily: 'Mulish-Regular' }}>1</Text>
                             </View>
                         </View>
                     </View>
@@ -153,7 +153,7 @@ const styles = StyleSheet.create({
         color: '#868585',
         fontSize: 14,
         marginLeft: 20,
-        marginTop: -10
+        marginTop: -5,
     },
     name: {
         fontSize: 14,

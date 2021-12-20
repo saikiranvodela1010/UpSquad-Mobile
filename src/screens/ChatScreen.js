@@ -14,7 +14,7 @@ export default class ChatScreen extends React.Component {
         return (
             <View style={{ flex: 1, backgroundColor: '#FFFFFF' }}>
                 <View style={{ flexDirection: 'row', marginTop: 20, marginBottom: 20 }}>
-                    <TouchableOpacity onPress={()=> this.props.navigation.navigate('ProfileSucess')}>
+                    <TouchableOpacity onPress={()=> this.props.navigation.navigate('profilesuccess')}>
                     <Image
                         source={ImagesWrapper.back}
                         style={{
@@ -42,32 +42,21 @@ export default class ChatScreen extends React.Component {
                     }}
 
                 >
-                     <Tab.Screen
-                        name="groupscreen"
-                        component={GroupScreen}
-                        options={{
-                            tabBarLabel: 'Groups',
-                            //tabBarOptions:{upperCaseLabel:'false'}
+                      <Tab.Screen
+                    name="chatscreen1"
+                    component={ChatScreen1}
+                    options={{
+                        tabBarLabel: 'Chats',
+                        //tabBarOptions:{upperCaseLabel:'false'}
 
-                        }} />
-                    <Tab.Screen
-                        name="chatscreen1"
-                        component={ChatScreen1}
-                        options={{
-                            tabBarLabel: 'Chats',
-                            //tabBarOptions:{upperCaseLabel:'false'}
+                    }} />
+                <Tab.Screen
+                    name="groupscreen"
+                    component={GroupScreen}
+                    options={{
+                        tabBarLabel: 'Groups',
 
-                        }} />
-                        <Tab.Screen
-                        name="chatscreen2"
-                        component={ChatScreen1}
-                        options={{
-                            tabBarLabel: 'Chats',
-                            //tabBarOptions:{upperCaseLabel:'false'}
-
-                        }} />
-                        
-                   
+                    }} />
                         
                 </Tab.Navigator>
                
