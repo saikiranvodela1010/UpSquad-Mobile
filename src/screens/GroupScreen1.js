@@ -142,7 +142,7 @@ export default class GroupScreen1 extends React.Component {
         <View style={{ borderWidth: 1, borderColor: '#F1F1F1' }}></View>
 
         <View style={styles.searchBorder}>
-          <View style={{ flexDirection: 'row', marginLeft: 20, marginTop: 10, alignItems: 'center' }}>
+          <View style={{ flexDirection: 'row', marginLeft: 20,alignItems: 'center' }}>
             <Image
               source={ImagesWrapper.search}
               style={{ marginRight: 5 }}
@@ -166,7 +166,7 @@ export default class GroupScreen1 extends React.Component {
 
               {this.state.selectedParticipants.map((item, index) => {
                 return (
-                  <View style={{ marginBottom: 40, alignItems: 'center', marginTop: 10 }}>
+                  <View style={{ marginBottom: 50, alignItems: 'center', marginTop: 10 }}>
                     <View style={{ marginLeft: 10, width: 50, height: 50, borderRadius: 25, borderWidth: 1, borderColor: 'black', alignItems: 'flex-end', flexDirection: "row-reverse" }}>
 
                       <TouchableOpacity onPress={() => this.deselectItem(item)}>

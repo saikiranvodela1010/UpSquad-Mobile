@@ -67,7 +67,7 @@ export default class OTPScreen extends React.Component {
                    {/* <KeyboardAvoidingView > */}
                     <View style={{flexDirection:'row'}}> 
                     <TextInput
-                        style={[styles.textinput,{borderColor:this.state.color1} ]}
+                        style={[styles.textinput,{borderColor:'#58C4C6'} ]}
                         onChangeText={(Otp) => {
                             this.setState({otp:Otp})
                             this.setState({otperr:''})   

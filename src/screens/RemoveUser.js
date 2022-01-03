@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, TextInput, Image, TouchableOpacity, ScrollView, FlatList, ImageBackground } from 'react-native';
+import { View, Text, StyleSheet, TextInput, Image, TouchableOpacity, ScrollView, FlatList, ImageBackground,BackHandler} from 'react-native';
 import ImagesWrapper from '../res/ImagesWrapper';
 import Fonts from '../res/Fonts';
 
@@ -56,7 +56,23 @@ export default class RemoveUser extends React.Component {
             ]
 
         };
+        this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
     }
+    
+
+    componentWillMount() {
+        BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
+    }
+    
+    componentWillUnmount() {
+        BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
+    }
+    
+    handleBackButtonClick() {
+        this.props.navigation.goBack(null);
+        return true;
+    }
+
     renderSeparator = () => {
         return (
             <View style={styles.border}></View>
@@ -109,8 +125,8 @@ export default class RemoveUser extends React.Component {
                     </TouchableOpacity>
                     <Text style={styles.title}>Remove Users</Text>
                     {this.state.save == false ?
-                        <Text style={{ color: 'rgba(30, 28, 36, 1)', fontSize: 14, fontFamily: Fonts.mulishRegular, marginLeft: '30%', paddingTop: 10 }}>Save</Text>
-                        : <TouchableOpacity>
+                        <Text style={{ color: 'rgba(134, 133, 133, 1)', fontSize: 14, fontFamily: Fonts.mulishRegular, marginLeft: '30%', paddingTop: 10 }}>Save</Text>
+                        : <TouchableOpacity onPress={()=>this.props.navigation.navigate('groupscreen')}>
                             <Text style={{ color: '#58C4C6', fontSize: 14, fontFamily: Fonts.mulishRegular, marginLeft: '51%', paddingTop: 10 }}>Save</Text>
                         </TouchableOpacity>
                     }
@@ -214,6 +230,7 @@ const styles = StyleSheet.create({
         marginRight: 'auto',
         marginTop: 30,
         borderColor: '#F1F1F1',
+        backgroundColor: 'rgba(241, 241, 241, 0.25)'
     },
     searchText: {
         color: '#868585',

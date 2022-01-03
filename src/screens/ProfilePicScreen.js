@@ -140,14 +140,14 @@ const askPermission = async () => {
   return(
       <View style={{backgroundColor:'#FFFFFF'}}>
           
-         
-        <View style={{flexDirection:"row"}}>
-            <View>
+         {/* <View style={{justifyContent:'space-between',flex:1}}> */}
+        <View style={{flexDirection:"row",margin:15,}}>
+            
                <TouchableOpacity onPress={()=>props.navigation.navigate('Account')}>
                 <Image style={styles.backarrow} source={ImagesWrapper.back} />
                 </TouchableOpacity>
-                </View>
-                <View style={{marginRight:'10%'}}>
+              
+                <View style={{flex:1,alignItems:'flex-end',marginRight:30}}>
                 {/* <TouchableOpacity onPress={()=>props.navigation.navigate('BioData')}> */}
                              
                 <Text style={styles.skip} onPress={()=>props.navigation.navigate('BioData')} >Skip</Text>
@@ -157,6 +157,7 @@ const askPermission = async () => {
                
 
         </View>
+        {/* </View> */}
         <Progress.Bar useNativeDriver={false} progress={2} width={150} style={styles.bar} color={'#212B68'}/>
         <Text style={styles.text}>Let's start by setting a great profile pic</Text>
         {/* <Text style={[styles.text,{marginTop:5}]}> profile pic</Text> */}
@@ -225,7 +226,9 @@ const askPermission = async () => {
             <LinearGradient colors={['#ECF8F8','white']} style={[styles.card,{height:height1,marginTop:top1}]} >
             <TouchableOpacity onPress={()=>setShow(true)}> 
             {file ?
+            // <View style={{flex:1,justifyContent:'center'}}>
                  <Image style={styles.uripath} source={{uri:file}} />
+                //  </View>
                  :
                  <Image style={styles.uripath} source={{uri:camerfile?.path}} />
             }
@@ -261,7 +264,7 @@ const askPermission = async () => {
 
 
         </ScrollView>
-        <View  style={{marginTop:'10%',marginBottom:'17%'}}>
+        <View  style={{marginTop:'15%',marginBottom:'17%'}}>
         <TouchableOpacity 
                         onPress={()=>{
                             props.navigation.navigate('BioData')
@@ -291,8 +294,9 @@ const askPermission = async () => {
                     onPress={()=>{
                         ImagePickerCropper.openCamera({
                             width:300,
-                            height:300,
-                            cropping:true,
+                            height:400,
+                            // cropping:true,
+                            // compressImageQuality:0.7,
                             freeStyleCropEnabled:true,
                             // multiple:true
                         })
@@ -316,22 +320,7 @@ const askPermission = async () => {
                 <View>
                     <TouchableOpacity
                         //  onPress={()=>{
-                        //      ImagePickerCropper.openPicker({
-                        //          width:300,
-                        //          height:300,
-                        //          cropping:true,
-                        //          freeStyleCropEnabled:true,
-                        //      })
-                        //      .then((images)=>{
-                        //          console.log('images',images.path);
-                        //            setFile(images)
-                        //            setShow(false)
-                        //      })
-                        //      .catch((error)=>{
-                        //          console.log('error',error)
-                        //      })
-                             
-                        //  }}
+                       
                         onPress={()=>{
                             // setShow(false);
                             getPhotos();
@@ -361,7 +350,7 @@ const askPermission = async () => {
                                 <View style={{backgroundColor:'white',borderTopLeftRadius: 20,borderTopRightRadius:20,height:'153%',marginTop:550,width:'110%',marginLeft:-20}}>
                                      <Text style={{fontSize:18,margin:30,fontFamily:Fonts.mulishSemiBold,color:'#1E1C24'}}>Gallery</Text>
                                      <View style={styles.underline}/>
-                                     <View>
+                                     <View style={{marginLeft:18,marginRight:15}}>
                                     
                                         <FlatList
                                        
@@ -416,12 +405,13 @@ const askPermission = async () => {
                                                         setShow(false);
                                                        
                                                     }}>
-                                                        
+                                                        <View style={{marginTop:5}}>
                                                     <Image
                                                         style={{
-                                                        width: Platform.OS === "ios" ? 100:100,
-                                                        height: 100,
-                                                        margin:Platform.OS === "ios" ? 5:10,
+                                                        width: Platform.OS === "ios" ? 100:108,
+                                                        height: 108,
+                                                        // margin:Platform.OS === "ios" ? 5:10,
+                                                        // marginLeft:
                                                         borderRadius:10
                                                         }}
                                                         // source={{uri: item.node.image.uri}}
@@ -429,6 +419,7 @@ const askPermission = async () => {
                                                         
                                                         // source={require('../src/images/img.png')}
                                                     />
+                                                    </View>
                                                     </TouchableOpacity>
                                                        
                                                       
@@ -459,11 +450,11 @@ const styles = StyleSheet.create({
         width: 30,
         height: 30,
         marginLeft: 30,
-        marginTop: 15
+        // marginTop: 15
     },
     skip: {
-        marginLeft: '80%',
-        marginTop: '5%',
+        // marginLeft: '80%',
+        // marginTop: '5%',
         fontSize: 18,
         color: '#58C4C6',
         fontWeight: '700',
@@ -475,7 +466,7 @@ const styles = StyleSheet.create({
         // width:'100%',
         // borderColor:'black',
         borderWidth: 0.1,
-        marginTop: 7,
+        marginTop: 5,
         backgroundColor:'#F1F1F1'
         //  color:'red',
         // flexGrow: 1

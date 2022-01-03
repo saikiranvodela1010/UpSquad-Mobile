@@ -287,7 +287,7 @@ const  getListViewItem =(data)=>{
                                
                             >
                                 <LinearGradient start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }} colors={barwidth === 350?['#212B68', '#58C4C6']:['#F1F1F1', '#F1F1F1']} style={[styles.linearGradientButton,  choose === false && choosewant === false ? { marginTop: '60%' } : selectedBox.length >=1? { marginTop: '10%'}: { marginTop: '3%'}]}>
-                                    <Text style={[styles.buttonText, { color: '#868585', }]}>
+                                    <Text style={[styles.buttonText, { color: barwidth === 350?'#FFFFFF':'#868585', }]}>
                                         Done
                         </Text>
                                 </LinearGradient>

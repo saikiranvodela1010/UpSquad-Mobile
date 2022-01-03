@@ -59,7 +59,7 @@ export default class ForgotPwdScreen extends React.Component {
                       style={{width:220,height:220}}
                     />
                     <Text style={[styles.welcome,Platform.OS === "ios" ? {marginTop:'-40%'}:{marginTop:'-40%'}]}>Forgot your Password?</Text>
-                    <Text style={styles.create}> Please enter the e-mail address you used when {"\n"} creating your account
+                    <Text style={styles.create}> Please enter the e-mail address you used when {"\n"} creating your account,
                     we'll send you {"\n"} instructions to reset your password. </Text>
 
                     

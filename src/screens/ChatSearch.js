@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, TextInput, Image, TouchableOpacity, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, TextInput, Image, TouchableOpacity, ScrollView,Keyboard } from 'react-native';
 import ImagesWrapper from '../res/ImagesWrapper';
 import Fonts from '../res/Fonts';
 
@@ -10,7 +10,10 @@ export default class ChatSearch extends React.Component {
 
             <View style={{ flex: 1, backgroundColor: '#FFFFFF' }}>
                 <View style={{ flexDirection: 'row', marginTop: 20, marginBottom: 5 }}>
-                    <TouchableOpacity onPress = {() => this.props.navigation.navigate('chatscreen1')}>
+                    <TouchableOpacity onPress = {() => {
+                        Keyboard.dismiss
+                        this.props.navigation.navigate('chatscreen1')
+                        }}>
                     <Image
                         source={ImagesWrapper.back}
                         style={{

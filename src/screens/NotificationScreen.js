@@ -23,97 +23,113 @@ export default class NotificationScreen extends React.Component {
                 </View>
                 <ScrollView>
                 <View style={{ borderWidth: 1, borderColor: '#F1F1F1' }}></View>
-                <View style={{ flexDirection: 'row', marginTop: 20, marginBottom: 20 }}>
+                <View style={{ flexDirection: 'row', marginTop: 20, marginBottom: 20 ,marginLeft: 30,marginRight:30}}>
                     <Image
                         source={ImagesWrapper.notification}
-                        style={{ marginLeft: 30 }}
+                        // style={{ marginLeft: 30 }}
                     />
+                    <View style={{flex:1,justifyContent:'space-between',flexDirection:'row'}}>
                     <View style={{ flexDirection: 'column', marginTop: 'auto', marginBottom: 'auto' }}>
                         <Text style={styles.text1}>You have an upcoming meeting</Text>
                         <Text style={styles.text1}>with <Text style={styles.text2}>Katy Brown</Text></Text>
                     </View>
                     <Text style={styles.minutes}>22m</Text>
+                    </View>
                 </View>
                 <View style={styles.border}></View>
-                <View style={{ flexDirection: 'row', marginTop: 20, marginBottom: 20 }}>
+                <View style={{ flexDirection: 'row', marginTop: 20, marginBottom: 20,marginLeft: 30,marginRight:30 }}>
                     <Image
                         source={ImagesWrapper.notification1}
-                        style={{ marginLeft: 30 }}
+                        // style={{ marginLeft: 30 }}
                     />
+                     <View style={{flex:1,justifyContent:'space-between',flexDirection:'row'}}>
                     <View style={{ flexDirection: 'column', marginTop: 'auto', marginBottom: 'auto' }}>
                         <Text style={[styles.text2, { marginLeft: 20 }]}>Thomas White <Text style={styles.text1}>commented on </Text></Text>
                         <Text style={styles.text1}>your post </Text>
                     </View>
                     <Text style={styles.minutes}>42m</Text>
+                    </View>
                 </View>
                 <View style={styles.border}></View>
-                <View style={{ flexDirection: 'row', marginTop: 20, marginBottom: 20 }}>
+                <View style={{ flexDirection: 'row', marginTop: 20, marginBottom: 20,marginLeft: 30,marginRight:30 }}>
                     <Image
                         source={ImagesWrapper.notification}
-                        style={{ marginLeft: 30 }}
+                        // style={{ marginLeft: 30 }}
                     />
+                     <View style={{flex:1,justifyContent:'space-between',flexDirection:'row'}}>
                     <View style={{ flexDirection: 'column', marginTop: 'auto', marginBottom: 'auto' }}>
                         <Text style={styles.text1}>You have an upcoming meeting</Text>
                         <Text style={styles.text1}>with <Text style={styles.text2}>Ann Marie</Text></Text>
                     </View>
                     <Text style={styles.minutes}>51m</Text>
+                    </View>
                 </View>
                 <View style={styles.border}></View>
-                <View style={{ flexDirection: 'row', marginTop: 20, marginBottom: 20 }}>
+                <View style={{ flexDirection: 'row', marginTop: 20, marginBottom: 20,marginLeft: 30,marginRight:30 }}>
                     <Image
                         source={ImagesWrapper.notification}
-                        style={{ marginLeft: 30 }}
+                        // style={{ marginLeft: 30 }}
                     />
+                     <View style={{flex:1,justifyContent:'space-between',flexDirection:'row'}}>
                     <View style={{ flexDirection: 'column', marginTop: 'auto', marginBottom: 'auto' }}>
                         <Text style={[styles.text2, { marginLeft: 20 }]}>Annie Marie <Text style={styles.text1}>liked your post</Text></Text>
                     </View>
                     <Text style={styles.minutes}>1h</Text>
+                    </View>
                 </View>
                 <View style={styles.border}></View>
-                <View style={{ flexDirection: 'row', marginTop: 20, marginBottom: 20 }}>
+                <View style={{ flexDirection: 'row', marginTop: 20, marginBottom: 20,marginLeft: 30,marginRight:30 }}>
                     <Image
                         source={ImagesWrapper.notification}
-                        style={{ marginLeft: 30 }}
+                        // style={{ marginLeft: 30 }}
                     />
+                     <View style={{flex:1,justifyContent:'space-between',flexDirection:'row'}}>
                     <View style={{ flexDirection: 'column', marginTop: 'auto', marginBottom: 'auto' }}>
                         <Text style={[styles.text2, { marginLeft: 20 }]}>Pooja Rathod <Text style={styles.text1}>commented on </Text></Text>
                         <Text style={styles.text1}>your post </Text>
                     </View>
                     <Text style={styles.minutes}>2h</Text>
+                    </View>
                 </View>
                 <View style={styles.border}></View>
-                <View style={{ flexDirection: 'row', marginTop: 20, marginBottom: 20 }}>
+                <View style={{ flexDirection: 'row', marginTop: 20, marginBottom: 20,marginLeft: 30,marginRight:30 }}>
                     <Image
                         source={ImagesWrapper.notification}
-                        style={{ marginLeft: 30 }}
+                        // style={{ marginLeft: 30 }}
                     />
+                     <View style={{flex:1,justifyContent:'space-between',flexDirection:'row'}}>
                     <View style={{ flexDirection: 'column', marginTop: 'auto', marginBottom: 'auto' }}>
                         <Text style={[styles.text2, { marginLeft: 20 }]}>Pooja Rathod <Text style={styles.text1}>liked your post</Text></Text>
                     </View>
                     <Text style={styles.minutes}>1d</Text>
+                    </View>
                 </View>
                 <View style={styles.border}></View>
-                <View style={{ flexDirection: 'row', marginTop: 20, marginBottom: 20 }}>
+                <View style={{ flexDirection: 'row', marginTop: 20, marginBottom: 20,marginLeft: 30,marginRight:30 }}>
                     <Image
                         source={ImagesWrapper.notification2}
-                        style={{ marginLeft: 30 }}
+                        // style={{ marginLeft: 30 }}
                     />
+                     <View style={{flex:1,justifyContent:'space-between',flexDirection:'row'}}>
                     <View style={{ flexDirection: 'column', marginTop: 'auto', marginBottom: 'auto' }}>
                         <Text style={styles.text1}>You have an upcoming event</Text>
                     </View>
                     <Text style={styles.minutes}>4d</Text>
+                    </View>
                 </View>
                 <View style={styles.border}></View>
-                <View style={{ flexDirection: 'row', marginTop: 20, marginBottom: 20 }}>
+                <View style={{ flexDirection: 'row', marginTop: 20, marginBottom: 20,marginLeft: 30,marginRight:30 }}>
                     <Image
                         source={ImagesWrapper.notification}
-                        style={{ marginLeft: 30 }}
+                        // style={{ marginLeft: 30 }}
                     />
+                     <View style={{flex:1,justifyContent:'space-between',flexDirection:'row'}}>
                     <View style={{ flexDirection: 'column', marginTop: 'auto', marginBottom: 'auto' }}>
                         <Text style={styles.text1}>You have an upcoming meeting</Text>
                         <Text style={styles.text1}>with <Text style={styles.text2}>Kesha Rice</Text></Text>
                     </View>
                     <Text style={styles.minutes}>1w</Text>
+                    </View>
                 </View>
                 </ScrollView>
                 {/* <View style = {{borderWidth: 1, borderColor: '#F1F1F1', width: 400, marginLeft: 'auto', marginRight: 'auto'}}></View> */}
@@ -147,9 +163,10 @@ const styles = StyleSheet.create({
     minutes: {
         marginTop: 'auto',
         marginBottom: 'auto',
-        marginLeft: 'auto',
-        marginRight: 'auto',
-        fontFamily: Fonts.mulishRegular
+        // marginLeft: 'auto',
+        // marginRight: 'auto',
+        fontFamily: Fonts.mulishRegular,
+        
 
     },
     border: {

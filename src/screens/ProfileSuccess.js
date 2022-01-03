@@ -13,7 +13,7 @@ class ProfileSuccess extends React.Component {
 
 
       <View style={styles.container}>
-        <View style={styles.header}>
+        {/* <View style={styles.header}>
           <Image source={ImagesWrapper.profile}
           ></Image>
           <Text style={{ fontSize: 20, fontFamily: Fonts.mulishSemiBold, fontWeight: '600', marginLeft: '5%',color:'#1E1C24' }}>Memphis Talks</Text>
@@ -27,7 +27,28 @@ class ProfileSuccess extends React.Component {
             <Image source={ImagesWrapper.chat}
             ></Image>
           </TouchableOpacity>
-        </View>
+        </View> */}
+
+          <View style={[styles.header]}>
+            <Image source={ImagesWrapper.profile}
+            style={{marginLeft:'9%'}}
+            ></Image>
+            <Text style={{ fontSize: 20, fontFamily: Fonts.mulishSemiBold, fontWeight: '600',color:'#1E1C24', marginLeft: '5%' }}>Memphis Talks</Text>
+            <View style={{justifyContent:'flex-end',flexDirection:'row',flex:1}}>
+            <TouchableOpacity  style={{marginRight:'18%'}} onPress={() => this.props.navigation.navigate('notificationscreen')}>
+              <Image source={ImagesWrapper.notification3}
+              ></Image>
+            </TouchableOpacity>
+           
+            <TouchableOpacity 
+              style={{marginRight:'18%'}}
+              onPress={() => this.props.navigation.navigate('chatscreen')}
+            >
+              <Image source={ImagesWrapper.chat}
+              ></Image>
+            </TouchableOpacity>
+            </View>
+          </View>
         <View style={{ flex: 8 }}>
           <ImageBackground source={ImagesWrapper.manpic}
             style={styles.imgBackground} >
@@ -52,16 +73,16 @@ class ProfileSuccess extends React.Component {
           </View>
         </View>
         <View style={{ flex: 1 }}>
-          <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-around', paddingTop: 15 }}>
-            {/* <TouchableOpacity onPress={() => this.props.navigation.navigate('BioSuccess')}> */}
+          <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-around',paddingTop:15 }}>
+            <TouchableOpacity onPress={() => this.props.navigation.navigate('BioSuccess')}>
             <View style={styles.tabView}>
               <Image
                 style={{ resizeMode: 'contain' }}
                 source={ImagesWrapper.feed} />
               <Text style={styles.tabLabels}>Feed</Text>
             </View>
-            {/* </TouchableOpacity> */}
-            {/* <TouchableOpacity onPress={() => this.props.navigation.navigate('tabbar1')}> */}
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => this.props.navigation.navigate('tabbar1')}>
 
             <View style={styles.tabView}>
               <Image
@@ -72,8 +93,8 @@ class ProfileSuccess extends React.Component {
               />
               <Text style={styles.tabLabels}>People</Text>
             </View>
-            {/* </TouchableOpacity> */}
-            {/* <TouchableOpacity onPress={() => this.props.navigation.navigate('tabbar2')}> */}
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => this.props.navigation.navigate('tabbar2')}>
             <View style={styles.tabView}>
               <Image
                 style={{
@@ -83,8 +104,8 @@ class ProfileSuccess extends React.Component {
               />
               <Text style={styles.tabLabels}>Stories</Text>
             </View>
-            {/* </TouchableOpacity> */}
-            {/* <TouchableOpacity onPress={() => this.props.navigation.navigate('tabbar3')}> */}
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => this.props.navigation.navigate('tabbar3')}>
 
             <View style={styles.tabView}>
               <Image
@@ -95,9 +116,9 @@ class ProfileSuccess extends React.Component {
               />
               <Text style={styles.tabLabels}>Meetings</Text>
             </View>
-            {/* </TouchableOpacity> */}
+            </TouchableOpacity>
 
-            {/* <TouchableOpacity onPress={() => this.props.navigation.navigate('tabbar4')}> */}
+            <TouchableOpacity onPress={() => this.props.navigation.navigate('tabbar4')}>
             <View style={styles.tabView}>
               <Image
                 style={{
@@ -107,7 +128,7 @@ class ProfileSuccess extends React.Component {
               />
               <Text style={styles.tabLabels}>Events</Text>
             </View>
-            {/* </TouchableOpacity> */}
+            </TouchableOpacity>
           </View>
         </View>
       </View>
@@ -146,10 +167,15 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent'
   },
   header: {
-    flex: 1,
+    // flex: 1,
+    // flexDirection: 'row',
+    // alignItems: 'center',
+    // paddingLeft: '9%'
     flexDirection: 'row',
     alignItems: 'center',
-    paddingLeft: '9%'
+    // paddingLeft: '9%',
+    marginTop:25,
+    marginBottom:25,
   },
   text: {
     color: '#F1F1F1',
@@ -171,7 +197,7 @@ const styles = StyleSheet.create({
     fontFamily: Fonts.mulishRegular,
     fontSize: 12,
     fontWeight: '400',
-    paddingTop: 10,
+    paddingTop: 7,
     color: '#B1AAAA'
   },
   tabView: {

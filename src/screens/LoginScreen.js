@@ -87,15 +87,18 @@ export default class LoginScreen extends React.Component {
         }
        
 
-        if (this.state.email !== '' && this.state.password !== ''&& 
+        if (this.state.email !== '' && this.state.password === '12345'&& 
           mailReg.test(this.state.email) 
          && nameReg.test(this.state.firstname)
          )
           {
               this.setState({email:''})
               this.setState({password:''})
-            this.props.navigation.navigate('profilesuccess')
+            this.props.navigation.navigate('BioSuccess')
         } 
+        else{
+            this.setState({ passworderr: 'Incorrect password'})
+        }
         
     }
 
@@ -113,7 +116,7 @@ export default class LoginScreen extends React.Component {
 
                    
                     <View style={styles.card}>
-                    <ScrollView >
+                    {/* <ScrollView > */}
                     
                     <Text style={styles.bio}>Email ID</Text>
                     <TextInput
@@ -178,7 +181,7 @@ export default class LoginScreen extends React.Component {
                     >
                     <Text style={styles.forgot}>Forgot Password? </Text>
                     </TouchableOpacity>
-                </ScrollView>
+                {/* </ScrollView> */}
 
                     {/* Next Button view */}
                    <View style={{flex:1,justifyContent:'flex-end'}}>

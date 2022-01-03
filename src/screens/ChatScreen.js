@@ -13,7 +13,7 @@ export default class ChatScreen extends React.Component {
     render() {
         return (
             <View style={{ flex: 1, backgroundColor: '#FFFFFF' }}>
-                <View style={{ flexDirection: 'row', marginTop: 20, marginBottom: 20 }}>
+                <View style={styles.header}>
                     <TouchableOpacity onPress={()=> this.props.navigation.navigate('profilesuccess')}>
                     <Image
                         source={ImagesWrapper.back}
@@ -76,5 +76,12 @@ const styles = StyleSheet.create({
         marginLeft: 20,
         marginTop:5
     },
+    header:{
+        flexDirection: 'row',
+        alignItems: 'center',
+        // paddingLeft: '9%',
+        marginTop:20,
+        marginBottom:20,
+    }
 })
 

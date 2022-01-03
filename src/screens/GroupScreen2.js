@@ -61,7 +61,7 @@ export default class GroupScreen2 extends React.Component {
                     <Text style={styles.title}>Create group</Text>
                 </View>
                 <View style={{ borderWidth: 1, borderColor: '#F1F1F1' }}></View>
-                <View style={{flexDirection:'row',alignItems:'center',marginTop:'5%',marginLeft:30}}>
+                <View style={{flexDirection:'row',alignItems:'center',marginTop:'5%',marginLeft:30,marginRight:30}}>
                     
                         
                 <ImageBackground source={ImagesWrapper.profileimage} style={{width:50,height:50,alignItems:'center',justifyContent:'center'}}>

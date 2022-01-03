@@ -1,14 +1,4 @@
-// import React from 'react';
-// import Navigation from './src/Navigation/navigation'
 
-
-// const App = () => {
-//   return(
-//     <Navigation/>
-//   );
- 
-// }
-// export default App;
 
 
 
@@ -37,9 +27,27 @@ import ChangePwdScreen from './src/screens/ChangePwdScreen';
 import ProfilePicScreen from './src/screens/ProfilePicScreen';
 import BioDataScreen from './src/screens/BioDataScreen';
 import GroupChat from './src/screens/GroupChat';
+import tabbar1 from './src/screens/tabbar1';
+import tabbar2 from './src/screens/tabbar2';
+import tabbar3 from './src/screens/tabbar3';
+import tabbar4 from './src/screens/tabbar4';
+import BioSuccessScreen from './src/screens/BioSuccessScreen';
+import damn from './src/screens/damn';
+import NewStory from './src/screens/NewStoryScreen'
 
-
-
+import colour from './src/screens/Coloring'
+import PlayersScreen from './src/screens/BottomTabs/PlayersScreen';
+import PlayesDetailScreen from './src/screens/PlayersDetailScreen';
+import PlayerSearchScreen from './src/screens/BottomTabs/PlayerSearchScreen'
+import CreateEventScreen from './src/screens/BottomTabs/CreateEventScreen';
+import EventSquadScreen from './src/screens/BottomTabs/EventSquadScreen';
+import EventScheduleScreen from './src/screens/BottomTabs/EventScheduleScreen';
+import MeetingScheduleScreen from './src/screens/BottomTabs/MeetingScheduleScreen';
+import CreateMeetingScreen from './src/screens/BottomTabs/CreateMeetingScreen';
+import CreateMeetingSurvey from './src/screens/BottomTabs/CreateMeetingSurvey';
+import SetAvailabilityScreen from './src/screens/BottomTabs/SetAvailabilityScreen';
+import EventSelectionScreen from './src/screens/BottomTabs/EventSelectionScreen';
+import CreateEventSurvey from './src/screens/BottomTabs/CreateEventSurvey';
 
 const Stack = createStackNavigator();
 const App = () => {
@@ -149,8 +157,77 @@ const App = () => {
         <Stack.Screen 
         name="groupchat" 
         component={GroupChat} />
-      
+      <Stack.Screen
+        name="BioSuccess"
+        component={BioSuccessScreen}
 
+      />
+      <Stack.Screen
+        name="tabbar1"
+        component={tabbar1}
+      />
+      <Stack.Screen
+        name="tabbar2"
+        component={tabbar2}
+      />
+      <Stack.Screen
+        name="tabbar3"
+        component={tabbar3}
+      />
+      <Stack.Screen
+        name="tabbar4"
+        component={tabbar4}
+      />
+      <Stack.Screen
+        name="damn"
+        component={damn}
+      />
+      <Stack.Screen
+        name="newstory"
+        component={NewStory}
+      />
+
+     
+     <Stack.Screen
+          name="color"
+          component={colour} />
+    <Stack.Screen
+          name="players"
+          component={PlayersScreen} />
+       <Stack.Screen
+          name="playersDetail"
+          component={PlayesDetailScreen} />
+          <Stack.Screen
+          name="playerSearch"
+          component={PlayerSearchScreen} />
+
+<Stack.Screen
+          name="createeventscreen"
+          component={CreateEventScreen} />
+        <Stack.Screen
+          name="eventsquadscreen"
+          component={EventSquadScreen} />
+        <Stack.Screen
+          name="eventschedulescreen"
+          component={EventScheduleScreen} />
+        <Stack.Screen
+          name="meetingschedulescreen"
+          component={MeetingScheduleScreen} />
+        <Stack.Screen
+          name="createmeetingscreen"
+          component={CreateMeetingScreen} />
+        <Stack.Screen
+          name="createmeetingsurvey"
+          component={CreateMeetingSurvey} />
+        <Stack.Screen
+          name="setavailabilityscreen"
+          component={SetAvailabilityScreen} />
+        <Stack.Screen
+          name="eventselectionscreen"
+          component={EventSelectionScreen} />
+        <Stack.Screen
+          name="createventsurvey"
+          component={CreateEventSurvey} />
 
     </Stack.Navigator>
   

@@ -456,10 +456,10 @@ export default class MessageScreen extends React.Component {
                             }}
                         />
                         <Image
-                            source={ImagesWrapper.menuimage}
+                            source={ImagesWrapper.dotsmenu}
                             style={{
                                 marginLeft: 20,
-                                marginTop: 2
+                                // marginTop: 2
                                 
                             }}
                         />

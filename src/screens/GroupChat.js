@@ -384,7 +384,7 @@ export default class GroupChat extends React.Component {
                         >
                         <View style = {{marginLeft: '2%'}}>
                             <Image
-                                source={ImagesWrapper.menuimage}
+                                source={ImagesWrapper.dotsmenu}
                                 style={{
                                     // marginLeft: 30,
                                     // marginTop: 3,
