@@ -2,11 +2,12 @@ import React from 'react';
 import { Image, View, Text, StyleSheet, TouchableOpacity, TextInput, ImageBackground, ScrollView, FlatList } from 'react-native';
 import Fonts from '../../res/Fonts';
 import ImagesWrapper from '../../res/ImagesWrapper';
-import * as Progress from 'react-native-progress';
+// import * as Progress from 'react-native-progress';
 import Modal from 'react-native-modal';
 import ImagePicker from 'react-native-image-crop-picker';
 import CameraRoll from "@react-native-community/cameraroll";
 import LinearGradient from 'react-native-linear-gradient'
+import { ProgressBar, Colors } from 'react-native-paper';
 
 
 export default class CreateEventScreen extends React.Component {
@@ -139,7 +140,7 @@ export default class CreateEventScreen extends React.Component {
                     <Text style={styles.header}>Create event</Text>
                 </View>
                 <View style={{ borderTopWidth: 1, borderColor: 'rgba(241, 241, 241, 1)' }}>
-                    <Progress.Bar useNativeDriver={false} progress={2} height={3} width={100} color={'rgba(33, 43, 104, 1)'} borderColor={'rgba(33, 43, 104, 1)'} />
+                    <ProgressBar useNativeDriver={false} progress={2} height={3} width={100} color={'rgba(33, 43, 104, 1)'} borderColor={'rgba(33, 43, 104, 1)'} />
                 </View>
                 {this.state.galleryImage || this.state.cameraImage
                     ?
@@ -269,13 +270,13 @@ export default class CreateEventScreen extends React.Component {
                             this.setState({ registeremailerr: '' })
                         }}
                         value={this.state.registeremail}
-                       returnKeyType={"done"}
+                    //    returnKeyType={"done"}
                         ref={(input) => { this.thirdTextInput = input; }}
                         // onSubmitEditing={() => { this.fourTextInput.focus(); }}
-                        importantForAutofill="no"
+                        // importantForAutofill="no"
                         maxLength={63}
                         keyboardType={Platform.OS === 'ios' ? 'ascii-capable' : 'visible-password'}
-                        blurOnSubmit={false}
+                        // blurOnSubmit={false}
                     />
                     <View style={styles.underline} />
                     <Text style={styles.error}>{this.state.registeremailerr}</Text>

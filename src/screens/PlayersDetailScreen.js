@@ -218,7 +218,7 @@ export default class MeetingsScreen extends React.Component {
                         // keyboardType={Platform.OS === 'ios' ? 'ascii-capable' : 'visible-password'}
                         // blurOnSubmit={false}
                     />
-                    <View style={[styles.underline,{width:'85%'}]}/>
+                    <View style={[styles.underline,{width:'85%',marginTop:0}]}/>
                     <View style={{marginTop:40,alignItems:'center'}}>
                 <TouchableOpacity
                                 onPress={() => {
@@ -253,8 +253,8 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         paddingLeft: '9%',
-        marginTop: 20,
-        marginBottom: 20,
+        marginTop: 25,
+        marginBottom: 25,
         // borderBottomWidth:1
       },
       card:{
@@ -303,11 +303,13 @@ const styles = StyleSheet.create({
         fontSize: 16,
         fontFamily: Fonts.mulishRegular,
         textAlign: 'center',
-        margin: 10,
+        marginTop:'auto',
         color: '#ffffff',
         backgroundColor: 'transparent',
         fontWeight: '600',
-        // marginBottom:20
+        // alignItems:'center',
+        // justifyContent:'center'
+        marginBottom:'auto'
     },
     linearGradientButton: {
        
@@ -338,9 +340,9 @@ const styles = StyleSheet.create({
         //  marginLeft:20
     },
     textinput:{
-        // marginTop:-2,
+        marginTop:10,
         marginLeft:30,
-        height:Platform.OS==='ios' ? 30:30,
+        height:40,
         fontFamily:Fonts.mulishSemiBold,
         fontSize:14,
         color:'#1E1C24',

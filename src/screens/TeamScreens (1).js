@@ -79,7 +79,7 @@ class TeamScreen extends React.Component {
                                 <Text style={styles.playertext}>others and</Text>
                                 <Text style={styles.playertext}>learn more.</Text>
                                 <View style={{ flexDirection: 'row', marginTop: 20, marginBottom: 15 }}>
-                                <Text style={{ borderWidth: 3, width: '12%', height: 20, borderColor: '#ffffff', borderRadius: 10, marginRight: 10, marginLeft: 10 }}></Text>
+                                    <Text style={{ borderWidth: 3, width: '12%', height: 20, borderColor: '#ffffff', borderRadius: 10, marginRight: 10, marginLeft: 10 }}></Text>
                                     <Text style={styles.player}>Player</Text>
                                 </View>
                             </View>
@@ -91,7 +91,7 @@ class TeamScreen extends React.Component {
                                 <Text style={styles.coachtext}>grow.</Text>
                                 <View style={{ flexDirection: 'row', marginTop: 20, marginBottom: 15 }}>
                                     {/* <TouchableOpacity onPress={() => this.PlayerRole()}> */}
-                                    <Text style={{ borderWidth: 3, width: '12%', height: 20, borderColor: '#F1F1F1', borderRadius: 10, marginRight: 10, marginLeft: 10 }}></Text>
+                                        <Text style={{ borderWidth: 1, width: '12%', height: 20, backgroundColor: '#F1F1F1', borderRadius: 10, marginRight: 10, marginLeft: 10, borderColor: '#B1AAAA' }}></Text>
                                     {/* </TouchableOpacity> */}
                                     <Text style={styles.coach}>Coach</Text>
 
@@ -110,7 +110,7 @@ class TeamScreen extends React.Component {
                                 <Text style={styles.playertext1}>learn more.</Text>
                                 <View style={{ flexDirection: 'row', marginTop: 20, marginBottom: 15 }}>
                                     {/* <TouchableOpacity onPress={() => this.PlayerRole()}> */}
-                                    <Text style={{ borderWidth: 3, width: '12%', height: 20, borderColor: '#F1F1F1', borderRadius: 10, marginRight: 10, marginLeft: 10 }}></Text>
+                                        <Text style={{ borderWidth: 1, width: '12%', height: 20, backgroundColor: '#F1F1F1', borderRadius: 10, marginRight: 10, marginLeft: 10, borderColor: '#B1AAAA' }}></Text>
                                     {/* </TouchableOpacity> */}
                                     <Text style={styles.player1}>Player</Text>
 
@@ -134,7 +134,7 @@ class TeamScreen extends React.Component {
                                 <Text style={styles.coachtext1}>grow.</Text>
 
                                 <View style={{ flexDirection: 'row', marginTop: 20, marginBottom: 15 }}>
-                                <Text style={{ borderWidth: 3, width: '12%', height: 20, borderColor: '#ffffff', borderRadius: 10, marginRight: 10, marginLeft: 10 }}></Text>
+                                    <Text style={{ borderWidth: 3, width: '12%', height: 20, borderColor: '#ffffff', borderRadius: 10, marginRight: 10, marginLeft: 10 }}></Text>
                                     <Text style={styles.coach1}>Coach</Text>
                                 </View>
                             </View>
@@ -467,7 +467,7 @@ const styles = StyleSheet.create({
     },
     viewlink: {
         marginLeft: '7%', 
-        // marginTop: , 
+         marginTop: '2%', 
         fontSize: 16, 
         color: '#58C4C6',
         marginBottom: 25,

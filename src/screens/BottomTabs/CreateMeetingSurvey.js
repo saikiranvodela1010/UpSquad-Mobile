@@ -3,9 +3,10 @@ import { Image, View, Text, StyleSheet, TextInput, TouchableOpacity, ImageBackgr
 import LinearGradient from 'react-native-linear-gradient';
 import ImagesWrapper from '../../res/ImagesWrapper';
 import Fonts from '../../res/Fonts';
-import * as Progress from 'react-native-progress';
+// import * as Progress from 'react-native-progress';
 import RadioForm, { RadioButton, RadioButtonInput, RadioButtonLabel } from 'react-native-simple-radio-button';
 import SelectDropdown from 'react-native-select-dropdown'
+import { ProgressBar, Colors } from 'react-native-paper';
 
 var radio_props = [
     { label: 'Yes', value: 0 },
@@ -56,7 +57,7 @@ class CreateMeetingSurvey extends React.Component {
                 </View>
                 {/* <View style={{ borderBottomColor: '#959494', borderBottomWidth: 0.5, width: '100%' }}></View> */}
                 <View style={{ borderTopWidth: 1, borderColor: 'rgba(241, 241, 241, 1)' }}>
-                    <Progress.Bar useNativeDriver={false} progress={6} height={3} width={370} color={'rgba(33, 43, 104, 1)'} borderColor={'rgba(33, 43, 104, 1)'} />
+                    <ProgressBar useNativeDriver={false} progress={6} height={3} width={370} color={'rgba(33, 43, 104, 1)'} borderColor={'rgba(33, 43, 104, 1)'} />
                 </View>
                 <ScrollView>
                     <View style={{marginTop:'6%',marginLeft:25,marginRight:25}}>
@@ -88,7 +89,9 @@ class CreateMeetingSurvey extends React.Component {
                           }}
                           dropdownIconPosition={"right"} 
                           buttonTextStyle={{ color: "#9F9F9F", textAlign: "left",fontSize:14,fontFamily:Fonts.mulishRegular,fontWeight:'400' } } 
-                          defaultButtonText={"Select category"}              
+                          defaultButtonText={"Select category"}   
+                          rowTextStyle={{color: "#9F9F9F", textAlign: "left",fontSize:14,fontFamily:Fonts.mulishRegular,fontWeight:'400'}}          
+           
                   />
                     </View>
                     <Text style={styles.title}>Meeting description</Text>

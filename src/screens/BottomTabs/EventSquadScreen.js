@@ -2,10 +2,11 @@ import React from 'react';
 import { Image, View, Text, StyleSheet, TouchableOpacity, TextInput, ImageBackground, ScrollView, FlatList } from 'react-native';
 import Fonts from '../../res/Fonts';
 import ImagesWrapper from '../../res/ImagesWrapper';
-import * as Progress from 'react-native-progress';
+// import * as Progress from 'react-native-progress';
 import SwitchToggle from "react-native-switch-toggle";
 import CheckBox from 'react-native-check-box';
 import LinearGradient from 'react-native-linear-gradient';
+import { ProgressBar, Colors } from 'react-native-paper';
 
 export default class EventSquadScreen extends React.Component {
     constructor() {
@@ -33,11 +34,11 @@ export default class EventSquadScreen extends React.Component {
                     <Text style={styles.header}>Create event</Text>
                 </View>
                 <View style={{ borderTopWidth: 1, borderColor: 'rgba(241, 241, 241, 1)' }}>
-                    <Progress.Bar useNativeDriver={false} progress={2} height={3} width={165} color={'rgba(33, 43, 104, 1)'} borderColor={'rgba(33, 43, 104, 1)'} />
+                    <ProgressBar useNativeDriver={false} progress={2} height={3} width={165} color={'rgba(33, 43, 104, 1)'} borderColor={'rgba(33, 43, 104, 1)'} />
                 </View>
                 <View style={{ marginTop: '8%', marginLeft: 25, flexDirection: 'row' }}>
                     <Text style={styles.heading}>Entire organization:</Text>
-                    <View style={{ marginLeft: '47%' }}>
+                    <View style={{ marginLeft: '42%' }}>
                         <SwitchToggle
                             switchOn={this.state.on}
                             onPress={() => this.setState({ on: !this.state.on })}

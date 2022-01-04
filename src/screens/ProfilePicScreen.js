@@ -14,7 +14,7 @@ import {
     BackHandler, Alert
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient'
-import * as Progress from 'react-native-progress';
+// import * as Progress from 'react-native-progress';
 // import { RNCamera } from 'react-native-camera';
 import {useCamera} from 'react-native-camera-hooks';
 // import RNFS from 'react-native-fs'
@@ -22,6 +22,7 @@ import ImagePickerCropper from 'react-native-image-crop-picker';
 import CameraRoll from "@react-native-community/cameraroll";
 import ImagesWrapper from '../res/ImagesWrapper';
 import Fonts from '../res/Fonts';
+import { ProgressBar, Colors } from 'react-native-paper';
 
 
 
@@ -158,7 +159,7 @@ const askPermission = async () => {
 
         </View>
         {/* </View> */}
-        <Progress.Bar useNativeDriver={false} progress={2} width={150} style={styles.bar} color={'#212B68'}/>
+        <ProgressBar useNativeDriver={false} progress={2} width={150} style={styles.bar} color={'#212B68'}/>
         <Text style={styles.text}>Let's start by setting a great profile pic</Text>
         {/* <Text style={[styles.text,{marginTop:5}]}> profile pic</Text> */}
     

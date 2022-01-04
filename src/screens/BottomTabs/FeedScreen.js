@@ -1,5 +1,5 @@
 import React from 'react'
-import {  View, Text, StyleSheet, TouchableOpacity, Image,TextInput} from 'react-native';
+import {  View, Text, StyleSheet, TouchableOpacity, Image,TextInput,SafeAreaView,Platform} from 'react-native';
 import ImagesWrapper from '../../res/ImagesWrapper';
 import Fonts from '../../res/Fonts';
 import { ScrollView } from 'react-native-gesture-handler';
@@ -75,7 +75,7 @@ import Modal from 'react-native-modal';
     render(){
         
         return(
-     <View style={{flex:1,backgroundColor:'#FFFFFF'}}>
+     <SafeAreaView style={{flex:1,backgroundColor:'#FFFFFF'}}>
         
             <View style={[styles.header]}>
             <Image source={ImagesWrapper.profile}
@@ -101,10 +101,10 @@ import Modal from 'react-native-modal';
           <ScrollView >
              <View style={{flexDirection:'row',marginRight:15}}>
                 <View style={styles.subheader}>
-                <Text style={styles.post}>All posts</Text>
+                <Text style={[styles.post,{marginTop:'auto',marginBottom:'auto'}]}>All posts</Text>
                 <Image 
                 source={ImagesWrapper.downarrow}
-                style={{width:'12%',height:'20%',marginTop:16,marginRight:5}}
+                style={{width:'12%',height:'20%',marginTop:'auto',marginBottom:'auto',marginRight:5}}
                 />
                 </View>
                 <View style={{ borderWidth: 1.1, borderColor: '#F1F1F1',marginTop:22,marginLeft:15 }}></View>
@@ -150,7 +150,7 @@ import Modal from 'react-native-modal';
                         style={{marginTop:-75,marginBottom:60,marginLeft:45}}
                  />
                  </TouchableOpacity>
-                 <Text style={[styles.post,{marginTop:-15,marginLeft:5,fontSize:12}]}>Add Story</Text>
+                 <Text style={[styles.post,{marginTop:-15,marginLeft:'auto',marginRight:'auto',fontSize:12}]}>Add Story</Text>
              </View>
 
              </TouchableOpacity>
@@ -208,8 +208,8 @@ import Modal from 'react-native-modal';
                     source={ImagesWrapper.ellipseman}
 
                 />
-                <Text style={[styles.post,{padding:-8,marginLeft:8,fontSize:16}]}>Jhon Craft</Text>
-                <Text style={[styles.post,{padding:5,marginLeft:5,fontSize:12,color:'#868585'}]}>10 mins ago</Text>
+                <Text style={[styles.post,{padding:-8,marginLeft:8,fontSize:16}]}>John Craft</Text>
+                <Text style={[styles.post,{padding:5,marginLeft:5,fontSize:12,color:'#868585',marginTop:-2}]}>10 mins ago</Text>
 
             </View>
             <View style={{flexDirection:'row',marginTop:10,marginLeft:25,justifyContent:'space-between'}}>
@@ -346,8 +346,8 @@ import Modal from 'react-native-modal';
                             source={ImagesWrapper.ellipseman}
 
                         />
-                        <Text style={[styles.post,{padding:-8,marginLeft:8}]}>Jhon Craft</Text>
-                        <Text style={[styles.post,{padding:5,marginLeft:5,fontSize:14,color:'#868585'}]}>10 mins ago</Text>
+                        <Text style={[styles.post,{padding:-8,marginLeft:8}]}>John Craft</Text>
+                        <Text style={[styles.post,{padding:5,marginLeft:5,fontSize:12,color:'#868585',marginTop:-2}]}>10 mins ago</Text>
 
             </View>
             </View>
@@ -488,7 +488,7 @@ import Modal from 'react-native-modal';
             :
             null
     }
-     </View>
+     </SafeAreaView>
         )
     }
 }
@@ -499,7 +499,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         // paddingLeft: '9%',
-        marginTop: 25,
+         marginTop: Platform.OS == 'ios'? 0 : 25,
         marginBottom: 25,
         // borderBottomWidth:1
       },

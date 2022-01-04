@@ -5,10 +5,16 @@ import LinearGradient from 'react-native-linear-gradient';
 import ImagesWrapper from '../../res/ImagesWrapper';
 import Fonts from '../../res/Fonts';
 import SwitchToggle from "react-native-switch-toggle";
-import * as Progress from 'react-native-progress';
+// import * as Progress from 'react-native-progress';
 // import RadioButtonRN from 'radio-buttons-react-native';
 import RadioForm, { RadioButton, RadioButtonInput, RadioButtonLabel } from 'react-native-simple-radio-button';
 import CheckBox from 'react-native-check-box'
+import { ProgressBar, Colors } from 'react-native-paper';
+
+
+
+
+
 var radio_props = [
     { label: 'Zoom', value: 0 },
     { label: 'Microsoft Teams', value: 1 }
@@ -63,7 +69,7 @@ export default class EventSelectionScreen extends React.Component {
                 <View style={{ borderTopWidth: 1, borderColor: 'rgba(241, 241, 241, 1)' }}>
 
                   
-                        <Progress.Bar useNativeDriver={false} progress={5} height={3} width={350} color={'rgba(33, 43, 104, 1)'} borderColor={'rgba(33, 43, 104, 1)'} />
+                        <ProgressBar useNativeDriver={false} progress={5} height={3} width={350} color={'rgba(33, 43, 104, 1)'} borderColor={'rgba(33, 43, 104, 1)'} />
                        
                 </View>
                 <ScrollView>
@@ -113,7 +119,7 @@ export default class EventSelectionScreen extends React.Component {
                         }}
                         // onSubmitEditing={() => { this.refs['second'].focus() }}
                         // onSubmitEditing={() => { this.secondTextInput.focus(); }}
-                        blurOnSubmit={false}
+                        // blurOnSubmit={false}
                         value={this.state.addguest}
                         // returnKeyType={"next"}
                         keyboardType={Platform.OS === 'ios' ? 'ascii-capable' : 'visible-password'}

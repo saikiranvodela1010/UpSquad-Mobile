@@ -14,7 +14,7 @@ export default class ChatScreen extends React.Component {
         return (
             <View style={{ flex: 1, backgroundColor: '#FFFFFF' }}>
                 <View style={styles.header}>
-                    <TouchableOpacity onPress={()=> this.props.navigation.navigate('profilesuccess')}>
+                    <TouchableOpacity onPress={()=> this.props.navigation.navigate('BioSuccess')}>
                     <Image
                         source={ImagesWrapper.back}
                         style={{

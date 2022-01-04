@@ -4,11 +4,16 @@ import { TextInput } from 'react-native-gesture-handler';
 import LinearGradient from 'react-native-linear-gradient'
 import ImagesWrapper from '../res/ImagesWrapper';
 import Fonts from '../res/Fonts';
+import axios from 'axios';
+import ServiceUrls from '../network/ServiceUrls';
+
 // import { FloatingLabelInput } from 'react-native-floating-label-input';
 
 
 
 export default class LoginScreen extends React.Component {
+
+    serviceUrls = new ServiceUrls();
 
     constructor(props){
         super(props);
@@ -55,50 +60,79 @@ export default class LoginScreen extends React.Component {
         
       }
     onSubmit(){
-        console.log('name',this.state.firstname,this.state.lastname)
-        let err = [];
-        // let mobileReg = /^([0|\+[0-9]{1,5})?([7-9][0-9]{9})$/;
-        let mobileReg = /^\d+$/;
-        let mailReg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-        let nameReg = /^[a-zA-Z ]{2,30}$/;
+
+
+
+        axios.post(this.serviceUrls.loginuser, {
+            'email':this.state.email,
+            'password':this.state.password,
+          })
+          .then(response => {
+            console.log('loginresponse',response);
+            if(response.data.success === true) {
+                this.props.navigation.navigate('BioSuccess');
+            }else{
+                if(response.data.msg === 'Email not found'){
+                    this.setState({emailerr:response.data.msg})
+                }else{
+                    this.setState({passworderr:response.data.msg})
+                }
+                
+            }
+          })
+          .catch(error=> {
+            console.log(error.response);
+            this.setState({emailerr:error.response.data.message})
+
+          })
+
+
+
+
+        // console.log('name',this.state.firstname,this.state.lastname)
+        // let err = [];
+        // // let mobileReg = /^([0|\+[0-9]{1,5})?([7-9][0-9]{9})$/;
+        // let mobileReg = /^\d+$/;
+        // let mailReg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+        // let nameReg = /^[a-zA-Z ]{2,30}$/;
        
 
-        if (this.state.email === "") {
-            // err['email'] = 'Please enter your email';
-            this.setState({emailerr:"Please enter your email"})
+        // if (this.state.email === "") {
+        //     // err['email'] = 'Please enter your email';
+        //     this.setState({emailerr:"Please enter your email"})
 
-        } 
-        else if (!mailReg.test(this.state.email)) {
-            // err['email'] = 'Please enter valid email';
-            console.log('mail',)
-            this.setState({emailerr:"Please enter valid email"})
+        // } 
+        // else if (!mailReg.test(this.state.email)) {
+        //     // err['email'] = 'Please enter valid email';
+        //     console.log('mail',)
+        //     this.setState({emailerr:"Please enter valid email"})
 
-        }
+        // }
 
         
 
-        if (this.state.password === '') {
-            // err['pwd'] = "Please enter your password";
-            this.setState({passworderr:"Please enter your password"})
+        // if (this.state.password === '') {
+        //     // err['pwd'] = "Please enter your password";
+        //     this.setState({passworderr:"Please enter your password"})
 
-        }
-        else if(this.state.password !== '12345'){
-            this.setState({passworderr:"Password incorrect"})
-        }
+        // }
+        // else if(this.state.password !== '12345'){
+        //     this.setState({passworderr:"Password incorrect"})
+        // }
        
 
-        if (this.state.email !== '' && this.state.password === '12345'&& 
-          mailReg.test(this.state.email) 
-         && nameReg.test(this.state.firstname)
-         )
-          {
-              this.setState({email:''})
-              this.setState({password:''})
-            this.props.navigation.navigate('BioSuccess')
-        } 
-        else{
-            this.setState({ passworderr: 'Incorrect password'})
-        }
+        // if (this.state.email !== '' && this.state.password === '12345'&& 
+        //   mailReg.test(this.state.email) 
+        //  && nameReg.test(this.state.firstname)
+        //  )
+        //   {
+        //       this.setState({email:''})
+        //       this.setState({password:''})
+        //     this.props.navigation.navigate('BioSuccess')
+        // } 
+        // else{
+        //     this.setState({ passworderr: 'Incorrect password'})
+        // }
         
     }
 

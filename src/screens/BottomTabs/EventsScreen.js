@@ -102,7 +102,7 @@ export default class EventsScreen extends React.Component {
                     <Text style={styles.eventName1}>Fundraising strategies</Text>
                     <Image
                       source={ImagesWrapper.favourite}
-                      style={{ marginLeft: 20 }}
+                      // style={{ marginLeft: 20 }}
 
                     />
                   </View>
@@ -164,7 +164,7 @@ export default class EventsScreen extends React.Component {
                     <Text style={styles.eventName1}>Fundraising strategies</Text>
                     <Image
                       source={ImagesWrapper.favourite}
-                      style={{ marginLeft: 20 }}
+                      // style={{ marginLeft: 20 }}
 
                     />
                   </View>
@@ -219,7 +219,7 @@ export default class EventsScreen extends React.Component {
                     <Text style={styles.eventName1}>Fundraising strategies</Text>
                     <Image
                       source={ImagesWrapper.favourite}
-                      style={{ marginLeft: 20 }}
+                      // style={{ marginLeft: 20 }}
                     />
                   </View>
                   <View style={styles.eventRow}>
@@ -435,7 +435,7 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     fontSize: 14,
     color: 'rgba(30, 28, 36, 1)',
-    // marginLeft: '-60%'
+    marginRight:15
   },
   eventName2: {
     fontFamily: Fonts.mulishSemiBold,

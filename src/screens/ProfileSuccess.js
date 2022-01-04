@@ -1,5 +1,5 @@
 import React from 'react';
-import { Image, View, Text, StyleSheet, TouchableOpacity, ImageBackground } from 'react-native';
+import { Image, View, Text, StyleSheet, TouchableOpacity, ImageBackground,SafeAreaView } from 'react-native';
 // import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import LinearGradient from 'react-native-linear-gradient';
 import ImagesWrapper from '../res/ImagesWrapper';
@@ -12,7 +12,7 @@ class ProfileSuccess extends React.Component {
     return (
 
 
-      <View style={styles.container}>
+      <SafeAreaView style={styles.container}>
         {/* <View style={styles.header}>
           <Image source={ImagesWrapper.profile}
           ></Image>
@@ -131,7 +131,7 @@ class ProfileSuccess extends React.Component {
             </TouchableOpacity>
           </View>
         </View>
-      </View>
+      </SafeAreaView>
 
     )
   }

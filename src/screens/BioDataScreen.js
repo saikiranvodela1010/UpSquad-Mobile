@@ -2,9 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { View, StyleSheet, ImageBackground, Text, Image, ScrollView, FlatList,Alert } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient'
 import ImagesWrapper from '../res/ImagesWrapper';
-import * as Progress from 'react-native-progress';
+// import * as Progress from 'react-native-progress';
 import Fonts from '../res/Fonts';
 import { TextInput, TouchableOpacity } from 'react-native-gesture-handler';
+import { ProgressBar, Colors } from 'react-native-paper';
 
 
 
@@ -127,7 +128,7 @@ const  getListViewItem =(data)=>{
                
             </TouchableOpacity>
             <Text onPress={() =>props.navigation.navigate('ProfilePic')}></Text>
-            <Progress.Bar progress={2} width={barwidth} style={styles.bar} color={'#212B68'} />
+            <ProgressBar progress={2} width={barwidth} style={styles.bar} color={'#212B68'} />
             <ImageBackground source={ImagesWrapper.manpic}
                 style={styles.imgBackground} >
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import { View ,StyleSheet,Text,Image, TouchableOpacity,Platform,ScrollView,Dimensions} from 'react-native';
+import { View ,StyleSheet,Text,Image, TouchableOpacity,Platform,ScrollView,Dimensions,KeyboardAvoidingView} from 'react-native';
 import { TextInput } from 'react-native-gesture-handler';
 import LinearGradient from 'react-native-linear-gradient'
 import ImagesWrapper from '../res/ImagesWrapper';
@@ -70,7 +70,7 @@ export default class SignUpScreen extends React.Component {
         // let mobileReg = /^([0|\+[0-9]{1,5})?([7-9][0-9]{9})$/;
         let mobileReg = /^\d+$/;
         let mailReg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-        let nameReg = /^[a-zA-Z ]{2,30}$/;
+        let nameReg =  /^[^-\s][a-zA-Z]{2,30}$/;
         if (this.state.firstname === "") {
             // err['firstName'] = "Please enter your first name";
             this.setState({firstnameerr:  "Please enter your first name"});
@@ -141,7 +141,9 @@ export default class SignUpScreen extends React.Component {
     render(){
         return(
            
-            <View style={styles.mainContainer}>
+            // <View style={styles.mainContainer}>
+            <KeyboardAvoidingView style={styles.mainContainer}
+            behavior='padding'>
                     <Image
                       source={ImagesWrapper.component}
                       style={{width:220,height:220}}
@@ -163,7 +165,7 @@ export default class SignUpScreen extends React.Component {
                         }}
                         // onSubmitEditing={() => { this.refs['second'].focus() }}
                         onSubmitEditing={() => { this.secondTextInput.focus(); }}
-                        blurOnSubmit={false}
+                        // blurOnSubmit={false}
                         value={this.state.firstname}
                         returnKeyType={"next"}
                         keyboardType={Platform.OS === 'ios' ? 'ascii-capable' : 'visible-password'}
@@ -189,7 +191,7 @@ export default class SignUpScreen extends React.Component {
                         onSubmitEditing={() => { this.thirdTextInput.focus(); }}
                         maxLength={63}
                         keyboardType={Platform.OS === 'ios' ? 'ascii-capable' : 'visible-password'}
-                        blurOnSubmit={false}
+                        // blurOnSubmit={false}
                     />
                      <View style={styles.underline}/>
                     <Text style={styles.error}>{this.state.lastnameerr}</Text>
@@ -208,7 +210,7 @@ export default class SignUpScreen extends React.Component {
                         importantForAutofill="no" 
                         maxLength={63}
                         keyboardType={Platform.OS === 'ios' ? 'ascii-capable' : 'visible-password'}
-                        blurOnSubmit={false}
+                        // blurOnSubmit={false}
                     />
                    
                     <View style={styles.underline}/>
@@ -245,7 +247,7 @@ export default class SignUpScreen extends React.Component {
                         onSubmitEditing={() => { this.fiveTextInput.focus(); }}
                         maxLength={63}
                         // keyboardType={Platform.OS === 'ios' ? 'ascii-capable' : 'visible-password'}
-                        blurOnSubmit={false}
+                        // blurOnSubmit={false}
                     />
                     <View style={styles.underline}/>
                     <Text style={styles.error}>{this.state.passworderr}</Text>
@@ -276,7 +278,7 @@ export default class SignUpScreen extends React.Component {
                     
                       maxLength={63}
                       keyboardType={Platform.OS === 'ios' ? 'ascii-capable' : 'visible-password'}
-                      blurOnSubmit={false}
+                    //   blurOnSubmit={false}
                      
                       onKeyPress={() => {
                        
@@ -304,7 +306,7 @@ export default class SignUpScreen extends React.Component {
                     }
                     
                     
-                    <View style={{flexDirection:'row'}}>
+                    <View style={{flexDirection:'row',marginTop:Platform.OS==='ios'?'20%':'5%'}}>
                         <TouchableOpacity
                              onPress={()=>{
                                 this.onCheckBoxPressed();
@@ -326,7 +328,7 @@ export default class SignUpScreen extends React.Component {
                             this.onSubmit();
                          }}
                     >
-                    <LinearGradient start={{x: 0, y: 0}} end={{x: 1, y: 0}} colors={['#212B68', '#58C4C6']} style={[styles.linearGradient,Platform.OS === "ios" ? {marginTop:'5%'}:{marginTop:'4%'}]}>
+                    <LinearGradient start={{x: 0, y: 0}} end={{x: 1, y: 0}} colors={['#212B68', '#58C4C6']} style={[styles.linearGradient,Platform.OS === "ios" ? {marginTop:'5%'}:{marginTop:'5%'}]}>
                         <Text style={styles.buttonText}>
                             Next
                         </Text>
@@ -335,7 +337,7 @@ export default class SignUpScreen extends React.Component {
                     </ScrollView>
                 </View>
                 
-            </View>
+            </KeyboardAvoidingView>
         );
     }
 }
@@ -366,8 +368,8 @@ const styles = StyleSheet.create({
     card:{
         backgroundColor:'#FFFFFF',
         flex:1,
-        width:Dimensions.get('window').width,
-        height: Dimensions.get('window').height,
+        width:'100%',
+        height: '100%',
         marginTop:30,
         borderTopLeftRadius:30,
         borderTopRightRadius:30,

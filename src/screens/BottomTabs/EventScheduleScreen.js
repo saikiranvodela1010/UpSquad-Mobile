@@ -2,7 +2,7 @@ import React from 'react';
 import { Image, View, Text, StyleSheet, TouchableOpacity, TextInput, ImageBackground, ScrollView, FlatList } from 'react-native';
 import Fonts from '../../res/Fonts';
 import ImagesWrapper from '../../res/ImagesWrapper';
-import * as Progress from 'react-native-progress';
+// import * as Progress from 'react-native-progress';
 import SwitchToggle from "react-native-switch-toggle";
 import Modal from 'react-native-modal';
 import ImagePicker from 'react-native-image-crop-picker';
@@ -10,6 +10,7 @@ import CalendarPicker from './Calendar';
 import moment from 'moment';
 import SelectDropdown from 'react-native-select-dropdown'
 import LinearGradient from 'react-native-linear-gradient'
+import { ProgressBar, Colors } from 'react-native-paper';
 
 
 
@@ -32,12 +33,14 @@ export default class EventScheduleScreen extends React.Component {
         this.setState({
             selectedStartDate: date,
             //selectedEndDate: date,
+            show:false
         });
     }
     onDate1Change(date) {
         this.setState({
             //selectedStartDate: date,
             selectedEndDate: date,
+            showend:false
         });
     }
 
@@ -59,7 +62,7 @@ export default class EventScheduleScreen extends React.Component {
                     <Text style={styles.header}>Create event</Text>
                 </View>
                 <View style={{ borderTopWidth: 1, borderColor: 'rgba(241, 241, 241, 1)' }}>
-                    <Progress.Bar useNativeDriver={false} progress={2} height={3} width={245} color={'rgba(33, 43, 104, 1)'} borderColor={'rgba(33, 43, 104, 1)'} />
+                    <ProgressBar useNativeDriver={false} progress={2} height={3} width={245} color={'rgba(33, 43, 104, 1)'} borderColor={'rgba(33, 43, 104, 1)'} />
                 </View>
                 <View style={{ marginTop: 30 }}>
                     <View>
@@ -190,14 +193,16 @@ export default class EventScheduleScreen extends React.Component {
                         margin: 0
                     }}
                     transparent={true}
-
+                    onRequestClose={() => {
+                        this.setState({ show: false })
+                     }}
                 >
 
-                    <View style={{ height: 490, width: '100%', backgroundColor: 'white', borderTopLeftRadius: 10, borderTopRightRadius: 10, bottom: 0, position: 'absolute' }}>
+                    <View style={{ height: 470, width: '100%', backgroundColor: 'white', borderTopLeftRadius: 10, borderTopRightRadius: 10, bottom: 0, position: 'absolute' }}>
                         <View style={{ paddingLeft: 20, paddingTop: 30 }}>
                             <Text style={styles.popupLabel}>Select start date</Text>
                             <View style={{ paddingTop: 22 }}>
-                                <View style={{ width: '95%', height: 390, borderWidth: 0.5, borderRadius: 10, paddingTop: 10, borderColor: '#DCDCDC' }}>
+                                <View style={{ width: '95%', height: 340, borderWidth: 0.5, borderRadius: 10, paddingTop: 10, borderColor: '#DCDCDC' }}>
                                     {/* <CalendarPicker/> */}
                                     <CalendarPicker
                                         onDateChange={this.onDateChange}
@@ -224,12 +229,14 @@ export default class EventScheduleScreen extends React.Component {
                                             fontSize: 16,
                                             fontWeight: '600',
                                             fontFamily: Fonts.mulishRegular,
+                                            marginLeft:5
                                         }}
                                         yearTitleStyle={{
                                             fontSize: 16,
                                             fontWeight: '600',
                                             fontFamily: Fonts.mulishRegular,
                                         }}
+                                        width={370}
                                         minDate={minDate}
                                         restrictMonthNavigation={true}
                                     />
@@ -249,14 +256,17 @@ export default class EventScheduleScreen extends React.Component {
                         margin: 0
                     }}
                     transparent={true}
+                    onRequestClose={() => {
+                        this.setState({ showend: false })
+                     }}
 
                 >
 
-                    <View style={{ height: 490, width: '100%', backgroundColor: 'white', borderTopLeftRadius: 10, borderTopRightRadius: 10, bottom: 0, position: 'absolute' }}>
+                    <View style={{ height: 470, width: '100%', backgroundColor: 'white', borderTopLeftRadius: 10, borderTopRightRadius: 10, bottom: 0, position: 'absolute' }}>
                         <View style={{ paddingLeft: 20, paddingTop: 30 }}>
                             <Text style={styles.popupLabel}>Select end date</Text>
                             <View style={{ paddingTop: 22 }}>
-                                <View style={{ width: '95%', height: 390, borderWidth: 0.5, borderRadius: 10, paddingTop: 10, borderColor: '#DCDCDC' }}>
+                                <View style={{ width: '95%', height: 340, borderWidth: 0.5, borderRadius: 10, paddingTop: 10, borderColor: '#DCDCDC' }}>
                                     {/* <CalendarPicker/> */}
                                     <CalendarPicker
                                         onDateChange={this.onDate1Change}
@@ -283,12 +293,15 @@ export default class EventScheduleScreen extends React.Component {
                                             fontSize: 16,
                                             fontWeight: '600',
                                             fontFamily: Fonts.mulishRegular,
+                                            marginLeft:5
                                         }}
                                         yearTitleStyle={{
                                             fontSize: 16,
                                             fontWeight: '600',
                                             fontFamily: Fonts.mulishRegular,
+                                            
                                         }}
+                                        width={370}
                                         minDate={minDate}
                                         restrictMonthNavigation={true}
                                     />
@@ -307,7 +320,9 @@ export default class EventScheduleScreen extends React.Component {
                         margin: 0
                     }}
                     transparent={true}
-
+                    onRequestClose={() => {
+                        this.setState({ showtime: false })
+                     }}
                 >
 
                     <View style={{ height: 280, width: '100%', backgroundColor: 'white', borderTopLeftRadius: 10, borderTopRightRadius: 10, bottom: 0, position: 'absolute' }}>

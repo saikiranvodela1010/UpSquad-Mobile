@@ -9,7 +9,7 @@ export default class NotificationScreen extends React.Component {
         return (
             <View style={{ flex: 1, backgroundColor: '#FFFFFF' }}>
                 <View style={{ flexDirection: 'row', marginTop: 20, marginBottom: 20 }}>
-                    <TouchableOpacity onPress={() => this.props.navigation.navigate('profilesuccess')}>
+                    <TouchableOpacity onPress={() => this.props.navigation.navigate('BioSuccess')}>
                     <Image
                         source={ImagesWrapper.back}
                         style={{
