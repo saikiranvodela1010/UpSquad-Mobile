@@ -25,7 +25,7 @@ class tabbar3 extends React.Component{
             screenOptions={{
               headerShown: false,
               tabBarStyle: {backgroundColor: 'white',
-              height:70,paddingBottom:10,paddingTop:10
+              height:Platform.OS ==='ios'?80:70,paddingBottom:Platform.OS ==='ios'?30:10,paddingTop:10
             }
             }}
             tabBarOptions={{
