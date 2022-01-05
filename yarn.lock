@@ -1160,6 +1160,11 @@
   "resolved" "https://registry.npmjs.org/@react-native-community/eslint-plugin/-/eslint-plugin-1.1.0.tgz"
   "version" "1.1.0"
 
+"@react-native-community/netinfo@^7.1.7":
+  "integrity" "sha512-QCEuvbTAD7vyCsSsgbWedhTfXlClp4TVHVWYYMjnN7nz6xgZbSp+MI3oo7X5C4JlDHpRm/Q+63hsCgAqKt3WVA=="
+  "resolved" "https://registry.npmjs.org/@react-native-community/netinfo/-/netinfo-7.1.7.tgz"
+  "version" "7.1.7"
+
 "@react-native-community/viewpager@^2.0.1":
   "integrity" "sha512-CKVhIZdX/Cmb80muog8sKpi5vM8npwFp4tx4Dj1IvTBidZweuO22+VH2rDOj7E0LzdV9IYRJ4FGBwcPBD2qUrQ=="
   "resolved" "https://registry.npmjs.org/@react-native-community/viewpager/-/viewpager-2.0.2.tgz"
@@ -5939,7 +5944,7 @@
     "prop-types" "^15.5.10"
     "shaka-player" "^2.4.4"
 
-"react-native@*", "react-native@>= 0.30.0", "react-native@>=0.20.0", "react-native@>=0.40.0", "react-native@>=0.42.0", "react-native@>=0.50.0", "react-native@>=0.55", "react-native@>=0.57", "react-native@>=0.58", "react-native@>=0.60", "react-native@>=0.65.0", "react-native@0.66.2":
+"react-native@*", "react-native@>= 0.30.0", "react-native@>=0.20.0", "react-native@>=0.40.0", "react-native@>=0.42.0", "react-native@>=0.50.0", "react-native@>=0.55", "react-native@>=0.57", "react-native@>=0.58", "react-native@>=0.59", "react-native@>=0.60", "react-native@>=0.65.0", "react-native@0.66.2":
   "integrity" "sha512-d5Kp23kqAH0EmcyxyfjAr4rhVVzyK/J0cZ/JuopX16CBD4Nkad65KcJi1pyOpbhpP9L1aUUs+mRyK5kg0uLqJQ=="
   "resolved" "https://registry.npmjs.org/react-native/-/react-native-0.66.2.tgz"
   "version" "0.66.2"

@@ -6,6 +6,9 @@ import ImagesWrapper from '../res/ImagesWrapper';
 import Fonts from '../res/Fonts';
 import axios from 'axios';
 import ServiceUrls from '../network/ServiceUrls';
+import { performPostOpertion } from '../network/NetWorkOperations';
+import APIHandler from '../network/NetWorkOperations';
+
 
 // import { FloatingLabelInput } from 'react-native-floating-label-input';
 
@@ -14,7 +17,7 @@ import ServiceUrls from '../network/ServiceUrls';
 export default class LoginScreen extends React.Component {
 
     serviceUrls = new ServiceUrls();
-
+    apiHandler = new APIHandler();
     constructor(props){
         super(props);
         this.textInput = React.createRef(null); 
@@ -28,6 +31,7 @@ export default class LoginScreen extends React.Component {
             iconName:'ios-eye-off',
             cont:'',
             show:false,
+            isInternet: false
            
         }
        
@@ -59,32 +63,53 @@ export default class LoginScreen extends React.Component {
         }
         
       }
-    onSubmit(){
-
-
-
-        axios.post(this.serviceUrls.loginuser, {
-            'email':this.state.email,
-            'password':this.state.password,
-          })
-          .then(response => {
-            console.log('loginresponse',response);
-            if(response.data.success === true) {
+    async onSubmit(){
+        const data = {
+            'email': this.state.email,
+            'password' : this.state.password
+        }
+        const response = await this.apiHandler.requestPost(data,this.serviceUrls.loginuser)
+        console.log("Response on Login Returned",response)
+        if(response.status == "No network Connected!"){
+            this.setState({isInternet: true})
+            alert('No network Connected!')
+        } else{
+            if(response.success  === true) {
                 this.props.navigation.navigate('BioSuccess');
-            }else{
-                if(response.data.msg === 'Email not found'){
-                    this.setState({emailerr:response.data.msg})
-                }else{
-                    this.setState({passworderr:response.data.msg})
-                }
-                
+            } else {
+                if(response.msg === "Email not found")
+                this.setState({emailerr:response.msg})
+                if(response.msg === "Wrong password")
+                this.setState({passworderr:response.msg})
+    
             }
-          })
-          .catch(error=> {
-            console.log(error.response);
-            this.setState({emailerr:error.response.data.message})
 
-          })
+        }
+        
+
+
+        // axios.post(this.serviceUrls.loginuser, {
+        //     'email':this.state.email,
+        //     'password':this.state.password,
+        //   })
+        //   .then(response => {
+        //     console.log('loginresponse',response);
+        //     if(response.data.success === true) {
+        //         this.props.navigation.navigate('BioSuccess');
+        //     }else{
+        //         if(response.data.msg === 'Email not found'){
+        //             this.setState({emailerr:response.data.msg})
+        //         }else{
+        //             this.setState({passworderr:response.data.msg})
+        //         }
+                
+        //     }
+        //   })
+        //   .catch(error=> {
+        //     console.log(error.response);
+        //     this.setState({emailerr:error.response.data.message})
+
+        //   })
 
 
 
