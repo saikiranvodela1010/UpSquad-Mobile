@@ -4,8 +4,16 @@ import { TextInput } from 'react-native-gesture-handler';
 import LinearGradient from 'react-native-linear-gradient'
 import ImagesWrapper from '../res/ImagesWrapper';
 import Fonts from '../res/Fonts';
+import ServiceUrls from '../network/ServiceUrls';
+import axios from 'axios';
+import APIHandler from '../network/NetWorkOperations';
+
 
 export default class SignUpScreen extends React.Component {
+
+    serviceUrls = new ServiceUrls();
+    apiHandler = new APIHandler();
+
 
     constructor(props){
         super(props);
@@ -64,7 +72,7 @@ export default class SignUpScreen extends React.Component {
 
         return string.replace(regex, '')
       }
-    onSubmit(){
+    async onSubmit(){
         console.log('name',this.state.firstname,this.state.lastname)
         let err = [];
         // let mobileReg = /^([0|\+[0-9]{1,5})?([7-9][0-9]{9})$/;
@@ -133,7 +141,49 @@ export default class SignUpScreen extends React.Component {
          && nameReg.test(this.state.firstname)
          )
           {
-            this.props.navigation.navigate('Team')
+            this.props.navigation.navigate('Team',{
+                                subscriptioncode:this.state.code,
+                                email:this.state.email,
+                                firstName:this.state.firstname,
+                                lastName:this.state.lastname,
+                                password:this.state.password
+                            });      
+               const data = this.state.email;
+            
+            const response = await this.apiHandler.requestGet(data,this.serviceUrls.validateEmail)
+            console.log("email valid response",response)
+            if(response.status == "No network Connected!"){
+                this.setState({isInternet: true})
+                alert('No network Connected!')
+            } else{
+                if(response.success === true) {
+                    this.props.navigation.navigate('Team',{
+                        subscriptioncode:this.state.code,
+                    });
+                }else{
+                    this.setState({emailerr:response.msg})
+                    
+                }
+    
+            }
+
+        //     axios.get(this.serviceUrls.validateEmail+this.state.email)
+        //       .then(emailresponse => {
+        //         console.log('loginresponse',emailresponse);
+        //         if(emailresponse.data.success === true) {
+        //             this.props.navigation.navigate('Team',{
+        //                 subscriptioncode:this.state.code,
+        //             });
+        //         }else{
+        //             this.setState({emailerr:emailresponse.data.msg})
+                    
+        //         }
+        //       })
+        //       .catch(error=> {
+        //         console.log(error.response);
+        //         this.setState({emailerr:error.response.data.message})
+    
+        //       })
         } 
         
     }
@@ -142,7 +192,7 @@ export default class SignUpScreen extends React.Component {
         return(
            
             // <View style={styles.mainContainer}>
-            <KeyboardAvoidingView style={styles.mainContainer}
+            <View style={styles.mainContainer}
             behavior='padding'>
                     <Image
                       source={ImagesWrapper.component}
@@ -337,7 +387,7 @@ export default class SignUpScreen extends React.Component {
                     </ScrollView>
                 </View>
                 
-            </KeyboardAvoidingView>
+            </View>
         );
     }
 }

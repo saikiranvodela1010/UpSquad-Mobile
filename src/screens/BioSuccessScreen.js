@@ -11,12 +11,49 @@ import EventsScreen from '../screens/BottomTabs/EventsScreen';
 import ImagesWrapper from '../res/ImagesWrapper';
 import Fonts from '../res/Fonts';
 
+
+
 const Tab = createBottomTabNavigator();
 const AddButton = () => {
   return null
 }
 class BioSuccessScreen extends React.Component{
+
+
+  
+  constructor(props){
+    super(props);
+   
+    this.state={
+       
+        back:false
+    }
+   
+}
+
+//  componentDidMount() {
+//       // const back = props.route.params.back != null ? props.route.params.back : false;
+//       console.log("ravi123",this.state.back);
+//       // this.setState({back : back})
+
+//   }
+//   componentDidUpdate(){
+//     console.log('heloooooooooooooo')
+//     const back =  this.props.route.params.back != null && this.props.route.params.back? this.props.route.params.back : false;
+    
+//     if(back === true){
+//       this.props.navigation.openDrawer();
+//     }
+//   }
+
+
+
     render() {
+
+      
+
+
+
         return(
           
         

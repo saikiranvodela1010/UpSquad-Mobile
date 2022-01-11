@@ -1,27 +1,83 @@
 import React from 'react';
-import { View, Text, StyleSheet, TextInput, Image, TouchableOpacity, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, TextInput, Image, TouchableOpacity, ScrollView ,FlatList} from 'react-native';
 import ImagesWrapper from '../../res/ImagesWrapper';
 import Fonts from '../../res/Fonts';
 import Modal from 'react-native-modal';
-
+import ServiceUrls from '../../network/ServiceUrls';
+import APIHandler from '../../network/NetWorkOperations';
+import StoragePrefs from '../../res/StoragePrefs';
 
 
 
 
 export default class PlayersScreen extends React.Component {
 
+  serviceUrls = new ServiceUrls();
+  apiHandler = new APIHandler();
+    storagePrefs = new StoragePrefs();
+
+
     constructor() {
         super();
         this.state = {
         //   show: false,
           show1: false,
+          isInternet: false,
+            // userId:'610aa7c7a26a80717a1eddde',
+            // universityId:"5eb955606d1ed60657154888",
+            userId:'',
+            universityId:'',
+            coachData: [],
         }
       }
 
+     async componentDidMount(){
+        
+        const universityDetsils = await this.storagePrefs.getObjectValue("universityDetsils")
+        
+        this.setState({universityId:universityDetsils._id})
+        const userDetails = await this.storagePrefs.getObjectValue("userDetails")
+        this.setState({userId:userDetails.userId})
+        this.getUserInfo();
+    }
+  async getUserInfo(){
+    //const data = '5e3bfad3cf7d530022e90429'+'/5ed8d9509e623f00221761a1';
+    const data = this.state.userId+'/'+this.state.universityId;
+    const response = await this.apiHandler.requestGet(data,this.serviceUrls.getuser)
+    //console.log("User response",response)
+   
+    this.setState({userData:response})
+    //console.log('isProfessional',this.state.userData.user.isProfessional)
+    this.getSearchUserByOrganization(this.state.userData);
+    }
+   async getSearchUserByOrganization(data){
+    const data1 = {
+        'field': "Field",
+       'isAdmin': false,
+       'isProfessional': true,
+       'player': data.user.isProfessional==true?false:true,
+       'universityId': this.state.universityId,
+       'userId': this.state.userId,
+        
+    }
+    console.log('data1',data1)
+    const response = await this.apiHandler.requestPost(data1,this.serviceUrls.searchUsersByOrganization)
+    console.log("searchUsersByOrganization",JSON.stringify(response));
+    this.setState({coachData: response})
+    console.log("CoachData",this.state.coachData);
+    }
+    renderSeparator = () => {
+      return (
+          <View style={styles.underline}></View>
+      );
+  };
     render() {
         return (
             <View style={{ flex: 1, backgroundColor: '#FFFFFF' }}>
-                 <TouchableOpacity onPress={() => this.props.navigation.navigate('playerSearch')}>
+                 <TouchableOpacity onPress={() => this.props.navigation.navigate('coachSearch',{
+                searchData: this.state.coachData,
+                userdata:this.state.userData
+              })}>
                 <View style={styles.searchBorder}>
                
                     <View style={{ flexDirection: 'row', marginLeft: 20, marginTop: 10 }}>
@@ -42,8 +98,46 @@ export default class PlayersScreen extends React.Component {
                     <Image source={ImagesWrapper.sortedimg}/>
                     </TouchableOpacity>
                 </View>
-                <ScrollView>
-                <TouchableOpacity onPress = {() => this.props.navigation.navigate('playersDetail')}>
+                
+
+                <FlatList
+                    data={this.state.coachData}
+                    renderItem={({ item }) =>
+                        <TouchableOpacity  onPress = {() => this.props.navigation.navigate('playersDetail',
+                        {id:item._id})}>
+
+                            <View style={{ flexDirection: 'row', marginTop: 20, marginBottom: 20, marginLeft: 30, }}>
+                              {item.profileImg==null?
+                                <View style={{ width: 50, height: 50, borderRadius: 25, borderWidth: 1, borderColor: 'black' }}>
+                                </View>:<Image style={{ width: 50, height: 50, borderRadius: 25}} source={{uri:item.profileImg }}
+
+                                ></Image>}
+                                {/* <View style={styles.list}>
+                                    <Text style={styles.name}>{item.firstName}</Text>
+                                </View> */}
+                                 <View style={styles.list}>
+                            <Text style={styles.name}>{item.firstName}</Text>
+                            <Text style={styles.nameText}>{item.currentJobTitle} at {item.currentCompany}</Text>
+                            <View style={{flexDirection:'row'}}>
+                            <Image source={ImagesWrapper.people} style={{marginRight:10}}/>
+                            <Text style={styles.nameText}>{item.currentRole}</Text>
+                        </View>
+                        </View>
+                                <TouchableOpacity >
+                                    <View style={styles.remove}>
+                                       <Image source={ImagesWrapper.messageimg}/>
+                                     </View>
+                                </TouchableOpacity>
+
+
+                            </View>
+                        </TouchableOpacity>
+                    }
+                    ItemSeparatorComponent={this.renderSeparator}
+                    extraData={this.state}
+                />
+
+                {/* <TouchableOpacity onPress = {() => this.props.navigation.navigate('playersDetail')}>
 
                 <View style={{ flexDirection: 'row', marginTop: 20, marginBottom: 20,marginLeft:20 }}>
                     
@@ -63,8 +157,24 @@ export default class PlayersScreen extends React.Component {
                     </View>
                 </View>
                 </TouchableOpacity>
-                <View style={[styles.underline]}></View>
-                    <View style={{ flexDirection: 'row', marginTop: 20, marginBottom: 20, marginLeft: 20 }}>
+                <View style={[styles.underline]}></View> */}
+                    {/* <View style={{ flexDirection: 'row', marginTop: 20, marginBottom: 20, marginLeft: 20 }}>
+                    <View style={styles.displayimage}></View>
+                        <View style={{ flexDirection: 'column', marginTop: 'auto', marginBottom: 'auto' }}>
+                            <Text style={styles.name}>Jay Jay</Text>
+                            <Text style={styles.nameText}>UI/UX Designer at Mediyum Studio</Text>
+                            <View style={{flexDirection:'row',marginLeft:20}}>
+                            <Image source={ImagesWrapper.people}/>
+                            <Text style={[styles.nameText,{marginLeft:10}]}> DesignTeam</Text>
+                        </View>
+                        </View>
+                        <View style={styles.time}>
+                        <Image source={ImagesWrapper.messageimg}/>
+                            
+                        </View>
+                    </View>
+                    <View style={[styles.underline]}></View> */}
+                    {/* <View style={{ flexDirection: 'row', marginTop: 20, marginBottom: 20, marginLeft: 20 }}>
                     <View style={styles.displayimage}></View>
                         <View style={{ flexDirection: 'column', marginTop: 'auto', marginBottom: 'auto' }}>
                             <Text style={styles.name}>Jay Jay</Text>
@@ -111,23 +221,7 @@ export default class PlayersScreen extends React.Component {
                             
                         </View>
                     </View>
-                    <View style={[styles.underline]}></View>
-                    <View style={{ flexDirection: 'row', marginTop: 20, marginBottom: 20, marginLeft: 20 }}>
-                    <View style={styles.displayimage}></View>
-                        <View style={{ flexDirection: 'column', marginTop: 'auto', marginBottom: 'auto' }}>
-                            <Text style={styles.name}>Jay Jay</Text>
-                            <Text style={styles.nameText}>UI/UX Designer at Mediyum Studio</Text>
-                            <View style={{flexDirection:'row',marginLeft:20}}>
-                            <Image source={ImagesWrapper.people}/>
-                            <Text style={[styles.nameText,{marginLeft:10}]}> DesignTeam</Text>
-                        </View>
-                        </View>
-                        <View style={styles.time}>
-                        <Image source={ImagesWrapper.messageimg}/>
-                            
-                        </View>
-                    </View>
-                    <View style={[styles.underline]}></View>
+                    <View style={[styles.underline]}></View> */}
 
 
 
@@ -196,7 +290,7 @@ export default class PlayersScreen extends React.Component {
           </View>
         </Modal>
 
-                </ScrollView>
+                
                 
             </View>
 
@@ -229,7 +323,7 @@ const styles = StyleSheet.create({
         fontSize: 14,
         fontWeight: '400',
         color: '#868585',
-        marginLeft: 20,
+        // marginLeft: 20,
         marginTop: 5
     },
     time: {
@@ -278,4 +372,30 @@ const styles = StyleSheet.create({
         marginRight:'auto',
         width:'85%'
     },
+    list: {
+      fontSize: 14,
+      fontWeight: '600',
+      marginLeft: 20,
+      marginTop: 'auto',
+      marginBottom: 'auto',
+      width: '70%',
+      flexDirection: 'column', 
+  },
+  remove: {
+    fontSize: 14,
+    fontWeight: '600',
+    marginLeft: '10%',
+    color: '#58C4C6',
+    fontFamily: Fonts.mulishSemiBold,
+    marginTop: 'auto',
+    marginBottom: 'auto',
+},
+name: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: '#1E1C24',
+    fontFamily: Fonts.mulishSemiBold,
+    marginTop: 'auto',
+    marginBottom: 'auto',
+},
 })

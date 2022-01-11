@@ -4,10 +4,35 @@ import { Image, View, Text, StyleSheet, TouchableOpacity, ImageBackground, Scrol
 import LinearGradient from 'react-native-linear-gradient';
 import ImagesWrapper from '../../res/ImagesWrapper';
 import Fonts from '../../res/Fonts';
+import StoragePrefs from '../../res/StoragePrefs';
 
 
 
 class MeetingsScreen extends React.Component {
+  storagePrefs = new StoragePrefs();
+    constructor(props){
+        super(props);
+       
+        this.state={
+            communityName:'',
+           
+        }
+       
+    }
+    async componentDidMount() {
+      
+        const universityDetsils = await this.storagePrefs.getObjectValue("universityDetsils")
+        // console.log('universityDetsils',universityDetsils);
+        this.setState({communityName:universityDetsils.universityName});
+       
+
+        }
+        async componentDidUpdate(){
+            const universityDetsils = await this.storagePrefs.getObjectValue("universityDetsils")
+            // console.log('universityDetsils',universityDetsils);
+            this.setState({communityName:universityDetsils.universityName});
+        }
+
   render() {
     return (
 
@@ -17,7 +42,7 @@ class MeetingsScreen extends React.Component {
             <Image source={ImagesWrapper.profile}
               style={{ marginLeft: '9%' }}
             ></Image>
-            <Text style={{ fontSize: 20, fontFamily: Fonts.mulishSemiBold, fontWeight: '600', color: '#1E1C24', marginLeft: '5%' }}>Memphis Talks</Text>
+            <Text style={{ fontSize: 20, fontFamily: Fonts.mulishSemiBold, fontWeight: '600', color: '#1E1C24', marginLeft: '5%' }}>{this.state.communityName}</Text>
             <View style={{ justifyContent: 'flex-end', flexDirection: 'row', flex: 1 }}>
               <TouchableOpacity style={{ marginRight: '18%' }} onPress={() => this.props.navigation.navigate('notificationscreen')}>
                 <Image source={ImagesWrapper.notificationNo}

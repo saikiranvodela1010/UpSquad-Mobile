@@ -1,16 +1,26 @@
 import React from 'react';
-import { View, Text, StyleSheet, SafeAreaView, Image, TouchableOpacity, ImageBackground, Platform } from 'react-native';
+import { View, Text, StyleSheet, SafeAreaView, Image, TouchableOpacity, ImageBackground, Platform,FlatList } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 // import CheckBox from 'react-native-check-box';
 // import { Checkbox } from 'react-native-paper';
 import LinearGradient from 'react-native-linear-gradient';
 import ImagesWrapper from '../res/ImagesWrapper';
 import Fonts from '../res/Fonts';
+import APIHandler from '../network/NetWorkOperations';
+import ServiceUrls from '../network/ServiceUrls';
+import CheckBox from 'react-native-check-box'
+import _ from 'lodash'
+import StoragePrefs from '../res/StoragePrefs';
 
 
 class TeamScreen extends React.Component {
-    constructor() {
-        super();
+
+    serviceUrls = new ServiceUrls();
+    apiHandler = new APIHandler();
+    storagePrefs = new StoragePrefs();
+
+    constructor(props) {
+        super(props);
         this.state = {
             checkmark: false,
             checkmark0: false,
@@ -19,23 +29,140 @@ class TeamScreen extends React.Component {
             status: true,
             viewall: true,
             rectbox: true,
-            checkmarkName:'mark-off',
+            teamsview:false,
+            teamsData:null,
+            isSelect:[],
+            selectedClass:'notselected',
+            userId:'',
+            universityId:'',
+            isProfessional:false,
+            playerRename:'',
+            coachRename:"",
+            hideCoachStatus:false,
+            hidePlayerStatus:false,
+            // userData from signup screen
 
+            subscriptioncode: props.route.params.subscriptioncode,
+            email:props.route.params.email,
+            firstName:props.route.params.firstName,
+            lastName:props.route.params.lastName,
+            password:props.route.params.password,
+           
         }
     }
 
-    // onCheckBoxPressed() {
-    //     console.log("click")
-    //     this.setState({ checkmark: false })
-
-    // }
-    onCheckBoxPressed ()  {
-        this.setState({ checkmark: false})
-        this.state.checkmarkName !== "mark-off"
-            ? (this.setState({checkmarkName:"mark-off"}), this.setState({checkmark:true}))
-            : (this.setState({checkmarkName:"mark-on"}),this.setState({checkmark:false}))
+    async componentDidMount() {
+    
+        await this.getroleDetails();
 
     }
+    
+    async getroleDetails() {
+      
+        const data= {
+            "subscriptionCodes": [this.state.subscriptioncode]
+        }
+        const response = await this.apiHandler.requestPost(data,this.serviceUrls.roleDetails)
+     
+        if(response.status == "No network Connected!"){
+            this.setState({isInternet: true})
+            alert('No network Connected!')
+        } else{
+            if(response.Status  === 'Success') {
+                // this.props.navigation.navigate('BioSuccess');
+                this.setState({playerRename:response.data[0].playerRename})
+                this.setState({coachRename:response.data[0].coachRename})
+                this.setState({hidePlayerStatus:response.data[0].hidePlayerStatus})
+                this.setState({hideCoachStatus:response.data[0].hideCoachStatus})
+                
+               this.setState({teamsData:response.data[0].teamsData})
+               this.setState({universityId:response.data[0]._id})
+            console.log('coderesponse',this.state.playerRename);
+
+            } 
+          
+
+        }
+    }
+   
+    async onSubmit(){
+
+       
+        let teamcheckedIds = this.state.isSelect;
+        
+        var teamsData= _.map(this.state.teamsData,(item)=> { 
+            
+            return teamcheckedIds.indexOf(item._id) === -1 ? {teamId: item._id, "isChecked": false} : {teamId:item._id, "isChecked": true}
+        })
+
+          
+          
+    // Register Api calling
+            console.log('player',this.state.isProfessional)
+
+        const registerData = {
+            "email": this.state.email,
+            "firstName":this.state.firstName,
+            "isProfessional": this.state.isProfessional,
+            "lastName": this.state.lastName,
+            "password": this.state.password,
+        }
+console.log("registerData",registerData)
+        const response = await this.apiHandler.requestPost(registerData,this.serviceUrls.userRegister);
+       
+
+        if(response.status == "No network Connected!"){
+            this.setState({isInternet: true})
+            alert('No network Connected!')
+        } else{
+            if(response.success === true){
+                this.setState({userId:response.user._id})
+                    const signupdetails={
+                        "token":response.token,
+                        "email":response.user.email,
+                        "firstName":response.user.firstName,
+                        "lastName":response.user.lastName,
+
+                    }
+              await this.storagePrefs.setObjectValue("signupdetails",signupdetails);
+
+            }
+
+        }
+        
+//  UpdateTeams api caling
+                
+            const UpdateTeams = {
+                "teamData":[
+                        {
+                            "SubscriptionCode":this.state.subscriptioncode,
+                            "universityId":this.state.universityId,
+                            "user_email": this.state.email,
+                            "user_id": this.state.userId,
+                        
+                        "teamDetails":teamsData,
+                        }
+                ]
+            }
+
+
+            const updateTeamsresponse = await this.apiHandler.requestPost(UpdateTeams,this.serviceUrls.updateTeams);
+           
+           
+
+            if(updateTeamsresponse.status == "No network Connected!"){
+                this.setState({isInternet: true})
+                alert('No network Connected!')
+            } 
+
+            if(response.success === true && updateTeamsresponse.succsess === true){
+                this.props.navigation.navigate('Account');
+            }
+
+           
+
+    }
+
     ShowHideTextComponentView = () => {
         
         if (this.state.status == true && this.state.viewall == true) {
@@ -48,11 +175,17 @@ class TeamScreen extends React.Component {
         }
     }
     PlayerRole = () => {
+       
+
         if(this.state.rectbox == true){
             this.setState({rectbox: false})
+            
+
         }
         else{
             this.setState({rectbox: true})
+            
+
         }
     }
     render() {
@@ -64,7 +197,7 @@ class TeamScreen extends React.Component {
                     
                     {this.state.rectbox ?
                         <View style={{ flexDirection: 'row',}}>
-                            
+                            {this.state.hidePlayerStatus === false ?
                             <View style={styles.recBox1}>
 
                                 <Image
@@ -80,44 +213,77 @@ class TeamScreen extends React.Component {
                                 <Text style={styles.playertext}>learn more.</Text>
                                 <View style={{ flexDirection: 'row', marginTop: 20, marginBottom: 15 }}>
                                 <Text style={{ borderWidth: 3, width: '12%', height: 20, borderColor: '#ffffff', borderRadius: 10, marginRight: 10, marginLeft: 10 }}></Text>
-                                    <Text style={styles.player}>Player</Text>
+                                {this.state.playerRename !== ""?
+                                    
+                                    <Text style={styles.player}>{this.state.codeResponse.data[0].playerRename}</Text>
+                                   :
+                                   <Text style={styles.player}>Player</Text>
+                                } 
                                 </View>
                             </View>
-                            <TouchableOpacity onPress={() => this.PlayerRole()} style={styles.recBox2}>
+                            :
+                            null
+                            }
+                            {this.state.hideCoachStatus === false ?
+                            <TouchableOpacity onPress={() => {
+                                this.PlayerRole();
+                                this.setState({isProfessional:true})
+                                }} 
+                                style={styles.recBox2}>
                             <View >
                                 <Text style={styles.coachtext}>Share your</Text>
                                 <Text style={styles.coachtext}>knowledge and</Text>
                                 <Text style={styles.coachtext}>help others to</Text>
                                 <Text style={styles.coachtext}>grow.</Text>
                                 <View style={{ flexDirection: 'row', marginTop: 20, marginBottom: 15 }}>
-                                    {/* <TouchableOpacity onPress={() => this.PlayerRole()}> */}
+                                 
                                     <Text style={{ borderWidth: 3, width: '12%', height: 20, borderColor: '#F1F1F1', borderRadius: 10, marginRight: 10, marginLeft: 10 }}></Text>
-                                    {/* </TouchableOpacity> */}
-                                    <Text style={styles.coach}>Coach</Text>
+                                  {this.state.coachRename !== '' ?
 
+                                    <Text style={styles.coach}>{this.state.codeResponse.data[0].coachRename}</Text>
+                                     :
+                                     <Text style={styles.coach}>Coach</Text>
+                             } 
                                 </View>
 
                             </View>
                             </TouchableOpacity>
+                            :
+                            null
+                             }
                         </View>
 
                         :
+                        
                         <View style={{ flexDirection: 'row',marginLeft:25 }}>
-                            <TouchableOpacity onPress={() => this.PlayerRole()} style={[styles.recBox2,{marginLeft:5,width:'45%'}]}>
+                            {this.state.hidePlayerStatus === false ? 
+                            <TouchableOpacity onPress={() => {
+                                this.PlayerRole();
+                                this.setState({isProfessional:false})
+                                }}  style={[styles.recBox2,{marginLeft:5,width:'45%'}]}>
                             <View>
                                 <Text style={styles.playertext1}>Get inspired by</Text>
                                 <Text style={styles.playertext1}>others and</Text>
                                 <Text style={styles.playertext1}>learn more.</Text>
                                 <View style={{ flexDirection: 'row', marginTop: 20, marginBottom: 15 }}>
-                                    {/* <TouchableOpacity onPress={() => this.PlayerRole()}> */}
+                                 
                                     <Text style={{ borderWidth: 3, width: '12%', height: 20, borderColor: '#F1F1F1', borderRadius: 10, marginRight: 10, marginLeft: 10 }}></Text>
-                                    {/* </TouchableOpacity> */}
-                                    <Text style={styles.player1}>Player</Text>
+                                   
+                                    {this.state.playerRename !== ""?
+                                    
+                                    <Text style={styles.player}>{this.state.codeResponse.data[0].playerRename}</Text>
+                                   :
+                                   <Text style={styles.player}>Player</Text>
+                                } 
 
                                 </View>
 
                             </View>
                             </TouchableOpacity>
+                            :
+                            null
+                        }
+                        {this.state.hideCoachStatus === false ?
                             <View style={[styles.recBox1,{width:'44%'}]}>
 
                                 <Image
@@ -135,11 +301,19 @@ class TeamScreen extends React.Component {
 
                                 <View style={{ flexDirection: 'row', marginTop: 20, marginBottom: 15 }}>
                                 <Text style={{ borderWidth: 3, width: '12%', height: 20, borderColor: '#ffffff', borderRadius: 10, marginRight: 10, marginLeft: 10 }}></Text>
-                                    <Text style={styles.coach1}>Coach</Text>
+                                {this.state.coachRename !== '' ?
+
+                                <Text style={styles.coach}>{this.state.codeResponse.data[0].coachRename}</Text>
+                                :
+                                <Text style={styles.coach}>Coach</Text>
+                                } 
                                 </View>
                             </View>
-
+                            :
+                            null
+    }
                         </View>
+                            
 
                     }
 
@@ -151,72 +325,74 @@ class TeamScreen extends React.Component {
                     <Text style={styles.selecteam}>Select your team(s)</Text>
                     <ScrollView style = {{marginTop: 20}}>            
                     <View style={{ marginLeft: 30 }}>
-                        <View style={styles.text}>
-                            <TouchableOpacity onPress={() => this.onCheckBoxPressed()}>
-                                <Image
-                                 source={ this.state.checkmarkName ==='mark-on'? ImagesWrapper.checkmark : ImagesWrapper.checkbox}
-                                 style={[this.state.checkmarkName  ==='mark-on'? styles.checkmark : styles.checkbox]}
-                                 />
-                                {/* <Image
-                                    source={this.state.checkmark ? require('./images/Checkbox.png') : require('./images/checkmark.png')}
-                                    style={[this.state.checkmark ? styles.checkbox : styles.checkmark]}
-                                /> */}
-                            </TouchableOpacity>
-                            {/* <TouchableOpacity  onPress={()=>this.onCheckBoxPressed()}> */}
-                            <Text style={[styles.checkboxtxt1, this.state.checkmarkName  ==='mark-on' ? {color: '#000000',fontFamily:Fonts.mulishSemiBold} : {color: '#868585'}]}>DesignTeam</Text>
-                            {/* </TouchableOpacity> */}
-                            {/* <TouchableOpacity
-                        onPress={() => {
-                              this.setState(!this.state.checked);
-                            
-                            }}
-                        >
-                        <CheckBox
-                        status={this.state.checked ? 'checked' : 'unchecked'}
-                        onPress={() => {
-                          this.setState(!this.state.checked);
                         
-                        }}
-                        /> 
-                        </TouchableOpacity> */}
+                         <FlatList
+                                        // horizontal
+                                        data={this.state.teamsData}
+                                        renderItem={item => (
+                                                
+                                                <View style={styles.text}>
 
+                                                     <CheckBox
 
-                        </View>
-                        <View style={styles.text}>
+                                                        onClick={() => {
+                                                            
+                                                            const index = this.state.isSelect.indexOf(item.item._id);
+                                                            if(index > -1){
+                                                                this.state.isSelect.splice(index,1)
+                                                            }else{
+                                                                this.state.isSelect.push(item.item._id)
+                                                            }
+                                                            this.setState({isSelect:this.state.isSelect})
+                                                        }}
+                                                        
+                                                        isChecked={this.state.isSelect.includes(item.item._id)}
+                                                    
+                                                        //leftText={"CheckBox"}
+                                                        checkedImage={<Image source={ImagesWrapper.checkedbox} />}
+                                                        unCheckedImage={<Image source={ImagesWrapper.uncheckedbox} />}
+                                                        />
+                                                    <Text style={[styles.checkboxtxt1, this.state.selectedClass  ==='mark-on' ? {color: '#000000',fontFamily:Fonts.mulishSemiBold} : {color: '#868585'}]}>{item.item.teamTitle}</Text>
+                                                </View>
+                                               
+                                          
+                                        )}
+                                    />
+                        {/* <View style={styles.text}>
                             <Image
                                 source={this.state.checkmark0 ? ImagesWrapper.checkmark : ImagesWrapper.checkbox}
                                 style={[this.state.checkmark0 ? styles.checkmark : styles.checkbox]}
                             />
                             <Text style={styles.checkboxtxt}>ManagementTeam</Text>
-                        </View>
+                        </View> */}
 
-                        <View style={styles.text}>
+                        {/* <View style={styles.text}>
                             <Image
                                 source={this.state.checkmark1 ?ImagesWrapper.checkmark : ImagesWrapper.checkbox}
                                 style={[this.state.checkmark1 ? styles.checkmark : styles.checkbox]}
                             />
                             <Text style={styles.checkboxtxt}>DiscussionTeam</Text>
-                        </View>
+                        </View> */}
 
-                        <View style={styles.text}>
+                        {/* <View style={styles.text}>
                             <Image
                                 source={this.state.checkmark2 ? ImagesWrapper.checkmark : ImagesWrapper.checkbox}
                                 style={[this.state.checkmark2 ? styles.checkmark : styles.checkbox]}
                             />
 
                             <Text style={styles.checkboxtxt}>TechTeam</Text>
-                        </View>
-                        <View style={styles.text}>
+                        </View> */}
+                        {/* <View style={styles.text}>
                             <Image
                                 source={this.state.checkmark2 ? ImagesWrapper.checkmark : ImagesWrapper.checkbox}
                                 style={[this.state.checkmark2 ? styles.checkmark : styles.checkbox]}
                             />
 
                             <Text style={styles.checkboxtxt}>CoordinatorsTeam</Text>
-                        </View>
+                        </View> */}
 
 
-                        {this.state.status ?
+                        {/* {this.state.status ?
                             null :
 
                             <View>
@@ -250,7 +426,7 @@ class TeamScreen extends React.Component {
                                 </View>
                             </View>
 
-                        }
+                        } */}
 
 
 
@@ -266,13 +442,14 @@ class TeamScreen extends React.Component {
                     <View>
                         <TouchableOpacity 
                             onPress={()=>{
-                                this.props.navigation.navigate('Account')
+                                // this.props.navigation.navigate('Account')
+                                this.onSubmit();
                             }}
                         >
                             <LinearGradient start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }} colors={['rgba(33, 43, 104, 1)', 'rgba(88, 196, 198, 1)']} style={[styles.linearGradient1, Platform.OS === "ios" ? { marginTop: '6%' } : { marginTop: '6%' }]}>
 
                                 <Text style={styles.nextbtn}>
-                                    Next
+                                    Submit
                                 </Text>
 
                             </LinearGradient>
@@ -350,7 +527,7 @@ const styles = StyleSheet.create({
         marginLeft: 12,
         fontSize: 14,
         // color: '#000000',
-        marginTop: 5,
+        // marginTop: 5,
         fontFamily: Fonts.mulishRegular,
         fontWeight: '600'
 

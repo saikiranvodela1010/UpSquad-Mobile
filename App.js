@@ -6,6 +6,8 @@ import * as React from 'react';
 import { View, Text,StatusBar,Image, Tab } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
+import { createDrawerNavigator  } from '@react-navigation/drawer';
+import DrawerContent from './src/res/DrawerContent';
 import NotificationScreen from './src/screens/NotificationScreen';
 import ChatScreen from './src/screens/ChatScreen';
 import ChatSearch from './src/screens/ChatSearch';
@@ -48,21 +50,24 @@ import CreateMeetingSurvey from './src/screens/BottomTabs/CreateMeetingSurvey';
 import SetAvailabilityScreen from './src/screens/BottomTabs/SetAvailabilityScreen';
 import EventSelectionScreen from './src/screens/BottomTabs/EventSelectionScreen';
 import CreateEventSurvey from './src/screens/BottomTabs/CreateEventSurvey';
+import SwitchCommunityScreen from './src/screens/DrawerScreens/SwitchCommunityScreen';
+import CoachSearchScreen from './src/screens/BottomTabs/CoachSearchScreen'
+
 
 const Stack = createStackNavigator();
-const App = () => {
+const Drawer = createDrawerNavigator();
 
-    return (
-      <NavigationContainer>
-      <StatusBar hidden={true} />
-    <Stack.Navigator 
-        screenOptions={{
-        headerShown: false,
-      }}
-        initialRouteName='GetStarted'
-  >
 
-      <Stack.Screen 
+const MainScreens =()=>{
+  return(
+    <Stack.Navigator
+    screenOptions={{
+      headerShown: false,
+    }}
+      initialRouteName='GetStarted'
+    >
+       {/* <StatusBar hidden={true} /> */}
+  <Stack.Screen 
         name="GetStarted" 
         component={GetStartedScreen} />
 
@@ -188,10 +193,10 @@ const App = () => {
       />
 
      
-     <Stack.Screen
+        <Stack.Screen
           name="color"
           component={colour} />
-    <Stack.Screen
+          <Stack.Screen
           name="players"
           component={PlayersScreen} />
        <Stack.Screen
@@ -201,7 +206,7 @@ const App = () => {
           name="playerSearch"
           component={PlayerSearchScreen} />
 
-<Stack.Screen
+        <Stack.Screen
           name="createeventscreen"
           component={CreateEventScreen} />
         <Stack.Screen
@@ -228,8 +233,37 @@ const App = () => {
         <Stack.Screen
           name="createventsurvey"
           component={CreateEventSurvey} />
+           <Stack.Screen
+          name="switchcommunity"
+          component={SwitchCommunityScreen} />
+          <Stack.Screen
+          name="coachSearch"
+          component={CoachSearchScreen} />
 
     </Stack.Navigator>
+  )
+}
+
+
+
+
+const App = () => {
+ return (
+  <NavigationContainer>
+     
+     <Drawer.Navigator
+        drawerContent={props =><DrawerContent { ...props}/>}
+        screenOptions={{
+            headerShown:false,
+         //    gestureEnabled: false,
+         //    animationEnabled: false
+        }}
+        initialRouteName='MainScreens'
+    >
+      <Drawer.Screen name='MainScreens' component={MainScreens}/>
+    
+    </Drawer.Navigator>
+    
   
   </NavigationContainer>
 

@@ -23,9 +23,11 @@ import CameraRoll from "@react-native-community/cameraroll";
 import ImagesWrapper from '../res/ImagesWrapper';
 import Fonts from '../res/Fonts';
 import { ProgressBar, Colors } from 'react-native-paper';
-
-
-
+import RNFS from 'react-native-fs';
+import ServiceUrls from '../network/ServiceUrls';
+import APIHandler from '../network/NetWorkOperations';
+import axios from 'axios';
+import StoragePrefs from '../res/StoragePrefs';
 
 const ProfilePicScreen = (props) => {
  const [show, setShow] = useState(false);
@@ -50,6 +52,10 @@ const[top5,setTop5]=useState(50)
 const Photolist=[
     {type:'camera'}
 ]
+const[imgBase64,setimgBase64]=useState("");
+const apiHandler = new APIHandler();
+const serviceUrls = new ServiceUrls();
+const storagePrefs = new StoragePrefs();
 
 const getPhotos = () => {
     console.log('data',data);
@@ -130,14 +136,66 @@ const askPermission = async () => {
   }
   useEffect(() => {
     askPermission();
-    // BackHandler.addEventListener('hardwareBackPress', handleBackButtonClick);
-    // return () => {
-    //   BackHandler.removeEventListener('hardwareBackPress', handleBackButtonClick);
-    // };
+    // singup();
+   
     
   }, []);
 
+  async function singup(){
+    const signupdetails = await storagePrefs.getObjectValue("signupdetails")
+    console.log('signupdetails',signupdetails);
+  }
+  async function onSubmit () {
+    const signupdetails = await storagePrefs.getObjectValue("signupdetails")
+    console.log('signupdetails',signupdetails);
   
+            console.log('ImagePath:', camerfile?.path);
+            RNFS.readFile(camerfile?.path, 'base64')
+        .then((res) =>{
+        // console.log("base64:",res);
+        setimgBase64(res);
+        });
+
+const imgUpload ={
+    'profileImg': imgBase64,
+    'email':signupdetails.email,
+    'firstName':signupdetails.firstName,
+    'lastName':signupdetails.lastName,
+}
+// console.log('dataimg',imgUpload)
+// console.log('dataimg')
+// return;
+
+// const response = await apiHandler.requestPost(imgUpload,serviceUrls.imageUpload)
+//         console.log("Image Upload",response)
+      
+      // axios.put(serviceUrls.imageUpload, imgUpload)
+      // .then(response => console.log("Image Upload",response));
+      
+    // axios.post(url,data, {
+    //     headers: {
+    //         'authorization': your_token,
+    //         'Accept' : 'application/json',
+    //         'Content-Type': 'application/json'
+    //     }
+    // })
+        // let header = `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7Il9pZCI6IjYxZGQyOThkYmYxYjYwMTVhOGUyMTllMiJ9LCJpYXQiOjE2NDE4ODQwNDUsImV4cCI6MTY0MzA5MzY0NX0._RDRL8zynlSr0mId0fj-URI3_YWy6YsXrUQ3ZxfXYq4`;
+      axios.put(serviceUrls.imageUpload,imgUpload,{
+        headers: {
+            'Authorization': signupdetails.token,
+            'Accept' : 'application/json',
+            'Content-Type': 'application/json'
+        },
+    })
+        .then (response => {
+          console.log("Check1234", response);
+        })
+        .catch(error => {
+          console.log(error);
+        });
+
+}
+
   return(
       <View style={{backgroundColor:'#FFFFFF'}}>
           
@@ -269,6 +327,7 @@ const askPermission = async () => {
         <TouchableOpacity 
                         onPress={()=>{
                             props.navigation.navigate('BioData')
+                            // onSubmit();
                          }}
                         
                     >

@@ -4,9 +4,9 @@ import { TextInput } from 'react-native-gesture-handler';
 import LinearGradient from 'react-native-linear-gradient'
 import ImagesWrapper from '../res/ImagesWrapper';
 import Fonts from '../res/Fonts';
-import axios from 'axios';
+
 import ServiceUrls from '../network/ServiceUrls';
-import { performPostOpertion } from '../network/NetWorkOperations';
+import StoragePrefs from '../res/StoragePrefs';
 import APIHandler from '../network/NetWorkOperations';
 
 
@@ -18,6 +18,8 @@ export default class LoginScreen extends React.Component {
 
     serviceUrls = new ServiceUrls();
     apiHandler = new APIHandler();
+    storagePrefs = new StoragePrefs();
+
     constructor(props){
         super(props);
         this.textInput = React.createRef(null); 
@@ -31,7 +33,8 @@ export default class LoginScreen extends React.Component {
             iconName:'ios-eye-off',
             cont:'',
             show:false,
-            isInternet: false
+            isInternet: false,
+            back:false,
            
         }
        
@@ -69,12 +72,25 @@ export default class LoginScreen extends React.Component {
             'password' : this.state.password
         }
         const response = await this.apiHandler.requestPost(data,this.serviceUrls.loginuser)
-        console.log("Response on Login Returned",response)
+      
+        const token = JSON. stringify(response.token);
+        const userId = JSON. stringify(response._id);
+        const userName = JSON. stringify(response.firstName + response.lastName);
+
+        const userDetsils = {
+            "token":response.token,
+            "userId":response.user._id,
+            "userName":response.user.firstName+ " "+response.user.lastName,
+        }
+       
+    
         if(response.status == "No network Connected!"){
             this.setState({isInternet: true})
             alert('No network Connected!')
         } else{
             if(response.success  === true) {
+                const logindetails=await this.storagePrefs.setObjectValue("userDetails",userDetsils);
+                console.log('logindetails',logindetails);
                 this.props.navigation.navigate('BioSuccess');
             } else {
                 if(response.msg === "Email not found")
@@ -83,6 +99,7 @@ export default class LoginScreen extends React.Component {
                 this.setState({passworderr:response.msg})
     
             }
+        
 
         }
         
@@ -305,8 +322,8 @@ const styles = StyleSheet.create({
     card:{
         backgroundColor:'#FFFFFF',
         flex:1,
-        width:Dimensions.get('window').width,
-        height: Dimensions.get('window').height,
+        width:'100%',
+        height:'100%',
         marginTop:30,
         borderTopLeftRadius:30,
         borderTopRightRadius:30,

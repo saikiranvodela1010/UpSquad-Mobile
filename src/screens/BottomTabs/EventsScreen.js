@@ -3,15 +3,31 @@ import { Image, View, Text, StyleSheet, TouchableOpacity, TextInput, ImageBackgr
 import Fonts from '../../res/Fonts';
 import ImagesWrapper from '../../res/ImagesWrapper';
 import Modal from 'react-native-modal';
+import StoragePrefs from '../../res/StoragePrefs';
 
 export default class EventsScreen extends React.Component {
-  constructor() {
-    super();
+  storagePrefs = new StoragePrefs();
+  constructor(props) {
+    super(props);
     this.state = {
       show: false,
       show1: false,
+      communityName: "",
     }
   }
+  async componentDidMount() {
+      
+    const universityDetsils = await this.storagePrefs.getObjectValue("universityDetsils")
+    // console.log('universityDetsils',universityDetsils);
+    this.setState({communityName:universityDetsils.universityName});
+   
+
+    }
+    async componentDidUpdate(){
+        const universityDetsils = await this.storagePrefs.getObjectValue("universityDetsils")
+        // console.log('universityDetsils',universityDetsils);
+        this.setState({communityName:universityDetsils.universityName});
+    }
   render() {
     return (
       <View style={{ flex: 1, backgroundColor: '#FFFFFF' }}>
@@ -19,7 +35,7 @@ export default class EventsScreen extends React.Component {
           <Image source={ImagesWrapper.profile}
             style={{ marginLeft: '9%' }}
           ></Image>
-          <Text style={{ fontSize: 20, fontFamily: Fonts.mulishSemiBold, fontWeight: '600', color: '#1E1C24', marginLeft: '5%' }}>Memphis Talks</Text>
+          <Text style={{ fontSize: 20, fontFamily: Fonts.mulishSemiBold, fontWeight: '600', color: '#1E1C24', marginLeft: '5%' }}>{this.state.communityName}</Text>
           <View style={{ justifyContent: 'flex-end', flexDirection: 'row', flex: 1 }}>
             <TouchableOpacity style={{ marginRight: '18%' }} onPress={() => this.props.navigation.navigate('notificationscreen')}>
               <Image source={ImagesWrapper.notificationNo}

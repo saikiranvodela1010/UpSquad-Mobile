@@ -1,14 +1,16 @@
 import React from 'react'
-import {  View, Text, StyleSheet, TouchableOpacity, Image,TextInput,SafeAreaView,Platform} from 'react-native';
+import {  View, Text, StyleSheet, TouchableOpacity, Image,TextInput,SafeAreaView,Platform,DeviceEventEmitter} from 'react-native';
 import ImagesWrapper from '../../res/ImagesWrapper';
 import Fonts from '../../res/Fonts';
 import { ScrollView } from 'react-native-gesture-handler';
 import Svg, { G, Circle } from "react-native-svg";
 import LinearGradient from 'react-native-linear-gradient'
 import Modal from 'react-native-modal';
-
+import StoragePrefs from '../../res/StoragePrefs';
 
  class MeetingsScreen extends React.Component {
+
+    storagePrefs = new StoragePrefs();
 
     constructor(props){
         super(props);
@@ -19,9 +21,28 @@ import Modal from 'react-native-modal';
             email:'',
             message:'',
             dotsmemu:false,
+            communityName:'',
+           
         }
        
     }
+
+    async componentDidMount() {
+      
+        const universityDetsils = await this.storagePrefs.getObjectValue("universityDetsils")
+        // console.log('universityDetsils',universityDetsils);
+        this.setState({communityName:universityDetsils.universityName});
+       
+
+        }
+        async componentDidUpdate(){
+            const universityDetsils = await this.storagePrefs.getObjectValue("universityDetsils")
+            // console.log('universityDetsils',universityDetsils);
+            this.setState({communityName:universityDetsils.universityName});
+        }
+
+  
+
 
     flowerWings=(width)=>{
         const initialArr = [];
@@ -78,10 +99,12 @@ import Modal from 'react-native-modal';
      <SafeAreaView style={{flex:1,backgroundColor:'#FFFFFF'}}>
         
             <View style={[styles.header]}>
+            <TouchableOpacity onPress={()=> this.props.navigation.openDrawer()}>
             <Image source={ImagesWrapper.profile}
-            style={{marginLeft:'9%'}}
+            style={{marginLeft:25}}
             ></Image>
-            <Text style={{ fontSize: 20, fontFamily: Fonts.mulishSemiBold, fontWeight: '600',color:'#1E1C24', marginLeft: '5%' }}>Memphis Talks</Text>
+            </TouchableOpacity>
+            <Text style={{ fontSize: 20, fontFamily: Fonts.mulishSemiBold, fontWeight: '600',color:'#1E1C24', marginLeft: '5%' }}>{this.state.communityName}</Text>
             <View style={{justifyContent:'flex-end',flexDirection:'row',flex:1}}>
             <TouchableOpacity  style={{marginRight:'18%'}} onPress={() => this.props.navigation.navigate('notificationscreen')}>
               <Image source={ImagesWrapper.notificationNo}

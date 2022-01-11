@@ -354,6 +354,10 @@ PODS:
     - React-jsi (= 0.66.2)
     - React-logger (= 0.66.2)
     - React-perflogger (= 0.66.2)
+  - RNCAsyncStorage (1.15.14):
+    - React-Core
+  - RNFS (2.18.0):
+    - React
   - RNGestureHandler (1.10.3):
     - React-Core
   - RNImageCropPicker (0.37.2):
@@ -372,6 +376,8 @@ PODS:
     - React-RCTImage
   - RNSVG (12.1.1):
     - React
+  - RNVectorIcons (9.0.0):
+    - React-Core
   - TOCropViewController (2.6.0)
   - Yoga (1.14.0)
   - YogaKit (1.18.1):
@@ -437,11 +443,14 @@ DEPENDENCIES:
   - React-RCTVibration (from `../node_modules/react-native/Libraries/Vibration`)
   - React-runtimeexecutor (from `../node_modules/react-native/ReactCommon/runtimeexecutor`)
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
+  - "RNCAsyncStorage (from `../node_modules/@react-native-async-storage/async-storage`)"
+  - RNFS (from `../node_modules/react-native-fs`)
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
   - RNImageCropPicker (from `../node_modules/react-native-image-crop-picker`)
   - RNReanimated (from `../node_modules/react-native-reanimated`)
   - RNScreens (from `../node_modules/react-native-screens`)
   - RNSVG (from `../node_modules/react-native-svg`)
+  - RNVectorIcons (from `../node_modules/react-native-vector-icons`)
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
 SPEC REPOS:
@@ -535,6 +544,10 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/runtimeexecutor"
   ReactCommon:
     :path: "../node_modules/react-native/ReactCommon"
+  RNCAsyncStorage:
+    :path: "../node_modules/@react-native-async-storage/async-storage"
+  RNFS:
+    :path: "../node_modules/react-native-fs"
   RNGestureHandler:
     :path: "../node_modules/react-native-gesture-handler"
   RNImageCropPicker:
@@ -545,6 +558,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-screens"
   RNSVG:
     :path: "../node_modules/react-native-svg"
+  RNVectorIcons:
+    :path: "../node_modules/react-native-vector-icons"
   Yoga:
     :path: "../node_modules/react-native/ReactCommon/yoga"
 
@@ -598,15 +613,18 @@ SPEC CHECKSUMS:
   React-RCTVibration: 3e815c3d2dd2e0e931b68595b5b92d23ba38b3fb
   React-runtimeexecutor: 393e26602c1b248683372051e34db63e359e3b01
   ReactCommon: c0263c1a41509aeb94be3214fa7bc3b71eae5ef6
+  RNCAsyncStorage: ea6b5c280997b2b32a587793163b1f10e580c4f7
+  RNFS: 3ab21fa6c56d65566d1fb26c2228e2b6132e5e32
   RNGestureHandler: a479ebd5ed4221a810967000735517df0d2db211
   RNImageCropPicker: 448d3c6e923fde3466b49caf3c2457c2a0ba02dd
   RNReanimated: 5d148a7f55ebf47055ea55f51f5dc7a827dc9547
   RNScreens: 4d79118be80f79fa1f4aa131909a1d6e86280af3
   RNSVG: 551acb6562324b1d52a4e0758f7ca0ec234e278f
+  RNVectorIcons: 4143ba35feebab8fdbe6bc43d1e776b393d47ac8
   TOCropViewController: 3105367e808b7d3d886a74ff59bf4804e7d3ab38
   Yoga: 9a08effa851c1d8cc1647691895540bc168ea65f
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
 
-PODFILE CHECKSUM: dbc78fc4175ae3af2b139c7f994c4cd6635ce1dc
+PODFILE CHECKSUM: e1331586725640fe351989a02daec73b14e025e9
 
 COCOAPODS: 1.11.2

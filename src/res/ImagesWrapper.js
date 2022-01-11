@@ -99,6 +99,7 @@ const ImagesWrapper = {
     favourite:require('../Images/favourite.png'),
     radiobtn:require('../Images/radiobtn.png'),
     radiobtn1:require('../Images/radiobtn1.png'),
+    radio:require('../Images/radio.png'),
     manpic1:require('../Images/manpic1.png'),
     scalendar:require('../Images/scalendar.png'),
     meetingsimage:require('../Images/meetingsimage.png'),
@@ -125,5 +126,12 @@ const ImagesWrapper = {
     plus2:require('../Images/plus2.png'),
     trashblack:require('../Images/trashblack.png'),
     plus1:require('../Images/plus1.png'),
+    usersthree:require('../Images/users-three.png'),
+    memphisTalks:require('../Images/memphisTalks.png'),
+    mindspace:require('../Images/mindspace.png'),
+    toppngdrawer:require('../Images/toppngdrawer.png'),
+    upsquadBG:require('../Images/upsquadBG.mp4'),
+    transBG:require('../Images/transBG.png'),
+    bloomingOrangeBlue:require('../Images/bloomingOrangeBlue.png')
 }
 export default ImagesWrapper;
