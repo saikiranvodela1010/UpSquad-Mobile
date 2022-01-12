@@ -52,7 +52,7 @@ export default class playersDetailScreen extends React.Component {
         this.getUserInfo();
     }
     async getUserInfo() {
-        console.log('userid', this.state.userid)
+        //console.log('userid', this.state.userid)
         const data = this.state.userid;
         //const data = this.state.userid;
         const response = await this.apiHandler.requestGet(data, this.serviceUrls.getParticularUser)
