@@ -81,6 +81,7 @@ export default class LoginScreen extends React.Component {
             "token":response.token,
             "userId":response.user._id,
             "userName":response.user.firstName+ " "+response.user.lastName,
+            "userEmail": response.user.email
         }
        
     
@@ -90,7 +91,7 @@ export default class LoginScreen extends React.Component {
         } else{
             if(response.success  === true) {
                 const logindetails=await this.storagePrefs.setObjectValue("userDetails",userDetsils);
-                console.log('logindetails',logindetails);
+                //console.log('logindetails',logindetails);
                 this.props.navigation.navigate('BioSuccess');
             } else {
                 if(response.msg === "Email not found")

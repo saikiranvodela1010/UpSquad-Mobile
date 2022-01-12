@@ -4,14 +4,19 @@ import NetInfo from "@react-native-community/netinfo";
 
 
 export default class ApiHandler {
-    async requestPost(data,url) {
-        console.log("Request URL>>>>",data,url);
+    async requestPost(data,url,param) {
+        console.log("Request URL>>>>",data,url,param);
         let headers = {
             'Content-Type': 'application/json'
         }
         const networkStatus = await NetInfo.fetch();
         if (networkStatus.isConnected) {
-            return this.callAPI(url, data, headers);
+            if(param !=null && param != undefined ){
+                return this.callAPI(url+param, data, headers);
+            } else{
+                return this.callAPI(url, data, headers);
+            }
+            
         } else {
             return responseData = { status: "No network Connected!" };
         }

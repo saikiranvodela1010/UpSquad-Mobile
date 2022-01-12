@@ -1,5 +1,5 @@
 import React from 'react'
-import {  View, Text, StyleSheet, TouchableOpacity,Image,ImageBackground,ScrollView} from 'react-native';
+import {  View, Text, StyleSheet, TouchableOpacity,Image,ImageBackground,ScrollView,SafeAreaView} from 'react-native';
 // import {ScrollView} from 'react-native-gesture-handler';
 import BottomTabs from '../../screens/BottomTabs/BottomTabs';
 import ImagesWrapper from '../../res/ImagesWrapper';
@@ -43,7 +43,7 @@ const Tab = createMaterialTopTabNavigator();
    
     render(){
         return(
-        <View style={{flex:1,backgroundColor:'#FFFFFF'}}>
+        <SafeAreaView style={{flex:1,backgroundColor:'#FFFFFF'}}>
                <View style={[styles.header]}>
                 <Image source={ImagesWrapper.profile}
                 style={{marginLeft:'9%'}}
@@ -169,7 +169,7 @@ const Tab = createMaterialTopTabNavigator();
                
                     
             </ScrollView> */}
-    </View>
+    </SafeAreaView>
         )
     }
    

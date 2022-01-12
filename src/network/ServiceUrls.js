@@ -2,6 +2,7 @@
 export default class ServiceUrls {
 
     mainUrl = 'https://devapi.upsquad.com';
+    socialUrl = 'https://socialapidev.upsquad.com';
 
 
     loginuser = this.mainUrl+'/users/authenticate';
@@ -15,4 +16,9 @@ export default class ServiceUrls {
     searchUsersByOrganization =this.mainUrl+ '/users/searchUsersByOrganization';
     searchUsersByOutside =this.mainUrl+ '/users/searchUsersByOutside';
     getParticularUser = this.mainUrl+ '/users/getParticularUser/';
+    getUniversityImages = this.socialUrl+ '/universitiescodes/getImagesForUniversityID/';
+    getUserProfile = this.socialUrl+'/user/profile/';
+    getPosts = this.socialUrl+'/feed/posts/';
+    getPost = this.socialUrl+'/feed/post/';
+    postComment = this.socialUrl+'/feed/comment/'
 }

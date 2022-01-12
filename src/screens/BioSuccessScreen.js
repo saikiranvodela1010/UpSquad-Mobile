@@ -33,7 +33,6 @@ class BioSuccessScreen extends React.Component{
 
 //  componentDidMount() {
 //       // const back = props.route.params.back != null ? props.route.params.back : false;
-//       console.log("ravi123",this.state.back);
 //       // this.setState({back : back})
 
 //   }

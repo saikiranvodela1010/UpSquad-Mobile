@@ -1,7 +1,3 @@
-
-
-
-
 import * as React from 'react';
 import { View, Text,StatusBar,Image, Tab } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
@@ -52,6 +48,7 @@ import EventSelectionScreen from './src/screens/BottomTabs/EventSelectionScreen'
 import CreateEventSurvey from './src/screens/BottomTabs/CreateEventSurvey';
 import SwitchCommunityScreen from './src/screens/DrawerScreens/SwitchCommunityScreen';
 import CoachSearchScreen from './src/screens/BottomTabs/CoachSearchScreen'
+import CommentScreen from './src/screens/BottomTabs/CommentScreen';
 
 
 const Stack = createStackNavigator();
@@ -239,6 +236,9 @@ const MainScreens =()=>{
           <Stack.Screen
           name="coachSearch"
           component={CoachSearchScreen} />
+          <Stack.Screen
+          name = "CommentScreen"
+          component = {CommentScreen}/>
 
     </Stack.Navigator>
   )

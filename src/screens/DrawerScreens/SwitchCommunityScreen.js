@@ -1,5 +1,5 @@
 import React from 'react'
-import {  View, Text, StyleSheet, TouchableOpacity,Image, DeviceEventEmitter} from 'react-native';
+import {  View, Text, StyleSheet, TouchableOpacity,Image, DeviceEventEmitter,SafeAreaView} from 'react-native';
 import ImagesWrapper from '../../res/ImagesWrapper';
 import Fonts from '../../res/Fonts';
 import APIHandler from '../../network/NetWorkOperations';
@@ -27,12 +27,18 @@ export default class SwitchCommunityScreen extends React.Component {
             radio_props:[],
             checked:0,
             back:true,
+            email : '',
+            userId: '',
            
         }
     }
 
     async componentDidMount() {
-    
+      const userDetails = await this.storagePrefs.getObjectValue("userDetails")
+      this.setState({
+        userId : userDetails.userId,
+        email : userDetails.userEmail
+      })
       await this.getCommunityDetails();
 
   }
@@ -40,14 +46,22 @@ export default class SwitchCommunityScreen extends React.Component {
   async getCommunityDetails() {
 
     const communityData={
-      "email": "rajkumar@thinkebiz.net",
-      "userID": "5ee21f3f5583d00022351037"
+      "email": this.state.email,
+      "userID": this.state.userId
     }
+    // const communityData={
+    //   "email": "rajkumar@thinkebiz.net",
+    //   "userID": "5ee21f3f5583d00022351037"
+    // }
     const response = await this.apiHandler.requestPost(communityData,this.serviceUrls.getCommunities);
     // const radio= response.data;
     console.log('communitydata=====',response.data)
-    this.setState({radio:response.data})
-  
+    if(response.data!=null && response.data.length>0){
+      this.setState({radio:response.data})
+    } else{
+      this.setState({radio: []})
+    }
+    
     for (var i = 0; i < this.state.radio.length; i++) {
       this.state. radio_props[i] = {
         "universityName":this.state.radio[i].universityName,
@@ -77,7 +91,7 @@ export default class SwitchCommunityScreen extends React.Component {
     render(){
        const{radio}=this.state
         return(
-            <View style={{flex:1,backgroundColor:'#FFFFFF'}}>
+            <SafeAreaView style={{flex:1,backgroundColor:'#FFFFFF'}}>
                <View style={styles.header}>
                     <TouchableOpacity onPress={() => {
                       // this.props.navigation.openDrawer();
@@ -148,7 +162,7 @@ export default class SwitchCommunityScreen extends React.Component {
 
 </View>
 
-            </View>
+            </SafeAreaView>
         )
     }
 }
