@@ -49,7 +49,7 @@ import CreateEventSurvey from './src/screens/BottomTabs/CreateEventSurvey';
 import SwitchCommunityScreen from './src/screens/DrawerScreens/SwitchCommunityScreen';
 import CoachSearchScreen from './src/screens/BottomTabs/CoachSearchScreen'
 import CommentScreen from './src/screens/BottomTabs/CommentScreen';
-
+import AddCommunityScreen from './src/screens/DrawerScreens/AddCommunityScreen';
 
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -239,6 +239,9 @@ const MainScreens =()=>{
           <Stack.Screen
           name = "CommentScreen"
           component = {CommentScreen}/>
+          <Stack.Screen
+          name = "AddCommunityScren"
+          component = {AddCommunityScreen}/>
 
     </Stack.Navigator>
   )

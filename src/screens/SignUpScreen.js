@@ -130,13 +130,28 @@ export default class SignUpScreen extends React.Component {
         if(this.state.code === regex){
             alert('Emojis will not allowed')
         }
-        // else {
-        //     this.props.navigation.navigate('Team')
-        // }
+        const data= {
+            "subscriptionCodes": [this.state.code]
+        }
+        const response = await this.apiHandler.requestPost(data,this.serviceUrls.roleDetails)
+     
+        if(response.status == "No network Connected!"){
+            this.setState({isInternet: true})
+            alert('No network Connected!')
+        } else{
+            if(response.data.length === 0) {
+               
+                alert("Please enter valid code")
+            } else{
+                
+            }
+          
+
+        }
 
         if (this.state.firstname !== '' && this.state.lastname !== "" 
         && this.state.email !== '' && this.state.password !== ''
-         && this.state.checkmarkName !== 'mark-off'&&
+         && this.state.checkmarkName !== 'mark-off'&& response.data.length !== 0 &&
           mailReg.test(this.state.email) 
          && nameReg.test(this.state.firstname)
          )

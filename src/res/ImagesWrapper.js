@@ -132,6 +132,11 @@ const ImagesWrapper = {
     toppngdrawer:require('../Images/toppngdrawer.png'),
     upsquadBG:require('../Images/upsquadBG.mp4'),
     transBG:require('../Images/transBG.png'),
-    bloomingOrangeBlue:require('../Images/bloomingOrangeBlue.png')
+    bloomingOrangeBlue:require('../Images/bloomingOrangeBlue.png'),
+    recentactivity:require('../Images/recentactivity.png'),
+    settings:require('../Images/settings.png'),
+    question:require('../Images/question.png'),
+    vectorcommunity:require('../Images/vectorcommunity.png'),
+
 }
 export default ImagesWrapper;
