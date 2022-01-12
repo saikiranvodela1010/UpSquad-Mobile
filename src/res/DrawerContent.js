@@ -20,11 +20,16 @@ export default class DrawerContent extends React.Component {
         }
        
     }
-
-    async componentDidMount() {
-        console.log('userDetails----',userDetails);
+    async componentDidMount(){
+        // console.log('userDetails----',userDetails);
         const userDetails = await this.storagePrefs.getObjectValue("userDetails")
         console.log('userDetails',userDetails);
+        this.setState({userName:userDetails.userName});
+    }
+    async componentDidUpdate() {
+        // console.log('userDetails----',userDetails);
+        const userDetails = await this.storagePrefs.getObjectValue("userDetails")
+        // console.log('userDetails',userDetails);
         this.setState({userName:userDetails.userName});
     }
     render(){
