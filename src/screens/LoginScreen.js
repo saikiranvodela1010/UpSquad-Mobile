@@ -1,5 +1,5 @@
 import React from 'react';
-import { View ,StyleSheet,Text,Image, TouchableOpacity,Platform,ScrollView,Dimensions} from 'react-native';
+import { View ,StyleSheet,Text,Image, TouchableOpacity,Platform,ScrollView,Dimensions,Modal,ActivityIndicator} from 'react-native';
 import { TextInput } from 'react-native-gesture-handler';
 import LinearGradient from 'react-native-linear-gradient'
 import ImagesWrapper from '../res/ImagesWrapper';
@@ -8,11 +8,6 @@ import Fonts from '../res/Fonts';
 import ServiceUrls from '../network/ServiceUrls';
 import StoragePrefs from '../res/StoragePrefs';
 import APIHandler from '../network/NetWorkOperations';
-
-
-// import { FloatingLabelInput } from 'react-native-floating-label-input';
-
-
 
 export default class LoginScreen extends React.Component {
 
@@ -35,12 +30,12 @@ export default class LoginScreen extends React.Component {
             show:false,
             isInternet: false,
             back:false,
+            isLoading: false
            
         }
        
     }
-   
-   
+
      onCheckBoxPressed ()  {
         // this.setState({checkmark:false)});
         this.setState({ checkmark: false})
@@ -67,20 +62,30 @@ export default class LoginScreen extends React.Component {
         
       }
     async onSubmit(){
+// <<<<<<< HEAD
         if(this.state.email === "",this.state.password === ""){
             // this.setState({passworderr:"Please enter the fields"})
             alert("Please enter the fields");
         }else{
+// =======
+        this.setState({
+            isLoading: true
+        })
+// >>>>>>> 71c5658bb2dcb7575bc9233a11aa3dcb4f68fe6b
         const data = {
             'email': this.state.email,
             'password' : this.state.password
         }
         const response = await this.apiHandler.requestPost(data,this.serviceUrls.loginuser)
+// <<<<<<< HEAD
       
+// =======
+// >>>>>>> 71c5658bb2dcb7575bc9233a11aa3dcb4f68fe6b
         if(response.status == "No network Connected!"){
-            this.setState({isInternet: true})
+            this.setState({isLoading: false, isInternet: true})
             alert('No network Connected!')
         } else{
+            this.setState({isLoading: false})
             if(response.success  === true) {
                 const userDetsils = {
                     "token":response.token,
@@ -89,6 +94,7 @@ export default class LoginScreen extends React.Component {
                     "userEmail": response.user.email
                 }
                 const logindetails=await this.storagePrefs.setObjectValue("userDetails",userDetsils);
+// <<<<<<< HEAD
                 
                 this.props.navigation.navigate('BioSuccess');
             } else {
@@ -102,9 +108,17 @@ export default class LoginScreen extends React.Component {
                 }
                
     
+// =======
+            //     this.props.navigation.navigate('BioSuccess');
+            // } else {
+            //      if(response.msg === "Wrong password"){
+            //         this.setState({passworderr:response.msg})
+            //      } else if(response.msg === "Email not found" || 
+            //         response.data.message!=null && response.data.message != undefined && response.data.message === "Please enter a valid email"){
+            //         this.setState({emailerr:"Email not found"})
+                //  }
+// >>>>>>> 71c5658bb2dcb7575bc9233a11aa3dcb4f68fe6b
             }
-        
-
         }
         
     }
@@ -182,10 +196,35 @@ export default class LoginScreen extends React.Component {
         
     }
 
+
+    renderLoader(){
+        return(
+            <Modal transparent={true}
+                visible={this.state.isLoading}>
+                <View style={{
+                    flex: 1,
+                    flexDirection: 'row',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    margin: 10
+                }}>
+                    <View style={{
+                        width: "50%",
+                        borderWidth: 1,
+                        borderRadius: 5,borderColor: "#58C4C6",marginBottom: 10}}>
+                        <Text style={styles.modalText}>Please Wait!</Text> 
+                        <ActivityIndicator size="small" color="#000" />
+                    </View>
+                </View>
+            </Modal>
+        )
+    }
+
     render(){
         return(
-           
+               
             <View style={styles.mainContainer}>
+               {this.renderLoader()}
                     <Image
                       source={ImagesWrapper.component}
                       style={{width:220,height:220}}
@@ -296,6 +335,7 @@ export default class LoginScreen extends React.Component {
                 </View>
                 
             </View>
+           
         );
     }
 }
@@ -425,6 +465,39 @@ const styles = StyleSheet.create({
         fontSize:15,
         marginLeft:25,
         // marginTop:-15
-    }
+    },
+    centeredView: {
+        // flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
+        //marginTop : "50%"
+        
+
+
+        
+      },
+      modalView: {
+        margin: 20,
+        backgroundColor: "white",
+        borderRadius: 20,
+        padding: 35,
+        alignItems: "center",
+        shadowColor: "#000",
+        shadowOffset: {
+          width: 0,
+          height: 2
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+        elevation: 5
+      },
+      modalText: {
+        marginBottom: 15,
+        textAlign: "center",
+        fontFamily:Fonts.mulishRegular,
+        color:'#000',
+        fontSize: 20,
+        marginTop: 10
+      }
 
 })

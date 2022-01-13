@@ -48,9 +48,9 @@ import StoragePrefs from '../../res/StoragePrefs';
         this.setState({userId:userDetails.userId})
         DeviceEventEmitter.addListener("refresh",this.getPosts);
         return new Promise((resolve, reject) => {
-            this.getUniversityImages()
-            .then(() => { return this.getUserProfile();})
-            .then(() => {return this.getPosts();})
+            this.getPosts()
+            .then(()=>{return this.getUniversityImages();})
+            .then(() => {return this.getUserProfile();})
             .then(()=>{ resolve('done')})
             .catch((error)=> {reject(error)})
         })
@@ -64,7 +64,7 @@ import StoragePrefs from '../../res/StoragePrefs';
 
     getPosts = async () => {
         //const data = '5ed8d9509e623f00221761a1/All/true/5f5892a1b205b1387d5cafb/All'
-        const data = this.state.universityId+'/All/'+this.state.isProfessional+this.state.userId+'/All'
+        const data = this.state.universityId+'/All/'+this.state.isProfessional+"/"+this.state.userId+'/All'
         const response = await this.apiHandler.requestGet(data,this.serviceUrls.getPosts);
         if(response.posts != null && response.posts.length != 0 ){
             this.setState({postData: response.posts});
@@ -81,7 +81,7 @@ import StoragePrefs from '../../res/StoragePrefs';
             this.setState({isInternet: true})
             alert('No network Connected!')
         } else{
-            if(response.succsess  === true) {
+            if(response.succsess  === true && response.data.length!=0) {
                 this.setState({
                     playerCreatePost: response.data[0].playerCrtPost,
                     coachCreatePost: response.data[0].coachCrtPost
@@ -148,6 +148,7 @@ import StoragePrefs from '../../res/StoragePrefs';
         this.state.leadercolor !== 'green'
             ?(this.setState({leadercolor:'green'})):(this.setState({leadercolor:'black'}))
     }
+
     
     render(){
         return(
@@ -539,6 +540,7 @@ const styles = StyleSheet.create({
         fontSize:14,
         color:'#1E1C24',
     },
+   
    
    
 })
