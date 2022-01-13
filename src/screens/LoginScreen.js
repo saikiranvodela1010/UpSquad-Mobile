@@ -67,44 +67,47 @@ export default class LoginScreen extends React.Component {
         
       }
     async onSubmit(){
+        if(this.state.email === "",this.state.password === ""){
+            // this.setState({passworderr:"Please enter the fields"})
+            alert("Please enter the fields");
+        }else{
         const data = {
             'email': this.state.email,
             'password' : this.state.password
         }
         const response = await this.apiHandler.requestPost(data,this.serviceUrls.loginuser)
       
-        const token = JSON. stringify(response.token);
-        const userId = JSON. stringify(response._id);
-        const userName = JSON. stringify(response.firstName + response.lastName);
-
-        const userDetsils = {
-            "token":response.token,
-            "userId":response.user._id,
-            "userName":response.user.firstName+ " "+response.user.lastName,
-            "userEmail": response.user.email
-        }
-       
-    
         if(response.status == "No network Connected!"){
             this.setState({isInternet: true})
             alert('No network Connected!')
         } else{
             if(response.success  === true) {
+                const userDetsils = {
+                    "token":response.token,
+                    "userId":response.user._id,
+                    "userName":response.user.firstName+ " "+response.user.lastName,
+                    "userEmail": response.user.email
+                }
                 const logindetails=await this.storagePrefs.setObjectValue("userDetails",userDetsils);
-                //console.log('logindetails',logindetails);
+                
                 this.props.navigation.navigate('BioSuccess');
             } else {
-                if(response.msg === "Email not found")
-                this.setState({emailerr:response.msg})
-                if(response.msg === "Wrong password")
-                this.setState({passworderr:response.msg})
+               console.log('logindetails',response.msg);
+                if(response.message){
+                    alert(response.message);
+                }
+              
+                if(response.msg){
+                    alert(response.msg);
+                }
+               
     
             }
         
 
         }
         
-
+    }
 
         // axios.post(this.serviceUrls.loginuser, {
         //     'email':this.state.email,
