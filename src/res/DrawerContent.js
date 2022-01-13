@@ -38,7 +38,7 @@ export default class DrawerContent extends React.Component {
             <View style={{flex:1}}>
                 <DrawerContentScrollView > 
                     <View style={{flex:1,backgroundColor:'#EBF8F8',marginTop:-3,height:'100%'}}>
-                        <View style={{flexDirection:'row',}}>
+                        <View style={{flexDirection:'row',justifyContent:'space-between',flex:1}}>
                       <View>
                     <View style = {styles.displayimage}></View>
                     <Text style={styles.userName}>{this.state.userName}</Text>
@@ -53,7 +53,7 @@ export default class DrawerContent extends React.Component {
                     <Drawer.Section style={{marginTop:15}}>
                         <TouchableOpacity onPress={() => {this.props.navigation.navigate('switchcommunity')}}>
                        <View style={{flexDirection:'row',margin:20,marginLeft:30}} >
-                        <Image source={ImagesWrapper.usersthree}/>
+                        <Image source={ImagesWrapper.recentactivity}/>
                         <Text style={{fontSize:14,fontWeight:'600',fontFamily:Fonts.mulishRegular,marginLeft:20,textAlign:'center',marginTop:5}}>Recent activity</Text>
                   
                      </View> 
@@ -71,7 +71,7 @@ export default class DrawerContent extends React.Component {
                     <Drawer.Section >
                         <TouchableOpacity onPress={() => {this.props.navigation.navigate('switchcommunity')}}>
                        <View style={{flexDirection:'row',margin:20,marginLeft:30}} >
-                        <Image source={ImagesWrapper.usersthree}/>
+                        <Image source={ImagesWrapper.settings}/>
                         <Text style={{fontSize:14,fontWeight:'600',fontFamily:Fonts.mulishRegular,marginLeft:20,textAlign:'center',marginTop:5}}>Settings</Text>
                     
                      </View> 
@@ -80,7 +80,7 @@ export default class DrawerContent extends React.Component {
                     <Drawer.Section >
                         <TouchableOpacity onPress={() => {this.props.navigation.navigate('switchcommunity')}}>
                        <View style={{flexDirection:'row',margin:20,marginLeft:30}} >
-                        <Image source={ImagesWrapper.usersthree}/>
+                        <Image source={ImagesWrapper.question}/>
                         <Text style={{fontSize:14,fontWeight:'600',fontFamily:Fonts.mulishRegular,marginLeft:20,textAlign:'center',marginTop:5}}>FAQ</Text>
                    
                      </View> 
@@ -111,5 +111,7 @@ userName:{
     fontWeight:'600',
     marginLeft:20,
     color:'#1E1C24',
+    width:150
+    // width:'10%',
 }
 });

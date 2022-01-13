@@ -117,40 +117,42 @@ export default class SwitchCommunityScreen extends React.Component {
       this.state.radio_props.map((item,key) => {
         return(
           <View>
-            <View style={{flexDirection:'row'}}>
-              {item.universityLogo === ''?
-               <View style = {styles.displayimage}></View>
-             :
-              <Image source={{uri:item.universityLogo}}  style={{height:40,width:40,marginLeft:25,marginTop:20}}/>
-        }
-              {this.state.checked === key ?
-              <View style={{justifyContent:'space-between',flex:1}}>
-              <TouchableOpacity style={{flexDirection:'row',justifyContent:'space-between',flex:1}}>
-                  <Text style={styles.communitytext}>{item.universityName}</Text>
-                <Image source={ImagesWrapper.radiobtn1} style={styles.radiobtn}/>
-              
-              </TouchableOpacity>
-              
-              </View>
-              :
-              <View style={{justifyContent:'space-between',flex:1}}>
-              <TouchableOpacity onPress={()=>{
-                this.setState({checked:key});
-                this.checked(item);
-                DeviceEventEmitter.emit("refresh");
-            }} 
-            style={{flexDirection:'row',justifyContent:'space-between',flex:1}}
-            >
-                  <Text style={styles.communitytext}>{item.universityName}</Text>
-                 
-                <Image source={ImagesWrapper.radio} style={styles.radiobtn}/>
-                
-              </TouchableOpacity>
-              </View>
-            }
-            </View>
-            <View style={[{borderBottomColor: '#959494',
-        borderBottomWidth: 0.5,marginTop:20,width:'85%',marginRight:25,marginLeft:30}]}></View>
+                    <View style={{flexDirection:'row'}}>
+                      {item.universityLogo === ''?
+                      <View style = {styles.displayimage}></View>
+                    :
+                      <Image source={{uri:item.universityLogo}}  style={{height:40,width:40,marginLeft:25,marginTop:20}}/>
+                }
+                      {this.state.checked === key ?
+                      <View style={{justifyContent:'space-between',flex:1}}>
+                      <TouchableOpacity style={{flexDirection:'row',justifyContent:'space-between',flex:1}}>
+                          <Text style={styles.communitytext}>{item.universityName}</Text>
+                        <Image source={ImagesWrapper.radiobtn1} style={styles.radiobtn}/>
+                      
+                      </TouchableOpacity>
+                      
+                      </View>
+                      :
+                      <View style={{justifyContent:'space-between',flex:1}}>
+                      <TouchableOpacity onPress={()=>{
+                        this.setState({checked:key});
+                        this.checked(item);
+                        DeviceEventEmitter.emit("refresh");
+                    }} 
+                    style={{flexDirection:'row',justifyContent:'space-between',flex:1}}
+                    >
+                          <Text style={styles.communitytext}>{item.universityName}</Text>
+                        
+                        <Image source={ImagesWrapper.radio} style={styles.radiobtn}/>
+                        
+                      </TouchableOpacity>
+                      </View>
+                    }
+                    </View>
+                    <View style={[{borderBottomColor: '#959494',
+                borderBottomWidth: 0.5,marginTop:20,width:'85%',marginRight:25,marginLeft:30}]}></View>
+
+               
             </View>
         )
 
@@ -159,7 +161,11 @@ export default class SwitchCommunityScreen extends React.Component {
     }
 
   </View>
-
+      <TouchableOpacity onPress={()=>{this.props.navigation.navigate('AddCommunityScren')}}>
+        <View style={styles.linearGradient}>
+            <Text style={styles.buttonText}>Add new ommunity</Text>
+      </View>
+      </TouchableOpacity>
 </View>
 
             </SafeAreaView>
@@ -213,4 +219,26 @@ const styles = StyleSheet.create({
       // justifyContent:'center'
       marginLeft:25,marginTop:20
   },
+  buttonText: {
+    fontSize: 16,
+    fontFamily:Fonts.mulishRegular,
+    textAlign: 'center',
+    margin: 10,
+    color: '#58C4C6',
+    backgroundColor: 'transparent',
+    fontWeight:'600',
+    // marginBottom:20
+},
+linearGradient: {
+    width:'85%',
+    borderRadius:30,
+    alignItems:"center",
+    justifyContent:'center',
+    marginLeft: 30,
+    height: 55,
+    marginRight: 30,
+    borderWidth:1,
+   borderColor:'#58C4C6',
+   marginTop:30
+},
     });
