@@ -21,4 +21,5 @@ export default class ServiceUrls {
     getPosts = this.socialUrl+'/feed/posts/';
     getPost = this.socialUrl+'/feed/post/';
     postComment = this.socialUrl+'/feed/comment/'
+    postLike = this.socialUrl+'/feed/post/like'
 }
