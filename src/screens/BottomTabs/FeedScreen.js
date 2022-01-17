@@ -1,5 +1,5 @@
 import React from 'react'
-import {  View, Text, StyleSheet, TouchableOpacity, Image,TextInput,SafeAreaView,Platform,FlatList, DeviceEventEmitter} from 'react-native';
+import {  View, Text, StyleSheet, TouchableOpacity, Image,TextInput,SafeAreaView,Platform,FlatList, DeviceEventEmitter,ActivityIndicator,} from 'react-native';
 import ImagesWrapper from '../../res/ImagesWrapper';
 import Fonts from '../../res/Fonts';
 import { ScrollView } from 'react-native-gesture-handler';
@@ -34,32 +34,72 @@ import StoragePrefs from '../../res/StoragePrefs';
             communityName:'',
             userId: '',
             universityId: '',
+            isLoading: false,
+            email : '',
+            userId: '',
+            universityName: '',
+            
         }
        
     }
 
     async componentDidMount(){
-        const universityDetsils = await this.storagePrefs.getObjectValue("universityDetsils")
-        this.setState({
-            communityName:universityDetsils.universityName,
-            universityId : universityDetsils._id
-        });
+        this.setState({isLoading: true})
+        // const universityDetsils = await this.storagePrefs.getObjectValue("universityDetsils")
+        //console.log("ravikiran#$#$#$",universityDetsils)
+        // this.setState({
+        //     communityName:universityDetsils.universityName,
+        //     universityId : universityDetsils._id
+        // });
         const userDetails = await this.storagePrefs.getObjectValue("userDetails")
-        this.setState({userId:userDetails.userId})
+        this.setState({
+            userId:userDetails.userId,        
+            userId : userDetails.userId,
+            email : userDetails.userEmail
+        })
         DeviceEventEmitter.addListener("refresh",this.getPosts);
         return new Promise((resolve, reject) => {
-            this.getPosts()
+            this.getCommunityDetails()
+            .then(()=>{return this.getPosts();})
             .then(()=>{return this.getUniversityImages();})
             .then(() => {return this.getUserProfile();})
+            .then(() => {return  this.setState({isLoading: false})})
             .then(()=>{ resolve('done')})
-            .catch((error)=> {reject(error)})
+            .catch((error)=> {this.setState({isLoading: false});
+                                 reject(error)})
         })
         
     }
     async componentDidUpdate(){
         const universityDetsils = await this.storagePrefs.getObjectValue("universityDetsils")
-        // console.log('universityDetsils',universityDetsils);
         this.setState({communityName:universityDetsils.universityName});
+    }
+
+    async getCommunityDetails() {
+        const communityData={
+          "email": this.state.email,
+          "userID": this.state.userId
+        }
+        const response = await this.apiHandler.requestPost(communityData,this.serviceUrls.getCommunities);
+        if(response.data!=null && response.data.length>0){
+            this.setState({
+              universityName:response.data[0].universityName,
+              universityId: response.data[0]._id,
+              communityName: response.data[0].universityName,
+            });
+          } else{
+            this.setState({
+              universityName:"",
+              universityId: "",
+              communityName: ""
+            });
+          }
+          const universityDetsils =  {
+            "_id":this.state.universityId,
+            "universityName":this.state.universityName,
+           }
+           console.log("ravikiran1234567",universityDetsils)
+           const data = await this.storagePrefs.setObjectValue("universityDetsils",universityDetsils);
     }
 
     getPosts = async () => {
@@ -149,11 +189,34 @@ import StoragePrefs from '../../res/StoragePrefs';
             ?(this.setState({leadercolor:'green'})):(this.setState({leadercolor:'black'}))
     }
 
+    renderLoader(){
+        return(
+            <Modal transparent={true}
+                visible={this.state.isLoading}>
+                <View style={{
+                    flex: 1,
+                    flexDirection: 'row',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    margin: 10
+                }}>
+                    <View style={{
+                        width: "80%",
+                        borderWidth: 1,
+                        borderRadius: 5,borderColor: "#58C4C6",marginBottom: 10}}>
+                        <Text style={styles.modalText}>Please Wait!</Text> 
+                        <ActivityIndicator size="small" color="#000" />
+                    </View>
+                </View>
+            </Modal>
+        )
+    }
+
     
     render(){
         return(
             <SafeAreaView style={{flex:1,backgroundColor:'#FFFFFF'}}>
-                
+                {this.renderLoader()}
                     <View style={[styles.header]}>
                     <TouchableOpacity onPress={()=> this.props.navigation.openDrawer()}>
                     <Image source={ImagesWrapper.profile}
@@ -162,13 +225,14 @@ import StoragePrefs from '../../res/StoragePrefs';
                     </TouchableOpacity>
                     <Text style={{ fontSize: 20, fontFamily: Fonts.mulishSemiBold, fontWeight: '600',color:'#1E1C24', marginLeft: '5%' }}>{this.state.communityName}</Text>
                     <View style={{justifyContent:'flex-end',flexDirection:'row',flex:1}}>
-                    <TouchableOpacity  style={{marginRight:'18%'}} onPress={() => this.props.navigation.navigate('notificationscreen')}>
-                    <Image source={ImagesWrapper.notificationNo}
-                    ></Image>
+                    <TouchableOpacity   
+                    style = {{marginRight:'8%'}}
+                    onPress={() => this.props.navigation.navigate('notificationscreen')}>
+                    <Image source={ImagesWrapper.notificationNo}></Image>
                     </TouchableOpacity>
                 
                     <TouchableOpacity 
-                    style={{marginRight:'18%'}}
+                    style={{marginRight:'10%'}}
                     onPress={() => this.props.navigation.navigate('chatscreen')}
                     >
                     <Image source={ImagesWrapper.chatNo}
@@ -182,7 +246,7 @@ import StoragePrefs from '../../res/StoragePrefs';
                     renderItem={({item})=> (
                         <View>
                             <View style={{flexDirection:'row',justifyContent:'space-between',marginTop:15,marginLeft:18}}>
-                            <View style={{flexDirection:'row',marginTop:10,marginLeft:10,}}>
+                            <View style={{flexDirection:'row',marginTop:'2%',marginRight:'5%',}}>
                                 <Image source={{uri : "https://www.careerquo.com/assets/images/18.png"}}
                                     style = {{width: 24, height: 24}}/> 
                                 <Text style={[styles.post,{padding:-8,marginLeft:8,fontSize:16}]}>{item.creator.firstName} {item.creator.lastName}</Text>
@@ -190,14 +254,14 @@ import StoragePrefs from '../../res/StoragePrefs';
                                     {moment(item.createdAt).fromNow()}
                                 </Text>
                             </View>
-                            {item.creator._id != '' ?<TouchableOpacity onPress={()=> this.setState({dotsmemu:true})}>
+                            {item.creator._id == this.state.userId ?<TouchableOpacity onPress={()=> this.setState({dotsmemu:true})}>
                                     <Image source={ImagesWrapper.dotsmenu}
                                         style={{marginTop:13,marginRight:18}}
                                     />
                                 </TouchableOpacity> : null }
                             
                             </View>
-                            <Text style={{fontSize:14,fontWeight:'400',fontFamily:Fonts.mulishSemiBold,color:'#868585',marginLeft:25,marginRight:22}}>
+                            <Text style={{fontSize:14,fontWeight:'400',fontFamily:Fonts.mulishSemiBold,color:'#868585',marginLeft:25,marginRight:22,marginTop:12}}>
                                 {item.content}
                             </Text>
                             {item.postImage !=null && item.postImage.length >0 ? 
@@ -540,6 +604,14 @@ const styles = StyleSheet.create({
         fontSize:14,
         color:'#1E1C24',
     },
+    modalText: {
+        marginBottom: 15,
+        textAlign: "center",
+        fontFamily:Fonts.mulishRegular,
+        color:'#000',
+        fontSize: 20,
+        marginTop: 10
+      }
    
    
    
@@ -548,3 +620,5 @@ const styles = StyleSheet.create({
 
 
 export default MeetingsScreen;
+
+

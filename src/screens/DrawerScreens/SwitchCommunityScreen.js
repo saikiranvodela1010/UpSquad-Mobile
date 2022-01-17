@@ -40,7 +40,6 @@ export default class SwitchCommunityScreen extends React.Component {
         email : userDetails.userEmail
       })
       await this.getCommunityDetails();
-
   }
 
   async getCommunityDetails() {

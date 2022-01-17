@@ -1,5 +1,5 @@
 import React from 'react'
-import {  View, Text, StyleSheet, TouchableOpacity, Image,TextInput,SafeAreaView,Platform,FlatList, ScrollView, DeviceEventEmitter} from 'react-native';
+import {  View, Text, StyleSheet, TouchableOpacity, Image,TextInput,SafeAreaView,Platform,FlatList, ScrollView, DeviceEventEmitter,Modal,ActivityIndicator} from 'react-native';
 import ImagesWrapper from '../../res/ImagesWrapper';
 import Fonts from '../../res/Fonts';
 import ServiceUrls from '../../network/ServiceUrls';
@@ -22,21 +22,24 @@ export default class CommentScreen extends React.Component {
             comments:[],
             postId: "",
             userId : "",
-            CommentsContent: ""
+            CommentsContent: "",
+            isLoading: false,
         }
        
     }
 
     async componentDidMount() {
+        this.setState({isLoading: true})
         const userDetails = await this.storagePrefs.getObjectValue("userDetails")
         const content = this.props.route.params.content;
         const postID = this.props.route.params.postID;
-        const data = postID
-        const response = await this.apiHandler.requestGet(data,this.serviceUrls.getPost);
         const creatorImg = this.props.route.params.creatorImg
         const firstName = this.props.route.params.firstName;
         const lastName = this.props.route.params.lastName;
         const postCreatedAt = this.props.route.params.postCreatedAt;
+        const data = postID
+        const response = await this.apiHandler.requestGet(data,this.serviceUrls.getPost);
+
         const comment = response.post.comments;
         const postId = response.post._id;
         //const userID = "6138c38d4cfd1f6ccac4af0d"
@@ -52,6 +55,7 @@ export default class CommentScreen extends React.Component {
             postId : postId,
             userId : userID
         })
+        this.setState({isLoading: false})
         DeviceEventEmitter.addListener("UpdateComments",this.updateComments)
     }
 
@@ -100,34 +104,59 @@ export default class CommentScreen extends React.Component {
                         }}
                     />
                     </TouchableOpacity>
-                    <Text style={{ fontSize: 20, fontFamily: Fonts.mulishSemiBold, fontWeight: "600" ,color:'#1E1C24',lineHeight:25.1,marginLeft: '5%',marginTop: '1%' }}>Post Comments</Text>
+                    <Text style={{ fontSize: 20, fontFamily: Fonts.mulishRegular, fontWeight: "600" ,color:'#1E1C24',lineHeight:25.1,marginLeft: '5%',marginTop: '1%' }}>Post Comments</Text>
                     
             </View>
             <View style={{ borderWidth: 1, borderColor: '#F1F1F1',marginTop:22}}></View>
             </SafeAreaView>
         )
     }
+
+    renderLoader(){
+        return(
+            <Modal transparent={true}
+                visible={this.state.isLoading}>
+                <View style={{
+                    flex: 1,
+                    flexDirection: 'row',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    margin: 10
+                }}>
+                    <View style={{
+                        width: "80%",
+                        borderWidth: 1,
+                        borderRadius: 5,borderColor: "#58C4C6",marginBottom: 10}}>
+                        <Text style={styles.modalText}>Please Wait!</Text> 
+                        <ActivityIndicator size="small" color="#000" />
+                    </View>
+                </View>
+            </Modal>
+        )
+    }
+
     render(){
         return(
             
         <SafeAreaView style = {{backgroundColor : '#FFFFFF',flex: 1}}>
             {this.renderHeader()}
+            {this.renderLoader()}
             <View style={{flexDirection:'row',marginTop:30,marginLeft:24,}}>
                 <Image source={{uri : this.state.creatorImg}}
                 style = {{width: 24, height: 24}}/> 
                 <Text style = {styles.name}>{this.state.firstName} {this.state.lastName}</Text>
-                <Text style  = {styles.createdAT}>{moment(this.state.postCreatedAt).fromNow()}</Text>
+                <Text style  = {styles.createdAT}>{moment(this.state.postCreatedAt).fromNow() == 'Invalid date' ? null  : moment(this.state.postCreatedAt).fromNow()}</Text>
             </View>
             
             <Text style={styles.content}>{this.state.content}</Text>
             <View style={{ borderWidth: 1, borderColor: '#F1F1F1',marginTop:22}}></View>
             <View style = {{flexDirection: 'column', marginLeft: 24}}>
                 <View style = {{flexDirection:'row',alignContent: 'center'}}>
-                    <View style = {{borderRadius: 20, borderWidth : 1,width :330 ,height :40,borderColor: "#F1F1F1",marginTop:27,justifyContent: 'center',}}>
+                    <View style = {{borderRadius: 20, borderWidth : 1,width :'80%' ,height :40,borderColor: "#F1F1F1",marginTop:27,justifyContent: 'center',}}>
                         <TextInput style = {{marginLeft:24,flex :0.65}}
                             placeholder="Add Comment"
                             placeholderTextColor= '#868585'
-                            placeholderStyle= {{fontFamily: Fonts.mulishSemiBold,fontWeight:400,fontSize:14,paddingBottom: 100}}
+                            placeholderStyle= {{fontFamily: Fonts.mulishRegular,fontWeight:400,fontSize:14,paddingBottom: 100}}
                             multiline = {true}
                             onChangeText={(text) => {this.setState({CommentsContent: text})}}
                             value={this.state.CommentsContent}
@@ -180,11 +209,11 @@ const styles = StyleSheet.create({
         // paddingLeft: '9%',
         marginTop: Platform.OS == 'ios'? 0 : 25,
         marginBottom: 25,
-        fontFamily: Fonts.mulishSemiBold,
+        fontFamily: Fonts.mulishRegular,
         // borderBottomWidth:1
       },
       writeText: {
-        fontFamily: Fonts.mulishSemiBold,
+        fontFamily: Fonts.mulishRegular,
         fontSize: 14,
         fontWeight: '600',
         marginStart: 24
@@ -193,7 +222,7 @@ const styles = StyleSheet.create({
     post:{
         fontSize:14,
         color:'#1E1C24',
-        fontFamily:Fonts.mulishSemiBold,
+        fontFamily:Fonts.mulishRegular,
         fontWeight:'600',
         padding:10,
         // marginLeft:10
@@ -201,14 +230,14 @@ const styles = StyleSheet.create({
     comment:{
         fontSize:14,
         color:'#1E1C24',
-        fontFamily:Fonts.mulishSemiBold,
+        fontFamily:Fonts.mulishRegular,
         fontWeight:'600',
         padding:10,
         marginTop: 30
     },
     name: {
         color:'#1E1C24',
-        fontFamily:Fonts.mulishSemiBold,
+        fontFamily:Fonts.mulishRegular,
         fontWeight:'600',
         padding: 2,
         marginLeft:8,
@@ -217,7 +246,7 @@ const styles = StyleSheet.create({
     },
     createdAT: {
         color:'#B1AAAA',
-        fontFamily:Fonts.mulishSemiBold,
+        fontFamily:Fonts.mulishRegular,
         fontWeight:'600',
         padding:15,
         marginLeft:5,
@@ -228,7 +257,7 @@ const styles = StyleSheet.create({
     content : {
         fontSize:14,
         fontWeight:'400',
-        fontFamily:Fonts.mulishSemiBold,
+        fontFamily:Fonts.mulishRegular,
         color:'#868585',
         marginLeft:24,
         marginRight:22, 
@@ -236,7 +265,7 @@ const styles = StyleSheet.create({
     },
     commenterName: {
         color:'#000000',
-        fontFamily:Fonts.mulishSemiBold,
+        fontFamily:Fonts.mulishRegular,
         fontWeight:'600',
         padding: 2,
         marginLeft:8,
@@ -245,7 +274,7 @@ const styles = StyleSheet.create({
     },
     commentCreatedAT: {
         color:'#B1AAAA',
-        fontFamily:Fonts.mulishSemiBold,
+        fontFamily:Fonts.mulishRegular,
         fontWeight:'400',
         padding:15,
         marginLeft:5,
@@ -254,13 +283,21 @@ const styles = StyleSheet.create({
         lineHeight:15.06
     },
     commentContent : {
-        fontFamily:Fonts.mulishSemiBold,
+        fontFamily:Fonts.mulishRegular,
         fontWeight:'400',
         fontSize:14,
         lineHeight:17.57,
         color:'#868585',
         marginTop:5,
         marginLeft :10
-    }
+    },
+    modalText: {
+        marginBottom: 15,
+        textAlign: "center",
+        fontFamily:Fonts.mulishRegular,
+        color:'#000',
+        fontSize: 20,
+        marginTop: 10
+      }
 })
 

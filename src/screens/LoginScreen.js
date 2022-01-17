@@ -62,25 +62,14 @@ export default class LoginScreen extends React.Component {
         
       }
     async onSubmit(){
-// <<<<<<< HEAD
-        if(this.state.email === "",this.state.password === ""){
-            // this.setState({passworderr:"Please enter the fields"})
-            alert("Please enter the fields");
-        }else{
-// =======
         this.setState({
             isLoading: true
         })
-// >>>>>>> 71c5658bb2dcb7575bc9233a11aa3dcb4f68fe6b
         const data = {
             'email': this.state.email,
             'password' : this.state.password
         }
         const response = await this.apiHandler.requestPost(data,this.serviceUrls.loginuser)
-// <<<<<<< HEAD
-      
-// =======
-// >>>>>>> 71c5658bb2dcb7575bc9233a11aa3dcb4f68fe6b
         if(response.status == "No network Connected!"){
             this.setState({isLoading: false, isInternet: true})
             alert('No network Connected!')
@@ -94,34 +83,18 @@ export default class LoginScreen extends React.Component {
                     "userEmail": response.user.email
                 }
                 const logindetails=await this.storagePrefs.setObjectValue("userDetails",userDetsils);
-// <<<<<<< HEAD
-                
                 this.props.navigation.navigate('BioSuccess');
             } else {
-               console.log('logindetails',response.msg);
-                if(response.message){
-                    alert(response.message);
+               if(response.msg === "Wrong password"){
+                    this.setState({passworderr:response.msg})
+                } else if(response.msg === "Email not found" || 
+                    response.data.message!=null && response.data.message != undefined && response.data.message === "Please enter a valid email"){
+                    this.setState({emailerr:"Email not found"})
                 }
-              
-                if(response.msg){
-                    alert(response.msg);
-                }
-               
-    
-// =======
-            //     this.props.navigation.navigate('BioSuccess');
-            // } else {
-            //      if(response.msg === "Wrong password"){
-            //         this.setState({passworderr:response.msg})
-            //      } else if(response.msg === "Email not found" || 
-            //         response.data.message!=null && response.data.message != undefined && response.data.message === "Please enter a valid email"){
-            //         this.setState({emailerr:"Email not found"})
-                //  }
-// >>>>>>> 71c5658bb2dcb7575bc9233a11aa3dcb4f68fe6b
-            }
+            }            
         }
         
-    }
+    
 
         // axios.post(this.serviceUrls.loginuser, {
         //     'email':this.state.email,

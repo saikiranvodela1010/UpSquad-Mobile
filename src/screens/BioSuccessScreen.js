@@ -48,14 +48,7 @@ class BioSuccessScreen extends React.Component{
 
 
     render() {
-
-      
-
-
-
         return(
-          
-        
             <Tab.Navigator 
             initialRouteName='Feed'
             screenOptions={{
@@ -64,8 +57,8 @@ class BioSuccessScreen extends React.Component{
               height:Platform.OS ==='ios'?80:70,paddingBottom:Platform.OS ==='ios'?30:10,paddingTop:10
             }
             }}
-            tabBarOptions={{
-             
+            screenOptions={{
+              headerShown: false,
               activeTintColor: '#58C4C6',
               labelStyle:{fontSize:12,fontFamily:'Mulish-Regular',fontWeight:'400'},
               style: {
