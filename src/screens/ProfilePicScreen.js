@@ -145,6 +145,8 @@ const askPermission = async () => {
     const signupdetails = await storagePrefs.getObjectValue("signupdetails")
     console.log('signupdetails',signupdetails);
   }
+
+
   async function onSubmit () {
     const signupdetails = await storagePrefs.getObjectValue("signupdetails")
     console.log('signupdetails',signupdetails);
