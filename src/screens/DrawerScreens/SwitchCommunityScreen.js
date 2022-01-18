@@ -104,11 +104,11 @@ export default class SwitchCommunityScreen extends React.Component {
                 margin: 10
             }}>
                 <View style={{
-                    width: "50%",
+                    width: "25%",
+                    height: "10%",
                     borderWidth: 1,
-                    borderRadius: 5,borderColor: "#58C4C6",marginBottom: 10}}>
-                    <Text style={styles.modalText}>Please Wait!</Text> 
-                    <ActivityIndicator size="small" color="#000" />
+                    borderRadius: 5,borderColor: "#58C4C6",marginBottom: 10 ,backgroundColor: '#58C4C6',justifyContent: 'center' }}>
+                    <ActivityIndicator size="large" color="#fff" />
                 </View>
             </View>
         </Modal>
