@@ -121,15 +121,8 @@ export default class PlayersScreen extends React.Component {
             <View style={{ flex: 1, backgroundColor: '#FFFFFF' }}>
 
                 <View style={{ flexDirection: 'row', marginTop: 20, marginBottom: 5 }}>
-                    <TouchableOpacity onPress={() => {
-                        Keyboard.dismiss
-                        this.setState({
-                            search: false,
-                            searchText: ''
-                        })
-                        this.props.navigation.navigate('tabbar1')
-
-                    }}>
+                    <TouchableOpacity onPress={() => 
+                        this.props.navigation.goBack(null)}>
                         <Image
                             source={ImagesWrapper.back}
                             style={{
