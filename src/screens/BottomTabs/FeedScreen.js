@@ -223,7 +223,7 @@ import StoragePrefs from '../../res/StoragePrefs';
                     style={{marginLeft:25}}
                     ></Image>
                     </TouchableOpacity>
-                    <Text style={{ fontSize: 20, fontFamily: Fonts.mulishSemiBold, fontWeight: '600',color:'#1E1C24', marginLeft: '5%' }}>{this.state.communityName}</Text>
+                    <Text style={{ fontSize: 20, fontFamily: Fonts.mulishSemiBold, fontWeight: '600',color:'#1E1C24', marginLeft: '5%',width:170}}>{this.state.communityName}</Text>
                     <View style={{justifyContent:'flex-end',flexDirection:'row',flex:1}}>
                     <TouchableOpacity   
                     style = {{marginRight:'8%'}}

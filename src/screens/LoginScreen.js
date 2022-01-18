@@ -80,7 +80,9 @@ export default class LoginScreen extends React.Component {
                     "token":response.token,
                     "userId":response.user._id,
                     "userName":response.user.firstName+ " "+response.user.lastName,
-                    "userEmail": response.user.email
+                    "userEmail": response.user.email,
+                    "firstName":response.user.firstName,
+                    "lastName":response.user.lastName,
                 }
                 const logindetails=await this.storagePrefs.setObjectValue("userDetails",userDetsils);
                 this.props.navigation.navigate('BioSuccess');
@@ -194,6 +196,7 @@ export default class LoginScreen extends React.Component {
     }
 
     render(){
+        
         return(
                
             <View style={styles.mainContainer}>

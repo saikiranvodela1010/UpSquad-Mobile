@@ -1,16 +1,16 @@
 import React from 'react';
-import { View, Text, StyleSheet, SafeAreaView, Image, TouchableOpacity, ImageBackground, Platform,FlatList } from 'react-native';
+import { View, Text, StyleSheet, SafeAreaView, Image, TouchableOpacity, ImageBackground, Platform,FlatList, DeviceEventEmitter,Modal,ActivityIndicator } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 // import CheckBox from 'react-native-check-box';
 // import { Checkbox } from 'react-native-paper';
 import LinearGradient from 'react-native-linear-gradient';
-import ImagesWrapper from '../res/ImagesWrapper';
-import Fonts from '../res/Fonts';
-import APIHandler from '../network/NetWorkOperations';
-import ServiceUrls from '../network/ServiceUrls';
+import ImagesWrapper from '../../res/ImagesWrapper';
+import Fonts from '../../res/Fonts';
+import APIHandler from '../../network/NetWorkOperations';
+import ServiceUrls from '../../network/ServiceUrls';
 import CheckBox from 'react-native-check-box'
 import _ from 'lodash'
-import StoragePrefs from '../res/StoragePrefs';
+import StoragePrefs from '../../res/StoragePrefs';
 
 
 class TeamScreen extends React.Component {
@@ -43,21 +43,30 @@ class TeamScreen extends React.Component {
             // userData from signup screen
 
             subscriptioncode: props.route.params.subscriptioncode,
-            email:props.route.params.email,
-            firstName:props.route.params.firstName,
-            lastName:props.route.params.lastName,
-            password:props.route.params.password,
+            email:"",
+            isLoading: false
            
         }
     }
 
     async componentDidMount() {
-    
-        await this.getroleDetails();
+        const userDetails = await this.storagePrefs.getObjectValue("userDetails")
+        this.setState({
+          userId : userDetails.userId,
+          email : userDetails.userEmail
+        })
+      this.getroleDetails();
 
     }
+    // async componentDidUpdate(){
+    //  await this.getroleDetails();
+
+    // }
     
     async getroleDetails() {
+        this.setState({
+            isLoading: true
+        })
       console.log('signupdetals',this.state.email)
         const data= {
             "subscriptionCodes": [this.state.subscriptioncode]
@@ -65,9 +74,11 @@ class TeamScreen extends React.Component {
         const response = await this.apiHandler.requestPost(data,this.serviceUrls.roleDetails)
      
         if(response.status == "No network Connected!"){
+            this.setState({isLoading: false})
             this.setState({isInternet: true})
             alert('No network Connected!')
         } else{
+            this.setState({isLoading: false})
             if(response.Status  === 'Success') {
                 // this.props.navigation.navigate('BioSuccess');
                 this.setState({playerRename:response.data[0].playerRename})
@@ -98,40 +109,41 @@ class TeamScreen extends React.Component {
           
           
     // Register Api calling
-            console.log('player',this.state.isProfessional)
+//             console.log('player',this.state.isProfessional)
 
-        const registerData = {
-            "email": this.state.email,
-            "firstName":this.state.firstName,
-            "isProfessional": this.state.isProfessional,
-            "lastName": this.state.lastName,
-            "password": this.state.password,
-        }
-console.log("registerData",registerData)
-        const response = await this.apiHandler.requestPost(registerData,this.serviceUrls.userRegister);
+//         const registerData = {
+//             "email": this.state.email,
+//             "firstName":this.state.firstName,
+//             "isProfessional": this.state.isProfessional,
+//             "lastName": this.state.lastName,
+//             "password": this.state.password,
+//         }
+// console.log("registerData",registerData)
+//         const response = await this.apiHandler.requestPost(registerData,this.serviceUrls.userRegister);
        
 
-        if(response.status == "No network Connected!"){
-            this.setState({isInternet: true})
-            alert('No network Connected!')
-        } else{
-            if(response.success === true){
-                this.setState({userId:response.user._id})
-                    const signupdetails={
-                        "token":response.token,
-                        "email":response.user.email,
-                        "firstName":response.user.firstName,
-                        "lastName":response.user.lastName,
-                        "password": this.state.password,
-                    }
-              await this.storagePrefs.setObjectValue("signupdetails",signupdetails);
+//         if(response.status == "No network Connected!"){
+//             this.setState({isInternet: true})
+//             alert('No network Connected!')
+//         } else{
+//             if(response.success === true){
+//                 this.setState({userId:response.user._id})
+//                     const signupdetails={
+//                         "token":response.token,
+//                         "email":response.user.email,
+//                         "firstName":response.user.firstName,
+//                         "lastName":response.user.lastName,
 
-            }
+//                     }
+//               await this.storagePrefs.setObjectValue("signupdetails",signupdetails);
 
-        }
+//             }
+
+//         }
         
 //  UpdateTeams api caling
-        if(this.state.subscriptioncode !== ""){ 
+       
+            
             const UpdateTeams = {
                 "teamData":[
                         {
@@ -155,15 +167,13 @@ console.log("registerData",registerData)
                 alert('No network Connected!')
             } 
 
-            if(response.success === true && updateTeamsresponse.succsess === true){
-                this.props.navigation.navigate('Account');
+            if(updateTeamsresponse.succsess === true){
+                // DeviceEventEmitter.emit("done");
+                // this.props.navigation.navigate('switchcommunity');
+                this.props.navigation.openDrawer();
             }
 
-        }else{
-            if(response.success === true ){
-                this.props.navigation.navigate('Account');
-            }
-        }
+       
 
     }
 
@@ -192,9 +202,53 @@ console.log("registerData",registerData)
 
         }
     }
+
+    renderLoader(){
+        return(
+            <Modal transparent={true}
+                visible={this.state.isLoading}>
+                <View style={{
+                    flex: 1,
+                    flexDirection: 'row',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    margin: 10
+                }}>
+                    <View style={{
+                        width: "50%",
+                        borderWidth: 1,
+                        borderRadius: 5,borderColor: "#58C4C6",marginBottom: 10}}>
+                        <Text style={styles.modalText}>Please Wait!</Text> 
+                        <ActivityIndicator size="small" color="#000" />
+                    </View>
+                </View>
+            </Modal>
+        )
+    }
+    
+
     render() {
         return (
             <SafeAreaView style={{ flex: 1,backgroundColor:'#FFFFFF' }}>
+                 {this.renderLoader()}
+                  <View style={styles.header}>
+                    <TouchableOpacity onPress={() => {
+                      // this.props.navigation.openDrawer();
+                      this.props.navigation.navigate('AddCommunityScren'
+                          // back:this.state.back,
+                          );
+                    }}>
+                        <Image
+                            source={ImagesWrapper.back}
+                            // style={{marginLeft:25}}
+                        />
+                    </TouchableOpacity>
+                    <Text style={styles.memphistalk}>Add Community</Text>
+                   
+
+                </View>
+                <View style={styles.underline}></View>
+                <Text style={[styles.memphistalk,{marginTop:20,marginLeft:30}]}>Step 2 of 2</Text>
                 <Text style={styles.title}>What's your role?</Text>
                 <View style={{ flexDirection: 'row', marginTop: 25, }}>
                     
@@ -219,7 +273,7 @@ console.log("registerData",registerData)
                                 <Text style={{ borderWidth: 3, width: '12%', height: 20, borderColor: '#ffffff', borderRadius: 10, marginRight: 10, marginLeft: 10 }}></Text>
                                 {this.state.playerRename !== ""?
                                     
-                                    <Text style={styles.player}>{this.state.codeResponse.data[0].playerRename}</Text>
+                                    <Text style={styles.player}>{this.state.playerRename}</Text>
                                    :
                                    <Text style={styles.player}>Player</Text>
                                 } 
@@ -244,7 +298,7 @@ console.log("registerData",registerData)
                                     <Text style={{ borderWidth: 3, width: '12%', height: 20, borderColor: '#F1F1F1', borderRadius: 10, marginRight: 10, marginLeft: 10 }}></Text>
                                   {this.state.coachRename !== '' ?
 
-                                    <Text style={styles.coach}>{this.state.codeResponse.data[0].coachRename}</Text>
+                                    <Text style={styles.coach}>{this.state.coachRename}</Text>
                                      :
                                      <Text style={styles.coach}>Coach</Text>
                              } 
@@ -275,7 +329,7 @@ console.log("registerData",registerData)
                                    
                                     {this.state.playerRename !== ""?
                                     
-                                    <Text style={styles.player}>{this.state.codeResponse.data[0].playerRename}</Text>
+                                    <Text style={styles.player}>{this.state.playerRename}</Text>
                                    :
                                    <Text style={styles.player}>Player</Text>
                                 } 
@@ -307,7 +361,7 @@ console.log("registerData",registerData)
                                 <Text style={{ borderWidth: 3, width: '12%', height: 20, borderColor: '#ffffff', borderRadius: 10, marginRight: 10, marginLeft: 10 }}></Text>
                                 {this.state.coachRename !== '' ?
 
-                                <Text style={styles.coach}>{this.state.codeResponse.data[0].coachRename}</Text>
+                                <Text style={styles.coach}>{this.state.coachRename}</Text>
                                 :
                                 <Text style={styles.coach}>Coach</Text>
                                 } 
@@ -390,7 +444,7 @@ console.log("registerData",registerData)
                             <LinearGradient start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }} colors={['rgba(33, 43, 104, 1)', 'rgba(88, 196, 198, 1)']} style={[styles.linearGradient1, Platform.OS === "ios" ? { marginTop: '6%' } : { marginTop: '6%' }]}>
 
                                 <Text style={styles.nextbtn}>
-                                    Submit
+                                    Done
                                 </Text>
 
                             </LinearGradient>
@@ -417,7 +471,7 @@ const styles = StyleSheet.create({
         color: '#1E1C24',
         fontSize: 16,
         marginLeft: '6%',
-        marginTop: '10%',
+        marginTop: '5%',
     },
     recBox1: {
         borderWidth: 1,
@@ -593,7 +647,31 @@ const styles = StyleSheet.create({
         fontWeight: '600',
         marginBottom:'5%'
 
-    }
+    },
+    memphistalk:{ 
+        fontSize: 20,
+         fontFamily: Fonts.mulishSemiBold,
+          fontWeight: '600',
+          color:'#1E1C24',
+           marginLeft: '5%'
+    },
+    header: {
+        // flex: 1,
+        flexDirection: 'row',
+        alignItems: 'center',
+        paddingLeft: '9%',
+        marginTop: 20,
+        marginBottom: 20,
+        flexDirection:'row',
+        marginLeft:-10
+        // borderBottomWidth:1
+      },
+      underline:{
+        borderBottomColor: '#959494',
+        borderBottomWidth: 0.5,
+        marginLeft:'auto',
+        width:'100%'
+    },
 });
 
 export default TeamScreen;

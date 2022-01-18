@@ -69,7 +69,7 @@ export default class DrawerContent extends React.Component {
                      </TouchableOpacity>
                     </Drawer.Section> 
                     <Drawer.Section >
-                        <TouchableOpacity onPress={() => {this.props.navigation.navigate('switchcommunity')}}>
+                        <TouchableOpacity onPress={() => {this.props.navigation.navigate('SeetingScreen')}}>
                        <View style={{flexDirection:'row',margin:20,marginLeft:30}} >
                         <Image source={ImagesWrapper.settings}/>
                         <Text style={{fontSize:14,fontWeight:'600',fontFamily:Fonts.mulishRegular,marginLeft:20,textAlign:'center',marginTop:5}}>Settings</Text>

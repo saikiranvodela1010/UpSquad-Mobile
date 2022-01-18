@@ -20,5 +20,6 @@ export default class ServiceUrls {
     getUserProfile = this.socialUrl+'/user/profile/';
     getPosts = this.socialUrl+'/feed/posts/';
     getPost = this.socialUrl+'/feed/post/';
-    postComment = this.socialUrl+'/feed/comment/'
+    postComment = this.socialUrl+'/feed/comment/';
+    addcommunity = this.mainUrl + '/subscriptionUsers/addSubscriptionCode';
 }

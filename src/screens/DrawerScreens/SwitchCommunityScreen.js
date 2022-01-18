@@ -1,5 +1,6 @@
 import React from 'react'
-import {  View, Text, StyleSheet, TouchableOpacity,Image, DeviceEventEmitter,SafeAreaView} from 'react-native';
+// import { View ,StyleSheet,Text,Image, TouchableOpacity,Platform,ScrollView,Dimensions,} from 'react-native';
+import {  View, Text, StyleSheet, TouchableOpacity,Image, DeviceEventEmitter,SafeAreaView,Modal,ActivityIndicator} from 'react-native';
 import ImagesWrapper from '../../res/ImagesWrapper';
 import Fonts from '../../res/Fonts';
 import APIHandler from '../../network/NetWorkOperations';
@@ -29,24 +30,28 @@ export default class SwitchCommunityScreen extends React.Component {
             back:true,
             email : '',
             userId: '',
-           
+            isLoading: false
         }
     }
 
     async componentDidMount() {
-      const userDetails = await this.storagePrefs.getObjectValue("userDetails")
-      this.setState({
-        userId : userDetails.userId,
-        email : userDetails.userEmail
-      })
+      
       await this.getCommunityDetails();
+     
   }
 
   async getCommunityDetails() {
-
+    this.setState({
+      isLoading: true
+  })
+    const userDetails = await this.storagePrefs.getObjectValue("userDetails")
+    // this.setState({
+    //   userId : userDetails.userId,
+    //   email : userDetails.userEmail
+    // })
     const communityData={
-      "email": this.state.email,
-      "userID": this.state.userId
+      "email": userDetails.userEmail,
+      "userID": userDetails.userId,
     }
     // const communityData={
     //   "email": "rajkumar@thinkebiz.net",
@@ -56,8 +61,10 @@ export default class SwitchCommunityScreen extends React.Component {
     // const radio= response.data;
     console.log('communitydata=====',response.data)
     if(response.data!=null && response.data.length>0){
+      this.setState({isLoading: false, isInternet: true})
       this.setState({radio:response.data})
     } else{
+      this.setState({isLoading: false})
       this.setState({radio: []})
     }
     
@@ -85,12 +92,34 @@ export default class SwitchCommunityScreen extends React.Component {
      const data = await this.storagePrefs.setObjectValue("universityDetsils",universityDetsils);
 
   }
-
+  renderLoader(){
+    return(
+        <Modal transparent={true}
+            visible={this.state.isLoading}>
+            <View style={{
+                flex: 1,
+                flexDirection: 'row',
+                justifyContent: 'center',
+                alignItems: 'center',
+                margin: 10
+            }}>
+                <View style={{
+                    width: "50%",
+                    borderWidth: 1,
+                    borderRadius: 5,borderColor: "#58C4C6",marginBottom: 10}}>
+                    <Text style={styles.modalText}>Please Wait!</Text> 
+                    <ActivityIndicator size="small" color="#000" />
+                </View>
+            </View>
+        </Modal>
+    )
+}
 
     render(){
        const{radio}=this.state
         return(
             <SafeAreaView style={{flex:1,backgroundColor:'#FFFFFF'}}>
+               {this.renderLoader()}
                <View style={styles.header}>
                     <TouchableOpacity onPress={() => {
                       // this.props.navigation.openDrawer();

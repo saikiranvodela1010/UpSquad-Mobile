@@ -50,6 +50,10 @@ import SwitchCommunityScreen from './src/screens/DrawerScreens/SwitchCommunitySc
 import CoachSearchScreen from './src/screens/BottomTabs/CoachSearchScreen'
 import CommentScreen from './src/screens/BottomTabs/CommentScreen';
 import AddCommunityScreen from './src/screens/DrawerScreens/AddCommunityScreen';
+import AddCommunityScreenStep2 from './src/screens/DrawerScreens/AddCommunityScreemStep2'
+import SeetingScreen from './src/screens/DrawerScreens/SettingsScreen';
+
+
 
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -242,6 +246,12 @@ const MainScreens =()=>{
           <Stack.Screen
           name = "AddCommunityScren"
           component = {AddCommunityScreen}/>
+           <Stack.Screen
+          name = "AddCommunityScreenStep2"
+          component = {AddCommunityScreenStep2}/>
+            <Stack.Screen
+          name = "SeetingScreen"
+          component = {SeetingScreen}/>
 
     </Stack.Navigator>
   )

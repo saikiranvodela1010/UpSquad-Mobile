@@ -145,21 +145,20 @@ const askPermission = async () => {
     const signupdetails = await storagePrefs.getObjectValue("signupdetails")
     console.log('signupdetails',signupdetails);
   }
-
-
   async function onSubmit () {
     const signupdetails = await storagePrefs.getObjectValue("signupdetails")
     console.log('signupdetails',signupdetails);
   
             console.log('ImagePath:', camerfile?.path);
-            RNFS.readFile(camerfile?.path, 'base64')
+            RNFS.readFile(camerfile?.path || file, 'base64')
         .then((res) =>{
         // console.log("base64:",res);
         setimgBase64(res);
         });
 
 const imgUpload ={
-    'profileImg': imgBase64,
+    'profileImg': 'data:image/jpg;base64,'+imgBase64,
+    // 'profileImg': imgBase64,
     'email':signupdetails.email,
     'firstName':signupdetails.firstName,
     'lastName':signupdetails.lastName,
@@ -190,11 +189,14 @@ const imgUpload ={
         },
     })
         .then (response => {
-          console.log("Check1234", response);
+          console.log("Check1234", response.data.user.profileImg);
+        // console.log("updateuserinfo", response);
+        
         })
         .catch(error => {
           console.log(error);
         });
+        props.navigation.navigate('BioData')
 
 }
 
@@ -328,8 +330,8 @@ const imgUpload ={
         <View  style={{marginTop:'15%',marginBottom:'17%'}}>
         <TouchableOpacity 
                         onPress={()=>{
-                            props.navigation.navigate('BioData')
-                            // onSubmit();
+                            // props.navigation.navigate('BioData')
+                            onSubmit();
                          }}
                         
                     >
