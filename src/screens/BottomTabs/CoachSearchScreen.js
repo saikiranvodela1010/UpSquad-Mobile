@@ -27,7 +27,9 @@ export default class PlayersScreen extends React.Component {
             selectedList: this.props.route.params.searchData,
             userdata: this.props.route.params.userdata,
             search: false,
-            error:''
+            error:'',
+            outside:'',
+            upSquad_id: '5ee072287a57fb54881a81db',
         }
     }
 
@@ -35,11 +37,17 @@ export default class PlayersScreen extends React.Component {
         const universityDetsils = await this.storagePrefs.getObjectValue("universityDetsils")
         
       this.setState({universityId:universityDetsils._id})
-    //   console.log('uniid',this.state.universityId);
+      console.log('uniid',this.state.universityId);
       const userDetails = await this.storagePrefs.getObjectValue("userDetails")
       this.setState({userId:userDetails.userId})
     //   console.log('id',this.state.userId);
-      this.getUserInfo();
+    if (this.state.universityId != this.state.upSquad_id) {
+        // this.getSearchUserByOrganization();
+        this.setState({outside:false}) 
+       }
+       else {
+         this.setState({outside:true})
+       }
 
       }
 
@@ -71,6 +79,29 @@ export default class PlayersScreen extends React.Component {
         console.log("playerData", this.state.coachData);
 
     }
+    async getSearchUserByOutside() {
+        this.setState({error:''})
+        this.setState({ search: true })
+        const data1 = {
+          "currentPage": 1,
+          "field": "Field",
+          "isAdmin": false,
+          "isProfessional": true,
+          "orgIds": ["5eb955606d1ed6065715487d", "5ed8d9509e623f00221761a1"],
+          "pageSize": 100,
+          'player': this.state.userdata.user.isProfessional==true?false:true,
+          "searchString": this.state.searchText,
+          "userId": this.state.userId,
+        }
+        console.log(data1)
+        const response = await this.apiHandler.requestPost(data1, this.serviceUrls.searchUsersByOutside)
+        console.log("searchUsersByOutside",response.data);
+        this.setState({ coachData: response.data })
+        if(this.state.coachData==''){
+            this.setState({error:"No Players found"})
+        }
+        console.log("coachData", this.state.coachData);
+      }
     renderSeparator = () => {
         return (
             <View style={styles.underline}></View>
@@ -85,15 +116,8 @@ export default class PlayersScreen extends React.Component {
             <View style={{ flex: 1, backgroundColor: '#FFFFFF' }}>
 
                 <View style={{ flexDirection: 'row', marginTop: 20, marginBottom: 5 }}>
-                    <TouchableOpacity onPress={() => {
-                        Keyboard.dismiss
-                        this.setState({
-                            search: false,
-                            searchText: ''
-                        })
-                        this.props.navigation.navigate('tabbar1')
-
-                    }}>
+                    <TouchableOpacity onPress={() => 
+                        this.props.navigation.goBack(null)}>
                         <Image
                             source={ImagesWrapper.back}
                             style={{
@@ -109,7 +133,7 @@ export default class PlayersScreen extends React.Component {
 
                         style={styles.title}
                         //onSubmitEditing={this.getSearchUserByOrganization}
-                        onSubmitEditing={() => (this.getSearchUserByOrganization())}
+                        onSubmitEditing={() => (this.state.outside==false?this.getSearchUserByOrganization():this.getSearchUserByOutside())}
                     value={this.state.searchText}
 
                     >

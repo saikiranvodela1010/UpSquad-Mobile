@@ -15,6 +15,8 @@ import Modal from 'react-native-modal';
 
 
 export default class playersDetailScreen extends React.Component {
+
+
     serviceUrls = new ServiceUrls();
     apiHandler = new APIHandler();
 
@@ -25,8 +27,6 @@ export default class playersDetailScreen extends React.Component {
         this.state = {
             tapstate: false,
             userData: [],
-            userid: this.props.route.params.id,
-
             isProfessional: '',
             experience: [],
             education: [],
@@ -39,22 +39,32 @@ export default class playersDetailScreen extends React.Component {
             data1: '',
             data2: '',
             data3: '',
+            singleData: '',
             data4: [],
+            data6: '',
+            data5: '',
             seeall: false,
             experienceall: false,
             educationall: false,
-            publicationsall: false
+            publicationsall: false,
+            communityall: false,
+            organizationData: [],
+            teamData: []
 
         }
 
     }
     componentDidMount() {
-        this.getUserInfo();
+
+        const userid = this.props.route.params.id;
+        this.getUserInfo(userid);
     }
-    async getUserInfo() {
+
+
+    async getUserInfo(userid) {
         //console.log('userid', this.state.userid)
-        const data = this.state.userid;
-        //const data = this.state.userid;
+        const data = userid;
+        //const data = '5e3bfad3cf7d530022e90429'
         const response = await this.apiHandler.requestGet(data, this.serviceUrls.getParticularUser)
         //console.log("User response", response)
 
@@ -75,7 +85,10 @@ export default class playersDetailScreen extends React.Component {
         const data2 = this.state.education[0]
         const data3 = this.state.certifications[0]
         const data4 = this.state.publications[0]
-        const data5 = this.state.publications[0].publicationLinks
+        const data5 = this.state.publications.length >= 1 ? this.state.publications[0].publicationLinks : ''
+
+        const email = this.state.userData.email
+        const user_id = this.state.userData._id
         this.setState({
             data: data3,
             data1: data1,
@@ -83,23 +96,45 @@ export default class playersDetailScreen extends React.Component {
             data3: data4,
             data4: data5
         })
-        // const range = moment.range(this.state.data1.fromDate, this.state.data1.toDate)
-        // alert(range.diff('months'))
-        //this.setState({duration:range.diff('months')})
         console.log('data1', data5)
         console.log('bannerImage', this.state.bannerImage)
         console.log('experience', this.state.experience)
         console.log('education', this.state.education)
+        this.getOrganization(email, user_id)
+    }
+
+    async getOrganization(email, user_id) {
+        const communityData = {
+            "email": email,
+            "userID": user_id
+            // "email": "rajkumar@thinkebiz.net",
+            // "userID": "5ee21f3f5583d00022351037"
+
+        }
+        const response = await this.apiHandler.requestPost(communityData, this.serviceUrls.getCommunities);
+        console.log('communitydata=====', response.data)
+        this.setState({
+            organizationData: response.data
+        })
+        const team = this.state.organizationData[0]
+        const data = this.state.organizationData.length >= 1 ? this.state.organizationData[0].teamsData : ''
+        const data1 = data != '' ? data[0] : ''
+       // console.log('teamtile', data1)
+      //  console.log('Team data', this.state.organizationData[0])
+        this.setState({
+            data5: team,
+            data6: data1
+        })
     }
 
 
     render() {
-        //const userdata=this.state.userData;
-        //console.log('data',userdata)
+
         return (
             <View style={{ flex: 1, backgroundColor: '#FFFFFF' }}>
                 <View style={styles.header}>
-                    <TouchableOpacity onPress={() => this.props.navigation.navigate('tabbar1')}>
+
+                    <TouchableOpacity onPress={() => this.props.navigation.goBack(null)}>
                         <Image
                             source={ImagesWrapper.back}
 
@@ -109,34 +144,33 @@ export default class playersDetailScreen extends React.Component {
                 <ScrollView >
 
                     <Image source={{ uri: this.state.bannerImage }} style={{ width: '100%', height: 250 }} />
-                    {/* <Image source={ImagesWrapper.manpic3} style={{width:'100%',height:250}} /> */}
 
                     <View style={[styles.card]}>
                         <Text style={styles.name}>{this.state.userData.firstName} {this.state.userData.lastName}</Text>
-                        <Text style={styles.technologytext}>{this.state.userData.currentJobTitle} | {this.state.userData.currentCompany} | Business ownership</Text>
+                        <Text style={styles.technologytext}>{this.state.userData.fieldOfstudyOrSpecialty} </Text>
                         <Text style={[styles.technologytext, { color: '#58C4C6' }]}>See more</Text>
                         <View style={{ flexDirection: 'row', marginTop: 10 }}>
                             <Image source={ImagesWrapper.users} />
                             <Text style={[styles.technologytext, { fontSize: 12, marginLeft: 10, marginTop: 5 }]}>Member of  {this.state.userData.currentRole}</Text>
                         </View>
-                        <View style={styles.followercrad}>
+                        {/* <View style={styles.followercrad}>
 
                             <View style={{ marginLeft: 30 }}>
                                 <Text style={[styles.technologytext,]}>Post</Text>
-                                {/* <Text style={styles.name}>{this.state.posts.length}</Text> */}
+                                <Text style={styles.name}>{this.state.posts.length}</Text>
                             </View>
                             <View style={{ borderWidth: 0.3, borderColor: '#F1F1F1', marginTop: 18, marginBottom: 18 }}></View>
                             <View >
                                 <Text style={styles.technologytext}>Followers</Text>
-                                {/* <Text style={styles.name}>{this.state.friends.length}</Text> */}
+                                <Text style={styles.name}>{this.state.friends.length}</Text>
                             </View>
                             <View style={{ borderWidth: 0.3, borderColor: '#F1F1F1', marginTop: 18, marginBottom: 18 }}></View>
                             <View style={{ marginRight: 30 }}>
                                 <Text style={styles.technologytext}>Following</Text>
-                                {/* <Text style={styles.name}>{this.state.request.count}</Text> */}
+                                <Text style={styles.name}>{this.state.request.count}</Text>
                             </View>
-                        </View>
-                        <View style={{ flexDirection: 'row', marginTop: 20, marginRight: 10 }}>
+                        </View> */}
+                        {/* <View style={{ flexDirection: 'row', marginTop: 20, marginRight: 10 }}>
                             <TouchableOpacity
                                 onPress={() => {
                                     // props.navigation.navigate('profilesuccess')
@@ -153,11 +187,11 @@ export default class playersDetailScreen extends React.Component {
                             <TouchableOpacity onPress={() => this.setState({ tapstate: true })}>
                                 <Image source={ImagesWrapper.tap} style={{ marginLeft: 70, marginTop: 15, }} />
                             </TouchableOpacity>
-                        </View>
-                        <View style={styles.underline}></View>
+                        </View> */}
+                        {/* <View style={styles.underline}></View> */}
                         <Text style={styles.name}>Get in touch</Text>
 
-                        <View style={{ flexDirection: 'row', marginTop: 20, }}>
+                        <View style={{ flexDirection: 'row', marginTop: 15, }}>
                             <View>
                                 <View style={styles.messagecard}>
                                     <Image source={ImagesWrapper.sendmsg} style={{ marginLeft: 10 }} />
@@ -211,13 +245,12 @@ export default class playersDetailScreen extends React.Component {
                                 <View style={{ flexDirection: 'row' }}>
                                     <Text style={[styles.technologytext, { fontSize: 14, marginTop: 10, }]}>{moment(this.state.data1.fromDate).format("MMM YYYY")}- {moment(this.state.data1.toDate).format("MMM YYYY")}</Text>
                                     <View style={{ marginTop: 18, marginLeft: 10, height: 5, width: 5, borderRadius: 10, backgroundColor: '#868585', borderColor: '#868585' }}></View>
-                                    <Text style={[styles.technologytext, { fontSize: 14, marginLeft: 10, marginTop: 10, }]}>3 Months</Text>
+                                    <Text style={[styles.technologytext, { fontSize: 14, marginLeft: 10, marginTop: 10, }]}>{moment(this.state.data1.toDate).diff(this.state.data1.fromDate, 'months')} Months</Text>
                                 </View>
                             </View> : null}
 
                         {this.state.experienceall == true && this.state.experience.length > 1 ?
-                            this.state.experience.map((data) => {
-                                // const range = moment.range(data.fromDate, data.toDate)
+                            this.state.experience.map((data, key) => {
                                 return (
                                     <View>
                                         <Text style={[styles.name, { fontSize: 14, marginTop: 10 }]}>{data.role}</Text>
@@ -229,7 +262,7 @@ export default class playersDetailScreen extends React.Component {
                                         <View style={{ flexDirection: 'row' }}>
                                             <Text style={[styles.technologytext, { fontSize: 14, marginTop: 10, }]}>{moment(data.fromDate).format("MMM YYYY")}- {moment(data.toDate).format("MMM YYYY")}</Text>
                                             <View style={{ marginTop: 18, marginLeft: 10, height: 5, width: 5, borderRadius: 10, backgroundColor: '#868585', borderColor: '#868585' }}></View>
-                                            {/* <Text style={[styles.technologytext, { fontSize: 14, marginLeft: 10, marginTop: 10, }]}>{range.diff('months')}</Text> */}
+                                            <Text style={[styles.technologytext, { fontSize: 14, marginLeft: 10, marginTop: 10, }]}>{moment(this.state.data1.toDate).diff(this.state.data1.fromDate, 'months')} Months</Text>
                                         </View>
                                     </View>
                                 )
@@ -247,7 +280,7 @@ export default class playersDetailScreen extends React.Component {
                         </View> : null
                         }
                         {this.state.educationall == true && this.state.education.length > 1 ?
-                            this.state.education.map((data) => {
+                            this.state.education.map((data, key) => {
                                 return (<View>
                                     <Text style={[styles.name, { fontSize: 14, marginTop: 10 }]}>{data.universityName}</Text>
                                     <Text style={[styles.technologytext, { fontSize: 14, marginTop: 10, }]}>{data.fieldOfstudyOrSpecialty}</Text>
@@ -274,7 +307,7 @@ export default class playersDetailScreen extends React.Component {
                                 </View>
                             </View> : null}
                         {this.state.seeall == true && this.state.certifications.length > 1 ?
-                            this.state.certifications.map((data) => {
+                            this.state.certifications.map((data, key) => {
                                 return (<View>
                                     <Text style={[styles.name, { fontSize: 14, marginTop: 10 }]}>{data.certificationName}</Text>
                                     <View style={{ flexDirection: 'row' }}>
@@ -297,7 +330,7 @@ export default class playersDetailScreen extends React.Component {
                             this.state.publicationsall == false && this.state.publications.length >= 1 ?
                                 <View>
                                     <Text style={[styles.name, { fontSize: 14, marginTop: 10 }]}>{this.state.data3.publicationDetails}</Text>
-                                    {this.state.data4.map((data) => {
+                                    {this.state.data4.map((data, key) => {
                                         return (
                                             <Text style={[styles.technologytext, { fontSize: 14, marginTop: 10, }]}>{data.link}</Text>)
                                     })}
@@ -305,7 +338,7 @@ export default class playersDetailScreen extends React.Component {
 
                         }
                         {this.state.publicationsall == true && this.state.publications.length > 1 ?
-                            this.state.publications.map((data) => {
+                            this.state.publications.map((data, key) => {
                                 return (<View>
                                     <Text style={[styles.name, { fontSize: 14, marginTop: 10 }]}>{data.publicationDetails}</Text>
                                     {data.publicationLinks.map((data) => {
@@ -320,11 +353,30 @@ export default class playersDetailScreen extends React.Component {
                             <View style={[styles.underline, { marginTop: 10 }]}></View> : null}
 
                         <Text style={[styles.name, { fontSize: 16 }]}>Community subscription</Text>
-                        <Text style={[styles.name, { fontSize: 14, marginTop: 10 }]}>Eis Organization</Text>
-                        <Text style={[styles.technologytext, { fontSize: 14, marginTop: 10, }]}>Design Team</Text>
-                        {/* <Text style={[styles.technologytext,{fontSize:14,marginLeft:10,marginTop:10,}]}>2017-2018</Text> */}
-                        <Text style={[styles.technologytext, { color: '#58C4C6', marginTop: 5, marginRight: 20 }]}>See all</Text>
 
+                        {
+                            this.state.communityall == false && this.state.organizationData.length >= 1 ?
+                                <View>
+                                    <Text style={[styles.name, { fontSize: 14, marginTop: 10 }]}>{this.state.data5.universityName}</Text>
+
+                                    <Text style={[styles.technologytext, { fontSize: 14, marginTop: 10, }]}>{this.state.data6.teamTitle}</Text>
+
+                                </View> : null
+
+                        }
+                        {this.state.communityall==true && this.state.organizationData.length>=1?
+                            this.state.organizationData.map((data, key) => {
+                                return (<View>
+                                    <Text style={[styles.name, { fontSize: 14, marginTop: 10 }]}>{data.universityName}</Text>
+                                    {data.teamsData.map((data, key) => {
+                                        return (
+                                            <Text style={[styles.technologytext, { fontSize: 14, marginTop: 10, }]}>{data.teamTitle}</Text>)
+                                    })}
+                                </View>)
+                            }) :null}
+                        
+                        {this.state.organizationData.length >= 1 && this.state.communityall == false ?
+                            <Text style={[styles.technologytext, { color: '#58C4C6', marginTop: 5, marginRight: 20 }]} onPress={() => this.setState({ communityall: true })}>See all</Text> : null}
                         {/* Modal code here */}
 
                         {this.state.tapstate === true ?
@@ -409,19 +461,19 @@ export default class playersDetailScreen extends React.Component {
 
 const styles = StyleSheet.create({
     header: {
-        // flex: 1,
+
         flexDirection: 'row',
         alignItems: 'center',
         paddingLeft: '9%',
         marginTop: 25,
         marginBottom: 25,
-        // borderBottomWidth:1
+
     },
     card: {
         backgroundColor: '#FFFFFF',
         flex: 1,
         width: '100%',
-        // height: 'auto',
+
         marginTop: -20,
         borderTopLeftRadius: 15,
         borderTopRightRadius: 15,

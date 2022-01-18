@@ -22,4 +22,8 @@ export default class ServiceUrls {
     getPost = this.socialUrl+'/feed/post/';
     postComment = this.socialUrl+'/feed/comment/';
     addcommunity = this.mainUrl + '/subscriptionUsers/addSubscriptionCode';
+    saveSortPreference = this.mainUrl+'/users/save_preference';
+    getSort = this.mainUrl+'/users/get_sort_preference/';
+    
+    postLike = this.socialUrl+'/feed/post/like'
 }
