@@ -32,12 +32,13 @@ import StoragePrefs from '../../res/StoragePrefs';
             postData: [],
             dateTime : "",
             communityName:'',
-            userId: '',
             universityId: '',
             isLoading: false,
             email : '',
             userId: '',
             universityName: '',
+            likeColor: false,
+            share: false,
             
         }
        
@@ -52,19 +53,18 @@ import StoragePrefs from '../../res/StoragePrefs';
         //     universityId : universityDetsils._id
         // });
         const userDetails = await this.storagePrefs.getObjectValue("userDetails")
-        this.setState({
-            userId:userDetails.userId,        
+        this.setState({      
             userId : userDetails.userId,
             email : userDetails.userEmail
         })
         DeviceEventEmitter.addListener("refresh",this.getPosts);
         return new Promise((resolve, reject) => {
             this.getCommunityDetails()
-            .then(()=>{return this.getPosts();})
-            .then(()=>{return this.getUniversityImages();})
+            .then(()=>  {return this.getPosts();})
+            .then(()=>  {return this.getUniversityImages();})
             .then(() => {return this.getUserProfile();})
             .then(() => {return  this.setState({isLoading: false})})
-            .then(()=>{ resolve('done')})
+            .then(()=>  { resolve('done')})
             .catch((error)=> {this.setState({isLoading: false});
                                  reject(error)})
         })
@@ -73,6 +73,16 @@ import StoragePrefs from '../../res/StoragePrefs';
     async componentDidUpdate(){
         const universityDetsils = await this.storagePrefs.getObjectValue("universityDetsils")
         this.setState({communityName:universityDetsils.universityName});
+        
+    }
+
+    async postLike(postID, userID){
+        const data = {
+            "postId" : postID,
+            "userId" : userID
+        }
+        const response = await this.apiHandler.requestPost(data,this.serviceUrls.postLike);
+        console.log("response fot like", response)
     }
 
     async getCommunityDetails() {
@@ -189,26 +199,43 @@ import StoragePrefs from '../../res/StoragePrefs';
             ?(this.setState({leadercolor:'green'})):(this.setState({leadercolor:'black'}))
     }
 
+    renderShareModal() {
+        return(
+            <Modal
+                transparent={true}
+                isVisible={this.state.share}
+                onBackdropPress={() => this.setState({share:false})}
+                onRequestClose={() => {
+                    this.setState({share:false})
+                }}  
+            >
+                    <View style={{backgroundColor:'white',borderTopLeftRadius: 20,borderTopRightRadius:20,height:'50%',marginTop:660,width:'110%',marginLeft:-18}}>
+                        
+                    </View>
+                    </Modal>
+        )
+    }
+
     renderLoader(){
         return(
             <Modal transparent={true}
-                visible={this.state.isLoading}>
+            visible={this.state.isLoading}>
+            <View style={{
+                flex: 1,
+                flexDirection: 'row',
+                justifyContent: 'center',
+                alignItems: 'center',
+                margin: 10
+            }}>
                 <View style={{
-                    flex: 1,
-                    flexDirection: 'row',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    margin: 10
-                }}>
-                    <View style={{
-                        width: "80%",
-                        borderWidth: 1,
-                        borderRadius: 5,borderColor: "#58C4C6",marginBottom: 10}}>
-                        <Text style={styles.modalText}>Please Wait!</Text> 
-                        <ActivityIndicator size="small" color="#000" />
-                    </View>
+                    width: "25%",
+                    height: "10%",
+                    borderWidth: 1,
+                    borderRadius: 5,borderColor: "#58C4C6",marginBottom: 10 ,backgroundColor: '#58C4C6',justifyContent: 'center' }}>
+                    <ActivityIndicator size="large" color="#fff" />
                 </View>
-            </Modal>
+            </View>
+        </Modal>
         )
     }
 
@@ -217,6 +244,7 @@ import StoragePrefs from '../../res/StoragePrefs';
         return(
             <SafeAreaView style={{flex:1,backgroundColor:'#FFFFFF'}}>
                 {this.renderLoader()}
+                {this.renderShareModal()}
                     <View style={[styles.header]}>
                     <TouchableOpacity onPress={()=> this.props.navigation.openDrawer()}>
                     <Image source={ImagesWrapper.profile}
@@ -326,10 +354,18 @@ import StoragePrefs from '../../res/StoragePrefs';
                             </View>
                             <View style={{ borderWidth: 1, borderColor: '#F1F1F1',marginTop:22}}></View>
                             <View style={{flexDirection:'row',marginLeft:'auto',marginRight:'auto',marginTop:20}}>
-                                <Image
-                                    source={ImagesWrapper.likeimg}
-                                />
-                                <Text style={{color:'#58C4C6',fontSize:14,marginTop:3,marginLeft:5,fontFamily:Fonts.mulishRegular,fontWeight:'600'}}>Like</Text>
+                                <TouchableOpacity
+                                onPress ={()=> {
+                                this.postLike(item._id,this.state.userId)
+                                }}>
+                                    <View style = {{flexDirection:'row'}}>
+                                        <Image
+                                            source={ImagesWrapper.likeimg}
+                                        />
+                                        <Text style={{color:this.state.likeColor == false? '#58C4C6' :'#868585' ,fontSize:14,marginTop:3,marginLeft:5,fontFamily:Fonts.mulishRegular,fontWeight:'600'}}>Like</Text>
+                                    </View>
+                                </TouchableOpacity>
+                                
                                 <TouchableOpacity 
                                 onPress={() => {
                                     this.props.navigation.navigate('CommentScreen',{
@@ -350,10 +386,17 @@ import StoragePrefs from '../../res/StoragePrefs';
                                     <Text style={{color:'#868585',fontSize:14,marginTop:3,marginLeft:5,fontFamily:Fonts.mulishRegular,fontWeight:'600'}}>Comment</Text> 
                                 </View>
                                 </TouchableOpacity>
+
+                                <TouchableOpacity onPress = {() => {
+                                    this.setState({share: true})
+                                }} >
+                                <View style={{flexDirection:'row'}}>
                                 <Image
                                     source={ImagesWrapper.shareimg}
                                 />
                                 <Text style={{color:'#868585',fontSize:14,marginTop:3,marginLeft:5,fontFamily:Fonts.mulishRegular,fontWeight:'600'}}>Share</Text>
+                                </View>
+                                </TouchableOpacity>
                             </View>
                             <View style={{ borderWidth: 1, borderColor: '#F1F1F1',marginTop:22}}></View>
                         </View>
@@ -611,7 +654,7 @@ const styles = StyleSheet.create({
         color:'#000',
         fontSize: 20,
         marginTop: 10
-      }
+      }    
    
    
    

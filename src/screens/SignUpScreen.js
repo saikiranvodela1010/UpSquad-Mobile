@@ -153,13 +153,13 @@ export default class SignUpScreen extends React.Component {
                  && nameReg.test(this.state.firstname)
                  )
                   {
-                    this.props.navigation.navigate('Team',{
-                                        subscriptioncode:this.state.code,
-                                        email:this.state.email,
-                                        firstName:this.state.firstname,
-                                        lastName:this.state.lastname,
-                                        password:this.state.password
-                                    });      
+                    // this.props.navigation.navigate('Team',{
+                    //                     subscriptioncode:this.state.code,
+                    //                     email:this.state.email,
+                    //                     firstName:this.state.firstname,
+                    //                     lastName:this.state.lastname,
+                    //                     password:this.state.password,
+                    //                 });      
                        const data = this.state.email;
                     
                     const response = await this.apiHandler.requestGet(data,this.serviceUrls.validateEmail)
@@ -171,6 +171,10 @@ export default class SignUpScreen extends React.Component {
                         if(response.success === true) {
                             this.props.navigation.navigate('Team',{
                                 subscriptioncode:this.state.code,
+                                email:this.state.email,
+                                firstName:this.state.firstname,
+                                lastName:this.state.lastname,
+                                password:this.state.password,
                             });
                         }else{
                             this.setState({emailerr:response.msg})
@@ -196,13 +200,13 @@ export default class SignUpScreen extends React.Component {
          && nameReg.test(this.state.firstname)
          )
           {
-            this.props.navigation.navigate('Team',{
-                                subscriptioncode:this.state.code,
-                                email:this.state.email,
-                                firstName:this.state.firstname,
-                                lastName:this.state.lastname,
-                                password:this.state.password
-                            });      
+            // this.props.navigation.navigate('Team',{
+            //                     subscriptioncode:this.state.code,
+            //                     email:this.state.email,
+            //                     firstName:this.state.firstname,
+            //                     lastName:this.state.lastname,
+            //                     password:this.state.password,
+            //                 });      
                const data = this.state.email;
             
             const response = await this.apiHandler.requestGet(data,this.serviceUrls.validateEmail)
@@ -214,6 +218,10 @@ export default class SignUpScreen extends React.Component {
                 if(response.success === true) {
                     this.props.navigation.navigate('Team',{
                         subscriptioncode:this.state.code,
+                        email:this.state.email,
+                        firstName:this.state.firstname,
+                        lastName:this.state.lastname,
+                        password:this.state.password,               
                     });
                 }else{
                     this.setState({emailerr:response.msg})

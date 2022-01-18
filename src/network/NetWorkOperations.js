@@ -59,12 +59,12 @@ export default class ApiHandler {
         await axios.get(url+data, headers) 
         .then(response => {
             responseData = response.data;
-            console.log('Response Data>>>', responseData); 
+            //console.log('Response Data>>>', responseData); 
         })
         .catch(error=>{
             if(error.response!=null){
                 responseData = error.response;
-                console.log('error Response Data>>>', responseData);
+                //console.log('error Response Data>>>', responseData);
             }
         });
         return responseData
@@ -79,12 +79,12 @@ export default class ApiHandler {
         await axios.post(url, data, headers) 
         .then(response => {
             responseData = response.data;
-            console.log('Response Data>>>', responseData);
+            //console.log('Response Data>>>', responseData);
         })
         .catch(error=>{
             if(error.response!=null){
                 responseData = error.response;
-                console.log('error Response Data>>>', responseData);
+                //console.log('error Response Data>>>', responseData);
             }
         });
         return responseData

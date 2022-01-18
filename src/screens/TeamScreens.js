@@ -58,7 +58,7 @@ class TeamScreen extends React.Component {
     }
     
     async getroleDetails() {
-      
+      console.log('signupdetals',this.state.email)
         const data= {
             "subscriptionCodes": [this.state.subscriptioncode]
         }
@@ -77,7 +77,7 @@ class TeamScreen extends React.Component {
                 
                this.setState({teamsData:response.data[0].teamsData})
                this.setState({universityId:response.data[0]._id})
-            console.log('coderesponse',this.state.playerRename);
+            console.log('coderesponse',this.state.universityId);
 
             } 
           
@@ -131,7 +131,7 @@ console.log("registerData",registerData)
         }
         
 //  UpdateTeams api caling
-                
+        if(this.state.subscriptioncode !== ""){ 
             const UpdateTeams = {
                 "teamData":[
                         {
@@ -159,7 +159,11 @@ console.log("registerData",registerData)
                 this.props.navigation.navigate('Account');
             }
 
-           
+        }else{
+            if(response.success === true ){
+                this.props.navigation.navigate('Account');
+            }
+        }
 
     }
 
@@ -321,7 +325,8 @@ console.log("registerData",registerData)
 
                 </View>
                  {/* <ScrollView>            */}
-                
+                {this.state.subscriptioncode !== "" ?
+                <View>
                     <Text style={styles.selecteam}>Select your team(s)</Text>
                     <ScrollView style = {{marginTop: 20}}>            
                     <View style={{ marginLeft: 30 }}>
@@ -358,80 +363,11 @@ console.log("registerData",registerData)
                                           
                                         )}
                                     />
-                        {/* <View style={styles.text}>
-                            <Image
-                                source={this.state.checkmark0 ? ImagesWrapper.checkmark : ImagesWrapper.checkbox}
-                                style={[this.state.checkmark0 ? styles.checkmark : styles.checkbox]}
-                            />
-                            <Text style={styles.checkboxtxt}>ManagementTeam</Text>
-                        </View> */}
-
-                        {/* <View style={styles.text}>
-                            <Image
-                                source={this.state.checkmark1 ?ImagesWrapper.checkmark : ImagesWrapper.checkbox}
-                                style={[this.state.checkmark1 ? styles.checkmark : styles.checkbox]}
-                            />
-                            <Text style={styles.checkboxtxt}>DiscussionTeam</Text>
-                        </View> */}
-
-                        {/* <View style={styles.text}>
-                            <Image
-                                source={this.state.checkmark2 ? ImagesWrapper.checkmark : ImagesWrapper.checkbox}
-                                style={[this.state.checkmark2 ? styles.checkmark : styles.checkbox]}
-                            />
-
-                            <Text style={styles.checkboxtxt}>TechTeam</Text>
-                        </View> */}
-                        {/* <View style={styles.text}>
-                            <Image
-                                source={this.state.checkmark2 ? ImagesWrapper.checkmark : ImagesWrapper.checkbox}
-                                style={[this.state.checkmark2 ? styles.checkmark : styles.checkbox]}
-                            />
-
-                            <Text style={styles.checkboxtxt}>CoordinatorsTeam</Text>
-                        </View> */}
-
-
-                        {/* {this.state.status ?
-                            null :
-
-                            <View>
-                                <View style={styles.text}>
-                                    <Image
-                                        source={this.state.checkmark0 ? ImagesWrapper.checkmark : ImagesWrapper.checkbox}
-                                        style={[this.state.checkmark0 ? styles.checkmark : styles.checkbox]}
-                                    />
-                                    <Text style={styles.checkboxtxt}>MarketingTeam</Text>
-                                </View>
-                                <View style={styles.text}>
-                                    <Image
-                                        source={this.state.checkmark1 ? ImagesWrapper.checkmark : ImagesWrapper.checkbox}
-                                        style={[this.state.checkmark1 ? styles.checkmark : styles.checkbox]}
-                                    />
-                                    <Text style={styles.checkboxtxt}>CoordinatorsTeam</Text>
-                                </View>
-                                <View style={styles.text}>
-                                    <Image
-                                        source={this.state.checkmark2 ? ImagesWrapper.checkmark : ImagesWrapper.checkbox}
-                                        style={[this.state.checkmark2 ? styles.checkmark : styles.checkbox]}
-                                    />
-                                    <Text style={styles.checkboxtxt}>SocialTeam</Text>
-                                </View>
-                                <View style={styles.text}>
-                                    <Image
-                                        source={this.state.checkmark0 ? ImagesWrapper.checkmark : ImagesWrapper.checkbox}
-                                        style={[this.state.checkmark0 ? styles.checkmark : styles.checkbox]}
-                                    />
-                                    <Text style={styles.checkboxtxt}>DiscussionTeam</Text>
-                                </View>
-                            </View>
-
-                        } */}
-
-
-
                     </View>
                     </ScrollView>
+                   
+
+                                                   
                     
                     <TouchableOpacity onPress={this.ShowHideTextComponentView}>
                         {this.state.viewall ? 
@@ -439,12 +375,17 @@ console.log("registerData",registerData)
                             : null
                         }
                     </TouchableOpacity>
-                    <View>
+                    </View>
+                    :
+                    null
+                     }
+                    <View style={{justifyContent:'flex-end',flex:1}}>
                         <TouchableOpacity 
                             onPress={()=>{
                                 // this.props.navigation.navigate('Account')
                                 this.onSubmit();
                             }}
+                            
                         >
                             <LinearGradient start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }} colors={['rgba(33, 43, 104, 1)', 'rgba(88, 196, 198, 1)']} style={[styles.linearGradient1, Platform.OS === "ios" ? { marginTop: '6%' } : { marginTop: '6%' }]}>
 

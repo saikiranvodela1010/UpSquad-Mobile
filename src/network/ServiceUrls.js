@@ -24,4 +24,5 @@ export default class ServiceUrls {
     saveSortPreference = this.mainUrl+'/users/save_preference';
     getSort = this.mainUrl+'/users/get_sort_preference/';
     
+    postLike = this.socialUrl+'/feed/post/like'
 }
