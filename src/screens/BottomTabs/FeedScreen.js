@@ -10,6 +10,7 @@ import ServiceUrls from '../../network/ServiceUrls';
 import APIHandler from '../../network/NetWorkOperations';
 import moment from 'moment';
 import StoragePrefs from '../../res/StoragePrefs';
+import Share from 'react-native-share';
 
 
  class MeetingsScreen extends React.Component {
@@ -46,12 +47,6 @@ import StoragePrefs from '../../res/StoragePrefs';
 
     async componentDidMount(){
         this.setState({isLoading: true})
-        // const universityDetsils = await this.storagePrefs.getObjectValue("universityDetsils")
-        //console.log("ravikiran#$#$#$",universityDetsils)
-        // this.setState({
-        //     communityName:universityDetsils.universityName,
-        //     universityId : universityDetsils._id
-        // });
         const userDetails = await this.storagePrefs.getObjectValue("userDetails")
         this.setState({      
             userId : userDetails.userId,
@@ -73,8 +68,20 @@ import StoragePrefs from '../../res/StoragePrefs';
     async componentDidUpdate(){
         const universityDetsils = await this.storagePrefs.getObjectValue("universityDetsils")
         this.setState({communityName:universityDetsils.universityName});
-        
     }
+
+    customShare = async () =>  {
+        const shareOptions  =  {
+            message:"This is a test message"
+        }
+            Share.open(shareOptions)
+            .then((res) => {
+                console.log(res);
+            })
+            .catch((err) => {
+                err && console.log(err);
+            });
+        }
 
     async postLike(postID, userID){
         const data = {
@@ -108,7 +115,6 @@ import StoragePrefs from '../../res/StoragePrefs';
             "_id":this.state.universityId,
             "universityName":this.state.universityName,
            }
-           console.log("ravikiran1234567",universityDetsils)
            const data = await this.storagePrefs.setObjectValue("universityDetsils",universityDetsils);
     }
 
@@ -388,7 +394,7 @@ import StoragePrefs from '../../res/StoragePrefs';
                                 </TouchableOpacity>
 
                                 <TouchableOpacity onPress = {() => {
-                                    this.setState({share: true})
+                                    this.customShare()
                                 }} >
                                 <View style={{flexDirection:'row'}}>
                                 <Image
@@ -419,7 +425,8 @@ import StoragePrefs from '../../res/StoragePrefs';
                         />
                     </View>
                     </TouchableOpacity>
-                    </View> : null}
+                    </View> : 
+                    null}
                     {this.state.tapstate === true ?
                     // <Modal
                     //     transparent={true}

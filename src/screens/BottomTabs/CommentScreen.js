@@ -6,6 +6,7 @@ import ServiceUrls from '../../network/ServiceUrls';
 import APIHandler from '../../network/NetWorkOperations';
 import moment from 'moment';
 import StoragePrefs from '../../res/StoragePrefs';
+
 export default class CommentScreen extends React.Component {
     serviceUrls = new ServiceUrls();
     apiHandler = new APIHandler();

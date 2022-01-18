@@ -137,11 +137,6 @@ const ImagesWrapper = {
     settings:require('../Images/settings.png'),
     question:require('../Images/question.png'),
     vectorcommunity:require('../Images/vectorcommunity.png'),
-    fb: require('../Images/fb.png'),
-    insta: require('../Images/instagram.png'),
-    twitter: require('../Images/twitter.png'),
-    linkedIn: require('../Images/linkedIn.png'),
-    whatsapp: require('../Images/whatsapp.png'),
 
 }
 export default ImagesWrapper;

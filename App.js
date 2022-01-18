@@ -54,6 +54,7 @@ import AddCommunityScreenStep2 from './src/screens/DrawerScreens/AddCommunityScr
 import SeetingScreen from './src/screens/DrawerScreens/SettingsScreen';
 
 
+import CreatePostScreen from './src/screens/BottomTabs/CreatePostScreen';
 
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -65,7 +66,7 @@ const MainScreens =()=>{
     screenOptions={{
       headerShown: false,
     }}
-      initialRouteName='GetStarted'
+      initialRouteName='CreatePostScreen'
     >
        {/* <StatusBar hidden={true} /> */}
   <Stack.Screen 
@@ -252,6 +253,9 @@ const MainScreens =()=>{
             <Stack.Screen
           name = "SeetingScreen"
           component = {SeetingScreen}/>
+          <Stack.Screen
+          name = "CreatePostScreen"
+          component = {CreatePostScreen}/>
 
     </Stack.Navigator>
   )
