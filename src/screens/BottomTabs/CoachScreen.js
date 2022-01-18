@@ -27,7 +27,9 @@ export default class PlayersScreen extends React.Component {
             // universityId:"5eb955606d1ed60657154888",
             userId:'',
             universityId:'',
+            userData:[],
             coachData: [],
+            upSquad_id: '5ee072287a57fb54881a81db'
         }
       }
 
@@ -48,7 +50,12 @@ export default class PlayersScreen extends React.Component {
    
     this.setState({userData:response})
     //console.log('isProfessional',this.state.userData.user.isProfessional)
-    this.getSearchUserByOrganization(this.state.userData);
+    if (this.state.universityId != this.state.upSquad_id) {
+      this.getSearchUserByOrganization(this.state.userData);
+    }
+    else {
+      this.getSearchUserByOutside(this.state.userData);
+    }
     }
    async getSearchUserByOrganization(data){
     const data1 = {
@@ -65,6 +72,22 @@ export default class PlayersScreen extends React.Component {
     console.log("searchUsersByOrganization",JSON.stringify(response));
     this.setState({coachData: response})
     console.log("CoachData",this.state.coachData);
+    }
+    async getSearchUserByOutside(data) {
+      const data1 = {
+        "currentPage": 1,
+        "field": "Field",
+        "isAdmin": false,
+        "isProfessional": true,
+        "orgIds": ["5eb955606d1ed6065715487d", "5ed8d9509e623f00221761a1"],
+        "pageSize": 100,
+        "player": data.user.isProfessional == true ? false : true,
+        "userId": this.state.userId,
+  
+      }
+      const response = await this.apiHandler.requestPost(data1, this.serviceUrls.searchUsersByOutside)
+      this.setState({ coachData: response.data })
+      console.log("coachData", this.state.coachData);
     }
     renderSeparator = () => {
       return (

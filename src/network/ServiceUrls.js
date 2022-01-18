@@ -20,5 +20,8 @@ export default class ServiceUrls {
     getUserProfile = this.socialUrl+'/user/profile/';
     getPosts = this.socialUrl+'/feed/posts/';
     getPost = this.socialUrl+'/feed/post/';
-    postComment = this.socialUrl+'/feed/comment/'
+    postComment = this.socialUrl+'/feed/comment/';
+    saveSortPreference = this.mainUrl+'/users/save_preference';
+    getSort = this.mainUrl+'/users/get_sort_preference/';
+    
 }
