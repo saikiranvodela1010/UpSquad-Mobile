@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		00E356F31AD99517003FC87E /* UpsquardTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* UpsquardTests.m */; };
+		00E356F31AD99517003FC87E /* UpsquadTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* UpsquadTests.m */; };
 		13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
@@ -43,16 +43,16 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		00E356EE1AD99517003FC87E /* UpsquardTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = UpsquardTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		00E356EE1AD99517003FC87E /* UpsquadTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = UpsquadTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		00E356F11AD99517003FC87E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		00E356F21AD99517003FC87E /* UpsquardTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = UpsquardTests.m; sourceTree = "<group>"; };
+		00E356F21AD99517003FC87E /* UpsquadTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = UpsquadTests.m; sourceTree = "<group>"; };
 		017C3F56544C4D70A92E5A4D /* AntDesign.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = AntDesign.ttf; path = "../node_modules/react-native-vector-icons/Fonts/AntDesign.ttf"; sourceTree = "<group>"; };
 		044DAA0811534AEEBB705674 /* Mulish-ExtraLight.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Mulish-ExtraLight.ttf"; path = "../assets/fonts/Mulish-ExtraLight.ttf"; sourceTree = "<group>"; };
 		060F047CEF2942A589B27D26 /* Octicons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Octicons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Octicons.ttf"; sourceTree = "<group>"; };
 		0B37E228D8AA44ECB3DDDB3C /* Mulish-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Mulish-Regular.ttf"; path = "../assets/fonts/Mulish-Regular.ttf"; sourceTree = "<group>"; };
 		0DB8D034697E4EFFB2111677 /* Feather.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Feather.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Feather.ttf"; sourceTree = "<group>"; };
 		1363EA0A08E44B8C990614BC /* MaterialIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = MaterialIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/MaterialIcons.ttf"; sourceTree = "<group>"; };
-		13B07F961A680F5B00A75B9A /* Upsquard.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Upsquard.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		13B07F961A680F5B00A75B9A /* Upsquad.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Upsquad.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = Upsquard/AppDelegate.h; sourceTree = "<group>"; };
 		13B07FB01A68108700A75B9A /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AppDelegate.m; path = Upsquard/AppDelegate.m; sourceTree = "<group>"; };
 		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = Upsquard/Images.xcassets; sourceTree = "<group>"; };
@@ -64,7 +64,7 @@
 		1E8E1D208F6244F9A9B1E4B3 /* Mulish-Bold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Mulish-Bold.ttf"; path = "../assets/fonts/Mulish-Bold.ttf"; sourceTree = "<group>"; };
 		21BE4EAC706E41D7988EB5F2 /* EvilIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = EvilIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/EvilIcons.ttf"; sourceTree = "<group>"; };
 		222DCB2A042B4821B1C5471F /* Mulish-Black.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Mulish-Black.ttf"; path = "../assets/fonts/Mulish-Black.ttf"; sourceTree = "<group>"; };
-		249D022B6F68713389982B56 /* Pods-Upsquard-UpsquardTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Upsquard-UpsquardTests.debug.xcconfig"; path = "Target Support Files/Pods-Upsquard-UpsquardTests/Pods-Upsquard-UpsquardTests.debug.xcconfig"; sourceTree = "<group>"; };
+		249D022B6F68713389982B56 /* Pods-Upsquard-UpsquadTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Upsquard-UpsquadTests.debug.xcconfig"; path = "Target Support Files/Pods-Upsquard-UpsquardTests/Pods-Upsquard-UpsquadTests.debug.xcconfig"; sourceTree = "<group>"; };
 		2A75AD6E85884C17AAE114D1 /* Zocial.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Zocial.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Zocial.ttf"; sourceTree = "<group>"; };
 		33F5A006FBAE421198C0CA0F /* Mulish-SemiBoldItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Mulish-SemiBoldItalic.ttf"; path = "../assets/fonts/Mulish-SemiBoldItalic.ttf"; sourceTree = "<group>"; };
 		4A8EAD990FD048EDB8B1CD8D /* FontAwesome5_Brands.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome5_Brands.ttf; path = "../node_modules/react-native-vector-icons/Fonts/FontAwesome5_Brands.ttf"; sourceTree = "<group>"; };
@@ -80,8 +80,8 @@
 		9D7486E38C7641818411C1C3 /* Mulish-ExtraBold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Mulish-ExtraBold.ttf"; path = "../assets/fonts/Mulish-ExtraBold.ttf"; sourceTree = "<group>"; };
 		A1C73A608BE7445BA3AA124A /* MaterialCommunityIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = MaterialCommunityIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/MaterialCommunityIcons.ttf"; sourceTree = "<group>"; };
 		C584A9B5C50046A098560F40 /* Ionicons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Ionicons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Ionicons.ttf"; sourceTree = "<group>"; };
-		C7D51EB57E98D6D15B55354C /* Pods-Upsquard.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Upsquard.debug.xcconfig"; path = "Target Support Files/Pods-Upsquard/Pods-Upsquard.debug.xcconfig"; sourceTree = "<group>"; };
-		CD4602D5E2FB0593F322AC8B /* Pods-Upsquard-UpsquardTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Upsquard-UpsquardTests.release.xcconfig"; path = "Target Support Files/Pods-Upsquard-UpsquardTests/Pods-Upsquard-UpsquardTests.release.xcconfig"; sourceTree = "<group>"; };
+		C7D51EB57E98D6D15B55354C /* Pods-Upsquad.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Upsquad.debug.xcconfig"; path = "Target Support Files/Pods-Upsquard/Pods-Upsquad.debug.xcconfig"; sourceTree = "<group>"; };
+		CD4602D5E2FB0593F322AC8B /* Pods-Upsquard-UpsquadTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Upsquard-UpsquadTests.release.xcconfig"; path = "Target Support Files/Pods-Upsquard-UpsquardTests/Pods-Upsquard-UpsquadTests.release.xcconfig"; sourceTree = "<group>"; };
 		D445EF162B814F5694E9E036 /* Mulish-LightItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Mulish-LightItalic.ttf"; path = "../assets/fonts/Mulish-LightItalic.ttf"; sourceTree = "<group>"; };
 		DC02C68ACC5D4DED9C9BDEED /* Foundation.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Foundation.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Foundation.ttf"; sourceTree = "<group>"; };
 		DCB178B078AA4F4DB5F07524 /* Mulish-Italic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Mulish-Italic.ttf"; path = "../assets/fonts/Mulish-Italic.ttf"; sourceTree = "<group>"; };
@@ -89,7 +89,7 @@
 		EC24076E27B4491B82A9AFBE /* Mulish-BlackItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Mulish-BlackItalic.ttf"; path = "../assets/fonts/Mulish-BlackItalic.ttf"; sourceTree = "<group>"; };
 		EC785C2F5EDC497DAF6B8EFD /* FontAwesome.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome.ttf; path = "../node_modules/react-native-vector-icons/Fonts/FontAwesome.ttf"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
-		EFDA26901462D3FB26E0DC24 /* Pods-Upsquard.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Upsquard.release.xcconfig"; path = "Target Support Files/Pods-Upsquard/Pods-Upsquard.release.xcconfig"; sourceTree = "<group>"; };
+		EFDA26901462D3FB26E0DC24 /* Pods-Upsquad.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Upsquad.release.xcconfig"; path = "Target Support Files/Pods-Upsquard/Pods-Upsquad.release.xcconfig"; sourceTree = "<group>"; };
 		F9DF2CA0DD994A6F95A3D411 /* Mulish-BoldItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Mulish-BoldItalic.ttf"; path = "../assets/fonts/Mulish-BoldItalic.ttf"; sourceTree = "<group>"; };
 		FE60403CE78F08AC01FBE1DF /* libPods-Upsquard-UpsquardTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Upsquard-UpsquardTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -114,13 +114,13 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		00E356EF1AD99517003FC87E /* UpsquardTests */ = {
+		00E356EF1AD99517003FC87E /* UpsquadTests */ = {
 			isa = PBXGroup;
 			children = (
-				00E356F21AD99517003FC87E /* UpsquardTests.m */,
+				00E356F21AD99517003FC87E /* UpsquadTests.m */,
 				00E356F01AD99517003FC87E /* Supporting Files */,
 			);
-			path = UpsquardTests;
+			path = UpsquadTests;
 			sourceTree = "<group>";
 		};
 		00E356F01AD99517003FC87E /* Supporting Files */ = {
@@ -131,7 +131,7 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
-		13B07FAE1A68108700A75B9A /* Upsquard */ = {
+		13B07FAE1A68108700A75B9A /* Upsquad */ = {
 			isa = PBXGroup;
 			children = (
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
@@ -141,7 +141,7 @@
 				81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */,
 				13B07FB71A68108700A75B9A /* main.m */,
 			);
-			name = Upsquard;
+			name = Upsquad;
 			sourceTree = "<group>";
 		};
 		1C7B4E90E6AA42749202475A /* Resources */ = {
@@ -196,10 +196,10 @@
 		64B7F980B899F3D093CED0C5 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				C7D51EB57E98D6D15B55354C /* Pods-Upsquard.debug.xcconfig */,
-				EFDA26901462D3FB26E0DC24 /* Pods-Upsquard.release.xcconfig */,
-				249D022B6F68713389982B56 /* Pods-Upsquard-UpsquardTests.debug.xcconfig */,
-				CD4602D5E2FB0593F322AC8B /* Pods-Upsquard-UpsquardTests.release.xcconfig */,
+				C7D51EB57E98D6D15B55354C /* Pods-Upsquad.debug.xcconfig */,
+				EFDA26901462D3FB26E0DC24 /* Pods-Upsquad.release.xcconfig */,
+				249D022B6F68713389982B56 /* Pods-Upsquard-UpsquadTests.debug.xcconfig */,
+				CD4602D5E2FB0593F322AC8B /* Pods-Upsquard-UpsquadTests.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -214,9 +214,9 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
-				13B07FAE1A68108700A75B9A /* Upsquard */,
+				13B07FAE1A68108700A75B9A /* Upsquad */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
-				00E356EF1AD99517003FC87E /* UpsquardTests */,
+				00E356EF1AD99517003FC87E /* UpsquadTests */,
 				83CBBA001A601CBA00E9B192 /* Products */,
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
 				64B7F980B899F3D093CED0C5 /* Pods */,
@@ -230,8 +230,8 @@
 		83CBBA001A601CBA00E9B192 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				13B07F961A680F5B00A75B9A /* Upsquard.app */,
-				00E356EE1AD99517003FC87E /* UpsquardTests.xctest */,
+				13B07F961A680F5B00A75B9A /* Upsquad.app */,
+				00E356EE1AD99517003FC87E /* UpsquadTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -239,9 +239,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		00E356ED1AD99517003FC87E /* UpsquardTests */ = {
+		00E356ED1AD99517003FC87E /* UpsquadTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 00E357021AD99517003FC87E /* Build configuration list for PBXNativeTarget "UpsquardTests" */;
+			buildConfigurationList = 00E357021AD99517003FC87E /* Build configuration list for PBXNativeTarget "UpsquadTests" */;
 			buildPhases = (
 				D1D7847048D4CF23D8954439 /* [CP] Check Pods Manifest.lock */,
 				00E356EA1AD99517003FC87E /* Sources */,
@@ -255,14 +255,14 @@
 			dependencies = (
 				00E356F51AD99517003FC87E /* PBXTargetDependency */,
 			);
-			name = UpsquardTests;
+			name = UpsquadTests;
 			productName = UpsquardTests;
-			productReference = 00E356EE1AD99517003FC87E /* UpsquardTests.xctest */;
+			productReference = 00E356EE1AD99517003FC87E /* UpsquadTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		13B07F861A680F5B00A75B9A /* Upsquard */ = {
+		13B07F861A680F5B00A75B9A /* Upsquad */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "Upsquard" */;
+			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "Upsquad" */;
 			buildPhases = (
 				C82C5935C360D9733571F234 /* [CP] Check Pods Manifest.lock */,
 				FD10A7F022414F080027D42C /* Start Packager */,
@@ -277,9 +277,9 @@
 			);
 			dependencies = (
 			);
-			name = Upsquard;
+			name = Upsquad;
 			productName = Upsquard;
-			productReference = 13B07F961A680F5B00A75B9A /* Upsquard.app */;
+			productReference = 13B07F961A680F5B00A75B9A /* Upsquad.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -299,7 +299,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 83CBB9FA1A601CBA00E9B192 /* Build configuration list for PBXProject "Upsquard" */;
+			buildConfigurationList = 83CBB9FA1A601CBA00E9B192 /* Build configuration list for PBXProject "Upsquad" */;
 			compatibilityVersion = "Xcode 12.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -312,8 +312,8 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				13B07F861A680F5B00A75B9A /* Upsquard */,
-				00E356ED1AD99517003FC87E /* UpsquardTests */,
+				13B07F861A680F5B00A75B9A /* Upsquad */,
+				00E356ED1AD99517003FC87E /* UpsquadTests */,
 			);
 		};
 /* End PBXProject section */
@@ -506,7 +506,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				00E356F31AD99517003FC87E /* UpsquardTests.m in Sources */,
+				00E356F31AD99517003FC87E /* UpsquadTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -524,7 +524,7 @@
 /* Begin PBXTargetDependency section */
 		00E356F51AD99517003FC87E /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 13B07F861A680F5B00A75B9A /* Upsquard */;
+			target = 13B07F861A680F5B00A75B9A /* Upsquad */;
 			targetProxy = 00E356F41AD99517003FC87E /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -532,7 +532,7 @@
 /* Begin XCBuildConfiguration section */
 		00E356F61AD99517003FC87E /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 249D022B6F68713389982B56 /* Pods-Upsquard-UpsquardTests.debug.xcconfig */;
+			baseConfigurationReference = 249D022B6F68713389982B56 /* Pods-Upsquard-UpsquadTests.debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -553,13 +553,13 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Upsquard.app/Upsquard";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Upsquad.app/Upsquad";
 			};
 			name = Debug;
 		};
 		00E356F71AD99517003FC87E /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = CD4602D5E2FB0593F322AC8B /* Pods-Upsquard-UpsquardTests.release.xcconfig */;
+			baseConfigurationReference = CD4602D5E2FB0593F322AC8B /* Pods-Upsquard-UpsquadTests.release.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				COPY_PHASE_STRIP = NO;
@@ -577,13 +577,13 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Upsquard.app/Upsquard";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Upsquad.app/Upsquad";
 			};
 			name = Release;
 		};
 		13B07F941A680F5B00A75B9A /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = C7D51EB57E98D6D15B55354C /* Pods-Upsquard.debug.xcconfig */;
+			baseConfigurationReference = C7D51EB57E98D6D15B55354C /* Pods-Upsquad.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
@@ -604,7 +604,7 @@
 					"-lc++",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = org.reactjs.native.example.Upsquad;
-				PRODUCT_NAME = Upsquard;
+				PRODUCT_NAME = Upsquad;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -614,7 +614,7 @@
 		};
 		13B07F951A680F5B00A75B9A /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = EFDA26901462D3FB26E0DC24 /* Pods-Upsquard.release.xcconfig */;
+			baseConfigurationReference = EFDA26901462D3FB26E0DC24 /* Pods-Upsquad.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
@@ -634,7 +634,7 @@
 					"-lc++",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = org.reactjs.native.example.Upsquad;
-				PRODUCT_NAME = Upsquard;
+				PRODUCT_NAME = Upsquad;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -769,7 +769,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		00E357021AD99517003FC87E /* Build configuration list for PBXNativeTarget "UpsquardTests" */ = {
+		00E357021AD99517003FC87E /* Build configuration list for PBXNativeTarget "UpsquadTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				00E356F61AD99517003FC87E /* Debug */,
@@ -778,7 +778,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "Upsquard" */ = {
+		13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "Upsquad" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				13B07F941A680F5B00A75B9A /* Debug */,
@@ -787,7 +787,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		83CBB9FA1A601CBA00E9B192 /* Build configuration list for PBXProject "Upsquard" */ = {
+		83CBB9FA1A601CBA00E9B192 /* Build configuration list for PBXProject "Upsquad" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				83CBBA201A601CBA00E9B192 /* Debug */,

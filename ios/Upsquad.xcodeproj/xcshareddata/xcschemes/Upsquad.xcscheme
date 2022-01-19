@@ -15,9 +15,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-               BuildableName = "Upsquard.app"
-               BlueprintName = "Upsquard"
-               ReferencedContainer = "container:Upsquard.xcodeproj">
+               BuildableName = "Upsquad.app"
+               BlueprintName = "Upsquad"
+               ReferencedContainer = "container:Upsquad.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -33,9 +33,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "00E356ED1AD99517003FC87E"
-               BuildableName = "UpsquardTests.xctest"
-               BlueprintName = "UpsquardTests"
-               ReferencedContainer = "container:Upsquard.xcodeproj">
+               BuildableName = "UpsquadTests.xctest"
+               BlueprintName = "UpsquadTests"
+               ReferencedContainer = "container:Upsquad.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -55,9 +55,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "Upsquard.app"
-            BlueprintName = "Upsquard"
-            ReferencedContainer = "container:Upsquard.xcodeproj">
+            BuildableName = "Upsquad.app"
+            BlueprintName = "Upsquad"
+            ReferencedContainer = "container:Upsquad.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </LaunchAction>
@@ -72,9 +72,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "Upsquard.app"
-            BlueprintName = "Upsquard"
-            ReferencedContainer = "container:Upsquard.xcodeproj">
+            BuildableName = "Upsquad.app"
+            BlueprintName = "Upsquad"
+            ReferencedContainer = "container:Upsquad.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>
