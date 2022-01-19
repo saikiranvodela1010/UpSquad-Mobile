@@ -54,7 +54,7 @@ export default class DrawerContent extends React.Component {
                         <TouchableOpacity onPress={() => {this.props.navigation.navigate('switchcommunity')}}>
                        <View style={{flexDirection:'row',margin:20,marginLeft:30}} >
                         <Image source={ImagesWrapper.recentactivity}/>
-                        <Text style={{fontSize:14,fontWeight:'600',fontFamily:Fonts.mulishRegular,marginLeft:20,textAlign:'center',marginTop:5}}>Recent activity</Text>
+                        <Text style={{fontSize:14,fontWeight:'600',fontFamily:Fonts.mulishRegular,marginLeft:20,textAlign:'center',marginTop:3}}>Recent activity</Text>
                   
                      </View> 
                      </TouchableOpacity>
@@ -63,7 +63,7 @@ export default class DrawerContent extends React.Component {
                         <TouchableOpacity onPress={() => {this.props.navigation.navigate('switchcommunity')}}>
                        <View style={{flexDirection:'row',margin:20,marginLeft:30}} >
                         <Image source={ImagesWrapper.usersthree}/>
-                        <Text style={{fontSize:14,fontWeight:'600',fontFamily:Fonts.mulishRegular,marginLeft:20,textAlign:'center',marginTop:5}}>Switch community</Text>
+                        <Text style={{fontSize:14,fontWeight:'600',fontFamily:Fonts.mulishRegular,marginLeft:20,textAlign:'center',marginTop:3}}>Switch community</Text>
                     
                      </View> 
                      </TouchableOpacity>
@@ -72,7 +72,7 @@ export default class DrawerContent extends React.Component {
                         <TouchableOpacity onPress={() => {this.props.navigation.navigate('SeetingScreen')}}>
                        <View style={{flexDirection:'row',margin:20,marginLeft:30}} >
                         <Image source={ImagesWrapper.settings}/>
-                        <Text style={{fontSize:14,fontWeight:'600',fontFamily:Fonts.mulishRegular,marginLeft:20,textAlign:'center',marginTop:5}}>Settings</Text>
+                        <Text style={{fontSize:14,fontWeight:'600',fontFamily:Fonts.mulishRegular,marginLeft:20,textAlign:'center',marginTop:3}}>Settings</Text>
                     
                      </View> 
                      </TouchableOpacity>
@@ -81,7 +81,7 @@ export default class DrawerContent extends React.Component {
                         <TouchableOpacity onPress={() => {this.props.navigation.navigate('switchcommunity')}}>
                        <View style={{flexDirection:'row',margin:20,marginLeft:30}} >
                         <Image source={ImagesWrapper.question}/>
-                        <Text style={{fontSize:14,fontWeight:'600',fontFamily:Fonts.mulishRegular,marginLeft:20,textAlign:'center',marginTop:5}}>FAQ</Text>
+                        <Text style={{fontSize:14,fontWeight:'600',fontFamily:Fonts.mulishRegular,marginLeft:20,textAlign:'center',marginTop:3}}>FAQ</Text>
                    
                      </View> 
                      </TouchableOpacity>
@@ -111,7 +111,8 @@ userName:{
     fontWeight:'600',
     marginLeft:20,
     color:'#1E1C24',
-    width:150
+    width:150,
+    marginTop:5
     // width:'10%',
 }
 });

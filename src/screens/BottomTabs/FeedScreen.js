@@ -53,6 +53,7 @@ import Share from 'react-native-share';
             email : userDetails.userEmail
         })
         DeviceEventEmitter.addListener("refresh",this.getPosts);
+        DeviceEventEmitter.addListener("UpdateFeed",this.updateFeed);
         return new Promise((resolve, reject) => {
             this.getCommunityDetails()
             .then(()=>  {return this.getPosts();})
@@ -70,17 +71,49 @@ import Share from 'react-native-share';
         this.setState({communityName:universityDetsils.universityName});
     }
 
-    customShare = async () =>  {
-        const shareOptions  =  {
-            message:"This is a test message"
-        }
-            Share.open(shareOptions)
-            .then((res) => {
-                console.log(res);
+  
+
+    // customShare = async () =>  {
+    //     const shareOptions  =  {
+    //         message:"This is a test message"
+    //     }
+    //         Share.open(shareOptions)
+    //         .then((res) => {
+    //             console.log(res);
+    //         })
+    //         .catch((err) => {
+    //             err && console.log(err);
+    //         });
+    //     }
+
+        updateFeed = async () => {
+            console.log("ravikiran Avasarala ASDFGHJKL_@230796 testing 12345666");
+            const universityDetsils = await this.storagePrefs.getObjectValue("universityDetsils")
+            console.log("universityDetsils inside deviceEventEmitter",universityDetsils)
+            const userDetails = await this.storagePrefs.getObjectValue("userDetails")
+            console.log("userDetails inside deviceEventEmitter",userDetails)
+
+            
+
+            this.setState({
+                universityName:universityDetsils.universityName,
+                universityId: universityDetsils._id,
+                communityName: universityDetsils.universityName,
+                userId : userDetails.userId,
+                email : userDetails.userEmail
             })
-            .catch((err) => {
-                err && console.log(err);
-            });
+            return new Promise((resolve, reject) => {
+            this.getPosts()
+            .then(() =>  {return this.getUniversityImages();})
+            .then(() => {return this.getUserProfile();})
+            .then(() => {return  this.setState({isLoading: false})})
+            .then(() =>  { resolve('done')})
+            .catch((error)=> {this.setState({isLoading: false});
+                                 reject(error)})
+        })
+
+            
+
         }
 
     async postLike(postID, userID){
@@ -121,6 +154,7 @@ import Share from 'react-native-share';
     getPosts = async () => {
         //const data = '5ed8d9509e623f00221761a1/All/true/5f5892a1b205b1387d5cafb/All'
         const data = this.state.universityId+'/All/'+this.state.isProfessional+"/"+this.state.userId+'/All'
+        console.log("Post is getting called")
         const response = await this.apiHandler.requestGet(data,this.serviceUrls.getPosts);
         if(response.posts != null && response.posts.length != 0 ){
             this.setState({postData: response.posts});
@@ -130,6 +164,7 @@ import Share from 'react-native-share';
     }
 
     getUniversityImages = async () =>  {
+        console.log("University Images is getting called")
         //const data =  '5ed8d9509e623f00221761a1';
         const data = this.state.userId;
         const response = await this.apiHandler.requestGet(data,this.serviceUrls.getUniversityImages);
@@ -149,6 +184,7 @@ import Share from 'react-native-share';
     }
 
     getUserProfile = async () => {
+        console.log("userProfile is getting called");
         //const data = '5ee21f3f5583d00022351037';
         const data = this.state.userId;
         const response = await this.apiHandler.requestGet(data,this.serviceUrls.getUserProfile);
@@ -257,7 +293,7 @@ import Share from 'react-native-share';
                     style={{marginLeft:25}}
                     ></Image>
                     </TouchableOpacity>
-                    <Text style={{ fontSize: 20, fontFamily: Fonts.mulishSemiBold, fontWeight: '600',color:'#1E1C24', marginLeft: '5%',width:170}}>{this.state.communityName}</Text>
+                    <Text ellipsizeMode='tail' numberOfLines={1} style={{ fontSize: 20, fontFamily: Fonts.mulishSemiBold, fontWeight: '600',color:'#1E1C24', marginLeft: '5%',width:170}}>{this.state.communityName}</Text>
                     <View style={{justifyContent:'flex-end',flexDirection:'row',flex:1}}>
                     <TouchableOpacity   
                     style = {{marginRight:'8%'}}
@@ -394,7 +430,7 @@ import Share from 'react-native-share';
                                 </TouchableOpacity>
 
                                 <TouchableOpacity onPress = {() => {
-                                    this.customShare()
+                                    // this.customShare()
                                 }} >
                                 <View style={{flexDirection:'row'}}>
                                 <Image
@@ -413,9 +449,7 @@ import Share from 'react-native-share';
                 
                     <TouchableOpacity activeOpacity={0.5} style={styles.toucahbleOpacity}
 
-                    //   onPress={() => this.props.navigation.navigate('groupscreen2', {
-                    //     participants: this.state.selectedParticipants,
-                    //   })}
+                    onPress={() => this.props.navigation.navigate('CreatePostScreen')}
                     >
                     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
                         <Image
@@ -426,7 +460,21 @@ import Share from 'react-native-share';
                     </View>
                     </TouchableOpacity>
                     </View> : 
-                    null}
+                    <View style={{ flex: 1, justifyContent: 'flex-end', alignItems: 'flex-end' }}>
+                
+                    <TouchableOpacity activeOpacity={0.5} style={styles.toucahbleOpacity}
+
+                      onPress={() => this.props.navigation.navigate('CreatePostScreen')}
+                    >
+                    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+                        <Image
+                        source={ImagesWrapper.plus}
+                            style={{ height: 60,
+                                width: 60,}}
+                        />
+                    </View>
+                    </TouchableOpacity>
+                    </View>}
                     {this.state.tapstate === true ?
                     // <Modal
                     //     transparent={true}

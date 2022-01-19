@@ -48,7 +48,7 @@ const Tab = createMaterialTopTabNavigator();
                 <Image source={ImagesWrapper.profile}
                 style={{marginLeft:'9%'}}
                 ></Image>
-                <Text style={{ fontSize: 20, fontFamily: Fonts.mulishSemiBold, fontWeight: '600',color:'#1E1C24', marginLeft: '5%' ,width:170}}>{this.state.communityName}</Text>
+                <Text ellipsizeMode='tail' numberOfLines={1} style={{ fontSize: 20, fontFamily: Fonts.mulishSemiBold, fontWeight: '600',color:'#1E1C24', marginLeft: '5%' ,width:170}}>{this.state.communityName}</Text>
                 <View style={{justifyContent:'flex-end',flexDirection:'row',flex:1}}>
                 <TouchableOpacity  style={{marginRight:'18%'}} onPress={() => this.props.navigation.navigate('notificationscreen')}>
                 <Image source={ImagesWrapper.notificationNo}

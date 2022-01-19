@@ -66,7 +66,7 @@ const MainScreens =()=>{
     screenOptions={{
       headerShown: false,
     }}
-      initialRouteName='CreatePostScreen'
+      initialRouteName='GetStarted'
     >
        {/* <StatusBar hidden={true} /> */}
   <Stack.Screen 
