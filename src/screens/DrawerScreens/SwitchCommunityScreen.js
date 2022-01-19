@@ -37,10 +37,15 @@ export default class SwitchCommunityScreen extends React.Component {
     async componentDidMount() {
       
       await this.getCommunityDetails();
+      DeviceEventEmitter.addListener("codeAddedSuccessfully",this.updateCommunityScreen)
      
+  }
+  updateCommunityScreen = () => {
+    this.getCommunityDetails()
   }
 
   async getCommunityDetails() {
+    
     this.setState({
       isLoading: true
   })
@@ -90,6 +95,7 @@ export default class SwitchCommunityScreen extends React.Component {
       "universityName":item.universityName,
      }
      const data = await this.storagePrefs.setObjectValue("universityDetsils",universityDetsils);
+     DeviceEventEmitter.emit("UpdateFeed");
 
   }
   renderLoader(){
@@ -165,7 +171,6 @@ export default class SwitchCommunityScreen extends React.Component {
                       <TouchableOpacity onPress={()=>{
                         this.setState({checked:key});
                         this.checked(item);
-                        DeviceEventEmitter.emit("refresh");
                     }} 
                     style={{flexDirection:'row',justifyContent:'space-between',flex:1}}
                     >

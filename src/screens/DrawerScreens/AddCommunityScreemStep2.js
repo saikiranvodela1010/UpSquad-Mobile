@@ -168,9 +168,13 @@ class TeamScreen extends React.Component {
             } 
 
             if(updateTeamsresponse.succsess === true){
-                // DeviceEventEmitter.emit("done");
-                // this.props.navigation.navigate('switchcommunity');
-                this.props.navigation.openDrawer();
+               
+                DeviceEventEmitter.emit("codeAddedSuccessfully");
+                this.props.navigation.navigate('switchcommunity');
+
+               
+
+                //this.props.navigation.openDrawer();
             }
 
        

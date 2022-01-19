@@ -53,6 +53,7 @@ import Share from 'react-native-share';
             email : userDetails.userEmail
         })
         DeviceEventEmitter.addListener("refresh",this.getPosts);
+        DeviceEventEmitter.addListener("UpdateFeed",this.updateFeed);
         return new Promise((resolve, reject) => {
             this.getCommunityDetails()
             .then(()=>  {return this.getPosts();})
@@ -70,17 +71,40 @@ import Share from 'react-native-share';
         this.setState({communityName:universityDetsils.universityName});
     }
 
-    customShare = async () =>  {
-        const shareOptions  =  {
-            message:"This is a test message"
-        }
-            Share.open(shareOptions)
-            .then((res) => {
-                console.log(res);
+  
+
+    // customShare = async () =>  {
+    //     const shareOptions  =  {
+    //         message:"This is a test message"
+    //     }
+    //         Share.open(shareOptions)
+    //         .then((res) => {
+    //             console.log(res);
+    //         })
+    //         .catch((err) => {
+    //             err && console.log(err);
+    //         });
+    //     }
+
+        updateFeed = async () => {
+            const universityDetsils = await this.storagePrefs.getObjectValue("universityDetsils")
+            const userDetails = await this.storagePrefs.getObjectValue("userDetails")
+            this.setState({
+                universityName:universityDetsils.universityName,
+                universityId: universityDetsils._id,
+                communityName: universityDetsils.universityName,
+                userId : userDetails.userId,
+                email : userDetails.userEmail
             })
-            .catch((err) => {
-                err && console.log(err);
-            });
+            return new Promise((resolve, reject) => {
+            this.getPosts()
+            .then(() =>  {return this.getUniversityImages();})
+            .then(() => {return this.getUserProfile();})
+            .then(() => {return  this.setState({isLoading: false})})
+            .then(() =>  { resolve('done')})
+            .catch((error)=> {this.setState({isLoading: false});
+                                 reject(error)})
+        })
         }
 
     async postLike(postID, userID){
@@ -89,7 +113,6 @@ import Share from 'react-native-share';
             "userId" : userID
         }
         const response = await this.apiHandler.requestPost(data,this.serviceUrls.postLike);
-        console.log("response fot like", response)
     }
 
     async getCommunityDetails() {
@@ -394,7 +417,7 @@ import Share from 'react-native-share';
                                 </TouchableOpacity>
 
                                 <TouchableOpacity onPress = {() => {
-                                    this.customShare()
+                                    // this.customShare()
                                 }} >
                                 <View style={{flexDirection:'row'}}>
                                 <Image
@@ -413,9 +436,7 @@ import Share from 'react-native-share';
                 
                     <TouchableOpacity activeOpacity={0.5} style={styles.toucahbleOpacity}
 
-                    //   onPress={() => this.props.navigation.navigate('groupscreen2', {
-                    //     participants: this.state.selectedParticipants,
-                    //   })}
+                    onPress={() => this.props.navigation.navigate('CreatePostScreen')}
                     >
                     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
                         <Image
@@ -426,7 +447,21 @@ import Share from 'react-native-share';
                     </View>
                     </TouchableOpacity>
                     </View> : 
-                    null}
+                    <View style={{ flex: 1, justifyContent: 'flex-end', alignItems: 'flex-end' }}>
+                
+                    <TouchableOpacity activeOpacity={0.5} style={styles.toucahbleOpacity}
+
+                      onPress={() => this.props.navigation.navigate('CreatePostScreen')}
+                    >
+                    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+                        <Image
+                        source={ImagesWrapper.plus}
+                            style={{ height: 60,
+                                width: 60,}}
+                        />
+                    </View>
+                    </TouchableOpacity>
+                    </View>}
                     {this.state.tapstate === true ?
                     // <Modal
                     //     transparent={true}
