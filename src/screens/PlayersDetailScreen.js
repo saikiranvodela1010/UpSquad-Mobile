@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, Text, StyleSheet, TouchableOpacity, ImageBackground, Image, Dimensions, TextInput } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ImageBackground, Image, Dimensions, TextInput,ActivityIndicator } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import Video, { FilterType } from 'react-native-video';
 import ImagesWrapper from '../res/ImagesWrapper';
@@ -49,7 +49,8 @@ export default class playersDetailScreen extends React.Component {
             publicationsall: false,
             communityall: false,
             organizationData: [],
-            teamData: []
+            teamData: [],
+            isLoading: false
 
         }
 
@@ -62,11 +63,15 @@ export default class playersDetailScreen extends React.Component {
 
 
     async getUserInfo(userid) {
+        this.setState({
+            isLoading: true
+        })
         //console.log('userid', this.state.userid)
         const data = userid;
         //const data = '5e3bfad3cf7d530022e90429'
         const response = await this.apiHandler.requestGet(data, this.serviceUrls.getParticularUser)
         //console.log("User response", response)
+       
 
         this.setState({ userData: response.data })
 
@@ -114,6 +119,9 @@ export default class playersDetailScreen extends React.Component {
         const response = await this.apiHandler.requestPost(communityData, this.serviceUrls.getCommunities);
         console.log('communitydata=====', response.data)
         this.setState({
+            isLoading: false
+        })
+        this.setState({
             organizationData: response.data
         })
         const team = this.state.organizationData[0]
@@ -126,12 +134,34 @@ export default class playersDetailScreen extends React.Component {
             data6: data1
         })
     }
-
+    renderLoader(){
+        return(
+            <Modal transparent={true}
+                visible={this.state.isLoading}>
+                <View style={{
+                    flex: 1,
+                    flexDirection: 'row',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    margin: 10
+                }}>
+                    <View style={{
+                        width: "25%",
+                        height: "10%",
+                        borderWidth: 1,
+                        borderRadius: 5,borderColor: "#58C4C6",marginBottom: 10 ,backgroundColor: '#58C4C6',justifyContent: 'center' }}>
+                        <ActivityIndicator size="large" color="#fff" />
+                    </View>
+                </View>
+            </Modal>
+        )
+    }
 
     render() {
 
         return (
             <View style={{ flex: 1, backgroundColor: '#FFFFFF' }}>
+                {this.renderLoader()}
                 <View style={styles.header}>
 
                     <TouchableOpacity onPress={() => this.props.navigation.goBack(null)}>

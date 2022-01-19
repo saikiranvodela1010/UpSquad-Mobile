@@ -1,11 +1,12 @@
 import React from 'react';
-import { View, Text, StyleSheet, TextInput, Image, TouchableOpacity, ScrollView, FlatList, DeviceEventEmitter } from 'react-native';
+import { View, Text, StyleSheet, TextInput, Image, TouchableOpacity, ScrollView, FlatList, DeviceEventEmitter,ActivityIndicator } from 'react-native';
 import ImagesWrapper from '../../res/ImagesWrapper';
 import Fonts from '../../res/Fonts';
 import Modal from 'react-native-modal';
 import ServiceUrls from '../../network/ServiceUrls';
 import APIHandler from '../../network/NetWorkOperations';
 import StoragePrefs from '../../res/StoragePrefs';
+import axios from 'axios'
 
 export default class PlayersScreen extends React.Component {
   serviceUrls = new ServiceUrls();
@@ -24,7 +25,9 @@ export default class PlayersScreen extends React.Component {
       // universityId:"5eb955606d1ed60657154888",
       playerData: [],
       userData: [],
-      upSquad_id: '5ee072287a57fb54881a81db'
+      upSquad_id: '5ee072287a57fb54881a81db',
+      isLoading: false,
+      sortData:''
 
     }
   }
@@ -39,6 +42,8 @@ export default class PlayersScreen extends React.Component {
     console.log('id', this.state.userId);
 
     this.getUserInfo();
+    this.getSort();
+    
     DeviceEventEmitter.addListener("UpdateFeed",this.updatePlayerScreen)
   }
 
@@ -50,6 +55,9 @@ export default class PlayersScreen extends React.Component {
     this.getUserInfo();
   }
   async getUserInfo() {
+    this.setState({
+      isLoading: true
+  })
     //const data = '5e3bfad3cf7d530022e90429'+'/5ed8d9509e623f00221761a1';
     const data = this.state.userId + '/' + this.state.universityId;
     const response = await this.apiHandler.requestGet(data, this.serviceUrls.getuser)
@@ -76,8 +84,23 @@ export default class PlayersScreen extends React.Component {
     }
     const response = await this.apiHandler.requestPost(data1, this.serviceUrls.searchUsersByOrganization)
     console.log("searchUsersByOrganization", JSON.stringify(response));
+    this.setState({
+      isLoading: false
+  })
     this.setState({ playerData: response })
+    console.log('sortname',this.state.sortData.sortName)
+    const sortName = this.state.sortData.sortName
+   
+    if(this.state.sortData.sortOrder=='asc'){
+    const sortedArrayData =this.state. playerData.sort((a, b) => a.sortName > b.sortName)
+    }
+    else{
+      const sortedArrayData =this.state. playerData.sort((a, b) => a.sortName < b.sortName)
+
+    }
+    //playerData.sort()
     console.log("playerData", this.state.playerData);
+    console.log("sortedArrayData", sortedArrayData);
   }
   async getSearchUserByOutside(data) {
     const data1 = {
@@ -93,9 +116,51 @@ export default class PlayersScreen extends React.Component {
     }
     const response = await this.apiHandler.requestPost(data1, this.serviceUrls.searchUsersByOutside)
     //console.log("searchUsersByOrganization",JSON.stringify(response));
+    this.setState({
+      isLoading: false
+  })
     this.setState({ playerData: response.data })
+
     console.log("playerData", this.state.playerData);
   }
+
+ async updateSortingLast(){
+   this.setState({show1:false})
+  const data={
+    "user_id":this.state.userId,
+    "sortName": "lastName",
+    "sortOrder": "asc"
+   }
+  const res = await axios.patch('https://devapi.upsquad.com/users/save_preference', data);
+
+  //res.data.headers['Content-Type'];
+  console.log("save sort data",res.data)
+  this.getSort()
+
+ }
+ async updateSortingFirst(){
+  this.setState({show1:false})
+ const data={
+   "user_id":this.state.userId,
+   "sortName": "firstName",
+   "sortOrder": "asc"
+  }
+ const res = await axios.patch('https://devapi.upsquad.com/users/save_preference', data);
+
+ //res.data.headers['Content-Type'];
+ console.log("save sort data",res.data)
+ this.getSort()
+
+}
+ async getSort(){
+   const data = this.state.userId
+   const response = await this.apiHandler.requestGet(data, this.serviceUrls.getSort)
+   console.log("Sort response", response)
+   this.setState({sortData:response.data.sortPreference})
+   console.log('Sorting',this.state.sortData)
+
+ }
+
   renderSeparator = () => {
     return (
       <View style={styles.underline}></View>
@@ -107,11 +172,33 @@ export default class PlayersScreen extends React.Component {
       { id: data })
 
   }
+  renderLoader(){
+    return(
+        <Modal transparent={true}
+            visible={this.state.isLoading}>
+            <View style={{
+                flex: 1,
+                flexDirection: 'row',
+                justifyContent: 'center',
+                alignItems: 'center',
+                margin: 10
+            }}>
+                <View style={{
+                    width: "25%",
+                    height: "10%",
+                    borderWidth: 1,
+                    borderRadius: 5,borderColor: "#58C4C6",marginBottom: 10 ,backgroundColor: '#58C4C6',justifyContent: 'center' }}>
+                    <ActivityIndicator size="large" color="#fff" />
+                </View>
+            </View>
+        </Modal>
+    )
+}
 
   render() {
     return (
       <View style={{ flex: 1, backgroundColor: '#FFFFFF' }}>
-
+       {this.renderLoader()}
 
         <TouchableOpacity onPress={() => this.props.navigation.navigate('playerSearch', {
           searchData: this.state.playerData,
@@ -298,6 +385,7 @@ export default class PlayersScreen extends React.Component {
                   </View>
 
                 </View>
+                <TouchableOpacity onPress={()=> this.updateSortingFirst()}>
                 <View style={{ flexDirection: 'row', marginTop: 10 }}>
                   <Text style={styles.popupText}>First name</Text>
                   <View style={{ flex: 1, alignItems: 'flex-end' }}>
@@ -308,6 +396,8 @@ export default class PlayersScreen extends React.Component {
                   </View>
 
                 </View>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={()=> this.updateSortingLast()}>
                 <View style={{ flexDirection: 'row', marginTop: 15 }}>
                   <Text style={styles.popupText}>Last name</Text>
                   <View style={{ flex: 1, alignItems: 'flex-end' }}>
@@ -317,6 +407,7 @@ export default class PlayersScreen extends React.Component {
                     />
                   </View>
                 </View>
+                </TouchableOpacity>
                 <View style={{ flexDirection: 'row', marginTop: 15 }}>
                   <Text style={styles.popupText}>Team name</Text>
                   <View style={{ flex: 1, alignItems: 'flex-end' }}>

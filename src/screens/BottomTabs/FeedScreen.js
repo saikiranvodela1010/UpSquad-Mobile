@@ -87,14 +87,8 @@ import Share from 'react-native-share';
     //     }
 
         updateFeed = async () => {
-            console.log("ravikiran Avasarala ASDFGHJKL_@230796 testing 12345666");
             const universityDetsils = await this.storagePrefs.getObjectValue("universityDetsils")
-            console.log("universityDetsils inside deviceEventEmitter",universityDetsils)
             const userDetails = await this.storagePrefs.getObjectValue("userDetails")
-            console.log("userDetails inside deviceEventEmitter",userDetails)
-
-            
-
             this.setState({
                 universityName:universityDetsils.universityName,
                 universityId: universityDetsils._id,
@@ -111,9 +105,6 @@ import Share from 'react-native-share';
             .catch((error)=> {this.setState({isLoading: false});
                                  reject(error)})
         })
-
-            
-
         }
 
     async postLike(postID, userID){
@@ -122,7 +113,6 @@ import Share from 'react-native-share';
             "userId" : userID
         }
         const response = await this.apiHandler.requestPost(data,this.serviceUrls.postLike);
-        console.log("response fot like", response)
     }
 
     async getCommunityDetails() {

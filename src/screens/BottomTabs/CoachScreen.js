@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, TextInput, Image, TouchableOpacity, ScrollView ,FlatList, DeviceEventEmitter} from 'react-native';
+import { View, Text, StyleSheet, TextInput, Image, TouchableOpacity, ScrollView ,FlatList, DeviceEventEmitter,ActivityIndicator} from 'react-native';
 import ImagesWrapper from '../../res/ImagesWrapper';
 import Fonts from '../../res/Fonts';
 import Modal from 'react-native-modal';
@@ -29,7 +29,8 @@ export default class PlayersScreen extends React.Component {
             universityId:'',
             userData:[],
             coachData: [],
-            upSquad_id: '5ee072287a57fb54881a81db'
+            upSquad_id: '5ee072287a57fb54881a81db',
+            isLoading: false
         }
       }
 
@@ -51,6 +52,9 @@ export default class PlayersScreen extends React.Component {
       this.getUserInfo();
     }
   async getUserInfo(){
+    this.setState({
+      isLoading: true
+  })
     //const data = '5e3bfad3cf7d530022e90429'+'/5ed8d9509e623f00221761a1';
     const data = this.state.userId+'/'+this.state.universityId;
     const response = await this.apiHandler.requestGet(data,this.serviceUrls.getuser)
@@ -78,6 +82,9 @@ export default class PlayersScreen extends React.Component {
     console.log('data1',data1)
     const response = await this.apiHandler.requestPost(data1,this.serviceUrls.searchUsersByOrganization)
     console.log("searchUsersByOrganization",JSON.stringify(response));
+    this.setState({
+      isLoading: false
+  })
     this.setState({coachData: response})
     console.log("CoachData",this.state.coachData);
     }
@@ -94,6 +101,9 @@ export default class PlayersScreen extends React.Component {
   
       }
       const response = await this.apiHandler.requestPost(data1, this.serviceUrls.searchUsersByOutside)
+      this.setState({
+        isLoading: false
+    })
       this.setState({ coachData: response.data })
       console.log("coachData", this.state.coachData);
     }
@@ -102,9 +112,32 @@ export default class PlayersScreen extends React.Component {
           <View style={styles.underline}></View>
       );
   };
+  renderLoader(){
+    return(
+        <Modal transparent={true}
+            visible={this.state.isLoading}>
+            <View style={{
+                flex: 1,
+                flexDirection: 'row',
+                justifyContent: 'center',
+                alignItems: 'center',
+                margin: 10
+            }}>
+                <View style={{
+                    width: "25%",
+                    height: "10%",
+                    borderWidth: 1,
+                    borderRadius: 5,borderColor: "#58C4C6",marginBottom: 10 ,backgroundColor: '#58C4C6',justifyContent: 'center' }}>
+                    <ActivityIndicator size="large" color="#fff" />
+                </View>
+            </View>
+        </Modal>
+    )
+}
     render() {
         return (
             <View style={{ flex: 1, backgroundColor: '#FFFFFF' }}>
+              {this.renderLoader()}
                  <TouchableOpacity onPress={() => this.props.navigation.navigate('coachSearch',{
                 searchData: this.state.coachData,
                 userdata:this.state.userData

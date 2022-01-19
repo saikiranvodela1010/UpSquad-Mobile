@@ -3,7 +3,7 @@ require_relative '../node_modules/@react-native-community/cli-platform-ios/nativ
 
 platform :ios, '11.0'
 
-target 'Upsquard' do
+target 'Upsquad' do
   config = use_native_modules!
 
   use_react_native!(
@@ -24,7 +24,7 @@ target 'Upsquard' do
 
   pod 'RNFS', :path => '../node_modules/react-native-fs'
 
-  target 'UpsquardTests' do
+  target 'UpsquadTests' do
     inherit! :complete
     # Pods for testing
   end

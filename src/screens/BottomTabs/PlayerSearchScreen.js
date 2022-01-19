@@ -1,15 +1,11 @@
 import React from 'react';
-import { View, Text, StyleSheet, Image, TouchableOpacity, ScrollView, Keyboard, FlatList } from 'react-native';
+import { View, Text, StyleSheet, Image, TouchableOpacity, ScrollView, Keyboard, FlatList,ActivityIndicator,Modal } from 'react-native';
 import ImagesWrapper from '../../res/ImagesWrapper';
 import Fonts from '../../res/Fonts';
 import ServiceUrls from '../../network/ServiceUrls';
 import APIHandler from '../../network/NetWorkOperations';
 import { TextInput } from 'react-native-gesture-handler';
 import StoragePrefs from '../../res/StoragePrefs';
-
-
-
-
 
 export default class PlayersScreen extends React.Component {
     serviceUrls = new ServiceUrls();
@@ -32,7 +28,8 @@ export default class PlayersScreen extends React.Component {
             search: false,
             error:'',
             upSquad_id: '5ee072287a57fb54881a81db',
-            outside:''
+            outside:'',
+            isLoading: false
         }
     }
 
@@ -45,19 +42,14 @@ export default class PlayersScreen extends React.Component {
       const userDetails = await this.storagePrefs.getObjectValue("userDetails")
       this.setState({userId:userDetails.userId})
     //   console.log('id',this.state.userId);
-    if (this.state.universityId != this.state.upSquad_id) {
-       // this.getSearchUserByOrganization();
-       this.setState({outside:false}) 
-      }
-      else {
-        this.setState({outside:true})
-      }
+   
      
       }
      
 
 
     async getSearchUserByOrganization() {
+        
        
         this.setState({error:''})
         this.setState({ search: true })
@@ -76,6 +68,9 @@ export default class PlayersScreen extends React.Component {
         console.log(data1)
         const response = await this.apiHandler.requestPost(data1, this.serviceUrls.searchUsersByOrganization)
         console.log("searchUsersByOrganization", response);
+        this.setState({
+            isLoading: false
+        })
         this.setState({ playerData: response })
         if(this.state.playerData==''){
             this.setState({error:"No Players found"})
@@ -85,6 +80,7 @@ export default class PlayersScreen extends React.Component {
 
     }
     async getSearchUserByOutside() {
+       
         this.setState({error:''})
         this.setState({ search: true })
         const data1 = {
@@ -101,17 +97,61 @@ export default class PlayersScreen extends React.Component {
         console.log(data1)
         const response = await this.apiHandler.requestPost(data1, this.serviceUrls.searchUsersByOutside)
         console.log("searchUsersByOutside",response.data);
+        this.setState({
+            isLoading: false
+        })
         this.setState({ playerData: response.data })
         if(this.state.playerData==''){
             this.setState({error:"No Players found"})
         }
         console.log("playerData", this.state.playerData);
       }
+
+
+      selectApi(){
+        this.setState({
+            isLoading: true
+        })
+
+        if (this.state.universityId != this.state.upSquad_id) {
+           
+           this.getSearchUserByOrganization();
+          // this.setState({outside:false}) 
+          }
+          else {
+          
+            this.getSearchUserByOutside()
+           // this.setState({outside:true})
+          }
+
+      }
     renderSeparator = () => {
         return (
             <View style={styles.underline}></View>
         );
     };
+    renderLoader(){
+        return(
+            <Modal transparent={true}
+                visible={this.state.isLoading}>
+                <View style={{
+                    flex: 1,
+                    flexDirection: 'row',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    margin: 10
+                }}>
+                    <View style={{
+                        width: "25%",
+                        height: "10%",
+                        borderWidth: 1,
+                        borderRadius: 5,borderColor: "#58C4C6",marginBottom: 10 ,backgroundColor: '#58C4C6',justifyContent: 'center' }}>
+                        <ActivityIndicator size="large" color="#fff" />
+                    </View>
+                </View>
+            </Modal>
+        )
+    }
 
 
     render() {
@@ -119,6 +159,7 @@ export default class PlayersScreen extends React.Component {
 
         return (
             <View style={{ flex: 1, backgroundColor: '#FFFFFF' }}>
+                {this.renderLoader()}
 
                 <View style={{ flexDirection: 'row', marginTop: 20, marginBottom: 5 }}>
                     <TouchableOpacity onPress={() => 
@@ -138,7 +179,7 @@ export default class PlayersScreen extends React.Component {
 
                         style={styles.title}
                         //onSubmitEditing={this.getSearchUserByOrganization}
-                        onSubmitEditing={() => (this.state.outside==false?this.getSearchUserByOrganization():this.getSearchUserByOutside())}
+                        onSubmitEditing={() => (this.selectApi())}
                     value={this.state.searchText}
                     // onKeyPress={({ nativeEvent }) => {
                     //     if (nativeEvent.key === 'Backspace') {

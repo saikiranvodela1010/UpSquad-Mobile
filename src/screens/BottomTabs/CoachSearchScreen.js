@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, Image, TouchableOpacity, ScrollView, Keyboard, FlatList } from 'react-native';
+import { View, Text, StyleSheet, Image, TouchableOpacity, ScrollView, Keyboard, FlatList,Modal,ActivityIndicator } from 'react-native';
 import ImagesWrapper from '../../res/ImagesWrapper';
 import Fonts from '../../res/Fonts';
 import ServiceUrls from '../../network/ServiceUrls';
@@ -30,6 +30,7 @@ export default class PlayersScreen extends React.Component {
             error:'',
             outside:'',
             upSquad_id: '5ee072287a57fb54881a81db',
+            isLoading: false
         }
     }
 
@@ -41,13 +42,7 @@ export default class PlayersScreen extends React.Component {
       const userDetails = await this.storagePrefs.getObjectValue("userDetails")
       this.setState({userId:userDetails.userId})
     //   console.log('id',this.state.userId);
-    if (this.state.universityId != this.state.upSquad_id) {
-        // this.getSearchUserByOrganization();
-        this.setState({outside:false}) 
-       }
-       else {
-         this.setState({outside:true})
-       }
+   
 
       }
 
@@ -71,6 +66,9 @@ export default class PlayersScreen extends React.Component {
         console.log(data1)
         const response = await this.apiHandler.requestPost(data1, this.serviceUrls.searchUsersByOrganization)
         console.log("searchUsersByOrganization", response);
+        this.setState({
+            isLoading: false
+        })
         this.setState({ coachData: response })
         if(this.state.coachData==''){
             this.setState({error:"No Coach found"})
@@ -96,6 +94,9 @@ export default class PlayersScreen extends React.Component {
         console.log(data1)
         const response = await this.apiHandler.requestPost(data1, this.serviceUrls.searchUsersByOutside)
         console.log("searchUsersByOutside",response.data);
+        this.setState({
+            isLoading: false
+        })
         this.setState({ coachData: response.data })
         if(this.state.coachData==''){
             this.setState({error:"No Players found"})
@@ -107,6 +108,44 @@ export default class PlayersScreen extends React.Component {
             <View style={styles.underline}></View>
         );
     };
+    selectApi(){
+        this.setState({
+            isLoading: true
+        })
+
+        if (this.state.universityId != this.state.upSquad_id) {
+            
+           this.getSearchUserByOrganization();
+          }
+          else {
+          
+            this.getSearchUserByOutside()
+          }
+
+      }
+      renderLoader(){
+        return(
+            <Modal transparent={true}
+                visible={this.state.isLoading}>
+                <View style={{
+                    flex: 1,
+                    flexDirection: 'row',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    margin: 10
+                }}>
+                    <View style={{
+                        width: "25%",
+                        height: "10%",
+                        borderWidth: 1,
+                        borderRadius: 5,borderColor: "#58C4C6",marginBottom: 10 ,backgroundColor: '#58C4C6',justifyContent: 'center' }}>
+                        <ActivityIndicator size="large" color="#fff" />
+                    </View>
+                </View>
+            </Modal>
+        )
+    }
+
 
 
     render() {
@@ -114,6 +153,7 @@ export default class PlayersScreen extends React.Component {
 
         return (
             <View style={{ flex: 1, backgroundColor: '#FFFFFF' }}>
+                {this.renderLoader()}
 
                 <View style={{ flexDirection: 'row', marginTop: 20, marginBottom: 5 }}>
                     <TouchableOpacity onPress={() => 
@@ -133,7 +173,7 @@ export default class PlayersScreen extends React.Component {
 
                         style={styles.title}
                         //onSubmitEditing={this.getSearchUserByOrganization}
-                        onSubmitEditing={() => (this.state.outside==false?this.getSearchUserByOrganization():this.getSearchUserByOutside())}
+                        onSubmitEditing={() => (this.selectApi())}
                     value={this.state.searchText}
 
                     >
