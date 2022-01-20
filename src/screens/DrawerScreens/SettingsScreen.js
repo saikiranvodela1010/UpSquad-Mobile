@@ -56,7 +56,7 @@ export default class MeetingsScreen extends React.Component {
                 <Text style={styles.account}>Account preferences</Text>
                 </TouchableOpacity>
                 <View style={[styles.underline,{width:'85%',marginLeft:'auto',marginRight:'auto'}]}></View>
-                <TouchableOpacity>
+                <TouchableOpacity onPress ={()=>{this.props.navigation.navigate('DefaultVisibility')}}>
                 <Text style={styles.account}>Default Visibility</Text>
                 </TouchableOpacity>
                
@@ -101,7 +101,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         paddingLeft: '9%',
         marginTop: 20,
-        marginBottom: 20,
+        marginBottom: 10,
         flexDirection:'row',
         marginLeft:-10
         // borderBottomWidth:1

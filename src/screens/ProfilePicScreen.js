@@ -146,41 +146,37 @@ const askPermission = async () => {
     console.log('signupdetails',signupdetails);
   }
   async function onSubmit () {
+    setimgBase64("");
     const signupdetails = await storagePrefs.getObjectValue("signupdetails")
     console.log('signupdetails',signupdetails);
   
             console.log('ImagePath:', camerfile?.path);
-            RNFS.readFile(camerfile?.path || file, 'base64')
+            if(file){
+                console.log("file",file)
+            RNFS.readFile( file, 'base64')
         .then((res) =>{
-        // console.log("base64:",res);
+        console.log("base64file:",res.substring(0, 100));
+        // setimgBase64("");
         setimgBase64(res);
         });
+    }else if(camerfile?.path){
+        console.log('camera',camerfile?.path)
+        RNFS.readFile( camerfile?.path, 'base64')
+        .then((res) =>{
+        console.log("base64camere:",res.substring(0, 100));
+        // setimgBase64("");
+        setimgBase64(res);
+        });
+    }
 
 const imgUpload ={
-    'profileImg': 'data:image/jpg;base64,'+imgBase64,
+    'profileImg': 'data:image/png;base64,'+imgBase64,
     // 'profileImg': imgBase64,
     'email':signupdetails.email,
     'firstName':signupdetails.firstName,
     'lastName':signupdetails.lastName,
 }
-// console.log('dataimg',imgUpload)
-// console.log('dataimg')
-// return;
 
-// const response = await apiHandler.requestPost(imgUpload,serviceUrls.imageUpload)
-//         console.log("Image Upload",response)
-      
-      // axios.put(serviceUrls.imageUpload, imgUpload)
-      // .then(response => console.log("Image Upload",response));
-      
-    // axios.post(url,data, {
-    //     headers: {
-    //         'authorization': your_token,
-    //         'Accept' : 'application/json',
-    //         'Content-Type': 'application/json'
-    //     }
-    // })
-        // let header = `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7Il9pZCI6IjYxZGQyOThkYmYxYjYwMTVhOGUyMTllMiJ9LCJpYXQiOjE2NDE4ODQwNDUsImV4cCI6MTY0MzA5MzY0NX0._RDRL8zynlSr0mId0fj-URI3_YWy6YsXrUQ3ZxfXYq4`;
       axios.put(serviceUrls.imageUpload,imgUpload,{
         headers: {
             'Authorization': signupdetails.token,
@@ -356,6 +352,7 @@ const imgUpload ={
                 <View>
                     <TouchableOpacity 
                     onPress={()=>{
+                        setCamerafile("");
                         ImagePickerCropper.openCamera({
                             width:300,
                             height:400,
@@ -367,6 +364,7 @@ const imgUpload ={
                         .then((image)=>{
                             console.log('images',image);
                             setFile('');
+                         
                           setCamerafile(image);
                           setShow(false)
                         })
