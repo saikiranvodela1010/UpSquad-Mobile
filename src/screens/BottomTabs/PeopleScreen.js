@@ -72,7 +72,7 @@ const Tab = createMaterialTopTabNavigator();
 
 
 
-                <Text  style={[styles.recommend,{marginTop:20,marginLeft:25}]}>All members of Memphis-Talks</Text>
+                <Text  style={[styles.recommend,{marginTop:20,marginLeft:25}]}>All members of {this.state.communityName}</Text>
 
                 {/* <View> */}
                 <Tab.Navigator
@@ -85,7 +85,7 @@ const Tab = createMaterialTopTabNavigator();
 
                     }}
                     tabBarOptions={{
-                        indicatorStyle: {backgroundColor: '#58C4C6', width: '30%', marginLeft: 20, height: 4}
+                        indicatorStyle: {backgroundColor: '#58C4C6', width: '30%', marginLeft: 30, height: 4}
                     }}
 
                 >
