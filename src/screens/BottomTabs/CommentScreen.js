@@ -94,7 +94,7 @@ export default class CommentScreen extends React.Component {
     renderHeader = ()=> {
         return(
             <SafeAreaView style = {{ flexDirection : 'column'}}>
-                <View style={{ flexDirection : 'row',alignContent: 'center',backgroundColor:'#FFFFFF'}}>
+                <View style={{ flexDirection : 'row',alignContent: 'center',backgroundColor:'#FFFFFF',alignItems: 'center', justifyContent:  'flex-start',marginTop: '3%'}}>
                   <TouchableOpacity onPress={()=> this.props.navigation.goBack(null)}>
                     <Image
                         source={ImagesWrapper.back}
@@ -140,18 +140,19 @@ export default class CommentScreen extends React.Component {
         return(
             
         <SafeAreaView style = {{backgroundColor : '#FFFFFF',flex: 1}}>
+            <ScrollView>
             {this.renderHeader()}
             {this.renderLoader()}
-            <View style={{flexDirection:'row',marginTop:30,marginLeft:24,}}>
+            {this.state.isLoading==false ? <View style={{flexDirection:'row',marginTop:30,marginLeft:24,}}>
                 <Image source={{uri : this.state.creatorImg}}
                 style = {{width: 24, height: 24}}/> 
                 <Text style = {styles.name}>{this.state.firstName} {this.state.lastName}</Text>
                 <Text style  = {styles.createdAT}>{moment(this.state.postCreatedAt).fromNow() == 'Invalid date' ? null  : moment(this.state.postCreatedAt).fromNow()}</Text>
-            </View>
+            </View> : null }
             
-            <Text style={styles.content}>{this.state.content}</Text>
-            <View style={{ borderWidth: 1, borderColor: '#F1F1F1',marginTop:22}}></View>
-            <View style = {{flexDirection: 'column', marginLeft: 24}}>
+            {this.state.isLoading==false ? <Text style={styles.content}>{this.state.content}</Text> : null }
+            {this.state.isLoading==false  ? <View style={{ borderWidth: 1, borderColor: '#F1F1F1',marginTop:22}}></View> : null}
+            {this.state.isLoading==false  ? <View style = {{flexDirection: 'column', marginLeft: 24}}>
                 <View style = {{flexDirection:'row',alignContent: 'center'}}>
                     <View style = {{borderRadius: 20, borderWidth : 1,width :'80%' ,height :40,borderColor: "#F1F1F1",marginTop:27,justifyContent: 'center',}}>
                         <TextInput style = {{marginLeft:24,flex :0.65}}
@@ -195,8 +196,8 @@ export default class CommentScreen extends React.Component {
                         />
                     }
                 </View>
-            </View>
-
+            </View> : null}
+            </ScrollView>
         </SafeAreaView>
         )
     }

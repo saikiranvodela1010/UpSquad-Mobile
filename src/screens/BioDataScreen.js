@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, ImageBackground, Text, Image, ScrollView, FlatList,Alert } from 'react-native';
+import { View, StyleSheet, ImageBackground, Text, Image, ScrollView, FlatList,Alert,SafeAreaView } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient'
 import ImagesWrapper from '../res/ImagesWrapper';
 // import * as Progress from 'react-native-progress';
@@ -120,7 +120,7 @@ const  getListViewItem =(data)=>{
     }
 
     return (
-        <View style={{ flex: 1, backgroundColor: 'white' }}>
+        <SafeAreaView style={{ flex: 1, backgroundColor: 'white' }}>
             
             <TouchableOpacity onPress={() =>props.navigation.navigate('ProfilePic')}>
               
@@ -303,7 +303,7 @@ const  getListViewItem =(data)=>{
                 </LinearGradient>
             </ImageBackground>
 
-        </View>
+        </SafeAreaView>
     );
 
 }
