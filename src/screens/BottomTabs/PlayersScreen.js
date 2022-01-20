@@ -50,9 +50,6 @@ export default class PlayersScreen extends React.Component {
 
     this.getUserInfo();
 
-
-    this.getSort();
-    
     DeviceEventEmitter.addListener("UpdateFeed",this.updatePlayerScreen)
   }
 
