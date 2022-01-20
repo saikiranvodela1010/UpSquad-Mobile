@@ -40,6 +40,7 @@ import Share from 'react-native-share';
             universityName: '',
             likeColor: false,
             share: false,
+            likedPosts: [],
             
         }
        
@@ -113,6 +114,10 @@ import Share from 'react-native-share';
             "userId" : userID
         }
         const response = await this.apiHandler.requestPost(data,this.serviceUrls.postLike);
+        console.log("response for post",response);
+        if(response.message == "You have liked this post"){
+            this.setState({likedPosts: [...this.state.likedPosts, post.id]})
+        }
     }
 
     async getCommunityDetails() {
@@ -394,7 +399,7 @@ import Share from 'react-native-share';
                                         <Image
                                             source={ImagesWrapper.likeimg}
                                         />
-                                        <Text style={{color:this.state.likeColor == false? '#58C4C6' :'#868585' ,fontSize:14,marginTop:3,marginLeft:5,fontFamily:Fonts.mulishRegular,fontWeight:'600'}}>Like</Text>
+                                        <Text style={{color:this.state.likedPosts.indexOf(item.id) > -1 ?  '#58C4C6' :'#868585' ,fontSize:14,marginTop:3,marginLeft:5,fontFamily:Fonts.mulishRegular,fontWeight:'600'}}>Like</Text>
                                     </View>
                                 </TouchableOpacity>
                                 
