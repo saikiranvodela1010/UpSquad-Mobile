@@ -137,6 +137,8 @@ const ImagesWrapper = {
     settings:require('../Images/settings.png'),
     question:require('../Images/question.png'),
     vectorcommunity:require('../Images/vectorcommunity.png'),
+    radiogrey:require('../Images/radiogrey.png'),
+
 
 }
 export default ImagesWrapper;

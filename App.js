@@ -52,9 +52,13 @@ import CommentScreen from './src/screens/BottomTabs/CommentScreen';
 import AddCommunityScreen from './src/screens/DrawerScreens/AddCommunityScreen';
 import AddCommunityScreenStep2 from './src/screens/DrawerScreens/AddCommunityScreemStep2'
 import SeetingScreen from './src/screens/DrawerScreens/SettingsScreen';
-
-
 import CreatePostScreen from './src/screens/BottomTabs/CreatePostScreen';
+import DefaultVisibilityScreen from './src/screens/DrawerScreens/DefaultVisibilityScreen';
+import PostVisibilityScreen from './src/screens/DrawerScreens/PostVisibilityScreen';
+
+
+
+
 
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -256,7 +260,13 @@ const MainScreens =()=>{
           <Stack.Screen
           name = "CreatePostScreen"
           component = {CreatePostScreen}/>
-
+           <Stack.Screen
+          name = "DefaultVisibility"
+          component = {DefaultVisibilityScreen}/>
+          <Stack.Screen
+          name = "PostVisibility"
+          component = {PostVisibilityScreen}/>
+          
     </Stack.Navigator>
   )
 }

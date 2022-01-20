@@ -45,43 +45,43 @@ export default class DrawerContent extends React.Component {
                     </View>
                    
                     <View style={{alignItems:'flex-end'}}>
-                    <Image  source={ImagesWrapper.toppngdrawer}  resizeMode="cover" style={{opacity:Platform.OS === "ios" ?0.1:0.4,marginLeft:-100}} tintColor="#58C4C6"/>
+                    <Image  source={ImagesWrapper.toppngdrawer}  resizeMode="cover" style={{opacity:Platform.OS === "ios" ?0.1:0.4,marginLeft:-105}} tintColor="#58C4C6"/>
                     </View>
                     </View>
                   
                     </View>
                     <Drawer.Section style={{marginTop:15}}>
                         <TouchableOpacity onPress={() => {this.props.navigation.navigate('switchcommunity')}}>
-                       <View style={{flexDirection:'row',margin:20,marginLeft:30}} >
+                       <View style={{flexDirection:'row',margin:20,marginLeft:25}} >
                         <Image source={ImagesWrapper.recentactivity}/>
-                        <Text style={{fontSize:14,fontWeight:'600',fontFamily:Fonts.mulishRegular,marginLeft:20,textAlign:'center',marginTop:3}}>Recent activity</Text>
+                        <Text style={styles.drawerlabels}>Recent activity</Text>
                   
                      </View> 
                      </TouchableOpacity>
                     </Drawer.Section> 
                     <Drawer.Section >
                         <TouchableOpacity onPress={() => {this.props.navigation.navigate('switchcommunity')}}>
-                       <View style={{flexDirection:'row',margin:20,marginLeft:30}} >
+                       <View style={{flexDirection:'row',margin:20,marginLeft:25}} >
                         <Image source={ImagesWrapper.usersthree}/>
-                        <Text style={{fontSize:14,fontWeight:'600',fontFamily:Fonts.mulishRegular,marginLeft:20,textAlign:'center',marginTop:3}}>Switch community</Text>
+                        <Text style={styles.drawerlabels}>Switch community</Text>
                     
                      </View> 
                      </TouchableOpacity>
                     </Drawer.Section> 
                     <Drawer.Section >
                         <TouchableOpacity onPress={() => {this.props.navigation.navigate('SeetingScreen')}}>
-                       <View style={{flexDirection:'row',margin:20,marginLeft:30}} >
+                       <View style={{flexDirection:'row',margin:20,marginLeft:25}} >
                         <Image source={ImagesWrapper.settings}/>
-                        <Text style={{fontSize:14,fontWeight:'600',fontFamily:Fonts.mulishRegular,marginLeft:20,textAlign:'center',marginTop:3}}>Settings</Text>
+                        <Text style={styles.drawerlabels}>Settings</Text>
                     
                      </View> 
                      </TouchableOpacity>
                     </Drawer.Section> 
                     <Drawer.Section >
                         <TouchableOpacity onPress={() => {this.props.navigation.navigate('switchcommunity')}}>
-                       <View style={{flexDirection:'row',margin:20,marginLeft:30}} >
+                       <View style={{flexDirection:'row',margin:20,marginLeft:25}} >
                         <Image source={ImagesWrapper.question}/>
-                        <Text style={{fontSize:14,fontWeight:'600',fontFamily:Fonts.mulishRegular,marginLeft:20,textAlign:'center',marginTop:3}}>FAQ</Text>
+                        <Text style={styles.drawerlabels}>FAQ</Text>
                    
                      </View> 
                      </TouchableOpacity>
@@ -103,16 +103,23 @@ displayimage: {
     // justifyContent:'center'
     marginTop:50,
     marginRight:-20,
-    marginLeft:20
+    marginLeft:25
 },
 userName:{
     fontFamily:Fonts.mulishSemiBold,
     fontSize:16,
     fontWeight:'600',
-    marginLeft:20,
+    marginLeft:25,
     color:'#1E1C24',
     width:150,
-    marginTop:5
+    marginTop:8
     // width:'10%',
-}
+},
+drawerlabels:{
+    fontSize:14,
+    fontWeight:'600',
+    fontFamily:Fonts.mulishRegular,
+    marginLeft:15,
+    textAlign:'center',
+    marginTop:3}
 });

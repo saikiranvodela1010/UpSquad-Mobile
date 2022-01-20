@@ -1,6 +1,6 @@
 import React from 'react'
 // import { View ,StyleSheet,Text,Image, TouchableOpacity,Platform,ScrollView,Dimensions,} from 'react-native';
-import {  View, Text, StyleSheet, TouchableOpacity,Image, DeviceEventEmitter,SafeAreaView,Modal,ActivityIndicator} from 'react-native';
+import {  View, Text, StyleSheet, TouchableOpacity,Image, DeviceEventEmitter,SafeAreaView,Modal,ActivityIndicator,ScrollView} from 'react-native';
 import ImagesWrapper from '../../res/ImagesWrapper';
 import Fonts from '../../res/Fonts';
 import APIHandler from '../../network/NetWorkOperations';
@@ -143,19 +143,19 @@ export default class SwitchCommunityScreen extends React.Component {
 
                 </View>
                 <View style={styles.underline}></View>
-
+     <ScrollView>
         <View >
-           
-  <View>
-    {
-      this.state.radio_props.map((item,key) => {
-        return(
-          <View>
+          
+        <View>
+          {
+            this.state.radio_props.map((item,key) => {
+              return(
+                <View>
                     <View style={{flexDirection:'row'}}>
                       {item.universityLogo === ''?
                       <View style = {styles.displayimage}></View>
                     :
-                      <Image source={{uri:item.universityLogo}}  style={{height:40,width:40,marginLeft:25,marginTop:20}}/>
+                      <Image source={{uri:item.universityLogo}}  style={{height:40,width:40,marginLeft:'9%',marginTop:20}}/>
                 }
                       {this.state.checked === key ?
                       <View style={{justifyContent:'space-between',flex:1}}>
@@ -196,10 +196,12 @@ export default class SwitchCommunityScreen extends React.Component {
   </View>
       <TouchableOpacity onPress={()=>{this.props.navigation.navigate('AddCommunityScren')}}>
         <View style={styles.linearGradient}>
-            <Text style={styles.buttonText}>Add new ommunity</Text>
+            <Text style={styles.buttonText}>Add new community</Text>
       </View>
       </TouchableOpacity>
+     
 </View>
+</ScrollView>
 
             </SafeAreaView>
         )

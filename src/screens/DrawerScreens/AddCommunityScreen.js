@@ -141,7 +141,7 @@ renderLoader(){
                             // style={{marginLeft:25}}
                         />
                     </TouchableOpacity>
-                    <Text style={styles.memphistalk}>Add Community</Text>
+                    <Text style={styles.memphistalk}>Add new Community</Text>
                    
 
                 </View>
@@ -159,12 +159,8 @@ renderLoader(){
                         
                       }}
                       value={this.removeEmojis(this.state.code)}
-                      
-                    
-                      maxLength={63}
-                      keyboardType={Platform.OS === 'ios' ? 'ascii-capable' : 'visible-password'}
-                  
-                     
+                      // returnKeyType={"done"}
+                        keyboardType={Platform.OS === 'ios' ? 'ascii-capable' : 'visible-password'}
                       onKeyPress={() => {
                        
                         if(this.state.code === ''){
@@ -174,7 +170,7 @@ renderLoader(){
                             this.setState({codebelongs:true});
                         }
                       }}
-                        
+                      maxLength={63}
                          
                        
                     />
