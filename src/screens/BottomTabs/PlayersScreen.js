@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, TextInput, Image, TouchableOpacity, ScrollView, FlatList ,ActivityIndicator} from 'react-native';
+import { View, Text, StyleSheet, TextInput, Image, TouchableOpacity, ScrollView, FlatList, ActivityIndicator } from 'react-native';
 import ImagesWrapper from '../../res/ImagesWrapper';
 import Fonts from '../../res/Fonts';
 import Modal from 'react-native-modal';
@@ -20,14 +20,21 @@ export default class PlayersScreen extends React.Component {
       show1: false,
       isInternet: false,
       userId: '',
-      universityId:'',
+      universityId: '',
       // userId:'610aa7c7a26a80717a1eddde',
       // universityId:"5eb955606d1ed60657154888",
       playerData: [],
+      playerData1: [],
       userData: [],
       upSquad_id: '5ee072287a57fb54881a81db',
       isLoading: false,
-      sortData:''
+      sortData: '',
+      radio1:false,
+      radio2:false,
+      radio3:false,
+      radio4:false,
+     
+      //sortOrder:"asc"
 
     }
   }
@@ -42,13 +49,13 @@ export default class PlayersScreen extends React.Component {
     console.log('id', this.state.userId);
 
     this.getUserInfo();
-    this.getSort();
-    
+
+
   }
   async getUserInfo() {
     this.setState({
       isLoading: true
-  })
+    })
     //const data = '5e3bfad3cf7d530022e90429'+'/5ed8d9509e623f00221761a1';
     const data = this.state.userId + '/' + this.state.universityId;
     const response = await this.apiHandler.requestGet(data, this.serviceUrls.getuser)
@@ -77,21 +84,12 @@ export default class PlayersScreen extends React.Component {
     console.log("searchUsersByOrganization", JSON.stringify(response));
     this.setState({
       isLoading: false
-  })
-    this.setState({ playerData: response })
-    console.log('sortname',this.state.sortData.sortName)
-    const sortName = this.state.sortData.sortName
-   
-    if(this.state.sortData.sortOrder=='asc'){
-    const sortedArrayData =this.state. playerData.sort((a, b) => a.sortName > b.sortName)
-    }
-    else{
-      const sortedArrayData =this.state. playerData.sort((a, b) => a.sortName < b.sortName)
-
-    }
+    })
+    this.setState({ playerData1: response })
+    this.getSort();
     //playerData.sort()
-    console.log("playerData", this.state.playerData);
-    console.log("sortedArrayData", sortedArrayData);
+    // console.log("playerData", this.state.playerData1);
+    //  console.log("sortedArrayData", sortedArrayData);
   }
   async getSearchUserByOutside(data) {
     const data1 = {
@@ -109,48 +107,173 @@ export default class PlayersScreen extends React.Component {
     //console.log("searchUsersByOrganization",JSON.stringify(response));
     this.setState({
       isLoading: false
-  })
-    this.setState({ playerData: response.data })
-
-    console.log("playerData", this.state.playerData);
+    })
+    this.setState({ playerData1: response.data })
+    this.getSort();
+    //console.log("playerData", this.state.playerData);
   }
 
- async updateSortingLast(){
-   this.setState({show1:false})
-  const data={
-    "user_id":this.state.userId,
-    "sortName": "lastName",
-    "sortOrder": "asc"
-   }
-  const res = await axios.patch('https://devapi.upsquad.com/users/save_preference', data);
+  async updateSortingLastA() {
+    this.setState({
+      isLoading: true,
+      radio2:true,
+      radio1:false,
+      radio3:false,
+      radio4:false
+    })
+    this.setState({ show1: false })
+    const data = {
+      "user_id": this.state.userId,
+      "sortName": "lastName",
+      "sortOrder": "asc"
+    }
+    const res = await axios.patch('https://devapi.upsquad.com/users/save_preference', data);
+    this.setState({
+      isLoading: false
+    })
+   // this.setState({radio:!radio2})
+    //res.data.headers['Content-Type'];
+    console.log("save sort data", res.data)
+    this.getSort()
 
-  //res.data.headers['Content-Type'];
-  console.log("save sort data",res.data)
-  this.getSort()
-
- }
- async updateSortingFirst(){
-  this.setState({show1:false})
- const data={
-   "user_id":this.state.userId,
-   "sortName": "firstName",
-   "sortOrder": "asc"
   }
- const res = await axios.patch('https://devapi.upsquad.com/users/save_preference', data);
+  async updateSortingFirstA() {
+    this.setState({
+      isLoading: true,
+      radio1:true,
+      radio2:false,
+      radio3:false,
+      radio4:false
+    })
+    this.setState({ show1: false })
+    const data = {
+      "user_id": this.state.userId,
+      "sortName": "firstName",
+      "sortOrder": "asc"
+    }
+    const res = await axios.patch('https://devapi.upsquad.com/users/save_preference', data);
+    this.setState({
+      isLoading: false
+    })
+    //this.setState({radio:!radio1})
+    //res.data.headers['Content-Type'];
+    console.log("save sort data", res.data)
+    this.getSort()
 
- //res.data.headers['Content-Type'];
- console.log("save sort data",res.data)
- this.getSort()
+  }
+  async updateSortingLastD() {
+    this.setState({
+      isLoading: true,
+      radio4:true,
+      radio3:false,
+      radio1:false,
+      radio2:false
+    })
+    this.setState({ show1: false })
+    const data = {
+      "user_id": this.state.userId,
+      "sortName": "lastName",
+      "sortOrder": "dsc"
+    }
+    const res = await axios.patch('https://devapi.upsquad.com/users/save_preference', data);
+    this.setState({
+      isLoading: false,
+     
+    })
+   // this.setState({radio:!radio4})
+    //res.data.headers['Content-Type'];
+    console.log("save sort data", res.data)
+    this.getSort()
 
-}
- async getSort(){
-   const data = this.state.userId
-   const response = await this.apiHandler.requestGet(data, this.serviceUrls.getSort)
-   console.log("Sort response", response)
-   this.setState({sortData:response.data.sortPreference})
-   console.log('Sorting',this.state.sortData)
+  }
+  async updateSortingFirstD() {
+    this.setState({
+      isLoading: true,
+      radio3:true,
+      radio2:false,
+      radio1:false,
+      radio4:false
+    })
+    this.setState({ show1: false })
+    const data = {
+      "user_id": this.state.userId,
+      "sortName": "firstName",
+      "sortOrder": "dsc"
+    }
+    const res = await axios.patch('https://devapi.upsquad.com/users/save_preference', data);
+    this.setState({
+      isLoading: false
+    })
+    //this.setState({radio:!radio3})
+    //res.data.headers['Content-Type'];
+    console.log("save sort data", res.data)
+    this.getSort()
 
- }
+  }
+  async getSort() {
+    this.setState({
+      isLoading: true
+    })
+    const data = this.state.userId
+    const response = await this.apiHandler.requestGet(data, this.serviceUrls.getSort)
+    console.log("Sort response", response)
+    this.setState({
+      isLoading: false
+    })
+    this.setState({ sortData: response.data.sortPreference })
+
+    if (this.state.sortData.sortOrder == 'asc') {
+      if (this.state.sortData.sortName == 'firstName') {
+
+        const sortedArrayData = this.state.playerData1.sort((a, b) => {
+          if (a.firstName.toUpperCase() < b.firstName.toUpperCase())
+            return -1;
+          if (a.firstName.toUpperCase() > b.firstName.toUpperCase())
+            return 1;
+          return 0;
+        });
+        this.setState({ playerData: sortedArrayData,radio1:true })
+
+      } else {
+        const sortedArrayData = this.state.playerData1.sort((a, b) => {
+          if (a.lastName.toUpperCase() < b.lastName.toUpperCase())
+            return -1;
+          if (a.lastName.toUpperCase() > b.lastName.toUpperCase())
+            return 1;
+          return 0;
+        });
+        this.setState({ playerData: sortedArrayData,radio2:true})
+
+      }
+    }
+    else
+    {
+      if (this.state.sortData.sortName == 'firstName') {
+
+        const sortedArrayData = this.state.playerData1.sort((a, b) => {
+          if (a.firstName.toUpperCase() > b.firstName.toUpperCase())
+            return -1;
+          if (a.firstName.toUpperCase() < b.firstName.toUpperCase())
+            return 1;
+          return 0;
+        });
+        this.setState({ playerData: sortedArrayData,radio3:true })
+
+      } else {
+        const sortedArrayData = this.state.playerData1.sort((a, b) => {
+          if (a.lastName.toUpperCase() > b.lastName.toUpperCase())
+            return -1;
+          if (a.lastName.toUpperCase() < b.lastName.toUpperCase())
+            return 1;
+          return 0;
+        });
+        this.setState({ playerData: sortedArrayData ,radio4:true})
+
+      }
+
+    }
+
+  }
 
   renderSeparator = () => {
     return (
@@ -158,38 +281,39 @@ export default class PlayersScreen extends React.Component {
     );
   };
   selected(data) {
-  
+
     this.props.navigation.navigate('playersDetail',
       { id: data })
 
   }
-  renderLoader(){
-    return(
-        <Modal transparent={true}
-            visible={this.state.isLoading}>
-            <View style={{
-                flex: 1,
-                flexDirection: 'row',
-                justifyContent: 'center',
-                alignItems: 'center',
-                margin: 10
-            }}>
-                <View style={{
-                    width: "25%",
-                    height: "10%",
-                    borderWidth: 1,
-                    borderRadius: 5,borderColor: "#58C4C6",marginBottom: 10 ,backgroundColor: '#58C4C6',justifyContent: 'center' }}>
-                    <ActivityIndicator size="large" color="#fff" />
-                </View>
-            </View>
-        </Modal>
+  renderLoader() {
+    return (
+      <Modal transparent={true}
+        visible={this.state.isLoading}>
+        <View style={{
+          flex: 1,
+          flexDirection: 'row',
+          justifyContent: 'center',
+          alignItems: 'center',
+          margin: 10
+        }}>
+          <View style={{
+            width: "25%",
+            height: "10%",
+            borderWidth: 1,
+            borderRadius: 5, borderColor: "#58C4C6", marginBottom: 10, backgroundColor: '#58C4C6', justifyContent: 'center'
+          }}>
+            <ActivityIndicator size="large" color="#fff" />
+          </View>
+        </View>
+      </Modal>
     )
-}
+  }
 
   render() {
     return (
       <View style={{ flex: 1, backgroundColor: '#FFFFFF' }}>
-       {this.renderLoader()}
+        {this.renderLoader()}
 
         <TouchableOpacity onPress={() => this.props.navigation.navigate('playerSearch', {
           searchData: this.state.playerData,
@@ -362,7 +486,7 @@ export default class PlayersScreen extends React.Component {
           <View style={{ flex: 1, justifyContent: 'flex-end', marginTop: 20 }}>
 
             <View style={{
-              height: 175, width: '100%', backgroundColor: 'white', borderTopLeftRadius: 10, borderTopRightRadius: 10, bottom: 0, position: 'absolute'
+              height: 230, width: '100%', backgroundColor: 'white', borderTopLeftRadius: 10, borderTopRightRadius: 10, bottom: 0, position: 'absolute'
             }}>
               <View style={{ marginLeft: 20, marginTop: 30 }}>
 
@@ -376,38 +500,68 @@ export default class PlayersScreen extends React.Component {
                   </View>
 
                 </View>
-                <TouchableOpacity onPress={()=> this.updateSortingFirst()}>
-                <View style={{ flexDirection: 'row', marginTop: 10 }}>
-                  <Text style={styles.popupText}>First name</Text>
-                  <View style={{ flex: 1, alignItems: 'flex-end' }}>
-                    <Image
+                <TouchableOpacity onPress={() => this.updateSortingFirstA()}>
+                  <View style={{ flexDirection: 'row', marginTop: 10 }}>
+                    <Text style={styles.popupText}>First name - Ascending</Text>
+                    <View style={{ flex: 1, alignItems: 'flex-end' }}>
+                      {this.state.radio1==false?
+                      <Image
+                        source={ImagesWrapper.radiobtn}
+                        style={{ marginRight: 31 }}
+                      />: <Image
                       source={ImagesWrapper.radiobtn1}
                       style={{ marginRight: 31 }}
-                    />
-                  </View>
+                    />}
+                    </View>
 
-                </View>
+                  </View>
                 </TouchableOpacity>
-                <TouchableOpacity onPress={()=> this.updateSortingLast()}>
+                <TouchableOpacity onPress={() => this.updateSortingLastA()}>
+                  <View style={{ flexDirection: 'row', marginTop: 15 }}>
+                    <Text style={styles.popupText}>Last name - Ascending</Text>
+                    <View style={{ flex: 1, alignItems: 'flex-end' }}>
+                    {this.state.radio2==false?
+                      <Image
+                        source={ImagesWrapper.radiobtn}
+                        style={{ marginRight: 31 }}
+                      />: <Image
+                      source={ImagesWrapper.radiobtn1}
+                      style={{ marginRight: 31 }}
+                    />}
+                    </View>
+                  </View>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={() => this.updateSortingFirstD()}>
                 <View style={{ flexDirection: 'row', marginTop: 15 }}>
-                  <Text style={styles.popupText}>Last name</Text>
+                  <Text style={styles.popupText}>First name - Descending</Text>
                   <View style={{ flex: 1, alignItems: 'flex-end' }}>
-                    <Image
-                      source={ImagesWrapper.radiobtn}
-                      style={{ marginRight: 30 }}
-                    />
+                  {this.state.radio3==false?
+                      <Image
+                        source={ImagesWrapper.radiobtn}
+                        style={{ marginRight: 31 }}
+                      />: <Image
+                      source={ImagesWrapper.radiobtn1}
+                      style={{ marginRight: 31 }}
+                    />}
                   </View>
                 </View>
                 </TouchableOpacity>
+                <TouchableOpacity onPress={() => this.updateSortingLastD()}>
                 <View style={{ flexDirection: 'row', marginTop: 15 }}>
-                  <Text style={styles.popupText}>Team name</Text>
+                  <Text style={styles.popupText}>Last name - Descending</Text>
                   <View style={{ flex: 1, alignItems: 'flex-end' }}>
-                    <Image
-                      source={ImagesWrapper.radiobtn}
-                      style={{ marginRight: 30 }}
-                    />
+                  {this.state.radio4==false?
+                      <Image
+                        source={ImagesWrapper.radiobtn}
+                        style={{ marginRight: 31 }}
+                      />: <Image
+                      source={ImagesWrapper.radiobtn1}
+                      style={{ marginRight: 31 }}
+                    />}
                   </View>
                 </View>
+                </TouchableOpacity>
+
               </View>
 
             </View>
