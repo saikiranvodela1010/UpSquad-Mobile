@@ -94,7 +94,7 @@ class ProfileSuccess extends React.Component {
               <Text style={styles.tabLabels}>People</Text>
             </View>
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => this.props.navigation.navigate('tabbar2')}>
+            {/* <TouchableOpacity onPress={() => this.props.navigation.navigate('tabbar2')}>
             <View style={styles.tabView}>
               <Image
                 style={{
@@ -104,7 +104,7 @@ class ProfileSuccess extends React.Component {
               />
               <Text style={styles.tabLabels}>Stories</Text>
             </View>
-            </TouchableOpacity>
+            </TouchableOpacity> */}
             <TouchableOpacity onPress={() => this.props.navigation.navigate('tabbar3')}>
 
             <View style={styles.tabView}>

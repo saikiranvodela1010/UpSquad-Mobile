@@ -11,7 +11,8 @@ import {
     PermissionsAndroid,
     Platform,
     Animated,
-    BackHandler, Alert
+    BackHandler, Alert,
+    SafeAreaView
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient'
 // import * as Progress from 'react-native-progress';
@@ -197,7 +198,7 @@ const imgUpload ={
 }
 
   return(
-      <View style={{backgroundColor:'#FFFFFF'}}>
+      <SafeAreaView style={{backgroundColor:'#FFFFFF'}}>
           
          {/* <View style={{justifyContent:'space-between',flex:1}}> */}
         <View style={{flexDirection:"row",margin:15,}}>
@@ -503,7 +504,7 @@ const imgUpload ={
                            
                            
    
-   </View>
+   </SafeAreaView>
   );
 
 }

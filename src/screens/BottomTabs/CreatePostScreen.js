@@ -1,15 +1,26 @@
 import React from 'react'
-import {  View, Text, StyleSheet, TouchableOpacity, Image,TextInput,SafeAreaView,Platform,FlatList, ScrollView, DeviceEventEmitter,Modal,ActivityIndicator} from 'react-native';
+import {  View, 
+    Text, 
+    StyleSheet,
+    TouchableOpacity,
+    Image,
+    TextInput,
+    SafeAreaView,
+    Platform,
+    FlatList,
+    ScrollView, 
+    DeviceEventEmitter,
+    Modal,
+    ActivityIndicator,
+    Switch} from 'react-native';
 import ImagesWrapper from '../../res/ImagesWrapper';
 import Fonts from '../../res/Fonts';
 import ServiceUrls from '../../network/ServiceUrls';
 import APIHandler from '../../network/NetWorkOperations';
 import moment from 'moment';
 import StoragePrefs from '../../res/StoragePrefs';
-import {Picker} from '@react-native-picker/picker';
 import {Icon} from 'native-base';
-// // import { Container, Header, Content, Picker, Form } from 'native-base';
-// import { Icon, Select ,Container, Header, Content, Picker, Form} from 'native-base';
+import RNPickerSelect, {defaultStyles} from 'react-native-picker-select';
 export default class CreatePostScreen extends React.Component {
     serviceUrls = new ServiceUrls();
     apiHandler = new APIHandler();
@@ -18,7 +29,8 @@ export default class CreatePostScreen extends React.Component {
         super(props);
         this.state = {
             isLoading: false,
-            categoryDropDown: ""
+            categoryDropDown: "",
+            isEnabled: false
         }
     }
 
@@ -26,11 +38,6 @@ export default class CreatePostScreen extends React.Component {
 
         console.log("CreatePostScreen");
     }
-    onValueChange(value) {
-        this.setState({
-            categoryDropDown: value,
-        });
-      }
 
     renderHeader = ()=> {
         return(
@@ -77,6 +84,12 @@ export default class CreatePostScreen extends React.Component {
     }
 
     render(){
+        const placeholder = {
+            label: 'Select category',
+            value: null,
+            color: '#9EA0A4',
+            
+          };
         return(
             <SafeAreaView style = {{backgroundColor : '#FFFFFF',flex: 1}}>
                 {this.renderHeader()}
@@ -97,21 +110,48 @@ export default class CreatePostScreen extends React.Component {
                         <View style={styles.underline}/>
                     </View>
                     <View style = {{marginTop:24}}>
-                        <Text style = {styles.name}>{"Category"}</Text>
+                        <Text style = {[styles.name,{fontSize: 20,lineHeight:20.08}]}>{"Category"}</Text>
                     </View>
-                    <View>
-                        <Picker
-                            note
-                            mode='dropdown'
-                            iosIcon = {
-                                <Icon name = "arrow-down"/>
-                            }
-                            selectedValue={this.state.categoryDropDown}
-                            style={{ height: 50, width: 300 }}
-                            onValueChange={(itemValue, itemIndex) => this.setState({categoryDropDown: itemValue})}>
-                            <Picker.Item label="Java" value="java" />
-                            <Picker.Item label="JavaScript" value="js" />
-                        </Picker>
+                    <View style = {{marginLeft: 10,borderWidth: 1,borderColor:"#B1AAAA",borderRadius: 5,height: 38,marginTop: 16}}>
+                        <RNPickerSelect
+                            placeholder={placeholder}
+                            items={[ { label: 'Football', value: 'football' },
+                            { label: 'Baseball', value: 'baseball' },
+                            { label: 'Hockey', value: 'hockey' },]}
+                            onValueChange={value => {
+                            this.setState({
+                                categoryDropDown: value,
+                            });
+                            }}
+                            style={pickerSelectStyles}
+            
+                        />
+                    </View>
+                    <View style = {{marginTop: 48,marginLeft: 10}}>
+                        <TextInput style={[styles.name,{marginBottom: '1%'}]}
+                        returnKeyType={"done"}
+                        placeholder="Tag people"
+                        placeholderTextColor='#868585'
+                        placeholderStyle={styles.placeholderstyle}></TextInput>
+                        <View style={styles.underline}/>
+                    </View>
+                    <View style = {{marginTop: 48,marginLeft: 10}}>
+                        <TextInput style={[styles.name,{marginBottom: '1%'}]}
+                        returnKeyType={"done"}
+                        placeholder="Add Tags"
+                        placeholderTextColor='#868585'
+                        placeholderStyle={styles.placeholderstyle}></TextInput>
+                        <View style={styles.underline}/>
+                    </View>
+                    <View style = {{ marginTop: 32,flexDirection: 'row',justifyContent: 'space-between',alignItems: 'center'}}>
+                        <Text style = {[styles.name,{fontSize: 20,lineHeight:20.08}]}>{"Publish post as anonymous"}</Text>
+                        <Switch
+                            trackColor={{ false: "#B1AAAA", true: "#81b0ff" }}
+                            thumbColor={this.state.isEnabled ? "#f5dd4b" : "#B1AAAA"}
+                            //ios_backgroundColor="#B1AAAA"
+                            //onValueChange={toggleSwitch}
+                            value={this.state.isEnabled}
+                        />
                     </View>
                 </View>
                 
@@ -151,3 +191,27 @@ const styles = StyleSheet.create({
 
     },
 })
+
+const pickerSelectStyles = StyleSheet.create({
+    inputIOS: {
+      fontSize: 16,
+      paddingVertical: 12,
+      paddingHorizontal: 10,
+      borderWidth: 1,
+      borderColor: '#B1AAAA',
+      borderRadius: 4,
+      color: '#9F9F9F',
+      paddingRight: 30, // to ensure the text is never behind the icon
+    },
+    inputAndroid: {
+      fontSize: 16,
+      paddingHorizontal: 10,
+      paddingVertical: 8,
+      borderWidth: 0.5,
+      borderColor: '#B1AAAA',
+      borderRadius: 8,
+      color: '#9F9F9F',
+      paddingRight: 30, // to ensure the text is never behind the icon
+    },
+  });
+  
