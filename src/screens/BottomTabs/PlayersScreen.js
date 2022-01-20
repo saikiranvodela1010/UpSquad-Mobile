@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, TextInput, Image, TouchableOpacity, ScrollView, FlatList, ActivityIndicator } from 'react-native';
+import { View, Text, StyleSheet, TextInput, Image, TouchableOpacity, ScrollView, FlatList, DeviceEventEmitter,ActivityIndicator } from 'react-native';
 import ImagesWrapper from '../../res/ImagesWrapper';
 import Fonts from '../../res/Fonts';
 import Modal from 'react-native-modal';
@@ -51,6 +51,17 @@ export default class PlayersScreen extends React.Component {
     this.getUserInfo();
 
 
+    this.getSort();
+    
+    DeviceEventEmitter.addListener("UpdateFeed",this.updatePlayerScreen)
+  }
+
+  updatePlayerScreen = async () => {
+
+    const universityDetsils = await this.storagePrefs.getObjectValue("universityDetsils");
+    const userDetails = await this.storagePrefs.getObjectValue("userDetails")
+    this.setState({ universityId: universityDetsils._id, userId: userDetails.userId})
+    this.getUserInfo();
   }
   async getUserInfo() {
     this.setState({

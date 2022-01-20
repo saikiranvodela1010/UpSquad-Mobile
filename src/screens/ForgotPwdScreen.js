@@ -1,11 +1,20 @@
 import React from 'react';
-import { View ,StyleSheet,Text,Image, TouchableOpacity,Platform,ScrollView,Dimensions,KeyboardAvoidingView} from 'react-native';
+import { View ,StyleSheet,Text,Image, TouchableOpacity,Platform,ScrollView,Dimensions,KeyboardAvoidingView,Modal,ActivityIndicator} from 'react-native';
 import { TextInput } from 'react-native-gesture-handler';
 import LinearGradient from 'react-native-linear-gradient'
 import ImagesWrapper from '../res/ImagesWrapper';
 import Fonts from '../res/Fonts';
+import ServiceUrls from '../network/ServiceUrls';
+import StoragePrefs from '../res/StoragePrefs';
+import APIHandler from '../network/NetWorkOperations';
+
 
 export default class ForgotPwdScreen extends React.Component {
+
+
+    serviceUrls = new ServiceUrls();
+    apiHandler = new APIHandler();
+    storagePrefs = new StoragePrefs();
 
     constructor(props){
         super(props);
@@ -13,47 +22,68 @@ export default class ForgotPwdScreen extends React.Component {
         this.state={
             email:'',
             emailerr:'',
-            
+            isLoading: false
            
         }
        
     }
    
-    onSubmit(){
-        // console.log('name',this.state.firstname,this.state.lastname)
-        let err = [];
-        // let mobileReg = /^([0|\+[0-9]{1,5})?([7-9][0-9]{9})$/;
-        let mobileReg = /^\d+$/;
-        let mailReg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-        let nameReg = /^[a-zA-Z ]{2,30}$/;
-       
-
-        if (this.state.email === "") {
-            // err['email'] = 'Please enter your email';
-            this.setState({emailerr:"Please enter your email"})
-
-        } 
-        else if (!mailReg.test(this.state.email)) {
-            // err['email'] = 'Please enter valid email';
-            // console.log('mail',)
-            this.setState({emailerr:"Please enter valid email"})
-
+   async onSubmit(){
+        this.setState({
+            isLoading: true
+        })
+        const data = {
+            "apiUrl": "https://dev.upsquad.com",
+            'email': this.state.email,
+            // 'password' : this.state.password
         }
-
+        const response = await this.apiHandler.requestPost(data,this.serviceUrls.fogotPassword)
+        if(response.status == "No network Connected!"){
+            this.setState({isLoading: false, isInternet: true})
+            alert('No network Connected!')
+        } else{
+            this.setState({isLoading: false})
+            if(response.status  === true) {
+                // alert(response.msg);
+                this.props.navigation.navigate('Otp');
+            } else {
+                alert(response.msg);
+               
+            }            
+        }
         
+    
        
-
-        if (this.state.email !== '' && mailReg.test(this.state.email) )
-          {
-            this.props.navigation.navigate('Otp')
-        } 
         
+    }
+    renderLoader(){
+        return(
+            <Modal transparent={true}
+                visible={this.state.isLoading}>
+                <View style={{
+                    flex: 1,
+                    flexDirection: 'row',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    margin: 10
+                }}>
+                    <View style={{
+                        width: "25%",
+                        height: "10%",
+                        borderWidth: 1,
+                        borderRadius: 5,borderColor: "#58C4C6",marginBottom: 10 ,backgroundColor: '#58C4C6',justifyContent: 'center' }}>
+                        <ActivityIndicator size="large" color="#fff" />
+                    </View>
+                </View>
+            </Modal>
+        )
     }
 
     render(){
         return(
            
             <View style={styles.mainContainer}>
+                 {this.renderLoader()}
                     <Image
                       source={ImagesWrapper.component}
                       style={{width:220,height:220}}

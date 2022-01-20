@@ -56,6 +56,11 @@ export default class AddCommunityScreen extends React.Component {
   return string.replace(regex, '')
 }
 async onSubmit(){
+  
+if(this.state.code === ""){
+  alert("Please enter the code")
+}
+if(this.state.code !== ""){
   this.setState({
     isLoading: true
 })
@@ -90,9 +95,11 @@ async onSubmit(){
             subscriptioncode:this.state.code,
                         
         });
+    }else{
+      alert(response.displayMessage);
     }
   }
-  
+}
 
 }
 renderLoader(){
@@ -125,7 +132,7 @@ renderLoader(){
                <View style={styles.header}>
                     <TouchableOpacity onPress={() => {
                       // this.props.navigation.openDrawer();
-                      this.props.navigation.navigate('BioSuccess'
+                      this.props.navigation.navigate('switchcommunity'
                           // back:this.state.back,
                           );
                     }}>
@@ -174,7 +181,7 @@ renderLoader(){
                     <View style={[styles.underline,{width:'85%',marginLeft:'auto',marginRight:'auto'}]}/>
                     {this.state.codebelongs === true ? 
                     <View style={{flexDirection:'row'}}>
-                    <Text style={[styles.agree,{paddingLeft:22,color:'#B1AAAA',fontSize:12,fontWeight:'400',marginTop:5}]}>This code belongs to</Text>
+                    <Text style={[styles.agree,{paddingLeft:22,color:'#B1AAAA',fontSize:12,fontWeight:'400',marginTop:5,marginLeft:8}]}>This code belongs to</Text>
                     <Text style={[{paddingLeft:3,marginTop:3,fontFamily:Fonts.mulishExtraBold}]}>Pencil community</Text>
                     </View>
                     :

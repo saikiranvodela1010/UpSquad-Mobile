@@ -24,6 +24,7 @@ export default class ServiceUrls {
     addcommunity = this.mainUrl + '/subscriptionUsers/addSubscriptionCode';
     saveSortPreference = this.mainUrl+'/users/save_preference';
     getSort = this.mainUrl+'/users/get_sort_preference/';
-    
-    postLike = this.socialUrl+'/feed/post/like'
+    postLike = this.socialUrl+'/feed/post/like';
+    fogotPassword = this.mainUrl+'/users/forgotpassword';
+
 }
