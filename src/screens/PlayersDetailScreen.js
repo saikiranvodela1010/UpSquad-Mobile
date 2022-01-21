@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, Text, StyleSheet, TouchableOpacity, ImageBackground, Image, Dimensions, TextInput,ActivityIndicator } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ImageBackground, Image, Dimensions, TextInput,ActivityIndicator, Platform } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import Video, { FilterType } from 'react-native-video';
 import ImagesWrapper from '../res/ImagesWrapper';
@@ -494,7 +494,7 @@ const styles = StyleSheet.create({
 
         flexDirection: 'row',
         alignItems: 'center',
-        paddingLeft: '9%',
+        paddingLeft: '7%',
         marginTop: 25,
         marginBottom: 25,
 
@@ -576,7 +576,7 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         borderWidth: 1,
         borderColor: '#F1F1F1',
-        shadowOpacity: 0.3,
+        shadowOpacity: Platform.OS=='ios'?null:0.3,
         flexDirection: 'row',
         alignItems: 'center',
         //  marginLeft:20

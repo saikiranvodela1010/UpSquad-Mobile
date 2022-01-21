@@ -22,8 +22,6 @@ const Tab = createMaterialTopTabNavigator();
        
         this.state={
             communityName:'',
-           
-           
         }
        
     }

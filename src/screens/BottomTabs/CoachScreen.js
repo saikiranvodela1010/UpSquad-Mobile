@@ -87,7 +87,7 @@ export default class PlayersScreen extends React.Component {
     }
     console.log('data1', data1)
     const response = await this.apiHandler.requestPost(data1, this.serviceUrls.searchUsersByOrganization)
-    console.log("searchUsersByOrganization", JSON.stringify(response));
+    //console.log("searchUsersByOrganization", JSON.stringify(response));
     this.setState({
       isLoading: false
     })
@@ -327,7 +327,7 @@ export default class PlayersScreen extends React.Component {
         <View style={{ flexDirection: 'row', marginRight: 20, marginTop: 20 }}>
           <Text style={{ fontSize: 14, color: '#1E1C24', fontFamily: Fonts.mulishSemiBold, fontWeight: '600', marginLeft: 25 }}>Sorted by name</Text>
           <TouchableOpacity onPress={() => this.setState({ show1: true })}>
-            <Image source={ImagesWrapper.sortedimg} style={{marginLeft:'76%'}} />
+            <Image source={ImagesWrapper.sortedimg} style={{marginLeft:'71%'}} />
           </TouchableOpacity>
         </View>
 
@@ -561,13 +561,13 @@ const styles = StyleSheet.create({
     marginLeft: 20,
     marginTop: 'auto',
     marginBottom: 'auto',
-    width: '70%',
+    width: '66%',
     flexDirection: 'column',
   },
   remove: {
     fontSize: 14,
     fontWeight: '600',
-    marginLeft: '5%',
+    //marginLeft: '5%',
     color: '#58C4C6',
     fontFamily: Fonts.mulishSemiBold,
     marginTop: 'auto',
