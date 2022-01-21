@@ -334,7 +334,7 @@ import Share from 'react-native-share';
                             </Text>
                             {item.postImage !=null && item.postImage.length >0 ? 
                                 <Image source = { {uri : item.postImage[0]} } 
-                                style={{marginTop:15,width:'87%', borderRadius:5,height: 192,}}/> 
+                                style={{marginTop:15,width:'95%', borderRadius:5,height: 192,}}/> 
                                 : null 
                             }
                             <View style={{flexDirection:'row',marginTop:10,justifyContent:'space-between'}}>
