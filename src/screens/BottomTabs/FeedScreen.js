@@ -458,21 +458,7 @@ import Share from 'react-native-share';
                     </View>
                     </TouchableOpacity>
                     </View> : 
-                    <View style={{ flex: 1, justifyContent: 'flex-end', alignItems: 'flex-end' }}>
-                
-                    <TouchableOpacity activeOpacity={0.5} style={styles.toucahbleOpacity}
-
-                      onPress={() => this.props.navigation.navigate('CreatePostScreen')}
-                    >
-                    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-                        <Image
-                        source={ImagesWrapper.plus}
-                            style={{ height: 60,
-                                width: 60,}}
-                        />
-                    </View>
-                    </TouchableOpacity>
-                    </View>}
+                    null}
                     {this.state.tapstate === true ?
                     // <Modal
                     //     transparent={true}
