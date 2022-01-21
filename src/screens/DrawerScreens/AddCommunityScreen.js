@@ -1,5 +1,5 @@
 import React from 'react'
-import {  View, Text, StyleSheet, TouchableOpacity,Image, DeviceEventEmitter,SafeAreaView,TextInput,Modal,ActivityIndicator} from 'react-native';
+import {  View, Text, StyleSheet, TouchableOpacity,Image, DeviceEventEmitter,SafeAreaView,TextInput,Modal,ActivityIndicator,Platform} from 'react-native';
 import ImagesWrapper from '../../res/ImagesWrapper';
 import Fonts from '../../res/Fonts';
 import APIHandler from '../../network/NetWorkOperations';
@@ -272,7 +272,7 @@ bio:{
 },
 textinput:{
     // marginTop:-2,
-    marginLeft:25,
+    marginLeft:Platform.OS === 'ios' ? 30: 25,
     height:Platform.OS==='ios' ? 30:40,
     fontFamily:Fonts.mulishSemiBold,
     fontSize:16,

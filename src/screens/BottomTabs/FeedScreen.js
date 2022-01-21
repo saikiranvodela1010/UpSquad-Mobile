@@ -41,6 +41,7 @@ import Share from 'react-native-share';
             likeColor: false,
             share: false,
             likedPosts: [],
+            communityLogo : ""
             
         }
        
@@ -94,6 +95,7 @@ import Share from 'react-native-share';
                 universityName:universityDetsils.universityName,
                 universityId: universityDetsils._id,
                 communityName: universityDetsils.universityName,
+                communityLogo: universityDetsils.universityLogo,
                 userId : userDetails.userId,
                 email : userDetails.userEmail
             })
@@ -131,6 +133,7 @@ import Share from 'react-native-share';
               universityName:response.data[0].universityName,
               universityId: response.data[0]._id,
               communityName: response.data[0].universityName,
+              communityLogo : response.data[0].universityLogo
             });
           } else{
             this.setState({
@@ -149,6 +152,7 @@ import Share from 'react-native-share';
     getPosts = async () => {
         //const data = '5ed8d9509e623f00221761a1/All/true/5f5892a1b205b1387d5cafb/All'
         const data = this.state.universityId+'/All/'+this.state.isProfessional+"/"+this.state.userId+'/All'
+        console.log("Posts Params",data)
         console.log("Post is getting called")
         const response = await this.apiHandler.requestGet(data,this.serviceUrls.getPosts);
         if(response.posts != null && response.posts.length != 0 ){
@@ -281,11 +285,10 @@ import Share from 'react-native-share';
         return(
             <SafeAreaView style={{flex:1,backgroundColor:'#FFFFFF'}}>
                 {this.renderLoader()}
-                {this.renderShareModal()}
                     <View style={[styles.header]}>
                     <TouchableOpacity onPress={()=> this.props.navigation.openDrawer()}>
-                    <Image source={ImagesWrapper.profile}
-                    style={{marginLeft:25}}
+                    <Image source= {{uri : this.state.communityLogo!=null && this.state.communityLogo!="" ? this.state.communityLogo: 'https://www.careerquo.com/assets/images/18.png' }}
+                            style={{marginLeft:25,height: 30,width: 30, borderRadius: 25}}
                     ></Image>
                     </TouchableOpacity>
                     <Text ellipsizeMode='tail' numberOfLines={1} style={{ fontSize: 20, fontFamily: Fonts.mulishSemiBold, fontWeight: '600',color:'#1E1C24', marginLeft: '5%',width:170}}>{this.state.communityName}</Text>
@@ -309,11 +312,11 @@ import Share from 'react-native-share';
                     <FlatList
                     data = {this.state.postData}
                     renderItem={({item})=> (
-                        <View>
-                            <View style={{flexDirection:'row',justifyContent:'space-between',marginTop:15,marginLeft:18}}>
-                            <View style={{flexDirection:'row',marginTop:'2%',marginRight:'5%',}}>
-                                <Image source={{uri : "https://www.careerquo.com/assets/images/18.png"}}
-                                    style = {{width: 24, height: 24}}/> 
+                        <View style = {{ marginLeft : 25}}>
+                            <View style={{flexDirection:'row',justifyContent:'space-between',marginTop:15,}}>
+                            <View style={{flexDirection:'row',marginTop:'2%',}}>
+                                <Image source={{uri : item.creator.profileImg !=null && item.creator.profileImg!="" ? item.creator.profileImg : "https://www.careerquo.com/assets/images/18.png"}}
+                                    style = {{height: 30,width: 30, borderRadius: 25}}/> 
                                 <Text style={[styles.post,{padding:-8,marginLeft:8,fontSize:16}]}>{item.creator.firstName} {item.creator.lastName}</Text>
                                 <Text style={[styles.post,{padding:5,marginLeft:5,fontSize:12,color:'#868585',marginTop:-2}]}>
                                     {moment(item.createdAt).fromNow()}
@@ -326,15 +329,15 @@ import Share from 'react-native-share';
                                 </TouchableOpacity> : null }
                             
                             </View>
-                            <Text style={{fontSize:14,fontWeight:'400',fontFamily:Fonts.mulishSemiBold,color:'#868585',marginLeft:25,marginRight:22,marginTop:12}}>
+                            <Text style={{fontSize:14,fontWeight:'400',fontFamily:Fonts.mulishSemiBold,color:'#868585',marginRight:22,marginTop:12}}>
                                 {item.content}
                             </Text>
                             {item.postImage !=null && item.postImage.length >0 ? 
                                 <Image source = { {uri : item.postImage[0]} } 
-                                style={{marginTop:15,marginLeft:25,width:'87%', borderRadius:5,height: 192,}}/> 
+                                style={{marginTop:15,width:'95%', borderRadius:5,height: 192,}}/> 
                                 : null 
                             }
-                            <View style={{flexDirection:'row',marginTop:10,marginLeft:25,justifyContent:'space-between'}}>
+                            <View style={{flexDirection:'row',marginTop:10,justifyContent:'space-between'}}>
                                 <View style={{flexDirection:'row'}}>
                                 
                                     {item.likes.length > 3 || item.likes.length == 3 ? 
@@ -379,7 +382,7 @@ import Share from 'react-native-share';
                                             item.likes[0].profileImage.imageUrl !=null && item.likes[0].profileImage.imageUrl !=''? 
                                                 {uri :item.likes[0].profileImage.imageUrl} : {uri : 'https://www.careerquo.com/assets/images/18.png'}
                                         : {uri : 'https://www.careerquo.com/assets/images/18.png'}}
-                                            style = {{width: 16, height: 16}}
+                                            style = {{width: 16, height: 16,}}
                                         />
                                 : null}
                                     <Text style={{fontSize:12,color:'#868585',fontFamily:Fonts.mulishBold,fontWeight:'400',marginLeft:5,marginTop:2}}>Like by</Text>
@@ -390,7 +393,7 @@ import Share from 'react-native-share';
                                 <Text style={{fontSize:12,color:'#868585',fontFamily:Fonts.mulishBold,fontWeight:'400',marginLeft:5,marginTop:2,marginRight:22}}>{item.comments.length } {item.comments.length > 1 ? "comments" : "comment"}</Text>
                             </View>
                             <View style={{ borderWidth: 1, borderColor: '#F1F1F1',marginTop:22}}></View>
-                            <View style={{flexDirection:'row',marginLeft:'auto',marginRight:'auto',marginTop:20}}>
+                            <View style={{flexDirection:'row',marginTop:20}}>
                                 <TouchableOpacity
                                 onPress ={()=> {
                                 this.postLike(item._id,this.state.userId)
@@ -399,7 +402,7 @@ import Share from 'react-native-share';
                                         <Image
                                             source={ImagesWrapper.likeimg}
                                         />
-                                        <Text style={{color:this.state.likedPosts.indexOf(item.id) > -1 ?  '#58C4C6' :'#868585' ,fontSize:14,marginTop:3,marginLeft:5,fontFamily:Fonts.mulishRegular,fontWeight:'600'}}>Like</Text>
+                                        <Text style={{color:this.state.likedPosts.indexOf(item.id) > -1 ?  '#58C4C6' :'#868585' ,fontSize:14,marginTop:3,fontFamily:Fonts.mulishRegular,fontWeight:'600'}}>Like</Text>
                                     </View>
                                 </TouchableOpacity>
                                 
@@ -420,7 +423,7 @@ import Share from 'react-native-share';
                                     <Image
                                         source={ImagesWrapper.commentimg}
                                     />
-                                    <Text style={{color:'#868585',fontSize:14,marginTop:3,marginLeft:5,fontFamily:Fonts.mulishRegular,fontWeight:'600'}}>Comment</Text> 
+                                    <Text style={{color:'#868585',fontSize:14,marginTop:3,fontFamily:Fonts.mulishRegular,fontWeight:'600'}}>Comment</Text> 
                                 </View>
                                 </TouchableOpacity>
 
@@ -431,7 +434,7 @@ import Share from 'react-native-share';
                                 <Image
                                     source={ImagesWrapper.shareimg}
                                 />
-                                <Text style={{color:'#868585',fontSize:14,marginTop:3,marginLeft:5,fontFamily:Fonts.mulishRegular,fontWeight:'600'}}>Share</Text>
+                                <Text style={{color:'#868585',fontSize:14,marginTop:3,fontFamily:Fonts.mulishRegular,fontWeight:'600'}}>Share</Text>
                                 </View>
                                 </TouchableOpacity>
                             </View>
@@ -455,21 +458,7 @@ import Share from 'react-native-share';
                     </View>
                     </TouchableOpacity>
                     </View> : 
-                    <View style={{ flex: 1, justifyContent: 'flex-end', alignItems: 'flex-end' }}>
-                
-                    <TouchableOpacity activeOpacity={0.5} style={styles.toucahbleOpacity}
-
-                      onPress={() => this.props.navigation.navigate('CreatePostScreen')}
-                    >
-                    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-                        <Image
-                        source={ImagesWrapper.plus}
-                            style={{ height: 60,
-                                width: 60,}}
-                        />
-                    </View>
-                    </TouchableOpacity>
-                    </View>}
+                    null}
                     {this.state.tapstate === true ?
                     // <Modal
                     //     transparent={true}
