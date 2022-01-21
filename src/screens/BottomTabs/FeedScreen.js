@@ -382,7 +382,7 @@ import Share from 'react-native-share';
                                             item.likes[0].profileImage.imageUrl !=null && item.likes[0].profileImage.imageUrl !=''? 
                                                 {uri :item.likes[0].profileImage.imageUrl} : {uri : 'https://www.careerquo.com/assets/images/18.png'}
                                         : {uri : 'https://www.careerquo.com/assets/images/18.png'}}
-                                            style = {{width: 16, height: 16}}
+                                            style = {{width: 16, height: 16,}}
                                         />
                                 : null}
                                     <Text style={{fontSize:12,color:'#868585',fontFamily:Fonts.mulishBold,fontWeight:'400',marginLeft:5,marginTop:2}}>Like by</Text>
@@ -393,7 +393,7 @@ import Share from 'react-native-share';
                                 <Text style={{fontSize:12,color:'#868585',fontFamily:Fonts.mulishBold,fontWeight:'400',marginLeft:5,marginTop:2,marginRight:22}}>{item.comments.length } {item.comments.length > 1 ? "comments" : "comment"}</Text>
                             </View>
                             <View style={{ borderWidth: 1, borderColor: '#F1F1F1',marginTop:22}}></View>
-                            <View style={{flexDirection:'row',marginLeft:'auto',marginRight:'auto',marginTop:20}}>
+                            <View style={{flexDirection:'row',marginTop:20}}>
                                 <TouchableOpacity
                                 onPress ={()=> {
                                 this.postLike(item._id,this.state.userId)
@@ -402,7 +402,7 @@ import Share from 'react-native-share';
                                         <Image
                                             source={ImagesWrapper.likeimg}
                                         />
-                                        <Text style={{color:this.state.likedPosts.indexOf(item.id) > -1 ?  '#58C4C6' :'#868585' ,fontSize:14,marginTop:3,marginLeft:5,fontFamily:Fonts.mulishRegular,fontWeight:'600'}}>Like</Text>
+                                        <Text style={{color:this.state.likedPosts.indexOf(item.id) > -1 ?  '#58C4C6' :'#868585' ,fontSize:14,marginTop:3,fontFamily:Fonts.mulishRegular,fontWeight:'600'}}>Like</Text>
                                     </View>
                                 </TouchableOpacity>
                                 
@@ -423,7 +423,7 @@ import Share from 'react-native-share';
                                     <Image
                                         source={ImagesWrapper.commentimg}
                                     />
-                                    <Text style={{color:'#868585',fontSize:14,marginTop:3,marginLeft:5,fontFamily:Fonts.mulishRegular,fontWeight:'600'}}>Comment</Text> 
+                                    <Text style={{color:'#868585',fontSize:14,marginTop:3,fontFamily:Fonts.mulishRegular,fontWeight:'600'}}>Comment</Text> 
                                 </View>
                                 </TouchableOpacity>
 
@@ -434,7 +434,7 @@ import Share from 'react-native-share';
                                 <Image
                                     source={ImagesWrapper.shareimg}
                                 />
-                                <Text style={{color:'#868585',fontSize:14,marginTop:3,marginLeft:5,fontFamily:Fonts.mulishRegular,fontWeight:'600'}}>Share</Text>
+                                <Text style={{color:'#868585',fontSize:14,marginTop:3,fontFamily:Fonts.mulishRegular,fontWeight:'600'}}>Share</Text>
                                 </View>
                                 </TouchableOpacity>
                             </View>
