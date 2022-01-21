@@ -16,7 +16,8 @@ export default class DrawerContent extends React.Component {
         super(props);
 
         this.state = {
-            userName:''
+            userName:'',
+            userImage: ''
         }
        
     }
@@ -24,13 +25,13 @@ export default class DrawerContent extends React.Component {
         // console.log('userDetails----',userDetails);
         const userDetails = await this.storagePrefs.getObjectValue("userDetails")
         console.log('userDetails',userDetails);
-        this.setState({userName:userDetails.userName});
+        this.setState({userName:userDetails.userName, userImage: userDetails.progileImage});
     }
     async componentDidUpdate() {
         // console.log('userDetails----',userDetails);
         const userDetails = await this.storagePrefs.getObjectValue("userDetails")
         // console.log('userDetails',userDetails);
-        this.setState({userName:userDetails.userName});
+        this.setState({userName:userDetails.userName, userImage: userDetails.progileImage});
     }
     render(){
        
@@ -40,7 +41,12 @@ export default class DrawerContent extends React.Component {
                     <View style={{flex:1,backgroundColor:'#EBF8F8',marginTop:-3,height:'100%'}}>
                         <View style={{flexDirection:'row',justifyContent:'space-between',flex:1}}>
                       <View>
-                    <View style = {styles.displayimage}></View>
+                    <View style = {styles.displayimage}>
+                        <Image source = {{uri: this.state.userImage!=null && this.state.userImage!="" ? this.state.userImage: "https://www.careerquo.com/assets/images/18.png"}}
+                        style = {{height: 45,
+                            width: 45,
+                            borderRadius: 25,}}/>
+                    </View>
                     <Text style={styles.userName}>{this.state.userName}</Text>
                     </View>
                    
@@ -95,10 +101,10 @@ export default class DrawerContent extends React.Component {
 
 const styles = StyleSheet.create({
 displayimage: {
-    borderWidth: 1,
-    height: 45,
-    width: 45,
-    borderRadius: 25,
+    // borderWidth: 1,
+    // height: 45,
+    // width: 45,
+    // borderRadius: 25,
     // alignItems:'center'
     // justifyContent:'center'
     marginTop:50,

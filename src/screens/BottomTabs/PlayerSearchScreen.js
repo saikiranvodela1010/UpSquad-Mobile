@@ -67,7 +67,7 @@ export default class PlayersScreen extends React.Component {
         }
         console.log(data1)
         const response = await this.apiHandler.requestPost(data1, this.serviceUrls.searchUsersByOrganization)
-        console.log("searchUsersByOrganization", response);
+       // console.log("searchUsersByOrganization", response);
         this.setState({
             isLoading: false
         })
@@ -96,7 +96,7 @@ export default class PlayersScreen extends React.Component {
         }
         console.log(data1)
         const response = await this.apiHandler.requestPost(data1, this.serviceUrls.searchUsersByOutside)
-        console.log("searchUsersByOutside",response.data);
+       // console.log("searchUsersByOutside",response.data);
         this.setState({
             isLoading: false
         })
@@ -161,14 +161,14 @@ export default class PlayersScreen extends React.Component {
             <View style={{ flex: 1, backgroundColor: '#FFFFFF' }}>
                 {this.renderLoader()}
 
-                <View style={{ flexDirection: 'row', marginTop: 20, marginBottom: 5 }}>
+                <View style={{ flexDirection: 'row',marginTop: 20, marginBottom: 10 }}>
                     <TouchableOpacity onPress={() => 
                         this.props.navigation.goBack(null)}>
                         <Image
                             source={ImagesWrapper.back}
                             style={{
                                 marginTop: 6,
-                                marginLeft: 20,
+                                marginLeft: 30,
                                 tintColor: '#000000',
                             }}
                         />
@@ -190,7 +190,12 @@ export default class PlayersScreen extends React.Component {
                     >
                     </TextInput>
                 </View>
-                <View style={[styles.underline]}></View>
+                <View style={{ borderBottomColor: '#959494',
+        borderBottomWidth: 0.5,
+        marginLeft: 'auto',
+        // marginTop:20,
+        marginRight: 'auto',
+        width: '100%'}}></View>
                 {this.state.error!=''?
                 <View style={{
                      alignItems: 'center',
@@ -220,7 +225,7 @@ export default class PlayersScreen extends React.Component {
                                     <View style={styles.list}>
                                         <Text style={styles.name}>{item.firstName} {item.lastName}</Text>
                                         <Text style={styles.nameText}>{item.currentJobTitle} at {item.currentCompany}</Text>
-                                        <View style={{ flexDirection: 'row' }}>
+                                        <View style={{ flexDirection: 'row',width:'75%' }}>
                                             <Image source={ImagesWrapper.people} style={{ marginRight: 10 }} />
                                             <Text style={styles.nameText}>{item.currentRole}</Text>
                                         </View>
@@ -255,7 +260,7 @@ export default class PlayersScreen extends React.Component {
                                     <View style={styles.list}>
                                         <Text style={styles.name}>{item.firstName} {item.lastName}</Text>
                                         <Text style={styles.nameText}>{item.currentJobTitle} at {item.currentCompany}</Text>
-                                        <View style={{ flexDirection: 'row' }}>
+                                        <View style={{ flexDirection: 'row',width:'75%' }}>
                                             <Image source={ImagesWrapper.people} style={{ marginRight: 10 }} />
                                             <Text style={styles.nameText}>{item.currentRole}</Text>
                                         </View>
@@ -357,7 +362,7 @@ const styles = StyleSheet.create({
         marginLeft: 'auto',
         // marginTop:20,
         marginRight: 'auto',
-        width: '100%'
+        width: '85%'
     },
     list: {
         fontSize: 14,
@@ -365,13 +370,13 @@ const styles = StyleSheet.create({
         marginLeft: 20,
         marginTop: 'auto',
         marginBottom: 'auto',
-        width: '70%',
+        width: '66%',
         flexDirection: 'column',
     },
     remove: {
         fontSize: 14,
         fontWeight: '600',
-        marginLeft: '10%',
+       // marginLeft: '8%',
         color: '#58C4C6',
         fontFamily: Fonts.mulishSemiBold,
         marginTop: 'auto',
