@@ -237,7 +237,7 @@ const ProfilePicScreen = (props) => {
                     <Image style={styles.backarrow} source={ImagesWrapper.back} />
                 </TouchableOpacity>
 
-                <View style={{ flex: 1, alignItems: 'flex-end', marginRight: 30 }}>
+                <View style={{ flex: 1, alignItems: 'flex-end', marginRight: 15,marginTop:5 }}>
                     {/* <TouchableOpacity onPress={()=>props.navigation.navigate('BioData')}> */}
 
                     <Text style={styles.skip} onPress={() => props.navigation.navigate('BioData')} >Skip</Text>
@@ -544,7 +544,7 @@ const styles = StyleSheet.create({
     backarrow: {
         width: 30,
         height: 30,
-        marginLeft: 30,
+        marginLeft: 8,
         // marginTop: 15
     },
     skip: {

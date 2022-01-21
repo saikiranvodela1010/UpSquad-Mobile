@@ -41,6 +41,7 @@ import Share from 'react-native-share';
             likeColor: false,
             share: false,
             likedPosts: [],
+            communityLogo : ""
             
         }
        
@@ -94,6 +95,7 @@ import Share from 'react-native-share';
                 universityName:universityDetsils.universityName,
                 universityId: universityDetsils._id,
                 communityName: universityDetsils.universityName,
+                communityLogo: universityDetsils.universityLogo,
                 userId : userDetails.userId,
                 email : userDetails.userEmail
             })
@@ -131,6 +133,7 @@ import Share from 'react-native-share';
               universityName:response.data[0].universityName,
               universityId: response.data[0]._id,
               communityName: response.data[0].universityName,
+              communityLogo : response.data[0].universityLogo
             });
           } else{
             this.setState({
@@ -284,8 +287,8 @@ import Share from 'react-native-share';
                 {this.renderShareModal()}
                     <View style={[styles.header]}>
                     <TouchableOpacity onPress={()=> this.props.navigation.openDrawer()}>
-                    <Image source={ImagesWrapper.profile}
-                    style={{marginLeft:25}}
+                    <Image source= {{uri : this.state.communityLogo!=null && this.state.communityLogo!="" ? this.state.communityLogo: null }}
+                            style={{marginLeft:25,height: 30,width: 30, borderRadius: 25}}
                     ></Image>
                     </TouchableOpacity>
                     <Text ellipsizeMode='tail' numberOfLines={1} style={{ fontSize: 20, fontFamily: Fonts.mulishSemiBold, fontWeight: '600',color:'#1E1C24', marginLeft: '5%',width:170}}>{this.state.communityName}</Text>
