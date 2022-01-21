@@ -138,7 +138,8 @@ const ImagesWrapper = {
     question:require('../Images/question.png'),
     vectorcommunity:require('../Images/vectorcommunity.png'),
     radiogrey:require('../Images/radiogrey.png'),
-
+    radioselected:require('../Images/radioselected.png'),
+    
 
 }
 export default ImagesWrapper;

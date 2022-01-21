@@ -22,7 +22,7 @@ export default class ApiHandler {
         }
     }
 
-    async requestPatch(data,url,param) {
+    async requestPatch(url,data,param) {
        // console.log("Request URL>>>>",data,url,param);
         let headers = {
             'Content-Type': 'application/json'
@@ -30,7 +30,7 @@ export default class ApiHandler {
         const networkStatus = await NetInfo.fetch();
         if (networkStatus.isConnected) {
             if(param !=null && param != undefined ){
-                return this.callAPI(url+param, data, headers);
+                return this.PatchAPI(url+param, data, headers);
             } else{
                 return this.PatchAPI(url, data, headers);
             }

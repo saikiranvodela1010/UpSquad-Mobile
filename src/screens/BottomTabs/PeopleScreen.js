@@ -23,6 +23,7 @@ const Tab = createMaterialTopTabNavigator();
         this.state={
             communityName:'',
            
+           
         }
        
     }
@@ -78,14 +79,14 @@ const Tab = createMaterialTopTabNavigator();
                 <Tab.Navigator
                     screenOptions={{
                         tabBarLabelStyle: { fontSize: 16, fontFamily: Fonts.mulishSemiBold, fontWeight: "600", textTransform: 'capitalize', },
-                        tabBarItemStyle: { width: 100 },
+                        tabBarItemStyle: { width: 100,marginLeft:3 },
 
                         tabBarActiveTintColor: '#1E1C24',
                         
 
                     }}
                     tabBarOptions={{
-                        indicatorStyle: {backgroundColor: '#58C4C6', width: '30%', marginLeft: 30, height: 4}
+                        indicatorStyle: {backgroundColor: '#58C4C6', width: '30%', marginLeft: 25, height: 4}
                     }}
 
                 >

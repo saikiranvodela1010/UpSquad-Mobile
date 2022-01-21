@@ -220,7 +220,7 @@ export default class PlayersScreen extends React.Component {
                                     <View style={styles.list}>
                                         <Text style={styles.name}>{item.firstName} {item.lastName}</Text>
                                         <Text style={styles.nameText}>{item.currentJobTitle} at {item.currentCompany}</Text>
-                                        <View style={{ flexDirection: 'row' }}>
+                                        <View style={{ flexDirection: 'row',width:'75%' }}>
                                             <Image source={ImagesWrapper.people} style={{ marginRight: 10 }} />
                                             <Text style={styles.nameText}>{item.currentRole}</Text>
                                         </View>
@@ -255,7 +255,7 @@ export default class PlayersScreen extends React.Component {
                                     <View style={styles.list}>
                                         <Text style={styles.name}>{item.firstName} {item.lastName}</Text>
                                         <Text style={styles.nameText}>{item.currentJobTitle} at {item.currentCompany}</Text>
-                                        <View style={{ flexDirection: 'row' }}>
+                                        <View style={{ flexDirection: 'row',width:'75%' }}>
                                             <Image source={ImagesWrapper.people} style={{ marginRight: 10 }} />
                                             <Text style={styles.nameText}>{item.currentRole}</Text>
                                         </View>
@@ -371,7 +371,7 @@ const styles = StyleSheet.create({
     remove: {
         fontSize: 14,
         fontWeight: '600',
-        marginLeft: '10%',
+        marginLeft: '8%',
         color: '#58C4C6',
         fontFamily: Fonts.mulishSemiBold,
         marginTop: 'auto',

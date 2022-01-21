@@ -135,14 +135,17 @@ export default class PlayersScreen extends React.Component {
       "sortName": "lastName",
       "sortOrder": "asc"
     }
-    const res = await axios.patch('https://devapi.upsquad.com/users/save_preference', data);
+    // const res = await axios.patch('https://devapi.upsquad.com/users/save_preference', data);
+    const response = await this.apiHandler.requestPatch( this.serviceUrls.saveSortPreference,data)
+
     this.setState({
       isLoading: false
     })
    // this.setState({radio:!radio2})
     //res.data.headers['Content-Type'];
-    console.log("save sort data", res.data)
+    console.log("lastname-asc")
     this.getSort()
+    
 
   }
   async updateSortingFirstA() {
@@ -159,13 +162,14 @@ export default class PlayersScreen extends React.Component {
       "sortName": "firstName",
       "sortOrder": "asc"
     }
-    const res = await axios.patch('https://devapi.upsquad.com/users/save_preference', data);
+    const response = await this.apiHandler.requestPatch( this.serviceUrls.saveSortPreference,data)
     this.setState({
       isLoading: false
     })
     //this.setState({radio:!radio1})
     //res.data.headers['Content-Type'];
-    console.log("save sort data", res.data)
+    //console.log("save sort data", response)
+    console.log("firstname-asc")
     this.getSort()
 
   }
@@ -183,14 +187,15 @@ export default class PlayersScreen extends React.Component {
       "sortName": "lastName",
       "sortOrder": "dsc"
     }
-    const res = await axios.patch('https://devapi.upsquad.com/users/save_preference', data);
+    const response = await this.apiHandler.requestPatch( this.serviceUrls.saveSortPreference,data)
     this.setState({
       isLoading: false,
      
     })
    // this.setState({radio:!radio4})
     //res.data.headers['Content-Type'];
-    console.log("save sort data", res.data)
+   // console.log("save sort data", response)
+   console.log("lastname-dsc")
     this.getSort()
 
   }
@@ -208,13 +213,14 @@ export default class PlayersScreen extends React.Component {
       "sortName": "firstName",
       "sortOrder": "dsc"
     }
-    const res = await axios.patch('https://devapi.upsquad.com/users/save_preference', data);
+    const response = await this.apiHandler.requestPatch( this.serviceUrls.saveSortPreference,data)
     this.setState({
       isLoading: false
     })
     //this.setState({radio:!radio3})
     //res.data.headers['Content-Type'];
-    console.log("save sort data", res.data)
+    //console.log("save sort data", response)
+    console.log("firstname-dsc")
     this.getSort()
 
   }
@@ -341,10 +347,10 @@ export default class PlayersScreen extends React.Component {
 
           </View>
         </TouchableOpacity>
-        <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginRight: 20, marginTop: 20 }}>
-          <Text style={{ fontSize: 14, color: '#1E1C24', fontFamily: Fonts.mulishSemiBold, fontWeight: '600', marginLeft: 20 }}>Sorted ny name</Text>
+        <View style={{ flexDirection: 'row', marginRight: 20, marginTop: 20 }}>
+          <Text style={{ fontSize: 14, color: '#1E1C24', fontFamily: Fonts.mulishSemiBold, fontWeight: '600', marginLeft: 25 }}>Sorted by name</Text>
           <TouchableOpacity onPress={() => this.setState({ show1: true })}>
-            <Image source={ImagesWrapper.sortedimg} />
+            <Image source={ImagesWrapper.sortedimg} style={{marginLeft:'76%'}} />
           </TouchableOpacity>
         </View>
 
@@ -357,7 +363,7 @@ export default class PlayersScreen extends React.Component {
             // {id:item._id})}>
             <TouchableOpacity onPress={() => { this.selected(item._id) }}>
 
-              <View style={{ flexDirection: 'row', marginTop: 20, marginBottom: 20, marginLeft: 30, }}>
+              <View style={{ flexDirection: 'row', marginTop: 20, marginBottom: 20, marginLeft: 25, }}>
                 {item.profileImg == null ?
                   <View style={{ width: 50, height: 50, borderRadius: 25, borderWidth: 1, borderColor: 'black' }}>
                   </View> : <Image style={{ width: 50, height: 50, borderRadius: 25 }} source={{ uri: item.profileImg }}
@@ -369,7 +375,7 @@ export default class PlayersScreen extends React.Component {
                 <View style={styles.list}>
                   <Text style={styles.name}>{item.firstName} {item.lastName}</Text>
                   <Text style={styles.nameText}>{item.currentJobTitle} at {item.currentCompany}</Text>
-                  <View style={{ flexDirection: 'row' }}>
+                  <View style={{ flexDirection: 'row',width:'75%'}}>
                     <Image source={ImagesWrapper.people} style={{ marginRight: 10 }} />
                     <Text style={styles.nameText}>{item.currentRole}</Text>
                   </View>
@@ -389,94 +395,6 @@ export default class PlayersScreen extends React.Component {
         />
 
 
-        {/* <TouchableOpacity onPress = {() => this.props.navigation.navigate('playersDetail')}>
-
-                <View style={{ flexDirection: 'row', marginTop: 20, marginBottom: 20,marginLeft:20 }}>
-                    
-                    <View style = {styles.displayimage}></View>
-                    <View style={{ flexDirection: 'column', marginTop: 'auto', marginBottom: 'auto' }}>
-                    
-                        <Text style={styles.name}>Kannie Sils</Text>
-                    
-                        <Text style={styles.nameText}>UI/UX Designer at Mediyum Studio</Text>
-                        <View style={{flexDirection:'row',marginLeft:20}}>
-                            <Image source={ImagesWrapper.people}/>
-                            <Text style={[styles.nameText,{marginLeft:10}]}> DesignTeam</Text>
-                        </View>
-                    </View>
-                    <View style={styles.time}>
-                        <Image source={ImagesWrapper.messageimg}/>
-                    </View>
-                </View>
-                </TouchableOpacity> */}
-        {/* <View style={[styles.underline]}></View>
-                    <View style={{ flexDirection: 'row', marginTop: 20, marginBottom: 20, marginLeft: 20 }}>
-                    <View style={styles.displayimage}></View>
-                        <View style={{ flexDirection: 'column', marginTop: 'auto', marginBottom: 'auto' }}>
-                            <Text style={styles.name}>Jay Jay</Text>
-                            <Text style={styles.nameText}>UI/UX Designer at Mediyum Studio</Text>
-                            <View style={{flexDirection:'row',marginLeft:20}}>
-                            <Image source={ImagesWrapper.people}/>
-                            <Text style={[styles.nameText,{marginLeft:10}]}> DesignTeam</Text>
-                        </View>
-                        </View>
-                        <View style={styles.time}>
-                        <Image source={ImagesWrapper.messageimg}/>
-                            
-                        </View>
-                    </View>
-                    <View style={[styles.underline]}></View>
-                    <View style={{ flexDirection: 'row', marginTop: 20, marginBottom: 20, marginLeft: 20 }}>
-                    <View style={styles.displayimage}></View>
-                        <View style={{ flexDirection: 'column', marginTop: 'auto', marginBottom: 'auto' }}>
-                            <Text style={styles.name}>Jay Jay</Text>
-                            <Text style={styles.nameText}>UI/UX Designer at Mediyum Studio</Text>
-                            <View style={{flexDirection:'row',marginLeft:20}}>
-                            <Image source={ImagesWrapper.people}/>
-                            <Text style={[styles.nameText,{marginLeft:10}]}> DesignTeam</Text>
-                        </View>
-                        </View>
-                        <View style={styles.time}>
-                        <Image source={ImagesWrapper.messageimg}/>
-                            
-                        </View>
-                    </View>
-                    <View style={[styles.underline]}></View>
-                    <View style={{ flexDirection: 'row', marginTop: 20, marginBottom: 20, marginLeft: 20 }}>
-                    <View style={styles.displayimage}></View>
-                        <View style={{ flexDirection: 'column', marginTop: 'auto', marginBottom: 'auto' }}>
-                            <Text style={styles.name}>Jay Jay</Text>
-                            <Text style={styles.nameText}>UI/UX Designer at Mediyum Studio</Text>
-                            <View style={{flexDirection:'row',marginLeft:20}}>
-                            <Image source={ImagesWrapper.people}/>
-                            <Text style={[styles.nameText,{marginLeft:10}]}> DesignTeam</Text>
-                        </View>
-                        </View>
-                        <View style={styles.time}>
-                        <Image source={ImagesWrapper.messageimg}/>
-                            
-                        </View>
-                    </View>
-                    <View style={[styles.underline]}></View>
-                    <View style={{ flexDirection: 'row', marginTop: 20, marginBottom: 20, marginLeft: 20 }}>
-                    <View style={styles.displayimage}></View>
-                        <View style={{ flexDirection: 'column', marginTop: 'auto', marginBottom: 'auto' }}>
-                            <Text style={styles.name}>Jay Jay</Text>
-                            <Text style={styles.nameText}>UI/UX Designer at Mediyum Studio</Text>
-                            <View style={{flexDirection:'row',marginLeft:20}}>
-                            <Image source={ImagesWrapper.people}/>
-                            <Text style={[styles.nameText,{marginLeft:10}]}> DesignTeam</Text>
-                        </View>
-                        </View>
-                        <View style={styles.time}>
-                        <Image source={ImagesWrapper.messageimg}/>
-                            
-                        </View>
-                    </View>
-                    <View style={[styles.underline]}></View> */}
-
-
-
         {/* Modals code are here */}
 
         <Modal
@@ -494,31 +412,31 @@ export default class PlayersScreen extends React.Component {
           <View style={{ flex: 1, justifyContent: 'flex-end', marginTop: 20 }}>
 
             <View style={{
-              height: 230, width: '100%', backgroundColor: 'white', borderTopLeftRadius: 10, borderTopRightRadius: 10, bottom: 0, position: 'absolute'
+              height: 250, width: '100%', backgroundColor: 'white', borderTopLeftRadius: 10, borderTopRightRadius: 10, bottom: 0, position: 'absolute'
             }}>
-              <View style={{ marginLeft: 20, marginTop: 30 }}>
+              <View style={{ marginLeft: 30, marginTop: 30 }}>
 
                 <View style={{ flexDirection: 'row' }}>
                   <Text style={[styles.popupText, { color: '#1E1C24', fontSize: 16 }]}>Sort by</Text>
-                  <View style={{ flex: 1, alignItems: 'flex-end' }}>
+                  <View style={{  }}>
                     <Image
                       source={ImagesWrapper.sortdescending}
-                      style={{ marginRight: 30 }}
+                      style={{ marginLeft: '35%' }}
                     />
                   </View>
 
                 </View>
                 <TouchableOpacity onPress={() => this.updateSortingFirstA()}>
-                  <View style={{ flexDirection: 'row', marginTop: 10 }}>
+                  <View style={{ flexDirection: 'row', marginTop: 25 }}>
                     <Text style={styles.popupText}>First name - Ascending</Text>
-                    <View style={{ flex: 1, alignItems: 'flex-end' }}>
+                    <View style={{ }}>
                       {this.state.radio1==false?
                       <Image
-                        source={ImagesWrapper.radiobtn}
-                        style={{ marginRight: 31 }}
+                        source={ImagesWrapper.radiogrey}
+                        style={{ marginLeft:'35%' }}
                       />: <Image
-                      source={ImagesWrapper.radiobtn1}
-                      style={{ marginRight: 31 }}
+                      source={ImagesWrapper.radioselected}
+                      style={{  marginLeft:'35%' }}
                     />}
                     </View>
 
@@ -527,14 +445,14 @@ export default class PlayersScreen extends React.Component {
                 <TouchableOpacity onPress={() => this.updateSortingLastA()}>
                   <View style={{ flexDirection: 'row', marginTop: 15 }}>
                     <Text style={styles.popupText}>Last name - Ascending</Text>
-                    <View style={{ flex: 1, alignItems: 'flex-end' }}>
+                    <View style={{ }}>
                     {this.state.radio2==false?
                       <Image
-                        source={ImagesWrapper.radiobtn}
-                        style={{ marginRight: 31 }}
+                        source={ImagesWrapper.radiogrey}
+                        style={{ marginLeft:'35%'  }}
                       />: <Image
-                      source={ImagesWrapper.radiobtn1}
-                      style={{ marginRight: 31 }}
+                      source={ImagesWrapper.radioselected}
+                      style={{ marginLeft:'35%'  }}
                     />}
                     </View>
                   </View>
@@ -542,14 +460,14 @@ export default class PlayersScreen extends React.Component {
                 <TouchableOpacity onPress={() => this.updateSortingFirstD()}>
                 <View style={{ flexDirection: 'row', marginTop: 15 }}>
                   <Text style={styles.popupText}>First name - Descending</Text>
-                  <View style={{ flex: 1, alignItems: 'flex-end' }}>
+                  <View style={{ }}>
                   {this.state.radio3==false?
                       <Image
-                        source={ImagesWrapper.radiobtn}
-                        style={{ marginRight: 31 }}
+                        source={ImagesWrapper.radiogrey}
+                        style={{  marginLeft:'35%'}}
                       />: <Image
-                      source={ImagesWrapper.radiobtn1}
-                      style={{ marginRight: 31 }}
+                      source={ImagesWrapper.radioselected}
+                      style={{  marginLeft:'35%'}}
                     />}
                   </View>
                 </View>
@@ -557,14 +475,14 @@ export default class PlayersScreen extends React.Component {
                 <TouchableOpacity onPress={() => this.updateSortingLastD()}>
                 <View style={{ flexDirection: 'row', marginTop: 15 }}>
                   <Text style={styles.popupText}>Last name - Descending</Text>
-                  <View style={{ flex: 1, alignItems: 'flex-end' }}>
+                  <View style={{  }}>
                   {this.state.radio4==false?
                       <Image
-                        source={ImagesWrapper.radiobtn}
-                        style={{ marginRight: 31 }}
+                        source={ImagesWrapper.radiogrey}
+                        style={{  marginLeft:'35%' }}
                       />: <Image
-                      source={ImagesWrapper.radiobtn1}
-                      style={{ marginRight: 31 }}
+                      source={ImagesWrapper.radioselected}
+                      style={{  marginLeft:'35%' }}
                     />}
                   </View>
                 </View>
@@ -648,7 +566,8 @@ const styles = StyleSheet.create({
     color: 'rgba(134, 133, 133, 1)',
     fontSize: 14,
     fontWeight: '600',
-    fontFamily: Fonts.mulishRegular
+    fontFamily: Fonts.mulishRegular,
+    width:'73%'
   },
   underline: {
     borderBottomColor: '#959494',
@@ -670,7 +589,7 @@ const styles = StyleSheet.create({
   remove: {
     fontSize: 14,
     fontWeight: '600',
-    marginLeft: '10%',
+    marginLeft: '8%',
     color: '#58C4C6',
     fontFamily: Fonts.mulishSemiBold,
     marginTop: 'auto',

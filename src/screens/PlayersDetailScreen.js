@@ -227,14 +227,14 @@ export default class playersDetailScreen extends React.Component {
                                     <Image source={ImagesWrapper.sendmsg} style={{ marginLeft: 10 }} />
                                     <Text style={[styles.technologytext, { color: '#58C4C6', marginLeft: 10, marginTop: 5, marginRight: 10 }]}>Send message</Text>
                                 </View>
-                                <Text style={[styles.technologytext, { fontSize: 12, marginLeft: 10, marginTop: 10, marginLeft: 'auto' }]}>Usually replies the next day</Text>
+                                {/* <Text style={[styles.technologytext, { fontSize: 12, marginLeft: 10, marginTop: 10, marginLeft: 'auto' }]}>Usually replies the next day</Text> */}
                             </View>
                             <View>
                                 <View style={[styles.messagecard, { marginLeft: 10 }]}>
                                     <Image source={ImagesWrapper.scalendar} style={{ marginLeft: 10 }} />
                                     <Text style={[styles.technologytext, { color: '#58C4C6', marginLeft: 10, marginTop: 5, marginRight: 10 }]}>Schedule a 1:1</Text>
                                 </View>
-                                <Text style={[styles.technologytext, { fontSize: 12, marginLeft: 10, marginTop: 10, marginRight: 'auto' }]}>Available 3 times this month </Text>
+                                {/* <Text style={[styles.technologytext, { fontSize: 12, marginLeft: 10, marginTop: 10, marginRight: 'auto' }]}>Available 3 times this month </Text> */}
                             </View>
                         </View>
                         <View style={styles.underline}></View>
