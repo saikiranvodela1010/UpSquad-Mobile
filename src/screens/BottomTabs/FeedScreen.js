@@ -145,6 +145,7 @@ import Share from 'react-native-share';
           const universityDetsils =  {
             "_id":this.state.universityId,
             "universityName":this.state.universityName,
+            "universityLogo":this.state.communityLogo,
            }
            const data = await this.storagePrefs.setObjectValue("universityDetsils",universityDetsils);
     }
