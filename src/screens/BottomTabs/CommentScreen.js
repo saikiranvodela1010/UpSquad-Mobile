@@ -154,11 +154,11 @@ export default class CommentScreen extends React.Component {
             {this.state.isLoading==false  ? <View style={{ borderWidth: 1, borderColor: '#F1F1F1',marginTop:22}}></View> : null}
             {this.state.isLoading==false  ? <View style = {{flexDirection: 'column', marginLeft: 24}}>
                 <View style = {{flexDirection:'row',alignContent: 'center'}}>
-                    <View style = {{borderRadius: 20, borderWidth : 1,width :'80%' ,height :40,borderColor: "#F1F1F1",marginTop:27,justifyContent: 'center',}}>
-                        <TextInput style = {{marginLeft:24,flex :0.65}}
+                    <View style = {{borderRadius: 20, borderWidth : 1,width :'80%' ,height :Platform.OS === 'ios' ? 40: 40,borderColor: "#F1F1F1",marginTop:27,justifyContent: 'center',}}>
+                        <TextInput style = {{marginLeft:24}}
                             placeholder="Add Comment"
                             placeholderTextColor= '#868585'
-                            placeholderStyle= {{fontFamily: Fonts.mulishRegular,fontWeight:400,fontSize:14,paddingBottom: 100}}
+                            placeholderStyle= {{fontFamily: Fonts.mulishRegular,fontWeight:400,fontSize:14,}}
                             multiline = {true}
                             onChangeText={(text) => {this.setState({CommentsContent: text})}}
                             value={this.state.CommentsContent}
