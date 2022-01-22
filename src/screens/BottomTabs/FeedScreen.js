@@ -296,13 +296,13 @@ import Share from 'react-native-share';
                     <Text ellipsizeMode='tail' numberOfLines={1} style={{ fontSize: 20, fontFamily: Fonts.mulishSemiBold, fontWeight: '600',color:'#1E1C24', marginLeft: '5%',width:170}}>{this.state.communityName}</Text>
                     <View style={{justifyContent:'flex-end',flexDirection:'row',flex:1}}>
                     <TouchableOpacity   
-                    style = {{marginRight:'8%'}}
+                    style = {{marginRight:'18%'}}
                     onPress={() => this.props.navigation.navigate('notificationscreen')}>
                     <Image source={ImagesWrapper.notificationNo}></Image>
                     </TouchableOpacity>
                 
                     <TouchableOpacity 
-                    style={{marginRight:'10%'}}
+                    style={{marginRight:'18%'}}
                     onPress={() => this.props.navigation.navigate('chatscreen')}
                     >
                     <Image source={ImagesWrapper.chatNo}
@@ -315,12 +315,12 @@ import Share from 'react-native-share';
                     data = {this.state.postData}
                     renderItem={({item})=> (
                         <View style = {{ marginLeft : 25}}>
-                            <View style={{flexDirection:'row',justifyContent:'space-between',marginTop:15,}}>
-                            <View style={{flexDirection:'row',marginTop:'2%',}}>
+                            <View style={{flexDirection:'row',justifyContent:'space-between',marginTop:15,alignContent: 'center'}}>
+                            <View style={{flexDirection:'row',marginTop:'2%',alignContent: 'center',alignItems:'center'}}>
                                 <Image source={{uri : item.creator.profileImg !=null && item.creator.profileImg!="" ? item.creator.profileImg : "https://www.careerquo.com/assets/images/18.png"}}
                                     style = {{height: 30,width: 30, borderRadius: 25}}/> 
                                 <Text style={[styles.post,{padding:-8,marginLeft:8,fontSize:16}]}>{item.creator.firstName} {item.creator.lastName}</Text>
-                                <Text style={[styles.post,{padding:5,marginLeft:5,fontSize:12,color:'#868585',marginTop:-2}]}>
+                                <Text style={[styles.post,{marginLeft:5,fontSize:12,color:'#868585'}]}>
                                     {moment(item.createdAt).fromNow()}
                                 </Text>
                             </View>
@@ -394,8 +394,8 @@ import Share from 'react-native-share';
                                 </View>
                                 <Text style={{fontSize:12,color:'#868585',fontFamily:Fonts.mulishBold,fontWeight:'400',marginLeft:5,marginTop:2,marginRight:22}}>{item.comments.length } {item.comments.length > 1 ? "comments" : "comment"}</Text>
                             </View>
-                            <View style={{ borderWidth: 1, borderColor: '#F1F1F1',marginTop:22}}></View>
-                            <View style={{flexDirection:'row',marginTop:20}}>
+                            <View style={{ borderWidth: 1, borderColor: '#F1F1F1',marginTop:22,marginRight: '5%'}}></View>
+                            <View style={{flexDirection:'row',marginTop:20,}}>
                                 <TouchableOpacity
                                 onPress ={()=> {
                                 this.postLike(item._id,this.state.userId)
@@ -440,7 +440,7 @@ import Share from 'react-native-share';
                                 </View>
                                 </TouchableOpacity>
                             </View>
-                            <View style={{ borderWidth: 1, borderColor: '#F1F1F1',marginTop:22}}></View>
+                            <View style={{ borderWidth: 1, borderColor: '#F1F1F1',marginTop:22,marginRight:'5%'}}></View>
                         </View>
                     )}/>
                     {(this.state.isProfessional == true && this.state.coachCreatePost == true) || 
@@ -587,7 +587,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         // paddingLeft: '9%',
-         marginTop: Platform.OS == 'ios'? 0 : 25,
+        marginTop: Platform.OS == 'ios'? 0 : 25,
         marginBottom: 25,
         // borderBottomWidth:1
       },

@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, Image, TouchableOpacity, ScrollView, Keyboard, FlatList,ActivityIndicator,Modal } from 'react-native';
+import { View, Text, StyleSheet, Image, TouchableOpacity, ScrollView, Keyboard, FlatList,ActivityIndicator,Modal,SafeAreaView, Platform } from 'react-native';
 import ImagesWrapper from '../../res/ImagesWrapper';
 import Fonts from '../../res/Fonts';
 import ServiceUrls from '../../network/ServiceUrls';
@@ -158,7 +158,7 @@ export default class PlayersScreen extends React.Component {
 
 
         return (
-            <View style={{ flex: 1, backgroundColor: '#FFFFFF' }}>
+            <SafeAreaView style={{ flex: 1, backgroundColor: '#FFFFFF' }}>
                 {this.renderLoader()}
 
                 <View style={{ flexDirection: 'row',marginTop: 20, marginBottom: 10 }}>
@@ -167,7 +167,7 @@ export default class PlayersScreen extends React.Component {
                         <Image
                             source={ImagesWrapper.back}
                             style={{
-                                marginTop: 6,
+                                marginTop: Platform.OS === 'ios'? 0 : 6,
                                 marginLeft: 30,
                                 tintColor: '#000000',
                             }}
@@ -281,7 +281,7 @@ export default class PlayersScreen extends React.Component {
 
                 }
                 
-            </View>
+            </SafeAreaView>
 
 
         )
@@ -353,7 +353,7 @@ const styles = StyleSheet.create({
         color: '#868585',
         fontSize: 14,
         marginLeft: 20,
-        marginTop: -5,
+        marginTop: Platform.OS==='ios'? 0: -5,
         width: '60%'
     },
     underline: {
