@@ -133,8 +133,14 @@ import Share from 'react-native-share';
               universityName:response.data[0].universityName,
               universityId: response.data[0]._id,
               communityName: response.data[0].universityName,
-              communityLogo : response.data[0].universityLogo
+              communityLogo : response.data[0].universityLogo, 
             });
+            const universityDetsils =  {
+                "_id":this.state.universityId,
+                "universityName":this.state.universityName,
+                "universityLogo":this.state.communityLogo,
+               }
+               const data = await this.storagePrefs.setObjectValue("universityDetsils",universityDetsils);
           } else{
             this.setState({
               universityName:"",
@@ -142,12 +148,7 @@ import Share from 'react-native-share';
               communityName: ""
             });
           }
-          const universityDetsils =  {
-            "_id":this.state.universityId,
-            "universityName":this.state.universityName,
-            "universityLogo":this.state.communityLogo,
-           }
-           const data = await this.storagePrefs.setObjectValue("universityDetsils",universityDetsils);
+          
     }
 
     getPosts = async () => {
@@ -288,7 +289,7 @@ import Share from 'react-native-share';
                 {this.renderLoader()}
                     <View style={[styles.header]}>
                     <TouchableOpacity onPress={()=> this.props.navigation.openDrawer()}>
-                    <Image source= {{uri : this.state.communityLogo!=null && this.state.communityLogo!="" ? this.state.communityLogo: null }}
+                    <Image source= {{uri : this.state.communityLogo!=null && this.state.communityLogo!="" ? this.state.communityLogo: "https://www.careerquo.com/assets/images/18.png" }}
                             style={{marginLeft:25,height: 30,width: 30, borderRadius: 25}}
                     ></Image>
                     </TouchableOpacity>

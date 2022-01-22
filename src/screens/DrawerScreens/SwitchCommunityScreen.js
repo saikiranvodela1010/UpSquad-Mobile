@@ -113,10 +113,8 @@ export default class SwitchCommunityScreen extends React.Component {
      const data = await this.storagePrefs.setObjectValue("universityDetsils",universityDetsils);
      const getuniversityDetsils = await this.storagePrefs.getObjectValue("universityDetsils")
     //  if(this.state.checked)
-     if(this.state.checked !== 0){
      this.setState({checked:getuniversityDetsils.key})
      DeviceEventEmitter.emit("UpdateFeed");
-     }
     
 
   }

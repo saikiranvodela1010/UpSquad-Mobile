@@ -234,7 +234,11 @@ export default class PlayersScreen extends React.Component {
     this.setState({
       isLoading: false
     })
+    if(response.success === true) {
     this.setState({ sortData: response.data.sortPreference })
+    } else{
+      this.setState({sortData : response.data})
+    }
 
     if (this.state.sortData.sortOrder == 'asc') {
       if (this.state.sortData.sortName == 'firstName') {

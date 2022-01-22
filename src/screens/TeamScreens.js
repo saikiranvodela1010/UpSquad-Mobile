@@ -124,7 +124,18 @@ console.log("registerData",registerData)
                         "lastName":response.user.lastName,
                         "password": this.state.password,
                     }
+                    const userDetsils = {
+                        "token":response.token,
+                        "userId":response.user._id,
+                        "userName":response.user.firstName+ " "+response.user.lastName,
+                        "userEmail": response.user.email,
+                        "firstName":response.user.firstName,
+                        "lastName":response.user.lastName,
+                        //"progileImage" : response.user.profileImg
+                    }
+              await this.storagePrefs.setObjectValue("userDetails",userDetsils);
               await this.storagePrefs.setObjectValue("signupdetails",signupdetails);
+
 
             }
 
