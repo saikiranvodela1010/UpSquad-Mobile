@@ -10,6 +10,10 @@ import SwitchToggle from "react-native-switch-toggle";
 import RadioForm, {RadioButton, RadioButtonInput, RadioButtonLabel} from 'react-native-simple-radio-button';
 import CheckBox from 'react-native-check-box'
 import { ProgressBar, Colors } from 'react-native-paper';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import ServiceUrls from '../../network/ServiceUrls';
+import APIHandler from '../../network/NetWorkOperations';
+import StoragePrefs from '../../res/StoragePrefs';
 
 
 
@@ -18,6 +22,9 @@ var radio_props = [
     {label: 'Microsoft Teams', value: 1 }
   ];
   export default class CreateMeetingScreen extends React.Component {
+    serviceUrls = new ServiceUrls();
+    apiHandler = new APIHandler();
+    storagePrefs = new StoragePrefs();
     constructor(props) {
         super(props);
         this.textInput = React.createRef(null);
@@ -29,10 +36,46 @@ var radio_props = [
             on: false,
             isFundRaising: false,
             isMarketing: false,
-            value:1
+            value:1,
+            userId:'',
+            universityId: '',
+            adminAccess:'',
+            isProfessional:''
            
         }
     }
+  async  componentDidMount(){
+        const universityDetsils = await this.storagePrefs.getObjectValue("universityDetsils")
+
+    this.setState({ universityId: universityDetsils._id })
+    console.log('universityid',this.state.universityId)
+    const userDetails = await this.storagePrefs.getObjectValue("userDetails")
+    this.setState({ userId: userDetails.userId,
+    adminAccess:userDetails.isAdmin,
+    isProfessional:userDetails.isProfessional
+})
+ this.getTeams()
+
+    }
+    async getTeams() {
+        this.setState({
+          isLoading: true
+        })
+        //const data = '5e3bfad3cf7d530022e90429'+'/5ed8d9509e623f00221761a1';
+        const data = {
+            u_id:this.state.universityId,
+            user_id:this.state.userId,
+            isProfessional:this.state.isProfessional,
+            admin_access:this.state.adminAccess
+        }
+        console.log('data',data)
+        const response = await this.apiHandler.requestGet(data, this.serviceUrls.getGroupTeams)
+        console.log("Teams response",response)
+    
+        
+      }
+
+
 
     onNext(){
         if(this.state.meetingtitle==''){
@@ -49,10 +92,11 @@ var radio_props = [
     render() {
 
         return (
+            <SafeAreaView>
 
             <View style={{ flex: 1, backgroundColor: '#FFFFFF' }}>
 
-<View style={{ flexDirection: 'row', marginTop: 20, marginBottom: 20, marginLeft: 30 }}>
+<View style={{ flexDirection: 'row', marginTop: '5%', marginBottom: 20, marginLeft: 30 }}>
                     <TouchableOpacity onPress={() => this.props.navigation.navigate('tabbar3')}>
                         <Image
                             source={ImagesWrapper.back}
@@ -250,6 +294,7 @@ var radio_props = [
 
                 </ScrollView>
             </View>
+            </SafeAreaView>
 
         )
     }

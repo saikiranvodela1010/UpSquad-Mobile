@@ -83,7 +83,9 @@ export default class LoginScreen extends React.Component {
                     "userEmail": response.user.email,
                     "firstName":response.user.firstName,
                     "lastName":response.user.lastName,
-                    "progileImage" : response.user.profileImg
+                    "progileImage" : response.user.profileImg,
+                    "isProfessional" : response.user.isProfessional,
+                    "isAdmin":response.user.isAdmin
                 }
                 const logindetails=await this.storagePrefs.setObjectValue("userDetails",userDetsils);
                 this.props.navigation.navigate('BioSuccess');

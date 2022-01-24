@@ -26,5 +26,6 @@ export default class ServiceUrls {
     getSort = this.mainUrl+'/users/get_sort_preference/';
     postLike = this.socialUrl+'/feed/post/like';
     fogotPassword = this.mainUrl+'/users/forgotpassword';
+    getGroupTeams = this.mainUrl+'/teams/getGroupSessionTeams';
 
 }
