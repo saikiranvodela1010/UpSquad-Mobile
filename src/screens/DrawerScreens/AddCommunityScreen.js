@@ -27,7 +27,8 @@ export default class AddCommunityScreen extends React.Component {
             code:'',
             firstName:'',
             lastName:'',
-            isLoading: false
+            isLoading: false,
+            communityName:"",
         }
     }
 
@@ -102,6 +103,17 @@ if(this.state.code !== ""){
 }
 
 }
+async getCommunityname(code){
+  const data=code;
+  console.log(code)
+  const response = await this.apiHandler.requestGet(data,this.serviceUrls.getcommunityname)
+  console.log('communityname',response.data[0].universityName)
+  if(response.Status === 200){
+      this.setState({communityName:response.data[0].universityName})
+  }else{
+      alert(response.message)
+  }
+}
 renderLoader(){
   return(
       <Modal transparent={true}
@@ -141,7 +153,7 @@ renderLoader(){
                             // style={{marginLeft:25}}
                         />
                     </TouchableOpacity>
-                    <Text style={styles.memphistalk}>Add new Community</Text>
+                    <Text style={styles.memphistalk}>Add new community</Text>
                    
 
                 </View>
@@ -156,7 +168,7 @@ renderLoader(){
                       autoCapitalize='characters'
                       onChangeText={(Code) => {
                         this.setState({code:Code})
-                        
+                        this.getCommunityname(Code);
                       }}
                       value={this.removeEmojis(this.state.code)}
                       // returnKeyType={"done"}
@@ -178,7 +190,7 @@ renderLoader(){
                     {this.state.codebelongs === true ? 
                     <View style={{flexDirection:'row'}}>
                     <Text style={[styles.agree,{paddingLeft:22,color:'#B1AAAA',fontSize:12,fontWeight:'400',marginTop:5,marginLeft:8}]}>This code belongs to</Text>
-                    <Text style={[{paddingLeft:3,marginTop:3,fontFamily:Fonts.mulishExtraBold}]}>Pencil community</Text>
+                    <Text style={[{paddingLeft:3,marginTop:3,fontFamily:Fonts.mulishExtraBold}]}>{this.state.communityName}</Text>
                     </View>
                     :
                     null

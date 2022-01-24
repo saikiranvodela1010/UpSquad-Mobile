@@ -34,6 +34,7 @@ export default class SignUpScreen extends React.Component {
             iconName:'ios-eye-off',
             underline:'-10%',
             codebelongs:false,
+            communityName:"",
            
         }
        
@@ -57,6 +58,17 @@ export default class SignUpScreen extends React.Component {
         this.state.iconName !== "ios-eye-off"
             ? (this.setState({iconName:"ios-eye-off"}), this.setState({hidePassword:true}))
             : (this.setState({iconName:"ios-eye"}),this.setState({hidePassword:false}))
+    }
+    async getCommunityname(code){
+        const data=code;
+        console.log(code)
+        const response = await this.apiHandler.requestGet(data,this.serviceUrls.getcommunityname)
+        console.log('communityname',response.data[0].universityName)
+        if(response.Status === 200){
+            this.setState({communityName:response.data[0].universityName})
+        }else{
+            alert(response.message)
+        }
     }
      sayHello (){
         if(this.state.code === ''){
@@ -309,6 +321,7 @@ export default class SignUpScreen extends React.Component {
                         maxLength={63}
                         keyboardType={Platform.OS === 'ios' ? 'ascii-capable' : 'visible-password'}
                         // blurOnSubmit={false}
+                       
                     />
                    
                     <View style={styles.underline}/>
@@ -369,6 +382,8 @@ export default class SignUpScreen extends React.Component {
                       onChangeText={(Code) => {
                         this.setState({code:Code})
                         this.setState({passworderr:''})
+                        this.getCommunityname(Code);
+                        
                       }}
                       value={this.removeEmojis(this.state.code)}
                       returnKeyType={"done"}
@@ -385,6 +400,7 @@ export default class SignUpScreen extends React.Component {
                             this.setState({codebelongs:false});
                         }else{
                             this.setState({codebelongs:true});
+                            
                         }
                       }}
                         
@@ -397,7 +413,8 @@ export default class SignUpScreen extends React.Component {
                     {this.state.codebelongs === true ? 
                     <View style={{flexDirection:'row'}}>
                     <Text style={[styles.agree,{paddingLeft:22,color:'#B1AAAA',fontSize:12,fontWeight:'400',marginTop:5}]}>This code belongs to</Text>
-                    <Text style={[{paddingLeft:3,marginTop:3,fontFamily:Fonts.mulishExtraBold}]}>Pencil community</Text>
+
+                    <Text style={[{paddingLeft:3,marginTop:3,fontFamily:Fonts.mulishExtraBold}]}>{this.state.communityName}</Text>
                     </View>
                     :
                     null

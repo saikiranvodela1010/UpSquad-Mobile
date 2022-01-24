@@ -27,5 +27,6 @@ export default class ServiceUrls {
     postLike = this.socialUrl+'/feed/post/like';
     fogotPassword = this.mainUrl+'/users/forgotpassword';
     getGroupTeams = this.mainUrl+'/teams/getGroupSessionTeams';
+    getcommunityname=this.mainUrl+'/subscriptionUsers/getCommunityInfo/';
 
 }

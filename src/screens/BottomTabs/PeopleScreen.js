@@ -22,21 +22,24 @@ const Tab = createMaterialTopTabNavigator();
        
         this.state={
             communityName:'',
+            communityLogo: ''
+           
+           
         }
        
     }
     async componentDidMount() {
       
         const universityDetsils = await this.storagePrefs.getObjectValue("universityDetsils")
-        // console.log('universityDetsils',universityDetsils);
-        this.setState({communityName:universityDetsils.universityName});
+        console.log('universityDetsils123456',universityDetsils);
+        this.setState({communityName:universityDetsils.universityName, communityLogo:universityDetsils.universityLogo});
        
 
         }
         async componentDidUpdate(){
             const universityDetsils = await this.storagePrefs.getObjectValue("universityDetsils")
             // console.log('universityDetsils',universityDetsils);
-            this.setState({communityName:universityDetsils.universityName});
+            this.setState({communityName:universityDetsils.universityName,communityLogo: universityDetsils.universityLogo});
         }
 
    
@@ -45,8 +48,8 @@ const Tab = createMaterialTopTabNavigator();
         <SafeAreaView style={{flex:1,backgroundColor:'#FFFFFF'}}>
                <View style={[styles.header]}>
                <TouchableOpacity onPress={()=> this.props.navigation.openDrawer()}>
-                    <Image source={ImagesWrapper.profile}
-                    style={{marginLeft:25}}
+               <Image source= {{uri : this.state.communityLogo!=null && this.state.communityLogo!="" ? this.state.communityLogo: 'https://www.careerquo.com/assets/images/18.png' }}
+                            style={{marginLeft:25,height: 30,width: 30, borderRadius: 25}}
                     ></Image>
                     </TouchableOpacity>
                 <Text ellipsizeMode='tail' numberOfLines={1} style={{ fontSize: 20, fontFamily: Fonts.mulishSemiBold, fontWeight: '600',color:'#1E1C24', marginLeft: '5%' ,width:170}}>{this.state.communityName}</Text>
@@ -182,7 +185,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         // paddingLeft: '9%',
-        marginTop: 25,
+        marginTop: Platform.OS == 'ios'? 0 : 25,
         marginBottom: 25,
         // borderBottomWidth:1
       },

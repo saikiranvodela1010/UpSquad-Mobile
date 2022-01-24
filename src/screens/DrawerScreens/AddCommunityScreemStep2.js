@@ -82,8 +82,8 @@ class TeamScreen extends React.Component {
                 this.setState({coachRename:response.data[0].coachRename})
                 this.setState({hidePlayerStatus:response.data[0].hidePlayerStatus})
                 this.setState({hideCoachStatus:response.data[0].hideCoachStatus})
-                this.setState({hidePlayerStatus:true})
-                this.setState({hideCoachStatus:false})
+                // this.setState({hidePlayerStatus:true})
+                // this.setState({hideCoachStatus:false})
 
                 
                this.setState({teamsData:response.data[0].teamsData})
@@ -219,18 +219,18 @@ class TeamScreen extends React.Component {
                             // style={{marginLeft:25}}
                         />
                     </TouchableOpacity>
-                    <Text style={styles.memphistalk}>Add Community</Text>
+                    <Text style={styles.memphistalk}>Add community</Text>
                    
 
                 </View>
                 <View style={styles.underline}></View>
 
-                <Text style={[styles.memphistalk,{marginTop:20,marginLeft:30}]}>Step 2 of 2</Text>
+                <Text style={[styles.memphistalk,{marginTop:20,marginLeft:"7%"}]}>Step 2 of 2</Text>
                 <Text style={styles.title}>What's your role?</Text>
                 <View style={{ flexDirection: 'row', marginTop: 25, }}>
                     
-                    
-                    {this.state.rectbox ?
+                    {this.state.isLoading === false ?
+                    this.state.rectbox ?
                         <View style={{ flexDirection: 'row',}}>
                             {/* {this.state.hideCoachStatus === true & this.state.hidePlayerStatus=== false ? this.setState({isProfessional:false}):null} */}
                             {this.state.hidePlayerStatus === false ?
@@ -347,13 +347,15 @@ class TeamScreen extends React.Component {
                             </View>
                             :
                             null
-    }
+                            }
                         </View>
                             
 
-                    }
+                    
+                    :
+                    null
 
-                   
+                   }
 
                 </View>
                  {/* <ScrollView>            */}
@@ -555,6 +557,7 @@ const styles = StyleSheet.create({
         fontFamily: Fonts.mulishRegular,
         fontWeight: '600',
         marginTop:-2,
+        width:100
     },
     coachtext: {
         fontSize: 14, 
@@ -570,6 +573,7 @@ const styles = StyleSheet.create({
         fontFamily: Fonts.mulishRegular,
         fontWeight: '600' ,
         marginTop:-2,
+        width:100
     },
     playertext1: {
         fontSize: 14, 

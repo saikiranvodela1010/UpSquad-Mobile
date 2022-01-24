@@ -11,7 +11,7 @@ import {
     PermissionsAndroid,
     Platform,
     Animated,
-    BackHandler, Alert
+    BackHandler, Alert, SafeAreaView
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient'
 // import * as Progress from 'react-native-progress';
@@ -228,7 +228,7 @@ const ProfilePicScreen = (props) => {
     }
 
     return (
-        <View style={{ backgroundColor: '#FFFFFF' }}>
+        <SafeAreaView style={{ backgroundColor: '#FFFFFF' }}>
 
             {/* <View style={{justifyContent:'space-between',flex:1}}> */}
             <View style={{ flexDirection: "row", margin: 15, }}>
@@ -237,7 +237,7 @@ const ProfilePicScreen = (props) => {
                     <Image style={styles.backarrow} source={ImagesWrapper.back} />
                 </TouchableOpacity>
 
-                <View style={{ flex: 1, alignItems: 'flex-end', marginRight: 30 }}>
+                <View style={{ flex: 1, alignItems: 'flex-end', marginRight: 15,marginTop:5 }}>
                     {/* <TouchableOpacity onPress={()=>props.navigation.navigate('BioData')}> */}
 
                     <Text style={styles.skip} onPress={() => props.navigation.navigate('BioData')} >Skip</Text>
@@ -536,7 +536,7 @@ const ProfilePicScreen = (props) => {
 
 
 
-        </View>
+        </SafeAreaView>
     );
 
 }
@@ -544,7 +544,7 @@ const styles = StyleSheet.create({
     backarrow: {
         width: 30,
         height: 30,
-        marginLeft: 30,
+        marginLeft: 8,
         // marginTop: 15
     },
     skip: {
