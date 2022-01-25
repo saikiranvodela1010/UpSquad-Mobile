@@ -2,7 +2,7 @@ import React from 'react'
 import {  View, Text, StyleSheet, TouchableOpacity, Image,TextInput,SafeAreaView,Platform,FlatList, DeviceEventEmitter,ActivityIndicator,} from 'react-native';
 import ImagesWrapper from '../../res/ImagesWrapper';
 import Fonts from '../../res/Fonts';
-import { ScrollView } from 'react-native-gesture-handler';
+import { ScrollView, TouchableHighlight } from 'react-native-gesture-handler';
 import Svg, { G, Circle } from "react-native-svg";
 import LinearGradient from 'react-native-linear-gradient'
 import Modal from 'react-native-modal';
@@ -11,6 +11,8 @@ import APIHandler from '../../network/NetWorkOperations';
 import moment from 'moment';
 import StoragePrefs from '../../res/StoragePrefs';
 import Share from 'react-native-share';
+import { forEach } from 'lodash';
+import axios from 'axios';
 
 
  class MeetingsScreen extends React.Component {
@@ -75,18 +77,7 @@ import Share from 'react-native-share';
 
   
 
-    // customShare = async () =>  {
-    //     const shareOptions  =  {
-    //         message:"This is a test message"
-    //     }
-    //         Share.open(shareOptions)
-    //         .then((res) => {
-    //             console.log(res);
-    //         })
-    //         .catch((err) => {
-    //             err && console.log(err);
-    //         });
-    //     }
+
 
         updateFeed = async () => {
             const universityDetsils = await this.storagePrefs.getObjectValue("universityDetsils")
@@ -116,10 +107,54 @@ import Share from 'react-native-share';
             "userId" : userID
         }
         const response = await this.apiHandler.requestPost(data,this.serviceUrls.postLike);
-        console.log("response for post",response);
         if(response.message == "You have liked this post"){
-            this.setState({likedPosts: [...this.state.likedPosts, post.id]})
+            this.setState({likedPosts: [...this.state.likedPosts, postID]})
         }
+    }
+
+    async disLikePost(postID, userID){
+        let data = { 
+                "postId" : postID,
+                "userId" : userID   
+        }
+        // const response = await this.apiHandler.requestDelete(data,this.serviceUrls.postLike);
+        axios.delete(this.serviceUrls.postLike, {
+            data: {
+                "postId" : postID,
+                "userId" : userID  
+            }
+          })
+        .then(response => {
+            if(response.data.message === "Liked removed!"){
+                let index = this.state.likedPosts.indexOf(postID);
+                if (index != -1) this.state.likedPosts.splice(index, 1);
+            }
+        })
+        .catch(error=> {
+            console.log("error herer",error);
+        })
+       
+    }
+
+    async deletePost(postID,userID){
+        axios.delete(this.serviceUrls.deletePost, {
+            data: {
+                "postId" : postID,
+                "userId" : userID  
+            }
+          })
+        .then(response => {
+            console.log("response.message",response.data.message)
+            if(response.data.message === "Post successfully deleted"){
+                console.log("ravikiran avasarala12355");
+                const filteredData = this.state.postData.filter(item => item._id !== postID);
+                console.log("filtered Data",filteredData)
+                this.setState({ postData: filteredData,dotsmemu: false  });
+            }
+        })
+        .catch(error=> {
+            console.log("error herer",error);
+        })
     }
 
     async getCommunityDetails() {
@@ -154,10 +189,15 @@ import Share from 'react-native-share';
     getPosts = async () => {
         //const data = '5ed8d9509e623f00221761a1/All/true/5f5892a1b205b1387d5cafb/All'
         const data = this.state.universityId+'/All/'+this.state.isProfessional+"/"+this.state.userId+'/All'
-        console.log("Posts Params",data)
-        console.log("Post is getting called")
         const response = await this.apiHandler.requestGet(data,this.serviceUrls.getPosts);
         if(response.posts != null && response.posts.length != 0 ){
+            response.posts.forEach((item,index)=> {
+                 for(i=0;i<item.likes.length;i++){
+                     if(item.likes[i]._id === this.state.userId){
+                         this.setState({likedPosts: [...this.state.likedPosts, item._id]})
+                     }
+                 }
+            })
             this.setState({postData: response.posts});
         } else {
             this.setState({postData:[]})
@@ -165,7 +205,6 @@ import Share from 'react-native-share';
     }
 
     getUniversityImages = async () =>  {
-        console.log("University Images is getting called")
         //const data =  '5ed8d9509e623f00221761a1';
         const data = this.state.userId;
         const response = await this.apiHandler.requestGet(data,this.serviceUrls.getUniversityImages);
@@ -185,7 +224,6 @@ import Share from 'react-native-share';
     }
 
     getUserProfile = async () => {
-        console.log("userProfile is getting called");
         //const data = '5ee21f3f5583d00022351037';
         const data = this.state.userId;
         const response = await this.apiHandler.requestGet(data,this.serviceUrls.getUserProfile);
@@ -199,6 +237,22 @@ import Share from 'react-native-share';
             }
         }
     }
+
+        customShare = async (postID,category,content,postImage) =>  {
+            const shareOptions  =  {
+                url:'https://social.upsquad.com/postmetainfo/'+postID,
+                title:category,
+                message:content,
+                url: postImage
+            }
+            Share.open(shareOptions)
+            .then((res) => {
+                console.log(res);
+            })
+            .catch((err) => {
+                err && console.log(err);
+            });
+        }
     flowerWings=(width)=>{
         const initialArr = [];
         for (var i = 0; i < 9; i++) {
@@ -324,7 +378,7 @@ import Share from 'react-native-share';
                                     {moment(item.createdAt).fromNow()}
                                 </Text>
                             </View>
-                            {item.creator._id == this.state.userId ?<TouchableOpacity onPress={()=> this.setState({dotsmemu:true})}>
+                            {item.creator._id == this.state.userId ?<TouchableOpacity onPress={()=> this.setState({dotsmemu:true, postId: item._id})}>
                                     <Image source={ImagesWrapper.dotsmenu}
                                         style={{marginTop:13,marginRight:18}}
                                     />
@@ -342,7 +396,7 @@ import Share from 'react-native-share';
                             <View style={{flexDirection:'row',marginTop:10,justifyContent:'space-between'}}>
                                 <View style={{flexDirection:'row'}}>
                                 
-                                    {item.likes.length > 3 || item.likes.length == 3 ? 
+                                    {item.likes.length > 3 || item.likes.length === 3 ? 
                                         <>
                                         <Image
                                             source={  item.likes[0] !=null && item.likes[0] != {}  && Object.keys(item.likes[0]).length != 0 ? 
@@ -387,7 +441,7 @@ import Share from 'react-native-share';
                                             style = {{width: 16, height: 16,}}
                                         />
                                 : null}
-                                    <Text style={{fontSize:12,color:'#868585',fontFamily:Fonts.mulishBold,fontWeight:'400',marginLeft:5,marginTop:2}}>Like by</Text>
+                                    {item.likes.length>0 ? <Text style={{fontSize:12,color:'#868585',fontFamily:Fonts.mulishBold,fontWeight:'400',marginLeft:5,marginTop:2}}>Like by</Text>: null}
                                     <Text style={{fontSize:12,color:'#1E1C24',fontFamily:Fonts.mulishBold,fontWeight:'400',marginLeft:5,marginTop:2}}>
                                         {item.likes[0].firstName} {item.likes[0].lastName} {item.likes.length >1 ? "and": null } {item.likes.length >1 ? item.likes.length-1 : null } {item.likes.length >1 ? "others" : null}
                                     </Text>
@@ -398,13 +452,15 @@ import Share from 'react-native-share';
                             <View style={{flexDirection:'row',marginTop:20,}}>
                                 <TouchableOpacity
                                 onPress ={()=> {
-                                this.postLike(item._id,this.state.userId)
+                                {this.state.likedPosts.indexOf(item._id) > -1 ? 
+                                this.disLikePost(item._id,this.state.userId) : 
+                                this.postLike(item._id,this.state.userId)}
                                 }}>
                                     <View style = {{flexDirection:'row'}}>
                                         <Image
                                             source={ImagesWrapper.likeimg}
                                         />
-                                        <Text style={{color:this.state.likedPosts.indexOf(item.id) > -1 ?  '#58C4C6' :'#868585' ,fontSize:14,marginTop:3,fontFamily:Fonts.mulishRegular,fontWeight:'600'}}>Like</Text>
+                                        <Text style={{color: this.state.likedPosts.indexOf(item._id) > -1 ?  '#58C4C6' :'#868585' ,fontSize:14,marginTop:3,fontFamily:Fonts.mulishRegular,fontWeight:'600'}}>Like</Text>
                                     </View>
                                 </TouchableOpacity>
                                 
@@ -430,7 +486,7 @@ import Share from 'react-native-share';
                                 </TouchableOpacity>
 
                                 <TouchableOpacity onPress = {() => {
-                                    // this.customShare()
+                                    this.customShare(item._id,item.category,item.content,item.postImage[0])
                                 }} >
                                 <View style={{flexDirection:'row'}}>
                                 <Image
@@ -546,14 +602,13 @@ import Share from 'react-native-share';
 
                     {this.state.dotsmemu === true ?
                     <Modal
-                    transparent={true}
-                    isVisible={this.state.dotsmemu}
-                    onBackdropPress={() => this.setState({dotsmemu:false})}
-                        onRequestClose={() => {
-                            this.setState({dotsmemu:false})
-                        }}
-                    
-                >
+                        transparent={true}
+                        isVisible={this.state.dotsmemu}
+                        onBackdropPress={() => this.setState({dotsmemu:false})}
+                            onRequestClose={() => {
+                                this.setState({dotsmemu:false})
+                            }}
+                    >
                     <View style={{backgroundColor:'white',borderTopLeftRadius: 20,borderTopRightRadius:20,height:'20%',marginTop:660,width:'110%',marginLeft:-18}}>
                         <View style={{margin:25}}>
                             <View style={{flexDirection:'row'}}>
@@ -563,13 +618,21 @@ import Share from 'react-native-share';
                                 />
                                 <Text style={[styles.post,{padding:0,paddingLeft:10}]}>Edit post</Text>
                             </View>
+                            <TouchableOpacity onPress={()=>{
+                                this.deletePost(this.state.postId, this.state.userId)
+                            }}
+                               >
                             <View style={{flexDirection:'row',marginTop:20}}>
-                                <Image
-                                    source={ImagesWrapper.trash}
-                                    
-                                />
-                                <Text style={[styles.post,{padding:0,paddingLeft:10}]}>Delete post</Text>
-                            </View>
+                               
+                               <Image
+                                   source={ImagesWrapper.trash}
+                                   
+                               />
+                               <Text style={[styles.post,{padding:0,paddingLeft:10}]}>Delete post</Text>
+                               
+                           </View>
+                            </TouchableOpacity>
+                            
                         </View>
                     </View>
                     </Modal>
