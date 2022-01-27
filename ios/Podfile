@@ -24,6 +24,8 @@ target 'Upsquad' do
 
   pod 'RNFS', :path => '../node_modules/react-native-fs'
 
+  pod 'react-native-create-thumbnail', :path => '../node_modules/react-native-create-thumbnail'
+
   target 'UpsquadTests' do
     inherit! :complete
     # Pods for testing

@@ -139,6 +139,9 @@ const ImagesWrapper = {
     vectorcommunity:require('../Images/vectorcommunity.png'),
     radiogrey:require('../Images/radiogrey.png'),
     radioselected:require('../Images/radioselected.png'),
+    addvideo:require('../Images/addvideo.png'),
+    addvideoplus:require('../Images/addvideoplus.png'),
+
     
 
 }

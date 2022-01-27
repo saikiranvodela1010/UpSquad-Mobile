@@ -1,5 +1,5 @@
 import React from 'react';
-import { View ,StyleSheet,Text,Image, TouchableOpacity,Platform,ScrollView,Dimensions,KeyboardAvoidingView,Modal,ActivityIndicator} from 'react-native';
+import { View ,StyleSheet,Text,Image, TouchableOpacity,Platform,ScrollView,Dimensions,KeyboardAvoidingView,Modal,ActivityIndicator,SafeAreaView} from 'react-native';
 import { TextInput } from 'react-native-gesture-handler';
 import LinearGradient from 'react-native-linear-gradient'
 import ImagesWrapper from '../res/ImagesWrapper';
@@ -42,11 +42,14 @@ export default class ForgotPwdScreen extends React.Component {
             this.setState({isLoading: false, isInternet: true})
             alert('No network Connected!')
         } else{
-            this.setState({isLoading: false})
-            if(response.status  === true) {
-                // alert(response.msg);
-                this.props.navigation.navigate('Otp');
+           
+            if(response.status  === "success") {
+                this.setState({isLoading: false})
+                this.props.navigation.navigate('Otp',{
+                    email:this.state.email
+                });
             } else {
+                this.setState({isLoading: false})
                 alert(response.msg);
                
             }            
@@ -82,7 +85,7 @@ export default class ForgotPwdScreen extends React.Component {
     render(){
         return(
            
-            <View style={styles.mainContainer}>
+            <SafeAreaView style={styles.mainContainer}>
                  {this.renderLoader()}
                     <Image
                       source={ImagesWrapper.component}
@@ -141,7 +144,7 @@ export default class ForgotPwdScreen extends React.Component {
                     </View>
                 </View>
                 
-            </View>
+            </SafeAreaView>
            
         );
     }

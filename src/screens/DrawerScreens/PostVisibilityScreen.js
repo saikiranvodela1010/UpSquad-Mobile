@@ -5,7 +5,7 @@ import Fonts from '../../res/Fonts';
 import SwitchToggle from "react-native-switch-toggle";
 import LinearGradient from 'react-native-linear-gradient';
 
-export default class MeetingsScreen extends React.Component {
+export default class PostVisibiltyScreen extends React.Component {
 
     constructor() {
         super();

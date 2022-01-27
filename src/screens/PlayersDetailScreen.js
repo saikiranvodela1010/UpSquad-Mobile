@@ -1,15 +1,16 @@
 import React from 'react'
-import { View, Text, StyleSheet, TouchableOpacity, ImageBackground, Image, Dimensions, TextInput,ActivityIndicator, Platform } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ImageBackground, Image, Dimensions, TextInput,ActivityIndicator, Platform,ScrollView,FlatList,DeviceEventEmitter } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import Video, { FilterType } from 'react-native-video';
 import ImagesWrapper from '../res/ImagesWrapper';
 import Fonts from '../res/Fonts'
-import { ScrollView } from 'react-native-gesture-handler';
+// import { FlatList, ScrollView } from 'react-native-gesture-handler';
 import ServiceUrls from '../network/ServiceUrls';
 import APIHandler from '../network/NetWorkOperations';
 import moment from 'moment';
-
+import RNThumbnail from 'react-native-thumbnail';
 import Modal from 'react-native-modal';
+import StoragePrefs from '../res/StoragePrefs';
 
 
 
@@ -19,6 +20,7 @@ export default class playersDetailScreen extends React.Component {
 
     serviceUrls = new ServiceUrls();
     apiHandler = new APIHandler();
+    storagePrefs = new StoragePrefs();
 
 
     constructor(props) {
@@ -50,17 +52,27 @@ export default class playersDetailScreen extends React.Component {
             communityall: false,
             organizationData: [],
             teamData: [],
-            isLoading: false
+            isLoading: false,
+            selfIntroVideos:[],
+            userId:'',
+            loginuserId:'',
+            url:''
 
         }
 
     }
-    componentDidMount() {
+   async componentDidMount() {
 
         const userid = this.props.route.params.id;
+        this.setState({userId:userid});
+        const userDetails = await this.storagePrefs.getObjectValue("userDetails")
+        console.log('userDetails',userDetails,this.state.userId);
+        this.setState({loginuserId:userDetails.userId});
         this.getUserInfo(userid);
-    }
+    
 
+    }
+   
 
     async getUserInfo(userid) {
         this.setState({
@@ -75,7 +87,7 @@ export default class playersDetailScreen extends React.Component {
 
         this.setState({ userData: response.data })
 
-        console.log('isProfessional', this.state.userData)
+     
         this.setState({
             bannerImage: response.data.bannerImage.imageUrl,
             experience: response.data.experience,
@@ -84,14 +96,17 @@ export default class playersDetailScreen extends React.Component {
             publications: response.data.publications,
             posts: response.data.posts,
             friends: response.data.friends,
-            request: response.data.requests
+            request: response.data.requests,
+            selfIntroVideos:response.data.selfIntroductoryVideos,
+          
         })
+        console.log('selfIntroVideos', this.state.selfIntroVideos[0].videoUrl)
         const data1 = this.state.experience[0]
         const data2 = this.state.education[0]
         const data3 = this.state.certifications[0]
         const data4 = this.state.publications[0]
         const data5 = this.state.publications.length >= 1 ? this.state.publications[0].publicationLinks : ''
-
+        const data6=this.state.selfIntroVideos[0].videoUrl
         const email = this.state.userData.email
         const user_id = this.state.userData._id
         this.setState({
@@ -99,9 +114,10 @@ export default class playersDetailScreen extends React.Component {
             data1: data1,
             data2: data2,
             data3: data4,
-            data4: data5
+            data4: data5,
+            url:data6
         })
-        console.log('data1', data5)
+        console.log('url', this.state.url)
         console.log('bannerImage', this.state.bannerImage)
         console.log('experience', this.state.experience)
         console.log('education', this.state.education)
@@ -133,6 +149,17 @@ export default class playersDetailScreen extends React.Component {
             data5: team,
             data6: data1
         })
+    }
+thumbnail = async (uri) =>{
+    try {
+        RNThumbnail.get(uri).then((result) => {
+           console.log("Thumbnail path: " + result.path); // thumbnail path
+           this.setState({ thumbUri: result.path });
+        });
+    //   }
+    } catch (exp) {
+      console.log(exp);
+    }
     }
     renderLoader(){
         return(
@@ -172,9 +199,16 @@ export default class playersDetailScreen extends React.Component {
                     </TouchableOpacity>
                 </View>
                 <ScrollView >
-
+                    <View>
                     <Image source={{ uri: this.state.bannerImage }} style={{ width: '100%', height: 250 }} />
-
+                    {this.state.userId === this.state.loginuserId ?
+                    <View style={{marginTop:'-58%',alignItems:'flex-end',marginRight:'8%'}}>
+                    <Image source={ImagesWrapper.pencil} />
+                    </View>
+                    :
+                    null
+                     }
+                    </View>
                     <View style={[styles.card]}>
                         <Text style={styles.name}>{this.state.userData.firstName} {this.state.userData.lastName}</Text>
                         <Text style={styles.technologytext}>{this.state.userData.fieldOfstudyOrSpecialty} </Text>
@@ -238,12 +272,22 @@ export default class playersDetailScreen extends React.Component {
                             </View>
                         </View>
                         <View style={styles.underline}></View>
+                        <View style={{flexDirection:'row',justifyContent:'space-between' }}>
                         <Text style={styles.name}>Self Introduction</Text>
-                        {/* <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}> */}
-                        <View style={{ width: 200, height: 110, borderWidth: 1 }}>
+                        <Image source={ImagesWrapper.pencil} style={{marginTop: 20}}/>
+                        </View>
+                        <ScrollView  horizontal={true} showsHorizontalScrollIndicator={false} >
+                        <View style={{flexDirection:'row'}}>
+                         <FlatList  
+                          horizontal
+                          data={this.state.selfIntroVideos}
+                          renderItem={item => (
+                             
+                            <View style={{ width: 180, height: 130, borderWidth: 1, borderColor:'#F1F1F1',borderRadius:5, }}>
                             <View style={{ flex: 1 }}>
+                           
                                 <Video
-                                    source={{ uri: 'https://www.w3schools.com/html/mov_bbb.mp4' }}
+                                    source={{ uri: item.item.videoUrl }}
                                     style={{ flex: 1 }}
                                     resizeMode='contain'
                                     controls={false}
@@ -256,8 +300,44 @@ export default class playersDetailScreen extends React.Component {
 
                                 </Video>
                             </View>
+                         
                         </View>
-                        {/* </ScrollView> */}
+                       
+                          )}
+                        /> 
+                        
+                        {/* <View style={{ width: 200, height: 110, borderWidth: 1 }}>
+                            <View style={{ flex: 1 }}>
+                                <Video
+                                    source={{ uri: "https://careerquoadmin.s3.amazonaws.com/self_introductory_videos/61f2264664f850104d245445_1643279953762.mp4" }}
+                                    style={{ flex: 1 }}
+                                    resizeMode='contain'
+                                    controls={false}
+                                    paused={false}
+                                    pictureInPicture={true}
+                                    ref={(ref) => {
+                                        this.player = ref
+                                    }}
+                                >
+
+                                </Video>
+                            </View>
+                        </View> */}
+
+                        {/* <Image source={ImagesWrapper.addvideo}/> */}
+                        {this.state.userId === this.state.loginuserId ?
+                        <TouchableOpacity onPress={()=>{
+                             this.props.navigation.navigate('SelfIntroduction')
+                        }}>
+                        <View style={[styles.addvideo,{marginLeft:10}]}>
+                            <Image source={ImagesWrapper.addvideoplus}/>
+                        </View>
+                        </TouchableOpacity>
+                        :
+                        null
+                        }
+                        </View>
+                        </ScrollView>
                         <View style={[styles.underline, { marginTop: 20 }]}></View>
                         <Text style={[styles.name, { fontSize: 16 }]}>About</Text>
                         <Text style={[styles.technologytext, { fontSize: 14, marginTop: 10, marginRight: 'auto' }]}>{this.state.userData.about}</Text>
@@ -504,7 +584,7 @@ const styles = StyleSheet.create({
         flex: 1,
         width: '100%',
 
-        marginTop: -20,
+        marginTop:'45%',
         borderTopLeftRadius: 15,
         borderTopRightRadius: 15,
         shadowOpacity: 0.05,
@@ -589,5 +669,15 @@ const styles = StyleSheet.create({
         fontSize: 14,
         color: '#1E1C24',
     },
+    addvideo:{ 
+        width: 180, 
+        height: 130,
+         borderWidth: 1 ,
+         backgroundColor:'#F1F1F1',
+         borderColor:'#F1F1F1',
+         borderRadius:5,
+         alignItems:'center',
+         justifyContent:'center'
+        }
 
 });

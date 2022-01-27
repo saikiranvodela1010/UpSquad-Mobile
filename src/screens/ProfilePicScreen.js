@@ -592,7 +592,7 @@ const styles = StyleSheet.create({
 
     },
     buttonText: {
-        fontSize: 18,
+        fontSize: 16,
         fontFamily: Fonts.mulishRegular,
         textAlign: 'center',
         margin: 10,
