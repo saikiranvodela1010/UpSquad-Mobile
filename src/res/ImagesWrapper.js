@@ -142,6 +142,7 @@ const ImagesWrapper = {
     addvideo:require('../Images/addvideo.png'),
     addvideoplus:require('../Images/addvideoplus.png'),
 
+    dislike: require('../Images/dislike.png'),
     
 
 }

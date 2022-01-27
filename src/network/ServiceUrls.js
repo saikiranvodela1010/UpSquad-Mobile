@@ -30,7 +30,7 @@ export default class ServiceUrls {
     verifytOtp=this.mainUrl+'/users/verifyotp';
     changePassword=this.mainUrl+'/users/updateResetPassword';
     selfIntroduction=this.mainUrl+'/users/uploadSelfIntroductoryVideo';
-
-
+    getGroupTeams = this.mainUrl+'/teams/getGroupSessionTeams';
+    deletePost = this.socialUrl+'/user/post'
 
 }
