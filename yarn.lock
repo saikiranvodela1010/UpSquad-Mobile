@@ -2,7 +2,7 @@
 # yarn lockfile v1
 
 
-"@babel/code-frame@^7.0.0", "@babel/code-frame@^7.16.0":
+"@babel/code-frame@^7.0.0", "@babel/code-frame@^7.16.0", "@babel/code-frame@^7.16.7":
   "integrity" "sha512-iAXqUn8IIeBTNd72xsFlgaXHkMBMt6y4HJp1tIaK465CWLT/fG1aqB7ykr95gHHmlBdGbFeWWfyB4NJJ0nmeIg=="
   "resolved" "https://registry.npmjs.org/@babel/code-frame/-/code-frame-7.16.7.tgz"
   "version" "7.16.7"
@@ -229,7 +229,7 @@
   dependencies:
     "@babel/types" "^7.16.7"
 
-"@babel/helper-validator-identifier@^7.15.7", "@babel/helper-validator-identifier@^7.16.7":
+"@babel/helper-validator-identifier@^7.16.7":
   "integrity" "sha512-hsEnFemeiW4D08A5gUAZxLBTXpZ39P+a+DGDsHw1yxqyQ/jzFEnxf5uTEGp+3bzAbNOxU1paTgYS4ECU/IgfDw=="
   "resolved" "https://registry.npmjs.org/@babel/helper-validator-identifier/-/helper-validator-identifier-7.16.7.tgz"
   "version" "7.16.7"
@@ -258,7 +258,7 @@
     "@babel/traverse" "^7.16.3"
     "@babel/types" "^7.16.0"
 
-"@babel/highlight@^7.16.7":
+"@babel/highlight@^7.10.4", "@babel/highlight@^7.16.7":
   "integrity" "sha512-5FnTQLSLswEj6IkgVw5KusNUUFY9ZGqe/TRFnP/BKYHYgfh7tc+C7mwiy95/yNP7Dh9x580Vv8r7u7ZfTBFxdw=="
   "resolved" "https://registry.npmjs.org/@babel/highlight/-/highlight-7.16.10.tgz"
   "version" "7.16.10"
@@ -6546,7 +6546,7 @@
     "encoding" "^0.1.11"
     "is-stream" "^1.0.1"
 
-"node-fetch@^2.2.0", "node-fetch@^2.6.0":
+"node-fetch@^2.2.0", "node-fetch@^2.6.0", "node-fetch@2.6.7":
   "integrity" "sha512-ZjMPFEfVx5j+y2yF35Kzx5sF7kDzxuDj6ziH4FFbOp87zKDZNx8yExJIb05OGF4Nlt9IHFIMBkRl41VdvcNdbQ=="
   "resolved" "https://registry.npmjs.org/node-fetch/-/node-fetch-2.6.7.tgz"
   "version" "2.6.7"
@@ -7196,6 +7196,22 @@
   dependencies:
     "invariant" "^2.2.4"
 
+"react-native-easy-guesture-responder@^1.1.2", "react-native-easy-guesture-responder@^1.1.3":
+  "integrity" "sha512-/1yHMRcslMWQJc1iRNCSjJ32npPrY3Atme0lzKxmhYJg67E7Douowq2FalGEegdid8yeZVnPKk+BkyIGyx2dCw=="
+  "resolved" "https://registry.npmjs.org/react-native-easy-guesture-responder/-/react-native-easy-guesture-responder-1.1.3.tgz"
+  "version" "1.1.3"
+  dependencies:
+    "prop-types" "^15.6.2"
+
+"react-native-easy-view-transformer@^1.2.0":
+  "integrity" "sha512-SawalQrXWQ6M5WOnWhTV8y3cyhRlrTgH2VC2+qPEk7GE10vLkH5/9ncM8lNjHKiXCgWrVk+0DI3pmEouDYd/GQ=="
+  "resolved" "https://registry.npmjs.org/react-native-easy-view-transformer/-/react-native-easy-view-transformer-1.2.0.tgz"
+  "version" "1.2.0"
+  dependencies:
+    "prop-types" "^15.6.2"
+    "react-native-easy-guesture-responder" "^1.1.2"
+    "react-native-scrolling" "^1.0.2"
+
 "react-native-fb-image-grid@^0.0.5":
   "integrity" "sha512-OJMAtYDdjwGBmzI0dwEIbblPGuK6L+1rbK1Ej8nTZMnak/s1awbKalQULPOO8fvMNsYMXXUVqJJiUvXRPV9qwg=="
   "resolved" "https://registry.npmjs.org/react-native-fb-image-grid/-/react-native-fb-image-grid-0.0.5.tgz"
@@ -7210,6 +7226,16 @@
   dependencies:
     "base-64" "^0.1.0"
     "utf8" "^3.0.0"
+
+"react-native-gallery-swiper@^1.26.4":
+  "integrity" "sha512-EK0c1g+ZIafEfZEtQyS774QitOk/fxZtuR1j+Eu+QjTtBu9NcbDvd7sc45KB+h0zmE+k1iAk5YPnSwYEXgVD+A=="
+  "resolved" "https://registry.npmjs.org/react-native-gallery-swiper/-/react-native-gallery-swiper-1.26.4.tgz"
+  "version" "1.26.4"
+  dependencies:
+    "prop-types" "^15.6.2"
+    "react-native-easy-guesture-responder" "^1.1.3"
+    "react-native-image-transformer" "^1.5.1"
+    "react-native-page-list" "^1.1.3"
 
 "react-native-gesture-handler@^1.10.3", "react-native-gesture-handler@>= 1.0.0":
   "integrity" "sha512-cBGMi1IEsIVMgoox4RvMx7V2r6bNKw0uR1Mu1o7NbuHS6BRSVLq0dP34l2ecnPlC+jpWd3le6Yg1nrdCjby2Mw=="
@@ -7226,6 +7252,14 @@
   "integrity" "sha512-YwZXW21Km8+3tSt0smTaLVgY4398c0/OJcpcH6EP0JDOt1BNNxl/R8m6qdvnwdXdIoa0CCnMVW6TL9IN5ia9OA=="
   "resolved" "https://registry.npmjs.org/react-native-image-crop-picker/-/react-native-image-crop-picker-0.37.2.tgz"
   "version" "0.37.2"
+
+"react-native-image-transformer@^1.5.1":
+  "integrity" "sha512-CNwjnJxf4DUqQu+vWi/a+MA8jgw46ss80UKeSjoHwdzlt9JnGA6z4VABLURTFytN15LaemZomUEwZ81B9I8SuA=="
+  "resolved" "https://registry.npmjs.org/react-native-image-transformer/-/react-native-image-transformer-1.5.1.tgz"
+  "version" "1.5.1"
+  dependencies:
+    "prop-types" "^15.6.2"
+    "react-native-easy-view-transformer" "^1.2.0"
 
 "react-native-iphone-x-helper@^1.0.3", "react-native-iphone-x-helper@^1.3.1":
   "integrity" "sha512-HOf0jzRnq2/aFUcdCJ9w9JGzN3gdEg0zFE4FyYlp4jtidqU03D5X7ZegGKfT1EWteR0gPBGp9ye5T5FvSWi9Yg=="
@@ -7252,6 +7286,15 @@
   dependencies:
     "prop-types" "^15.6.2"
     "react-native-animatable" "1.3.3"
+
+"react-native-page-list@^1.1.3":
+  "integrity" "sha512-LvbU9qxxLTujQV6/IKUbzKkosSDGBG6enhf3cb/5oSy0wG50TTloXKaeZY75/ssp/mX7qSZiU9aayV7Q+Q8iUQ=="
+  "resolved" "https://registry.npmjs.org/react-native-page-list/-/react-native-page-list-1.1.3.tgz"
+  "version" "1.1.3"
+  dependencies:
+    "prop-types" "^15.6.2"
+    "react-native-easy-guesture-responder" "^1.1.2"
+    "react-native-scrolling" "^1.0.2"
 
 "react-native-pager-view@*", "react-native-pager-view@^5.4.9", "react-native-pager-view@>= 4.0.0":
   "integrity" "sha512-D6tzxpwMGdl6CXgtskGWhKRc5cJakCazESRGt7PkqnpyiH3N35ft1KmR82pCSQetAFlytFiToeu3a/dG5CELvA=="
@@ -7317,6 +7360,13 @@
     "prop-types" "^15.6.0"
     "react-timer-mixin" "^0.13.3"
 
+"react-native-scrolling@^1.0.2":
+  "integrity" "sha512-V8ORRnRA4sdOREJlDHxnPfM/7IK6rj/HZejgTaym1ACjKr9a3Pej4ZDOQA9qnBgNac8kMVhDup40HgJxYG//EA=="
+  "resolved" "https://registry.npmjs.org/react-native-scrolling/-/react-native-scrolling-1.0.3.tgz"
+  "version" "1.0.3"
+  dependencies:
+    "prop-types" "^15.6.2"
+
 "react-native-select-dropdown@^1.6.0":
   "integrity" "sha512-lKBVG1McWOBeeJRFo47yx5HXPkRYdMXFa05gsAqF7N6kx1rawQXHkkt+eO+wrFDAxWOMPn7mSjIi9IKhf11Vow=="
   "resolved" "https://registry.npmjs.org/react-native-select-dropdown/-/react-native-select-dropdown-1.6.0.tgz"
@@ -7340,11 +7390,6 @@
     "css-select" "^2.1.0"
     "css-tree" "^1.0.0-alpha.39"
 
-"react-native-swipe-image@^1.1.0":
-  "integrity" "sha512-t2T4yAqA+3Dhf8GNAOvLAb0RBVXzwW1E/hHD/zde7NsGIWaP+kYZM1XjyTA1itSp2F2y4hwQ01vOgiydLthPyg=="
-  "resolved" "https://registry.npmjs.org/react-native-swipe-image/-/react-native-swipe-image-1.1.0.tgz"
-  "version" "1.1.0"
-
 "react-native-switch-toggle@^2.2.1":
   "integrity" "sha512-Y/RQ1Pb/KDVZhBSNjc16LKtUi7MGZb0MYxouZLj/THpiSQLsy5pUyTwbIKRjNuZDNSxmMDXyRX1QfLt+oup4Uw=="
   "resolved" "https://registry.npmjs.org/react-native-switch-toggle/-/react-native-switch-toggle-2.2.1.tgz"
@@ -7356,11 +7401,6 @@
   "integrity" "sha512-M5pRN6utQfytKWoKlKVzg5NbkYu308qNoW1khGTtEOTs1k14p2dHJ/BWOJoJYHKbPVUyZldbG9MFT7gUl4YHnw=="
   "resolved" "https://registry.npmjs.org/react-native-tab-view/-/react-native-tab-view-3.1.1.tgz"
   "version" "3.1.1"
-
-"react-native-thumbnail@^1.1.3":
-  "integrity" "sha512-x/9q9QPzq7BiHbpmPL/QrNrkxa4f+RQOAQ0Lw+p907jhpKpgojIo7pTTC/kvlyp+6YcYBeuq9sEELEEwzmk4nA=="
-  "resolved" "https://registry.npmjs.org/react-native-thumbnail/-/react-native-thumbnail-1.1.3.tgz"
-  "version" "1.1.3"
 
 "react-native-vector-icons@*", "react-native-vector-icons@^9.0.0":
   "integrity" "sha512-qKX5d5/TafHmI4B7UOSZCL3BAGh7ZfF30iLwRgxBkKfZl2lKSuHp8Ottj9OyWh9b5fFtlg+LtyvZrns3g2kh+w=="
