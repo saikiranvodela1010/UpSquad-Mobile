@@ -1,5 +1,5 @@
 import React from 'react'
-import {  View, Text, StyleSheet, TouchableOpacity, Image,TextInput,SafeAreaView,Platform,FlatList, DeviceEventEmitter,ActivityIndicator,} from 'react-native';
+import {  View, Text, StyleSheet, TouchableOpacity, Image,TextInput,SafeAreaView,Platform,FlatList, DeviceEventEmitter,ActivityIndicator,Dimensions} from 'react-native';
 import ImagesWrapper from '../../res/ImagesWrapper';
 import Fonts from '../../res/Fonts';
 import { ScrollView, TouchableHighlight } from 'react-native-gesture-handler';
@@ -13,6 +13,9 @@ import StoragePrefs from '../../res/StoragePrefs';
 import Share from 'react-native-share';
 import { forEach } from 'lodash';
 import axios from 'axios';
+import { SliderBox } from "react-native-image-slider-box";
+import FbGrid from "react-native-fb-image-grid";
+
 
 
  class MeetingsScreen extends React.Component {
@@ -43,8 +46,7 @@ import axios from 'axios';
             likeColor: false,
             share: false,
             likedPosts: [],
-            communityLogo : ""
-            
+            communityLogo : "" , 
         }
        
     }
@@ -75,31 +77,27 @@ import axios from 'axios';
         this.setState({communityName:universityDetsils.universityName});
     }
 
-  
-
-
-
-        updateFeed = async () => {
-            const universityDetsils = await this.storagePrefs.getObjectValue("universityDetsils")
-            const userDetails = await this.storagePrefs.getObjectValue("userDetails")
-            this.setState({
-                universityName:universityDetsils.universityName,
-                universityId: universityDetsils._id,
-                communityName: universityDetsils.universityName,
-                communityLogo: universityDetsils.universityLogo,
-                userId : userDetails.userId,
-                email : userDetails.userEmail
-            })
-            return new Promise((resolve, reject) => {
-            this.getPosts()
-            .then(() =>  {return this.getUniversityImages();})
-            .then(() => {return this.getUserProfile();})
-            .then(() => {return  this.setState({isLoading: false})})
-            .then(() =>  { resolve('done')})
-            .catch((error)=> {this.setState({isLoading: false});
-                                 reject(error)})
+    updateFeed = async () => {
+        const universityDetsils = await this.storagePrefs.getObjectValue("universityDetsils")
+        const userDetails = await this.storagePrefs.getObjectValue("userDetails")
+        this.setState({
+            universityName:universityDetsils.universityName,
+            universityId: universityDetsils._id,
+            communityName: universityDetsils.universityName,
+            communityLogo: universityDetsils.universityLogo,
+            userId : userDetails.userId,
+            email : userDetails.userEmail
         })
-        }
+        return new Promise((resolve, reject) => {
+        this.getPosts()
+        .then(() =>  {return this.getUniversityImages();})
+        .then(() => {return this.getUserProfile();})
+        .then(() => {return  this.setState({isLoading: false})})
+        .then(() =>  { resolve('done')})
+        .catch((error)=> {this.setState({isLoading: false});
+                                reject(error)})
+    })
+    }
 
     async postLike(postID, userID){
         const data = {
@@ -146,7 +144,6 @@ import axios from 'axios';
         .then(response => {
             console.log("response.message",response.data.message)
             if(response.data.message === "Post successfully deleted"){
-                console.log("ravikiran avasarala12355");
                 const filteredData = this.state.postData.filter(item => item._id !== postID);
                 console.log("filtered Data",filteredData)
                 this.setState({ postData: filteredData,dotsmemu: false  });
@@ -240,10 +237,9 @@ import axios from 'axios';
 
         customShare = async (postID,category,content,postImage) =>  {
             const shareOptions  =  {
-                url:'https://social.upsquad.com/postmetainfo/'+postID,
+                urls:['https://social.upsquad.com/postmetainfo/'+postID, postImage],
                 title:category,
                 message:content,
-                url: postImage
             }
             Share.open(shareOptions)
             .then((res) => {
@@ -253,6 +249,14 @@ import axios from 'axios';
                 err && console.log(err);
             });
         }
+         onPress = (url) => {
+            // url and index of the image you have clicked alongwith onPress event.
+            console.log("url",url);
+            this.props.navigation.navigate('ImageView',{
+                url : url
+            })
+          }
+
     flowerWings=(width)=>{
         const initialArr = [];
         for (var i = 0; i < 9; i++) {
@@ -387,12 +391,18 @@ import axios from 'axios';
                             </View>
                             <Text style={{fontSize:14,fontWeight:'400',fontFamily:Fonts.mulishSemiBold,color:'#868585',marginRight:22,marginTop:12}}>
                                 {item.content}
-                            </Text>
-                            {item.postImage !=null && item.postImage.length >0 ? 
-                                <Image source = { {uri : item.postImage[0]} } 
-                                style={{marginTop:15,width:'95%', borderRadius:5,height: 192,}}/> 
-                                : null 
-                            }
+                            </Text>  
+                                                   
+                                <View style = {{ marginLeft :-25}}>
+                                    {item.postImage!=null && item.postImage.length!=0 ? 
+                                    <FbGrid images = {item.postImage}
+                                    style = {{height : 300,width: Dimensions.get('window').width}}
+                                    onPress ={()=> {this.onPress(item.postImage)}}/>
+                                    
+                                    : null}
+                                    
+                                </View>
+                            
                             <View style={{flexDirection:'row',marginTop:10,justifyContent:'space-between'}}>
                                 <View style={{flexDirection:'row'}}>
                                 
@@ -400,19 +410,19 @@ import axios from 'axios';
                                         <>
                                         <Image
                                             source={  item.likes[0] !=null && item.likes[0] != {}  && Object.keys(item.likes[0]).length != 0 ? 
-                                            item.likes[0].profileImage.imageUrl !=null && item.likes[0].profileImage.imageUrl !=''? 
+                                            item.likes[0].profileImage !=null &&  item.likes[0].profileImage.imageUrl !=null && item.likes[0].profileImage.imageUrl !=''? 
                                                 {uri :item.likes[0].profileImage.imageUrl} : {uri : 'https://www.careerquo.com/assets/images/18.png'}
                                         : {uri : 'https://www.careerquo.com/assets/images/18.png'}}
                                                 style={{ width: 16, height: 16 }} />
                                         <Image
                                         source={  item.likes[1] !=null && item.likes[1] != {}  && Object.keys(item.likes[1]).length != 0 ? 
-                                        item.likes[1].profileImage.imageUrl !=null && item.likes[1].profileImage.imageUrl !=''? 
+                                        item.likes[1].profileImage !=null &&  item.likes[1].profileImage.imageUrl !=null && item.likes[1].profileImage.imageUrl !=''? 
                                             {uri :item.likes[1].profileImage.imageUrl} : {uri : 'https://www.careerquo.com/assets/images/18.png'}
                                     : {uri : 'https://www.careerquo.com/assets/images/18.png'}}
                                             style={{ width: 16, height: 16, marginLeft: -4 }} />
                                         <Image
                                             source={  item.likes[2] !=null && item.likes[2] != {}  && Object.keys(item.likes[2]).length != 0 ? 
-                                            item.likes[2].profileImage.imageUrl !=null && item.likes[2].profileImage.imageUrl !=''? 
+                                            item.likes[2].profileImage !=null &&  item.likes[2].profileImage.imageUrl !=null && item.likes[2].profileImage.imageUrl !=''? 
                                                 {uri :item.likes[2].profileImage.imageUrl} : {uri : 'https://www.careerquo.com/assets/images/18.png'}
                                         : {uri : 'https://www.careerquo.com/assets/images/18.png'}}
                                             style={{ width: 16, height: 16, marginLeft: -4 }} />
@@ -421,13 +431,13 @@ import axios from 'axios';
                                         <>
                                     <Image
                                         source={  item.likes[0] !=null && item.likes[0] != {}  && Object.keys(item.likes[0]).length != 0 ? 
-                                            item.likes[0].profileImage.imageUrl !=null && item.likes[0].profileImage.imageUrl !=''? 
+                                        item.likes[0].profileImage !=null &&  item.likes[0].profileImage.imageUrl !=null && item.likes[0].profileImage.imageUrl !=''? 
                                                 {uri :item.likes[0].profileImage.imageUrl} : {uri : 'https://www.careerquo.com/assets/images/18.png'}
                                         : {uri : 'https://www.careerquo.com/assets/images/18.png'}}
                                             style={{ width: 16, height: 16 }} />
                                             <Image
                                         source={  item.likes[1] !=null && item.likes[1] != {}  && Object.keys(item.likes[1]).length != 0 ? 
-                                            item.likes[1].profileImage.imageUrl !=null && item.likes[1].profileImage.imageUrl !=''? 
+                                        item.likes[1].profileImage !=null &&  item.likes[1].profileImage.imageUrl !=null && item.likes[1].profileImage.imageUrl !=''? 
                                                 {uri :item.likes[1].profileImage.imageUrl} : {uri : 'https://www.careerquo.com/assets/images/18.png'}
                                         : {uri : 'https://www.careerquo.com/assets/images/18.png'}}
                                                 style={{ width: 16, height: 16, marginLeft: -4 }} />
@@ -435,7 +445,7 @@ import axios from 'axios';
                                     : item.likes.length == 1 ? 
                                         <Image
                                         source={  item.likes[0] !=null && item.likes[0] != {}  && Object.keys(item.likes[0]).length != 0 ? 
-                                            item.likes[0].profileImage.imageUrl !=null && item.likes[0].profileImage.imageUrl !=''? 
+                                            item.likes[0].profileImage !=null &&  item.likes[0].profileImage !=null &&  item.likes[0].profileImage.imageUrl !=null && item.likes[0].profileImage.imageUrl !=''? 
                                                 {uri :item.likes[0].profileImage.imageUrl} : {uri : 'https://www.careerquo.com/assets/images/18.png'}
                                         : {uri : 'https://www.careerquo.com/assets/images/18.png'}}
                                             style = {{width: 16, height: 16,}}
@@ -457,9 +467,13 @@ import axios from 'axios';
                                 this.postLike(item._id,this.state.userId)}
                                 }}>
                                     <View style = {{flexDirection:'row'}}>
+                                    {this.state.likedPosts.indexOf(item._id) > -1 ?
                                         <Image
                                             source={ImagesWrapper.likeimg}
-                                        />
+                                        /> : 
+                                        <Image
+                                            source={ImagesWrapper.dislike}
+                                        />}
                                         <Text style={{color: this.state.likedPosts.indexOf(item._id) > -1 ?  '#58C4C6' :'#868585' ,fontSize:14,marginTop:3,fontFamily:Fonts.mulishRegular,fontWeight:'600'}}>Like</Text>
                                     </View>
                                 </TouchableOpacity>
@@ -487,6 +501,7 @@ import axios from 'axios';
 
                                 <TouchableOpacity onPress = {() => {
                                     this.customShare(item._id,item.category,item.content,item.postImage[0])
+
                                 }} >
                                 <View style={{flexDirection:'row'}}>
                                 <Image
@@ -516,7 +531,21 @@ import axios from 'axios';
                     </View>
                     </TouchableOpacity>
                     </View> : 
-                    null}
+                    <View style={{ flex: 1, justifyContent: 'flex-end', alignItems: 'flex-end' }}>
+                
+                    <TouchableOpacity activeOpacity={0.5} style={styles.toucahbleOpacity}
+
+                    onPress={() => this.props.navigation.navigate('CreatePostScreen')}
+                    >
+                    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+                        <Image
+                        source={ImagesWrapper.plus}
+                            style={{ height: 60,
+                                width: 60,}}
+                        />
+                    </View>
+                    </TouchableOpacity>
+                    </View> }
                     {this.state.tapstate === true ?
                     // <Modal
                     //     transparent={true}

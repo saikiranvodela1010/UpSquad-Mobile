@@ -38,7 +38,7 @@
 	<key>NSCameraUsageDescription</key>
 	<string>UpSquad require access to your phone's camera</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string></string>
+	<string/>
 	<key>NSPhotoLibraryAddUsageDescription</key>
 	<string>UpSquad require access to your phone's gallery</string>
 	<key>NSPhotoLibraryUsageDescription</key>

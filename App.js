@@ -55,6 +55,8 @@ import SeetingScreen from './src/screens/DrawerScreens/SettingsScreen';
 import CreatePostScreen from './src/screens/BottomTabs/CreatePostScreen';
 import DefaultVisibilityScreen from './src/screens/DrawerScreens/DefaultVisibilityScreen';
 import PostVisibilityScreen from './src/screens/DrawerScreens/PostVisibilityScreen';
+import SocketTest from './src/screens/BottomTabs/SocketTest';
+import { ImageView } from './src/screens/BottomTabs/ImageView';
 
 
 
@@ -266,6 +268,12 @@ const MainScreens =()=>{
           <Stack.Screen
           name = "PostVisibility"
           component = {PostVisibilityScreen}/>
+          <Stack.Screen 
+          name = "SocketTest"
+          component = {SocketTest}/>
+          <Stack.Screen
+          name = "ImageView"
+          component = {ImageView}/>
           
     </Stack.Navigator>
   )

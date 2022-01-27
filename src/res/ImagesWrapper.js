@@ -139,6 +139,7 @@ const ImagesWrapper = {
     vectorcommunity:require('../Images/vectorcommunity.png'),
     radiogrey:require('../Images/radiogrey.png'),
     radioselected:require('../Images/radioselected.png'),
+    dislike: require('../Images/dislike.png'),
     
 
 }
