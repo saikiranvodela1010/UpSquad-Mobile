@@ -3,13 +3,24 @@ import { View ,StyleSheet,Text,Image, TouchableOpacity,
     Platform,
     Dimensions,
     KeyboardAvoidingView,
-    TextInput
+    TextInput,
+    SafeAreaView,
+    Modal,
+    ActivityIndicator
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient'
 import ImagesWrapper from '../res/ImagesWrapper';
 import Fonts from '../res/Fonts';
+import ServiceUrls from '../network/ServiceUrls';
+import StoragePrefs from '../res/StoragePrefs';
+import APIHandler from '../network/NetWorkOperations';
 
 export default class OTPScreen extends React.Component {
+
+
+    serviceUrls = new ServiceUrls();
+    apiHandler = new APIHandler();
+    storagePrefs = new StoragePrefs();
 
     constructor(props){
         super(props);
@@ -25,7 +36,8 @@ export default class OTPScreen extends React.Component {
            color2:'#868585',
            color3:'#868585',
            color4:'#868585',
-
+           email: props.route.params.email,
+           isLoading: false
         }
        
     }
@@ -34,27 +46,67 @@ export default class OTPScreen extends React.Component {
         nextField.current.focus();
     }
     
-    onSubmit(){
-        console.log('name',this.state.firstname,this.state.lastname)
-        let err = [];
-        // let mobileReg = /^([0|\+[0-9]{1,5})?([7-9][0-9]{9})$/;
-        let mobileReg = /^\d+$/;
-        let mailReg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-        let nameReg = /^[a-zA-Z ]{2,30}$/;
-       
-
+   async onSubmit(){
+      console.log('otp',this.state.otp+this.state.otp1+this.state.otp2+this.state.otp3,this.state.email)
        if(this.state.otp === '' && this.state.otp1==='' && this.state.otp2 ==='' && this.state.otp3 === ''){
            this.setState({otperr:'Please enter OTP'})
-       }else{
-           this.props.navigation.navigate('ChangePwd')
+       }
+       else{
+        this.setState({
+            isLoading: true
+        })
+        const data = {
+            "email": this.state.email,
+            "verificationcode": this.state.otp+this.state.otp1+this.state.otp2+this.state.otp3
+        }
+        const response = await this.apiHandler.requestPost(data,this.serviceUrls.verifytOtp)
+        console.log('otpresponse',response);
+        if(response.Status == "success"){
+            this.setState({isLoading: false})
+            
+               
+                this.props.navigation.navigate('ChangePwd',{
+                    userId:response.userId
+                });
+     
+        } else {
+            this.setState({isLoading: false})
+                alert(response.msg);
+               
+        }            
+       
+          
        }
         
+    }
+    renderLoader(){
+        return(
+            <Modal transparent={true}
+                visible={this.state.isLoading}>
+                <View style={{
+                    flex: 1,
+                    flexDirection: 'row',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    margin: 10
+                }}>
+                    <View style={{
+                        width: "25%",
+                        height: "10%",
+                        borderWidth: 1,
+                        borderRadius: 5,borderColor: "#58C4C6",marginBottom: 10 ,backgroundColor: '#58C4C6',justifyContent: 'center' }}>
+                        <ActivityIndicator size="large" color="#fff" />
+                    </View>
+                </View>
+            </Modal>
+        )
     }
 
     render(){
         return(
            
-            <View style={styles.mainContainer}>
+            <SafeAreaView style={styles.mainContainer}>
+                   {this.renderLoader()}
                     <Image
                       source={ImagesWrapper.component}
                       style={{width:220,height:220}}
@@ -186,7 +238,7 @@ export default class OTPScreen extends React.Component {
                 </View>
                 
                 
-            </View>
+            </SafeAreaView>
         );
     }
 }

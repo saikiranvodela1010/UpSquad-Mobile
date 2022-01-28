@@ -17,7 +17,8 @@ export default class DrawerContent extends React.Component {
 
         this.state = {
             userName:'',
-            userImage: ''
+            userImage: '',
+            userId:'',
         }
        
     }
@@ -25,13 +26,13 @@ export default class DrawerContent extends React.Component {
         // console.log('userDetails----',userDetails);
         const userDetails = await this.storagePrefs.getObjectValue("userDetails")
         console.log('userDetails',userDetails);
-        this.setState({userName:userDetails.userName, userImage: userDetails.progileImage});
+        this.setState({userName:userDetails.userName, userImage: userDetails.progileImage,userId:userDetails.userId});
     }
     async componentDidUpdate() {
         // console.log('userDetails----',userDetails);
         const userDetails = await this.storagePrefs.getObjectValue("userDetails")
         // console.log('userDetails',userDetails);
-        this.setState({userName:userDetails.userName, userImage: userDetails.progileImage});
+        this.setState({userName:userDetails.userName, userImage: userDetails.progileImage,userId:userDetails.userId});
     }
     render(){
        
@@ -41,12 +42,17 @@ export default class DrawerContent extends React.Component {
                     <View style={{flex:1,backgroundColor:'#EBF8F8',marginTop:-3,height:'100%'}}>
                         <View style={{flexDirection:'row',justifyContent:'space-between',flex:1}}>
                       <View>
+                    <TouchableOpacity onPress={()=>{
+                         this.props.navigation.navigate('playersDetail',
+                         { id:this.state.userId})
+                    }}>
                     <View style = {styles.displayimage}>
                         <Image source = {{uri: this.state.userImage!=null && this.state.userImage!="" ? this.state.userImage: "https://www.careerquo.com/assets/images/18.png"}}
                         style = {{height: 45,
                             width: 45,
                             borderRadius: 25,}}/>
                     </View>
+                    </TouchableOpacity>
                     <Text style={styles.userName}>{this.state.userName}</Text>
                     </View>
                    

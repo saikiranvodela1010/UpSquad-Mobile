@@ -25,8 +25,12 @@ export default class ServiceUrls {
     saveSortPreference = this.mainUrl+'/users/save_preference';
     getSort = this.mainUrl+'/users/get_sort_preference/';
     postLike = this.socialUrl+'/feed/post/like';
-    fogotPassword = this.mainUrl+'/users/forgotpassword';
-    getGroupTeams = this.mainUrl+'/teams/getGroupSessionTeams';
+    fogotPassword = this.mainUrl+'/users/mobile/forgotpassword';
     getcommunityname=this.mainUrl+'/subscriptionUsers/getCommunityInfo/';
+    verifytOtp=this.mainUrl+'/users/verifyotp';
+    changePassword=this.mainUrl+'/users/updateResetPassword';
+    selfIntroduction=this.mainUrl+'/users/uploadSelfIntroductoryVideo';
+    getGroupTeams = this.mainUrl+'/teams/getGroupSessionTeams';
+    deletePost = this.socialUrl+'/user/post'
 
 }

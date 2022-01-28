@@ -30,11 +30,11 @@ export default class MeetingsScreen extends React.Component {
                 </View>
                 <View style={styles.underline}></View>
                 <View>
-                <TouchableOpacity onPress={()=>{this.props.navigation.navigate('PostVisibility')}}>
+                <TouchableOpacity >
                 <Text style={styles.account}>Post visibility</Text>
-                </TouchableOpacity>
+                </TouchableOpacity >
                 <View style={[styles.underline,{width:'85%',marginLeft:'auto',marginRight:'auto'}]}></View>
-                <TouchableOpacity>
+                <TouchableOpacity  onPress={()=>{this.props.navigation.navigate('StorySetting')}}>
                 <Text style={styles.account}>Story visibility</Text>
                 </TouchableOpacity>
                
