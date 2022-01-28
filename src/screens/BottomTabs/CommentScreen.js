@@ -40,7 +40,6 @@ export default class CommentScreen extends React.Component {
         const postCreatedAt = this.props.route.params.postCreatedAt;
         const data = postID
         const response = await this.apiHandler.requestGet(data,this.serviceUrls.getPost);
-
         const comment = response.post.comments;
         const postId = response.post._id;
         //const userID = "6138c38d4cfd1f6ccac4af0d"
@@ -145,7 +144,7 @@ export default class CommentScreen extends React.Component {
             {this.renderLoader()}
             {this.state.isLoading==false ? <View style={{flexDirection:'row',marginTop:30,marginLeft:24,}}>
                 <Image source={{uri : this.state.creatorImg}}
-                style = {{width: 24, height: 24}}/> 
+                style = {{height: 30,width: 30, borderRadius: 25}}/> 
                 <Text style = {styles.name}>{this.state.firstName} {this.state.lastName}</Text>
                 <Text style  = {styles.createdAT}>{moment(this.state.postCreatedAt).fromNow() == 'Invalid date' ? null  : moment(this.state.postCreatedAt).fromNow()}</Text>
             </View> : null }
@@ -182,14 +181,12 @@ export default class CommentScreen extends React.Component {
                                 renderItem={({item})=> (
                                     <View>
                                     <View style = {{marginTop:16, marginLeft :10, flexDirection: 'row'}}>
-                                        <Image source={{uri : this.state.creatorImg}}
-                                               style = {{width: 24, height: 24}}
-                                        /> 
-                                        <Text style = {styles.commenterName}>{item.user.firstName} {item.user.lastName}</Text>
-                                        {/* <Text style  = {styles.commentCreatedAT}>{this.state.postCreatedAt}</Text>  */}
+                                        <Image source={{uri : "https://www.careerquo.com/assets/images/18.png"}}
+                                        style = {{width: 24, height: 24,borderRadius:10}}
+                                        />
+                                        {item.user!=null && item.user!={}?  <Text style = {styles.commenterName}>{item.user.firstName} {item.user.lastName}</Text>: null}
                                         <Text style  = {styles.commentCreatedAT}>{moment(item.createdAt).fromNow()}</Text>
                                     </View>
-                                    {/* <Text style = {{marginTop:16, marginLeft :10}} >Hellp</Text> */}
                                     <Text style = {styles.commentContent}>{item.content}</Text>
                                     </View>
                                 )}

@@ -483,7 +483,7 @@ import FbGrid from "react-native-fb-image-grid";
                                     this.props.navigation.navigate('CommentScreen',{
                                         content:item.content,
                                         postID: item._id,
-                                        creatorImg : "https://www.careerquo.com/assets/images/18.png",
+                                        creatorImg : item.creator.profileImg !=null && item.creator.profileImg!="" ? item.creator.profileImg : "https://www.careerquo.com/assets/images/18.png",
                                         firstName : item.creator.firstName,
                                         lastName: item.creator.lastName,
                                         postCreatedAt: item.createdAt,
