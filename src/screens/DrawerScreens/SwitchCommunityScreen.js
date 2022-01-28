@@ -76,6 +76,9 @@ export default class SwitchCommunityScreen extends React.Component {
     if(response.data!=null && response.data.length>0){
       this.setState({isLoading: false, isInternet: true})
       this.setState({radio:response.data})
+      const universityDetsils = await this.storagePrefs.getObjectValue("universityDetsils")
+      console.log("ravikiran&&&&&&&&*&*&*&*&",universityDetsils)
+      this.setState({checked:universityDetsils.key,key:universityDetsils.key })
     } else{
       this.setState({isLoading: false})
       this.setState({radio: []})
@@ -91,13 +94,14 @@ export default class SwitchCommunityScreen extends React.Component {
      
   }
   // console.log('communitydata',this.state.radio_props)
-  console.log('checked',this.state.checked)
+  console.log('checked *************',this.state.checked)
   if(this.state.checked === undefined){
-    this.setState({checked:0});
+    this.setState({checked: 0,key: 0})
+    this.checked(this.state.radio_props[this.state.checked],this.state.key);
+  } else{
+    this.checked(this.state.radio_props[this.state.checked],this.state.key);
   }
-    if(this.state.checked === 0){
-      this.checked(this.state.radio_props[0]);
-    }
+    
   }
 
   async checked(item,key){
@@ -113,7 +117,7 @@ export default class SwitchCommunityScreen extends React.Component {
      const data = await this.storagePrefs.setObjectValue("universityDetsils",universityDetsils);
      const getuniversityDetsils = await this.storagePrefs.getObjectValue("universityDetsils")
     //  if(this.state.checked)
-     this.setState({checked:getuniversityDetsils.key})
+     this.setState({checked:getuniversityDetsils.key, key: getuniversityDetsils.key})
      DeviceEventEmitter.emit("UpdateFeed");
     
 
