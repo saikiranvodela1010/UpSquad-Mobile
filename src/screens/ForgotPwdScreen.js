@@ -7,6 +7,7 @@ import Fonts from '../res/Fonts';
 import ServiceUrls from '../network/ServiceUrls';
 import StoragePrefs from '../res/StoragePrefs';
 import APIHandler from '../network/NetWorkOperations';
+import {FloatingLabelInput} from 'react-native-floating-label-input';
 
 
 export default class ForgotPwdScreen extends React.Component {
@@ -99,23 +100,25 @@ export default class ForgotPwdScreen extends React.Component {
                     <View style={styles.card}>
                    
                     {/* <ScrollView> */}
-                    <Text style={styles.bio}>Email ID</Text>
-                    <TextInput
-                        style={styles.textinput}
-                        onChangeText={(Email) => {
-                            this.setState({email:Email})
-                            this.setState({emailerr:''})
-                        }}
-                        value={this.state.email}
-                        returnKeyType={"done"}
-                        keyboardType={Platform.OS === 'ios' ? 'ascii-capable' : 'visible-password'}
-                        // ref={(input) => { this.thirdTextInput = input; }}
-                        // onSubmitEditing={() => { this.fourTextInput.focus(); }}
-                        // importantForAutofill="no" 
-                        maxLength={63}
-                        
-                        // blurOnSubmit={false}
-                    />
+                    <FloatingLabelInput
+          label='Email ID'
+            style={styles.textinput}
+            onChangeText={Email => {
+              this.setState({email: Email});
+              this.setState({emailerr: ''});
+            }}
+            value={this.state.email}
+            returnKeyType={'done'}
+            keyboardType={
+              Platform.OS === 'ios' ? 'ascii-capable' : 'visible-password'
+            }
+            // ref={(input) => { this.thirdTextInput = input; }}
+            // onSubmitEditing={() => { this.fourTextInput.focus(); }}
+            // importantForAutofill="no"
+            maxLength={63}
+
+            // blurOnSubmit={false}
+          />
                    
                     <View style={styles.underline}/>
                     <Text style={styles.error}>{this.state.emailerr}</Text>

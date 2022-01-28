@@ -65,7 +65,7 @@ import NotfctnPostComntScreen from './src/screens/DrawerScreens/NotfctnPostComnt
 
 import SocketTest from './src/screens/BottomTabs/SocketTest';
 import { ImageView } from './src/screens/BottomTabs/ImageView';
-
+import {getISUSERLOGEDIN,} from './src/res/GetUserInfo';
 
 
 
