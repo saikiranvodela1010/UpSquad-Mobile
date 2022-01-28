@@ -36,13 +36,13 @@
 		</dict>
 	</dict>
 	<key>NSCameraUsageDescription</key>
-	<string>UpSquad require access to your phone's camera</string>
+	<string>UpSquad require access to your phone&apos;s camera</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string/>
+	<string></string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
-	<string>UpSquad require access to your phone's gallery</string>
+	<string>UpSquad require access to your phone&apos;s gallery</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>UpSquad require access to your phone's gallery</string>
+	<string>UpSquad require access to your phone&apos;s gallery</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>Mulish-Black.ttf</string>
@@ -61,6 +61,22 @@
 		<string>Mulish-Regular.ttf</string>
 		<string>Mulish-SemiBold.ttf</string>
 		<string>Mulish-SemiBoldItalic.ttf</string>
+		<string>AntDesign.ttf</string>
+		<string>Fontisto.ttf</string>
+		<string>Entypo.ttf</string>
+		<string>EvilIcons.ttf</string>
+		<string>Feather.ttf</string>
+		<string>FontAwesome.ttf</string>
+		<string>FontAwesome5_Brands.ttf</string>
+		<string>FontAwesome5_Regular.ttf</string>
+		<string>Foundation.ttf</string>
+		<string>FontAwesome5_Solid.ttf</string>
+		<string>Ionicons.ttf</string>
+		<string>MaterialCommunityIcons.ttf</string>
+		<string>MaterialIcons.ttf</string>
+		<string>Octicons.ttf</string>
+		<string>SimpleLineIcons.ttf</string>
+		<string>Zocial.ttf</string>
 	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>

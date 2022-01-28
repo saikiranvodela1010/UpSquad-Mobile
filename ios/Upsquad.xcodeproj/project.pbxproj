@@ -19,6 +19,7 @@
 		711AF04F535949D38F79CD76 /* Mulish-ExtraBoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8E74C37995F74F9882FA1701 /* Mulish-ExtraBoldItalic.ttf */; };
 		73AAF220A786437A9604ED4C /* Mulish-LightItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D445EF162B814F5694E9E036 /* Mulish-LightItalic.ttf */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
+		8474F30927A42B4300854ABC /* Fonts in Resources */ = {isa = PBXBuildFile; fileRef = 8474F30827A42B4300854ABC /* Fonts */; };
 		8D76EF0CA6864A4E91747311 /* Mulish-ExtraLight.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 044DAA0811534AEEBB705674 /* Mulish-ExtraLight.ttf */; };
 		9489627E69874F389C187F42 /* Mulish-BlackItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = EC24076E27B4491B82A9AFBE /* Mulish-BlackItalic.ttf */; };
 		B72D53DB57224DE086844F13 /* Mulish-ExtraBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 9D7486E38C7641818411C1C3 /* Mulish-ExtraBold.ttf */; };
@@ -77,6 +78,7 @@
 		6B5BF7F1D3F149F4AB3379E4 /* Entypo.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Entypo.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Entypo.ttf"; sourceTree = "<group>"; };
 		7E7EFC072A0C428180750776 /* Mulish-SemiBold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Mulish-SemiBold.ttf"; path = "../assets/fonts/Mulish-SemiBold.ttf"; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = Upsquard/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		8474F30827A42B4300854ABC /* Fonts */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Fonts; path = "../node_modules/react-native-vector-icons/Fonts"; sourceTree = "<group>"; };
 		8E74C37995F74F9882FA1701 /* Mulish-ExtraBoldItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Mulish-ExtraBoldItalic.ttf"; path = "../assets/fonts/Mulish-ExtraBoldItalic.ttf"; sourceTree = "<group>"; };
 		9970E72B48E347A29B72F1F1 /* Mulish-Medium.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Mulish-Medium.ttf"; path = "../assets/fonts/Mulish-Medium.ttf"; sourceTree = "<group>"; };
 		9D7486E38C7641818411C1C3 /* Mulish-ExtraBold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Mulish-ExtraBold.ttf"; path = "../assets/fonts/Mulish-ExtraBold.ttf"; sourceTree = "<group>"; };
@@ -218,6 +220,7 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+				8474F30827A42B4300854ABC /* Fonts */,
 				13B07FAE1A68108700A75B9A /* Upsquad */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				00E356EF1AD99517003FC87E /* UpsquadTests */,
@@ -347,6 +350,7 @@
 				EBDDBCB00E99498AA0088B07 /* Mulish-Italic.ttf in Resources */,
 				2874E2F912CF45478068C91C /* Mulish-Light.ttf in Resources */,
 				73AAF220A786437A9604ED4C /* Mulish-LightItalic.ttf in Resources */,
+				8474F30927A42B4300854ABC /* Fonts in Resources */,
 				D0EF408AF3BC46FCBACFED80 /* Mulish-Medium.ttf in Resources */,
 				EC00FD5D1DD4476DBFFE1C0E /* Mulish-MediumItalic.ttf in Resources */,
 				6C19C885D7A04585B2BEC20B /* Mulish-Regular.ttf in Resources */,
