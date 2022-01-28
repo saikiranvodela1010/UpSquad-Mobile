@@ -7,7 +7,7 @@ import ServiceUrls from '../../network/ServiceUrls';
 import StoragePrefs from '../../res/StoragePrefs';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-export default class MeetingsScreen extends React.Component {
+export default class SettingsScreen extends React.Component {
 
 
 
@@ -56,12 +56,13 @@ export default class MeetingsScreen extends React.Component {
                 <Text style={styles.account}>Account preferences</Text>
                 </TouchableOpacity>
                 <View style={[styles.underline,{width:'85%',marginLeft:'auto',marginRight:'auto'}]}></View>
-                <TouchableOpacity>
+                <TouchableOpacity onPress ={()=>{this.props.navigation.navigate('DefaultVisibility')}}>
+                <View>
                 <Text style={styles.account}>Default Visibility</Text>
+                </View>
                 </TouchableOpacity>
-               
                 <View style={[styles.underline,{width:'85%',marginLeft:'auto',marginRight:'auto'}]}></View>
-                <TouchableOpacity>
+                <TouchableOpacity onPress={()=>{this.props.navigation.navigate('DrawerNotification')}}>
                 <Text style={styles.account}>Notifications</Text>
                 </TouchableOpacity>
                 
@@ -101,7 +102,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         paddingLeft: '9%',
         marginTop: 20,
-        marginBottom: 20,
+        marginBottom: 10,
         flexDirection:'row',
         marginLeft:-10
         // borderBottomWidth:1

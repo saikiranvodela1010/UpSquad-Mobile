@@ -1,8 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, SafeAreaView, Image, TouchableOpacity, ImageBackground, Platform,FlatList, DeviceEventEmitter,Modal,ActivityIndicator } from 'react-native';
-import { ScrollView } from 'react-native-gesture-handler';
-// import CheckBox from 'react-native-check-box';
-// import { Checkbox } from 'react-native-paper';
+import { View, Text, StyleSheet, SafeAreaView, Image, TouchableOpacity, ImageBackground, Platform,FlatList, DeviceEventEmitter,Modal,ActivityIndicator,ScrollView } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import ImagesWrapper from '../../res/ImagesWrapper';
 import Fonts from '../../res/Fonts';
@@ -44,8 +41,8 @@ class TeamScreen extends React.Component {
 
             subscriptioncode: props.route.params.subscriptioncode,
             email:"",
-            isLoading: false
-           
+            isLoading: false,
+           length:''
         }
     }
 
@@ -85,10 +82,18 @@ class TeamScreen extends React.Component {
                 this.setState({coachRename:response.data[0].coachRename})
                 this.setState({hidePlayerStatus:response.data[0].hidePlayerStatus})
                 this.setState({hideCoachStatus:response.data[0].hideCoachStatus})
+                // this.setState({hidePlayerStatus:true})
+                // this.setState({hideCoachStatus:false})
+
                 
                this.setState({teamsData:response.data[0].teamsData})
                this.setState({universityId:response.data[0]._id})
-            console.log('coderesponse',this.state.universityId);
+            console.log('coderesponse',this.state.teamsData.length);
+            this.setState({length:this.state.teamsData.length})
+
+           if(this.state.hidePlayerStatus===true ){
+            this.setState({isProfessional:true});
+           } 
 
             } 
           
@@ -108,40 +113,7 @@ class TeamScreen extends React.Component {
 
           
           
-    // Register Api calling
-//             console.log('player',this.state.isProfessional)
-
-//         const registerData = {
-//             "email": this.state.email,
-//             "firstName":this.state.firstName,
-//             "isProfessional": this.state.isProfessional,
-//             "lastName": this.state.lastName,
-//             "password": this.state.password,
-//         }
-// console.log("registerData",registerData)
-//         const response = await this.apiHandler.requestPost(registerData,this.serviceUrls.userRegister);
-       
-
-//         if(response.status == "No network Connected!"){
-//             this.setState({isInternet: true})
-//             alert('No network Connected!')
-//         } else{
-//             if(response.success === true){
-//                 this.setState({userId:response.user._id})
-//                     const signupdetails={
-//                         "token":response.token,
-//                         "email":response.user.email,
-//                         "firstName":response.user.firstName,
-//                         "lastName":response.user.lastName,
-
-//                     }
-//               await this.storagePrefs.setObjectValue("signupdetails",signupdetails);
-
-//             }
-
-//         }
-        
-//  UpdateTeams api caling
+    
        
             
             const UpdateTeams = {
@@ -247,20 +219,22 @@ class TeamScreen extends React.Component {
                             // style={{marginLeft:25}}
                         />
                     </TouchableOpacity>
-                    <Text style={styles.memphistalk}>Add Community</Text>
+                    <Text style={styles.memphistalk}>Add community</Text>
                    
 
                 </View>
                 <View style={styles.underline}></View>
-                <Text style={[styles.memphistalk,{marginTop:20,marginLeft:30}]}>Step 2 of 2</Text>
+
+                <Text style={[styles.memphistalk,{marginTop:20,marginLeft:"7%"}]}>Step 2 of 2</Text>
                 <Text style={styles.title}>What's your role?</Text>
                 <View style={{ flexDirection: 'row', marginTop: 25, }}>
                     
-                    
-                    {this.state.rectbox ?
+                    {this.state.isLoading === false ?
+                    this.state.rectbox ?
                         <View style={{ flexDirection: 'row',}}>
+                            {/* {this.state.hideCoachStatus === true & this.state.hidePlayerStatus=== false ? this.setState({isProfessional:false}):null} */}
                             {this.state.hidePlayerStatus === false ?
-                            <View style={styles.recBox1}>
+                            <View style={[styles.recBox1,{width:this.state.hideCoachStatus === true ?'62%':'42%'}]}>
 
                                 <Image
                                    source={ImagesWrapper.image}
@@ -291,7 +265,7 @@ class TeamScreen extends React.Component {
                                 this.PlayerRole();
                                 this.setState({isProfessional:true})
                                 }} 
-                                style={styles.recBox2}>
+                                style={[this.state.hidePlayerStatus=== true?styles.recBox1:styles.recBox2,{width:this.state.hidePlayerStatus === true ?'62%':'42%'}]}>
                             <View >
                                 <Text style={styles.coachtext}>Share your</Text>
                                 <Text style={styles.coachtext}>knowledge and</Text>
@@ -322,7 +296,7 @@ class TeamScreen extends React.Component {
                             <TouchableOpacity onPress={() => {
                                 this.PlayerRole();
                                 this.setState({isProfessional:false})
-                                }}  style={[styles.recBox2,{marginLeft:5,width:'45%'}]}>
+                                }}  style={[styles.recBox2,{marginLeft:5,width:this.state.playerRename !=="" &this.state.hideCoachStatus === true ?'62%':'45%'}]}>
                             <View>
                                 <Text style={styles.playertext1}>Get inspired by</Text>
                                 <Text style={styles.playertext1}>others and</Text>
@@ -346,7 +320,7 @@ class TeamScreen extends React.Component {
                             null
                         }
                         {this.state.hideCoachStatus === false ?
-                            <View style={[styles.recBox1,{width:'44%'}]}>
+                            <View style={[styles.recBox1,{width:this.state.coachRename !=="" &this.state.hidePlayerStatus === true ?'62%':'44%'}]}>
 
                                 <Image
                                     source={ImagesWrapper.image}
@@ -373,22 +347,24 @@ class TeamScreen extends React.Component {
                             </View>
                             :
                             null
-    }
+                            }
                         </View>
                             
 
-                    }
+                    
+                    :
+                    null
 
-                   
+                   }
 
                 </View>
                  {/* <ScrollView>            */}
                 {this.state.subscriptioncode !== "" ?
                 <View>
                     <Text style={styles.selecteam}>Select your team(s)</Text>
-                    <ScrollView style = {{marginTop: 20}}>            
-                    <View style={{ marginLeft: 30 }}>
-                        
+                             
+                    <View style={{ marginLeft: 22 ,height:this.state.length ===0?null:150}}>
+                    <ScrollView style = {{marginTop: 20}}>  
                          <FlatList
                                         // horizontal
                                         data={this.state.teamsData}
@@ -421,18 +397,22 @@ class TeamScreen extends React.Component {
                                           
                                         )}
                                     />
+                                      </ScrollView>
                     </View>
-                    </ScrollView>
+                  
                    
 
                                                    
-                    
-                    <TouchableOpacity onPress={this.ShowHideTextComponentView}>
+                    {this.state.length >3 ?
+                    <TouchableOpacity>
                         {this.state.viewall ? 
                             <Text style={styles.viewlink}>View all</Text>
                             : null
                         }
                     </TouchableOpacity>
+                    :
+                    null
+                     }
                     </View>
                     :
                     null
@@ -474,7 +454,7 @@ const styles = StyleSheet.create({
         fontWeight: '600',
         color: '#1E1C24',
         fontSize: 16,
-        marginLeft: '6%',
+        marginLeft: '7%',
         marginTop: '5%',
     },
     recBox1: {
@@ -544,17 +524,7 @@ const styles = StyleSheet.create({
         marginLeft: 'auto',
         marginRight: 'auto',
         marginBottom: 55
-        // width:'85%',
-        // height:60,
-        // borderRadius:30,
-        // alignItems:"center",
-        // justifyContent:'center',
-        // // paddingLeft: 15,
-        // // paddingRight: 15,
-        // // borderRadius: 25,
-        // marginLeft: 30,
-        // // height: 48,
-        // marginRight: 30
+        
 
 
     },
@@ -587,6 +557,7 @@ const styles = StyleSheet.create({
         fontFamily: Fonts.mulishRegular,
         fontWeight: '600',
         marginTop:-2,
+        width:100
     },
     coachtext: {
         fontSize: 14, 
@@ -602,6 +573,7 @@ const styles = StyleSheet.create({
         fontFamily: Fonts.mulishRegular,
         fontWeight: '600' ,
         marginTop:-2,
+        width:100
     },
     playertext1: {
         fontSize: 14, 
@@ -642,7 +614,7 @@ const styles = StyleSheet.create({
         fontWeight: '600' 
     },
     viewlink: {
-        marginLeft: '7%', 
+        marginLeft: '6%', 
         // marginTop: , 
         fontSize: 16, 
         color: '#58C4C6',

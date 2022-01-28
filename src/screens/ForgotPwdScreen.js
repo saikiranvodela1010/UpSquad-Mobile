@@ -1,5 +1,5 @@
 import React from 'react';
-import { View ,StyleSheet,Text,Image, TouchableOpacity,Platform,ScrollView,Dimensions,KeyboardAvoidingView,Modal,ActivityIndicator} from 'react-native';
+import { View ,StyleSheet,Text,Image, TouchableOpacity,Platform,ScrollView,Dimensions,KeyboardAvoidingView,Modal,ActivityIndicator,SafeAreaView} from 'react-native';
 import { TextInput } from 'react-native-gesture-handler';
 import LinearGradient from 'react-native-linear-gradient'
 import ImagesWrapper from '../res/ImagesWrapper';
@@ -7,6 +7,7 @@ import Fonts from '../res/Fonts';
 import ServiceUrls from '../network/ServiceUrls';
 import StoragePrefs from '../res/StoragePrefs';
 import APIHandler from '../network/NetWorkOperations';
+import {FloatingLabelInput} from 'react-native-floating-label-input';
 
 
 export default class ForgotPwdScreen extends React.Component {
@@ -42,11 +43,14 @@ export default class ForgotPwdScreen extends React.Component {
             this.setState({isLoading: false, isInternet: true})
             alert('No network Connected!')
         } else{
-            this.setState({isLoading: false})
-            if(response.status  === true) {
-                // alert(response.msg);
-                this.props.navigation.navigate('Otp');
+           
+            if(response.status  === "success") {
+                this.setState({isLoading: false})
+                this.props.navigation.navigate('Otp',{
+                    email:this.state.email
+                });
             } else {
+                this.setState({isLoading: false})
                 alert(response.msg);
                
             }            
@@ -82,7 +86,7 @@ export default class ForgotPwdScreen extends React.Component {
     render(){
         return(
            
-            <View style={styles.mainContainer}>
+            <SafeAreaView style={styles.mainContainer}>
                  {this.renderLoader()}
                     <Image
                       source={ImagesWrapper.component}
@@ -96,23 +100,25 @@ export default class ForgotPwdScreen extends React.Component {
                     <View style={styles.card}>
                    
                     {/* <ScrollView> */}
-                    <Text style={styles.bio}>Email ID</Text>
-                    <TextInput
-                        style={styles.textinput}
-                        onChangeText={(Email) => {
-                            this.setState({email:Email})
-                            this.setState({emailerr:''})
-                        }}
-                        value={this.state.email}
-                        returnKeyType={"done"}
-                        keyboardType={Platform.OS === 'ios' ? 'ascii-capable' : 'visible-password'}
-                        // ref={(input) => { this.thirdTextInput = input; }}
-                        // onSubmitEditing={() => { this.fourTextInput.focus(); }}
-                        // importantForAutofill="no" 
-                        maxLength={63}
-                        
-                        // blurOnSubmit={false}
-                    />
+                    <FloatingLabelInput
+          label='Email ID'
+            style={styles.textinput}
+            onChangeText={Email => {
+              this.setState({email: Email});
+              this.setState({emailerr: ''});
+            }}
+            value={this.state.email}
+            returnKeyType={'done'}
+            keyboardType={
+              Platform.OS === 'ios' ? 'ascii-capable' : 'visible-password'
+            }
+            // ref={(input) => { this.thirdTextInput = input; }}
+            // onSubmitEditing={() => { this.fourTextInput.focus(); }}
+            // importantForAutofill="no"
+            maxLength={63}
+
+            // blurOnSubmit={false}
+          />
                    
                     <View style={styles.underline}/>
                     <Text style={styles.error}>{this.state.emailerr}</Text>
@@ -141,7 +147,7 @@ export default class ForgotPwdScreen extends React.Component {
                     </View>
                 </View>
                 
-            </View>
+            </SafeAreaView>
            
         );
     }

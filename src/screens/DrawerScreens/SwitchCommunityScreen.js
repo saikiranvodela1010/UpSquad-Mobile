@@ -1,6 +1,6 @@
 import React from 'react'
 // import { View ,StyleSheet,Text,Image, TouchableOpacity,Platform,ScrollView,Dimensions,} from 'react-native';
-import {  View, Text, StyleSheet, TouchableOpacity,Image, DeviceEventEmitter,SafeAreaView,Modal,ActivityIndicator} from 'react-native';
+import {  View, Text, StyleSheet, TouchableOpacity,Image, DeviceEventEmitter,SafeAreaView,Modal,ActivityIndicator,ScrollView} from 'react-native';
 import ImagesWrapper from '../../res/ImagesWrapper';
 import Fonts from '../../res/Fonts';
 import APIHandler from '../../network/NetWorkOperations';
@@ -26,11 +26,12 @@ export default class SwitchCommunityScreen extends React.Component {
             value:0,
             radio: [],
             radio_props:[],
-            checked:0,
+            checked:'',
             back:true,
             email : '',
             userId: '',
-            isLoading: false
+            isLoading: false,
+            key:0,
         }
     }
 
@@ -39,8 +40,15 @@ export default class SwitchCommunityScreen extends React.Component {
       await this.getCommunityDetails();
       DeviceEventEmitter.addListener("codeAddedSuccessfully",this.updateCommunityScreen)
      
-  }
+    }
+    async componentDidUpdate(){
+      const getuniversityDetsils = await this.storagePrefs.getObjectValue("universityDetsils")
+      if(this.state.checked !== 0){
+     this.setState({checked:getuniversityDetsils.key})
+      }
+    }
   updateCommunityScreen = () => {
+
     this.getCommunityDetails()
   }
 
@@ -82,20 +90,32 @@ export default class SwitchCommunityScreen extends React.Component {
       this.setState({ radio_props: this.state.radio_props });
      
   }
-  console.log('communitydata',this.state.radio_props)
+  // console.log('communitydata',this.state.radio_props)
+  console.log('checked',this.state.checked)
+  if(this.state.checked === undefined){
+    this.setState({checked:0});
+  }
     if(this.state.checked === 0){
       this.checked(this.state.radio_props[0]);
     }
   }
 
-  async checked(item){
+  async checked(item,key){
+    console.log('key',key)
     console.log('item',item);
+    // if(this.)
      const universityDetsils =  {
       "_id":item._id,
       "universityName":item.universityName,
+      "universityLogo":item.universityLogo,
+      "key":key
      }
      const data = await this.storagePrefs.setObjectValue("universityDetsils",universityDetsils);
+     const getuniversityDetsils = await this.storagePrefs.getObjectValue("universityDetsils")
+    //  if(this.state.checked)
+     this.setState({checked:getuniversityDetsils.key})
      DeviceEventEmitter.emit("UpdateFeed");
+    
 
   }
   renderLoader(){
@@ -143,19 +163,19 @@ export default class SwitchCommunityScreen extends React.Component {
 
                 </View>
                 <View style={styles.underline}></View>
-
+     <ScrollView>
         <View >
-           
-  <View>
-    {
-      this.state.radio_props.map((item,key) => {
-        return(
-          <View>
+          
+        <View>
+          {
+            this.state.radio_props.map((item,key) => {
+              return(
+                <View>
                     <View style={{flexDirection:'row'}}>
                       {item.universityLogo === ''?
                       <View style = {styles.displayimage}></View>
                     :
-                      <Image source={{uri:item.universityLogo}}  style={{height:40,width:40,marginLeft:25,marginTop:20}}/>
+                      <Image source={{uri:item.universityLogo}}  style={{height:40,width:40,marginLeft:'9%',marginTop:20}}/>
                 }
                       {this.state.checked === key ?
                       <View style={{justifyContent:'space-between',flex:1}}>
@@ -170,7 +190,7 @@ export default class SwitchCommunityScreen extends React.Component {
                       <View style={{justifyContent:'space-between',flex:1}}>
                       <TouchableOpacity onPress={()=>{
                         this.setState({checked:key});
-                        this.checked(item);
+                        this.checked(item,key);
                     }} 
                     style={{flexDirection:'row',justifyContent:'space-between',flex:1}}
                     >
@@ -194,12 +214,18 @@ export default class SwitchCommunityScreen extends React.Component {
     }
 
   </View>
+  {this.state.isLoading === false ?
       <TouchableOpacity onPress={()=>{this.props.navigation.navigate('AddCommunityScren')}}>
         <View style={styles.linearGradient}>
-            <Text style={styles.buttonText}>Add new ommunity</Text>
+            <Text style={styles.buttonText}>Add new community</Text>
       </View>
       </TouchableOpacity>
+      :
+      null
+    }
+
 </View>
+</ScrollView>
 
             </SafeAreaView>
         )
@@ -272,6 +298,7 @@ linearGradient: {
     marginRight: 30,
     borderWidth:1,
    borderColor:'#58C4C6',
-   marginTop:30
+   marginTop:30,
+   marginBottom:20
 },
     });

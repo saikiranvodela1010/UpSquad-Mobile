@@ -28,6 +28,7 @@ import Video from "react-native-video";
 import FormulaBased from './FormulaBased'
 import ImagesWrapper from '../res/ImagesWrapper';
 import Fonts from '../res/Fonts';
+import StoragePrefs from '../res/StoragePrefs';
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
@@ -47,7 +48,25 @@ var bhanuu = null;
 
 
 export default class GetStartedScreen extends Component {
+  storagePrefs = new StoragePrefs();
 
+  async componentDidMount(){
+    // console.log('userDetails----',userDetails);
+    const userDetails = await this.storagePrefs.getObjectValue("userDetails")
+    // console.log('userDetails',userDetails);
+    // if(userDetails !== null){
+    //   this.props.navigation.navigate("BioSuccess");
+    // }
+   
+}
+async componentDidUpdate() {
+  // console.log('userDetails----',userDetails);
+  const userDetails = await this.storagePrefs.getObjectValue("userDetails")
+  // console.log('userDetails',userDetails);
+  if(userDetails !== ""){
+    this.props.navigation.navigate("BioSuccess");
+  }
+}
 
 
   render() {

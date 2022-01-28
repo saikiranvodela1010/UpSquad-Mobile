@@ -23,14 +23,14 @@ class MeetingsScreen extends React.Component {
       
         const universityDetsils = await this.storagePrefs.getObjectValue("universityDetsils")
         // console.log('universityDetsils',universityDetsils);
-        this.setState({communityName:universityDetsils.universityName});
+        this.setState({communityName:universityDetsils.universityName,communityLogo:universityDetsils.universityLog});
        
 
         }
         async componentDidUpdate(){
             const universityDetsils = await this.storagePrefs.getObjectValue("universityDetsils")
             // console.log('universityDetsils',universityDetsils);
-            this.setState({communityName:universityDetsils.universityName});
+            this.setState({communityName:universityDetsils.universityName,communityLogo:universityDetsils.universityLog});
         }
 
   render() {
@@ -39,9 +39,11 @@ class MeetingsScreen extends React.Component {
       <View style={{ flex: 1, backgroundColor: '#FFFFFF' }}>
         
           <View style={[styles.header]}>
-            <Image source={ImagesWrapper.profile}
-              style={{ marginLeft: '9%' }}
-            ></Image>
+          <TouchableOpacity onPress={()=> this.props.navigation.openDrawer()}>
+               <Image source= {{uri : this.state.communityLogo!=null && this.state.communityLogo!="" ? this.state.communityLogo: 'https://www.careerquo.com/assets/images/18.png' }}
+                            style={{marginLeft:25,height: 30,width: 30, borderRadius: 25}}
+                    ></Image>
+                    </TouchableOpacity>
             <Text ellipsizeMode='tail' numberOfLines={1} style={{ fontSize: 20, fontFamily: Fonts.mulishSemiBold, fontWeight: '600', color: '#1E1C24', marginLeft: '5%',width:170 }}>{this.state.communityName}</Text>
             <View style={{ justifyContent: 'flex-end', flexDirection: 'row', flex: 1 }}>
               <TouchableOpacity style={{ marginRight: '18%' }} onPress={() => this.props.navigation.navigate('notificationscreen')}>
@@ -60,7 +62,7 @@ class MeetingsScreen extends React.Component {
           </View>
           <ScrollView>
           <View style={{ borderWidth: 1, borderColor: '#F1F1F1' }}></View>
-          <View style={{ flex: 1, backgroundColor: 'rgba(235, 248, 248, 1)' }}>
+          {/* <View style={{ flex: 1, backgroundColor: 'rgba(235, 248, 248, 1)' }}>
             <View style={{ flexDirection: 'row', marginLeft: '6%', marginTop: '5%' }}>
               <View style={{ flexDirection: 'column', marginRight: '23%' }}>
                 <Text style={{ fontSize: 14, fontFamily: Fonts.mulishRegular, fontWeight: '400', color: 'rgba(134, 133, 133, 1)' }}>
@@ -144,8 +146,8 @@ class MeetingsScreen extends React.Component {
                 </View>
               </View>
             </ScrollView>
-          </View>
-          <View style={{ flex: 1 ,}}>
+          </View> */}
+          <View style={{ flex: 1}}>
             <View style={{marginTop:'5%',marginLeft:'6%',flexDirection:'row',marginLeft:'auto',marginRight:'auto'}}>
           <View style={{ borderTopWidth: 1, borderColor: '#F1F1F1',width:'37%', marginTop: '3%'}}></View>
           <View style = {{borderWidth: 1, height: 25, width: '15%', borderRadius: 15, backgroundColor: '#F1F1F1', borderColor: '#F1F1F1', marginBottom: 5, alignItems: 'center', justifyContent: 'center',}}>

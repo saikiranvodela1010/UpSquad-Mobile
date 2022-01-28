@@ -76,7 +76,7 @@ class tabbar3 extends React.Component{
             source={ImagesWrapper.people1}/>
               ),
           }} />
-        <Tab.Screen
+        {/* <Tab.Screen
           name="Stories"
           component={StoriesScreen}
           options={{
@@ -94,7 +94,7 @@ class tabbar3 extends React.Component{
             style={{resizeMode: 'contain'}}
             source={ImagesWrapper.stories1}/>
               ),
-          }} />
+          }} /> */}
           <Tab.Screen
           name="Meetings"
           component={MeetingsScreen}

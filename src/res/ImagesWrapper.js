@@ -138,6 +138,13 @@ const ImagesWrapper = {
     question:require('../Images/question.png'),
     vectorcommunity:require('../Images/vectorcommunity.png'),
     edit:require('../Images/edit.png'),
+    radiogrey:require('../Images/radiogrey.png'),
+    radioselected:require('../Images/radioselected.png'),
+    addvideo:require('../Images/addvideo.png'),
+    addvideoplus:require('../Images/addvideoplus.png'),
+
+    dislike: require('../Images/dislike.png'),
+    
 
 }
 export default ImagesWrapper;

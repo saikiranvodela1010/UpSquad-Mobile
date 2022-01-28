@@ -35,5 +35,14 @@ export default class StoragePref extends React.Component {
 
         }
     }
+    async getIsLogedIn() {
+        try {
+            const value = await AsyncStorage.getItem("logedin");
+            return value;
+        }
+        catch (e) {
+return "NO";
+        }
+    }
 
 }

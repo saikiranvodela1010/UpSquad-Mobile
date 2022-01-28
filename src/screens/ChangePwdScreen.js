@@ -1,11 +1,21 @@
 import React from 'react';
-import { View ,StyleSheet,Text,Image, TouchableOpacity,Platform,ScrollView,Dimensions} from 'react-native';
+import { View ,StyleSheet,Text,Image, TouchableOpacity,Platform,ScrollView,Dimensions,Modal,ActivityIndicator} from 'react-native';
 import { TextInput } from 'react-native-gesture-handler';
 import LinearGradient from 'react-native-linear-gradient'
 import ImagesWrapper from '../res/ImagesWrapper';
 import Fonts from '../res/Fonts';
+import ServiceUrls from '../network/ServiceUrls';
+import StoragePrefs from '../res/StoragePrefs';
+import APIHandler from '../network/NetWorkOperations';
+
 
 export default class ChangePwdScreen extends React.Component {
+
+
+
+    serviceUrls = new ServiceUrls();
+    apiHandler = new APIHandler();
+    storagePrefs = new StoragePrefs();
 
     constructor(props){
         super(props);
@@ -14,13 +24,12 @@ export default class ChangePwdScreen extends React.Component {
             password:'',
             passworderr:'',
             hidePassword:true,
-           
+            userId: props.route.params.userId,
+            isLoading: false
         }
        
     }
-    // componentDidMount() {
-    //     this.textInput.current.focusTextInput();  
-    // }
+   
 
     
     togglePwdVisibility ()  {
@@ -29,23 +38,66 @@ export default class ChangePwdScreen extends React.Component {
             : (this.setState({iconName:"ios-eye"}),this.setState({hidePassword:false}))
     }
      
-    onSubmit(){
-        
+   async onSubmit(){
+        console.log("password",this.state.password)
         if(this.state.password === ''){
             this.setState({passworderr:'Please create a password'})
         }else{
-            this.props.navigation.navigate('Login')
+            this.setState({
+                isLoading: true
+            })
+            const data = {
+                "id": this.state.userId,
+                "password": this.state.password
+            }
+            const response = await this.apiHandler.requestPost(data,this.serviceUrls.changePassword)
+            console.log('otpresponse',response);
+            if(response.status == "Success"){
+                this.setState({isLoading: false})
+                
+                   
+                    this.props.navigation.navigate('Login');
+         
+            } else {
+                this.setState({isLoading: false})
+                    alert(response.msg);
+                   
+            }          
+           
         }
        
 
         
         
     }
+    renderLoader(){
+        return(
+            <Modal transparent={true}
+                visible={this.state.isLoading}>
+                <View style={{
+                    flex: 1,
+                    flexDirection: 'row',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    margin: 10
+                }}>
+                    <View style={{
+                        width: "25%",
+                        height: "10%",
+                        borderWidth: 1,
+                        borderRadius: 5,borderColor: "#58C4C6",marginBottom: 10 ,backgroundColor: '#58C4C6',justifyContent: 'center' }}>
+                        <ActivityIndicator size="large" color="#fff" />
+                    </View>
+                </View>
+            </Modal>
+        )
+    }
 
     render(){
         return(
            
             <View style={styles.mainContainer}>
+                 {this.renderLoader()}
                     <Image
                       source={ImagesWrapper.component}
                       style={{width:220,height:220}}

@@ -1,8 +1,8 @@
 import React from 'react'
-import {  View, Text, StyleSheet, TouchableOpacity, Image,TextInput,SafeAreaView,Platform,FlatList, DeviceEventEmitter,ActivityIndicator,} from 'react-native';
+import {  View, Text, StyleSheet, TouchableOpacity, Image,TextInput,SafeAreaView,Platform,FlatList, DeviceEventEmitter,ActivityIndicator,Dimensions} from 'react-native';
 import ImagesWrapper from '../../res/ImagesWrapper';
 import Fonts from '../../res/Fonts';
-import { ScrollView } from 'react-native-gesture-handler';
+import { ScrollView, TouchableHighlight } from 'react-native-gesture-handler';
 import Svg, { G, Circle } from "react-native-svg";
 import LinearGradient from 'react-native-linear-gradient'
 import Modal from 'react-native-modal';
@@ -11,6 +11,11 @@ import APIHandler from '../../network/NetWorkOperations';
 import moment from 'moment';
 import StoragePrefs from '../../res/StoragePrefs';
 import Share from 'react-native-share';
+import { forEach } from 'lodash';
+import axios from 'axios';
+import { SliderBox } from "react-native-image-slider-box";
+import FbGrid from "react-native-fb-image-grid";
+
 
 
  class MeetingsScreen extends React.Component {
@@ -40,7 +45,8 @@ import Share from 'react-native-share';
             universityName: '',
             likeColor: false,
             share: false,
-            
+            likedPosts: [],
+            communityLogo : "" , 
         }
        
     }
@@ -71,41 +77,27 @@ import Share from 'react-native-share';
         this.setState({communityName:universityDetsils.universityName});
     }
 
-  
-
-    // customShare = async () =>  {
-    //     const shareOptions  =  {
-    //         message:"This is a test message"
-    //     }
-    //         Share.open(shareOptions)
-    //         .then((res) => {
-    //             console.log(res);
-    //         })
-    //         .catch((err) => {
-    //             err && console.log(err);
-    //         });
-    //     }
-
-        updateFeed = async () => {
-            const universityDetsils = await this.storagePrefs.getObjectValue("universityDetsils")
-            const userDetails = await this.storagePrefs.getObjectValue("userDetails")
-            this.setState({
-                universityName:universityDetsils.universityName,
-                universityId: universityDetsils._id,
-                communityName: universityDetsils.universityName,
-                userId : userDetails.userId,
-                email : userDetails.userEmail
-            })
-            return new Promise((resolve, reject) => {
-            this.getPosts()
-            .then(() =>  {return this.getUniversityImages();})
-            .then(() => {return this.getUserProfile();})
-            .then(() => {return  this.setState({isLoading: false})})
-            .then(() =>  { resolve('done')})
-            .catch((error)=> {this.setState({isLoading: false});
-                                 reject(error)})
+    updateFeed = async () => {
+        const universityDetsils = await this.storagePrefs.getObjectValue("universityDetsils")
+        const userDetails = await this.storagePrefs.getObjectValue("userDetails")
+        this.setState({
+            universityName:universityDetsils.universityName,
+            universityId: universityDetsils._id,
+            communityName: universityDetsils.universityName,
+            communityLogo: universityDetsils.universityLogo,
+            userId : userDetails.userId,
+            email : userDetails.userEmail
         })
-        }
+        return new Promise((resolve, reject) => {
+        this.getPosts()
+        .then(() =>  {return this.getUniversityImages();})
+        .then(() => {return this.getUserProfile();})
+        .then(() => {return  this.setState({isLoading: false})})
+        .then(() =>  { resolve('done')})
+        .catch((error)=> {this.setState({isLoading: false});
+                                reject(error)})
+    })
+    }
 
     async postLike(postID, userID){
         const data = {
@@ -113,6 +105,53 @@ import Share from 'react-native-share';
             "userId" : userID
         }
         const response = await this.apiHandler.requestPost(data,this.serviceUrls.postLike);
+        if(response.message == "You have liked this post"){
+            this.setState({likedPosts: [...this.state.likedPosts, postID]})
+        }
+    }
+
+    async disLikePost(postID, userID){
+        let data = { 
+                "postId" : postID,
+                "userId" : userID   
+        }
+        // const response = await this.apiHandler.requestDelete(data,this.serviceUrls.postLike);
+        axios.delete(this.serviceUrls.postLike, {
+            data: {
+                "postId" : postID,
+                "userId" : userID  
+            }
+          })
+        .then(response => {
+            if(response.data.message === "Liked removed!"){
+                let index = this.state.likedPosts.indexOf(postID);
+                if (index != -1) this.state.likedPosts.splice(index, 1);
+            }
+        })
+        .catch(error=> {
+            console.log("error herer",error);
+        })
+       
+    }
+
+    async deletePost(postID,userID){
+        axios.delete(this.serviceUrls.deletePost, {
+            data: {
+                "postId" : postID,
+                "userId" : userID  
+            }
+          })
+        .then(response => {
+            console.log("response.message",response.data.message)
+            if(response.data.message === "Post successfully deleted"){
+                const filteredData = this.state.postData.filter(item => item._id !== postID);
+                console.log("filtered Data",filteredData)
+                this.setState({ postData: filteredData,dotsmemu: false  });
+            }
+        })
+        .catch(error=> {
+            console.log("error herer",error);
+        })
     }
 
     async getCommunityDetails() {
@@ -126,7 +165,14 @@ import Share from 'react-native-share';
               universityName:response.data[0].universityName,
               universityId: response.data[0]._id,
               communityName: response.data[0].universityName,
+              communityLogo : response.data[0].universityLogo, 
             });
+            const universityDetsils =  {
+                "_id":this.state.universityId,
+                "universityName":this.state.universityName,
+                "universityLogo":this.state.communityLogo,
+               }
+               const data = await this.storagePrefs.setObjectValue("universityDetsils",universityDetsils);
           } else{
             this.setState({
               universityName:"",
@@ -134,19 +180,21 @@ import Share from 'react-native-share';
               communityName: ""
             });
           }
-          const universityDetsils =  {
-            "_id":this.state.universityId,
-            "universityName":this.state.universityName,
-           }
-           const data = await this.storagePrefs.setObjectValue("universityDetsils",universityDetsils);
+          
     }
 
     getPosts = async () => {
         //const data = '5ed8d9509e623f00221761a1/All/true/5f5892a1b205b1387d5cafb/All'
         const data = this.state.universityId+'/All/'+this.state.isProfessional+"/"+this.state.userId+'/All'
-        console.log("Post is getting called")
         const response = await this.apiHandler.requestGet(data,this.serviceUrls.getPosts);
         if(response.posts != null && response.posts.length != 0 ){
+            response.posts.forEach((item,index)=> {
+                 for(i=0;i<item.likes.length;i++){
+                     if(item.likes[i]._id === this.state.userId){
+                         this.setState({likedPosts: [...this.state.likedPosts, item._id]})
+                     }
+                 }
+            })
             this.setState({postData: response.posts});
         } else {
             this.setState({postData:[]})
@@ -154,7 +202,6 @@ import Share from 'react-native-share';
     }
 
     getUniversityImages = async () =>  {
-        console.log("University Images is getting called")
         //const data =  '5ed8d9509e623f00221761a1';
         const data = this.state.userId;
         const response = await this.apiHandler.requestGet(data,this.serviceUrls.getUniversityImages);
@@ -174,7 +221,6 @@ import Share from 'react-native-share';
     }
 
     getUserProfile = async () => {
-        console.log("userProfile is getting called");
         //const data = '5ee21f3f5583d00022351037';
         const data = this.state.userId;
         const response = await this.apiHandler.requestGet(data,this.serviceUrls.getUserProfile);
@@ -188,6 +234,29 @@ import Share from 'react-native-share';
             }
         }
     }
+
+        customShare = async (postID,category,content,postImage) =>  {
+            const shareOptions  =  {
+                urls:['https://social.upsquad.com/postmetainfo/'+postID, postImage],
+                title:category,
+                message:content,
+            }
+            Share.open(shareOptions)
+            .then((res) => {
+                console.log(res);
+            })
+            .catch((err) => {
+                err && console.log(err);
+            });
+        }
+         onPress = (url) => {
+            // url and index of the image you have clicked alongwith onPress event.
+            console.log("url",url);
+            this.props.navigation.navigate('ImageView',{
+                url : url
+            })
+          }
+
     flowerWings=(width)=>{
         const initialArr = [];
         for (var i = 0; i < 9; i++) {
@@ -276,23 +345,22 @@ import Share from 'react-native-share';
         return(
             <SafeAreaView style={{flex:1,backgroundColor:'#FFFFFF'}}>
                 {this.renderLoader()}
-                {this.renderShareModal()}
                     <View style={[styles.header]}>
                     <TouchableOpacity onPress={()=> this.props.navigation.openDrawer()}>
-                    <Image source={ImagesWrapper.profile}
-                    style={{marginLeft:25}}
+                    <Image source= {{uri : this.state.communityLogo!=null && this.state.communityLogo!="" ? this.state.communityLogo: "https://www.careerquo.com/assets/images/18.png" }}
+                            style={{marginLeft:25,height: 30,width: 30, borderRadius: 25}}
                     ></Image>
                     </TouchableOpacity>
                     <Text ellipsizeMode='tail' numberOfLines={1} style={{ fontSize: 20, fontFamily: Fonts.mulishSemiBold, fontWeight: '600',color:'#1E1C24', marginLeft: '5%',width:170}}>{this.state.communityName}</Text>
                     <View style={{justifyContent:'flex-end',flexDirection:'row',flex:1}}>
                     <TouchableOpacity   
-                    style = {{marginRight:'8%'}}
+                    style = {{marginRight:'18%'}}
                     onPress={() => this.props.navigation.navigate('notificationscreen')}>
                     <Image source={ImagesWrapper.notificationNo}></Image>
                     </TouchableOpacity>
                 
                     <TouchableOpacity 
-                    style={{marginRight:'10%'}}
+                    style={{marginRight:'18%'}}
                     onPress={() => this.props.navigation.navigate('chatscreen')}
                     >
                     <Image source={ImagesWrapper.chatNo}
@@ -304,51 +372,57 @@ import Share from 'react-native-share';
                     <FlatList
                     data = {this.state.postData}
                     renderItem={({item})=> (
-                        <View>
-                            <View style={{flexDirection:'row',justifyContent:'space-between',marginTop:15,marginLeft:18}}>
-                            <View style={{flexDirection:'row',marginTop:'2%',marginRight:'5%',}}>
-                                <Image source={{uri : "https://www.careerquo.com/assets/images/18.png"}}
-                                    style = {{width: 24, height: 24}}/> 
+                        <View style = {{ marginLeft : 25}}>
+                            <View style={{flexDirection:'row',justifyContent:'space-between',marginTop:15,alignContent: 'center'}}>
+                            <View style={{flexDirection:'row',marginTop:'2%',alignContent: 'center',alignItems:'center'}}>
+                                <Image source={{uri : item.creator.profileImg !=null && item.creator.profileImg!="" ? item.creator.profileImg : "https://www.careerquo.com/assets/images/18.png"}}
+                                    style = {{height: 30,width: 30, borderRadius: 25}}/> 
                                 <Text style={[styles.post,{padding:-8,marginLeft:8,fontSize:16}]}>{item.creator.firstName} {item.creator.lastName}</Text>
-                                <Text style={[styles.post,{padding:5,marginLeft:5,fontSize:12,color:'#868585',marginTop:-2}]}>
+                                <Text style={[styles.post,{marginLeft:5,fontSize:12,color:'#868585'}]}>
                                     {moment(item.createdAt).fromNow()}
                                 </Text>
                             </View>
-                            {item.creator._id == this.state.userId ?<TouchableOpacity onPress={()=> this.setState({dotsmemu:true})}>
+                            {item.creator._id == this.state.userId ?<TouchableOpacity onPress={()=> this.setState({dotsmemu:true, postId: item._id})}>
                                     <Image source={ImagesWrapper.dotsmenu}
                                         style={{marginTop:13,marginRight:18}}
                                     />
                                 </TouchableOpacity> : null }
                             
                             </View>
-                            <Text style={{fontSize:14,fontWeight:'400',fontFamily:Fonts.mulishSemiBold,color:'#868585',marginLeft:25,marginRight:22,marginTop:12}}>
+                            <Text style={{fontSize:14,fontWeight:'400',fontFamily:Fonts.mulishSemiBold,color:'#868585',marginRight:22,marginTop:12}}>
                                 {item.content}
-                            </Text>
-                            {item.postImage !=null && item.postImage.length >0 ? 
-                                <Image source = { {uri : item.postImage[0]} } 
-                                style={{marginTop:15,marginLeft:25,width:'87%', borderRadius:5,height: 192,}}/> 
-                                : null 
-                            }
-                            <View style={{flexDirection:'row',marginTop:10,marginLeft:25,justifyContent:'space-between'}}>
+                            </Text>  
+                                                   
+                                <View style = {{ marginLeft :-25}}>
+                                    {item.postImage!=null && item.postImage.length!=0 ? 
+                                    <FbGrid images = {item.postImage}
+                                    style = {{height : 300,width: Dimensions.get('window').width}}
+                                    onPress ={()=> {this.onPress(item.postImage)}}/>
+                                    
+                                    : null}
+                                    
+                                </View>
+                            
+                            <View style={{flexDirection:'row',marginTop:10,justifyContent:'space-between'}}>
                                 <View style={{flexDirection:'row'}}>
                                 
-                                    {item.likes.length > 3 || item.likes.length == 3 ? 
+                                    {item.likes.length > 3 || item.likes.length === 3 ? 
                                         <>
                                         <Image
                                             source={  item.likes[0] !=null && item.likes[0] != {}  && Object.keys(item.likes[0]).length != 0 ? 
-                                            item.likes[0].profileImage.imageUrl !=null && item.likes[0].profileImage.imageUrl !=''? 
+                                            item.likes[0].profileImage !=null &&  item.likes[0].profileImage.imageUrl !=null && item.likes[0].profileImage.imageUrl !=''? 
                                                 {uri :item.likes[0].profileImage.imageUrl} : {uri : 'https://www.careerquo.com/assets/images/18.png'}
                                         : {uri : 'https://www.careerquo.com/assets/images/18.png'}}
                                                 style={{ width: 16, height: 16 }} />
                                         <Image
                                         source={  item.likes[1] !=null && item.likes[1] != {}  && Object.keys(item.likes[1]).length != 0 ? 
-                                        item.likes[1].profileImage.imageUrl !=null && item.likes[1].profileImage.imageUrl !=''? 
+                                        item.likes[1].profileImage !=null &&  item.likes[1].profileImage.imageUrl !=null && item.likes[1].profileImage.imageUrl !=''? 
                                             {uri :item.likes[1].profileImage.imageUrl} : {uri : 'https://www.careerquo.com/assets/images/18.png'}
                                     : {uri : 'https://www.careerquo.com/assets/images/18.png'}}
                                             style={{ width: 16, height: 16, marginLeft: -4 }} />
                                         <Image
                                             source={  item.likes[2] !=null && item.likes[2] != {}  && Object.keys(item.likes[2]).length != 0 ? 
-                                            item.likes[2].profileImage.imageUrl !=null && item.likes[2].profileImage.imageUrl !=''? 
+                                            item.likes[2].profileImage !=null &&  item.likes[2].profileImage.imageUrl !=null && item.likes[2].profileImage.imageUrl !=''? 
                                                 {uri :item.likes[2].profileImage.imageUrl} : {uri : 'https://www.careerquo.com/assets/images/18.png'}
                                         : {uri : 'https://www.careerquo.com/assets/images/18.png'}}
                                             style={{ width: 16, height: 16, marginLeft: -4 }} />
@@ -357,13 +431,13 @@ import Share from 'react-native-share';
                                         <>
                                     <Image
                                         source={  item.likes[0] !=null && item.likes[0] != {}  && Object.keys(item.likes[0]).length != 0 ? 
-                                            item.likes[0].profileImage.imageUrl !=null && item.likes[0].profileImage.imageUrl !=''? 
+                                        item.likes[0].profileImage !=null &&  item.likes[0].profileImage.imageUrl !=null && item.likes[0].profileImage.imageUrl !=''? 
                                                 {uri :item.likes[0].profileImage.imageUrl} : {uri : 'https://www.careerquo.com/assets/images/18.png'}
                                         : {uri : 'https://www.careerquo.com/assets/images/18.png'}}
                                             style={{ width: 16, height: 16 }} />
                                             <Image
                                         source={  item.likes[1] !=null && item.likes[1] != {}  && Object.keys(item.likes[1]).length != 0 ? 
-                                            item.likes[1].profileImage.imageUrl !=null && item.likes[1].profileImage.imageUrl !=''? 
+                                        item.likes[1].profileImage !=null &&  item.likes[1].profileImage.imageUrl !=null && item.likes[1].profileImage.imageUrl !=''? 
                                                 {uri :item.likes[1].profileImage.imageUrl} : {uri : 'https://www.careerquo.com/assets/images/18.png'}
                                         : {uri : 'https://www.careerquo.com/assets/images/18.png'}}
                                                 style={{ width: 16, height: 16, marginLeft: -4 }} />
@@ -371,30 +445,36 @@ import Share from 'react-native-share';
                                     : item.likes.length == 1 ? 
                                         <Image
                                         source={  item.likes[0] !=null && item.likes[0] != {}  && Object.keys(item.likes[0]).length != 0 ? 
-                                            item.likes[0].profileImage.imageUrl !=null && item.likes[0].profileImage.imageUrl !=''? 
+                                            item.likes[0].profileImage !=null &&  item.likes[0].profileImage !=null &&  item.likes[0].profileImage.imageUrl !=null && item.likes[0].profileImage.imageUrl !=''? 
                                                 {uri :item.likes[0].profileImage.imageUrl} : {uri : 'https://www.careerquo.com/assets/images/18.png'}
                                         : {uri : 'https://www.careerquo.com/assets/images/18.png'}}
-                                            style = {{width: 16, height: 16}}
+                                            style = {{width: 16, height: 16,}}
                                         />
                                 : null}
-                                    <Text style={{fontSize:12,color:'#868585',fontFamily:Fonts.mulishBold,fontWeight:'400',marginLeft:5,marginTop:2}}>Like by</Text>
+                                    {item.likes.length>0 ? <Text style={{fontSize:12,color:'#868585',fontFamily:Fonts.mulishBold,fontWeight:'400',marginLeft:5,marginTop:2}}>Like by</Text>: null}
                                     <Text style={{fontSize:12,color:'#1E1C24',fontFamily:Fonts.mulishBold,fontWeight:'400',marginLeft:5,marginTop:2}}>
                                         {item.likes[0].firstName} {item.likes[0].lastName} {item.likes.length >1 ? "and": null } {item.likes.length >1 ? item.likes.length-1 : null } {item.likes.length >1 ? "others" : null}
                                     </Text>
                                 </View>
                                 <Text style={{fontSize:12,color:'#868585',fontFamily:Fonts.mulishBold,fontWeight:'400',marginLeft:5,marginTop:2,marginRight:22}}>{item.comments.length } {item.comments.length > 1 ? "comments" : "comment"}</Text>
                             </View>
-                            <View style={{ borderWidth: 1, borderColor: '#F1F1F1',marginTop:22}}></View>
-                            <View style={{flexDirection:'row',marginLeft:'auto',marginRight:'auto',marginTop:20}}>
+                            <View style={{ borderWidth: 1, borderColor: '#F1F1F1',marginTop:22,marginRight: '5%'}}></View>
+                            <View style={{flexDirection:'row',marginTop:20,}}>
                                 <TouchableOpacity
                                 onPress ={()=> {
-                                this.postLike(item._id,this.state.userId)
+                                {this.state.likedPosts.indexOf(item._id) > -1 ? 
+                                this.disLikePost(item._id,this.state.userId) : 
+                                this.postLike(item._id,this.state.userId)}
                                 }}>
                                     <View style = {{flexDirection:'row'}}>
+                                    {this.state.likedPosts.indexOf(item._id) > -1 ?
                                         <Image
                                             source={ImagesWrapper.likeimg}
-                                        />
-                                        <Text style={{color:this.state.likeColor == false? '#58C4C6' :'#868585' ,fontSize:14,marginTop:3,marginLeft:5,fontFamily:Fonts.mulishRegular,fontWeight:'600'}}>Like</Text>
+                                        /> : 
+                                        <Image
+                                            source={ImagesWrapper.dislike}
+                                        />}
+                                        <Text style={{color: this.state.likedPosts.indexOf(item._id) > -1 ?  '#58C4C6' :'#868585' ,fontSize:14,marginTop:3,fontFamily:Fonts.mulishRegular,fontWeight:'600'}}>Like</Text>
                                     </View>
                                 </TouchableOpacity>
                                 
@@ -403,7 +483,7 @@ import Share from 'react-native-share';
                                     this.props.navigation.navigate('CommentScreen',{
                                         content:item.content,
                                         postID: item._id,
-                                        creatorImg : "https://www.careerquo.com/assets/images/18.png",
+                                        creatorImg : item.creator.profileImg !=null && item.creator.profileImg!="" ? item.creator.profileImg : "https://www.careerquo.com/assets/images/18.png",
                                         firstName : item.creator.firstName,
                                         lastName: item.creator.lastName,
                                         postCreatedAt: item.createdAt,
@@ -415,22 +495,23 @@ import Share from 'react-native-share';
                                     <Image
                                         source={ImagesWrapper.commentimg}
                                     />
-                                    <Text style={{color:'#868585',fontSize:14,marginTop:3,marginLeft:5,fontFamily:Fonts.mulishRegular,fontWeight:'600'}}>Comment</Text> 
+                                    <Text style={{color:'#868585',fontSize:14,marginTop:3,fontFamily:Fonts.mulishRegular,fontWeight:'600'}}>Comment</Text> 
                                 </View>
                                 </TouchableOpacity>
 
                                 <TouchableOpacity onPress = {() => {
-                                    // this.customShare()
+                                    this.customShare(item._id,item.category,item.content,item.postImage[0])
+
                                 }} >
                                 <View style={{flexDirection:'row'}}>
                                 <Image
                                     source={ImagesWrapper.shareimg}
                                 />
-                                <Text style={{color:'#868585',fontSize:14,marginTop:3,marginLeft:5,fontFamily:Fonts.mulishRegular,fontWeight:'600'}}>Share</Text>
+                                <Text style={{color:'#868585',fontSize:14,marginTop:3,fontFamily:Fonts.mulishRegular,fontWeight:'600'}}>Share</Text>
                                 </View>
                                 </TouchableOpacity>
                             </View>
-                            <View style={{ borderWidth: 1, borderColor: '#F1F1F1',marginTop:22}}></View>
+                            <View style={{ borderWidth: 1, borderColor: '#F1F1F1',marginTop:22,marginRight:'5%'}}></View>
                         </View>
                     )}/>
                     {(this.state.isProfessional == true && this.state.coachCreatePost == true) || 
@@ -454,7 +535,7 @@ import Share from 'react-native-share';
                 
                     <TouchableOpacity activeOpacity={0.5} style={styles.toucahbleOpacity}
 
-                      onPress={() => this.props.navigation.navigate('CreatePostScreen')}
+                    onPress={() => this.props.navigation.navigate('CreatePostScreen')}
                     >
                     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
                         <Image
@@ -464,7 +545,7 @@ import Share from 'react-native-share';
                         />
                     </View>
                     </TouchableOpacity>
-                    </View>}
+                    </View> }
                     {this.state.tapstate === true ?
                     // <Modal
                     //     transparent={true}
@@ -550,14 +631,13 @@ import Share from 'react-native-share';
 
                     {this.state.dotsmemu === true ?
                     <Modal
-                    transparent={true}
-                    isVisible={this.state.dotsmemu}
-                    onBackdropPress={() => this.setState({dotsmemu:false})}
-                        onRequestClose={() => {
-                            this.setState({dotsmemu:false})
-                        }}
-                    
-                >
+                        transparent={true}
+                        isVisible={this.state.dotsmemu}
+                        onBackdropPress={() => this.setState({dotsmemu:false})}
+                            onRequestClose={() => {
+                                this.setState({dotsmemu:false})
+                            }}
+                    >
                     <View style={{backgroundColor:'white',borderTopLeftRadius: 20,borderTopRightRadius:20,height:'20%',marginTop:660,width:'110%',marginLeft:-18}}>
                         <View style={{margin:25}}>
                             <View style={{flexDirection:'row'}}>
@@ -567,13 +647,21 @@ import Share from 'react-native-share';
                                 />
                                 <Text style={[styles.post,{padding:0,paddingLeft:10}]}>Edit post</Text>
                             </View>
+                            <TouchableOpacity onPress={()=>{
+                                this.deletePost(this.state.postId, this.state.userId)
+                            }}
+                               >
                             <View style={{flexDirection:'row',marginTop:20}}>
-                                <Image
-                                    source={ImagesWrapper.trash}
-                                    
-                                />
-                                <Text style={[styles.post,{padding:0,paddingLeft:10}]}>Delete post</Text>
-                            </View>
+                               
+                               <Image
+                                   source={ImagesWrapper.trash}
+                                   
+                               />
+                               <Text style={[styles.post,{padding:0,paddingLeft:10}]}>Delete post</Text>
+                               
+                           </View>
+                            </TouchableOpacity>
+                            
                         </View>
                     </View>
                     </Modal>
@@ -591,7 +679,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         // paddingLeft: '9%',
-         marginTop: Platform.OS == 'ios'? 0 : 25,
+        marginTop: Platform.OS == 'ios'? 0 : 25,
         marginBottom: 25,
         // borderBottomWidth:1
       },
