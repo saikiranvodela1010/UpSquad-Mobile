@@ -8,7 +8,7 @@ import Fonts from '../res/Fonts'
 import ServiceUrls from '../network/ServiceUrls';
 import APIHandler from '../network/NetWorkOperations';
 import moment from 'moment';
-import RNThumbnail from 'react-native-thumbnail';
+// import RNThumbnail from 'react-native-thumbnail';
 import Modal from 'react-native-modal';
 import StoragePrefs from '../res/StoragePrefs';
 
@@ -100,13 +100,13 @@ export default class playersDetailScreen extends React.Component {
             selfIntroVideos:response.data.selfIntroductoryVideos,
           
         })
-        console.log('selfIntroVideos', this.state.selfIntroVideos[0].videoUrl)
+        // console.log('selfIntroVideos', this.state.selfIntroVideos[0].videoUrl)
         const data1 = this.state.experience[0]
         const data2 = this.state.education[0]
         const data3 = this.state.certifications[0]
         const data4 = this.state.publications[0]
         const data5 = this.state.publications.length >= 1 ? this.state.publications[0].publicationLinks : ''
-        const data6=this.state.selfIntroVideos[0].videoUrl
+        // const data6=this.state.selfIntroVideos[0].videoUrl
         const email = this.state.userData.email
         const user_id = this.state.userData._id
         this.setState({
@@ -115,9 +115,9 @@ export default class playersDetailScreen extends React.Component {
             data2: data2,
             data3: data4,
             data4: data5,
-            url:data6
+            // url:data6
         })
-        console.log('url', this.state.url)
+        // console.log('url', this.state.url)
         console.log('bannerImage', this.state.bannerImage)
         console.log('experience', this.state.experience)
         console.log('education', this.state.education)
@@ -200,16 +200,16 @@ thumbnail = async (uri) =>{
                 </View>
                 <ScrollView >
                     <View>
-                    <Image source={{ uri: this.state.bannerImage }} style={{ width: '100%', height: 250 }} />
+                    <Image source={{ uri: this.state.bannerImage }} style={{ width: '100%', height: 250,marginTop:this.state.userId === this.state.loginuserId ? "0%":"0%" }} />
                     {this.state.userId === this.state.loginuserId ?
                     <View style={{marginTop:'-58%',alignItems:'flex-end',marginRight:'8%'}}>
                     <Image source={ImagesWrapper.pencil} />
                     </View>
                     :
                     null
-                     }
+                    }
                     </View>
-                    <View style={[styles.card]}>
+                    <View style={[styles.card,{ marginTop:this.state.userId===this.state.loginuserId?'45%':'-10%',}]}>
                         <Text style={styles.name}>{this.state.userData.firstName} {this.state.userData.lastName}</Text>
                         <Text style={styles.technologytext}>{this.state.userData.fieldOfstudyOrSpecialty} </Text>
                         <Text style={[styles.technologytext, { color: '#58C4C6' }]}>See more</Text>
@@ -253,8 +253,10 @@ thumbnail = async (uri) =>{
                             </TouchableOpacity>
                         </View> */}
                         {/* <View style={styles.underline}></View> */}
+                        {this.state.userId !== this.state.loginuserId ?
+                        <View>
                         <Text style={styles.name}>Get in touch</Text>
-
+                        
                         <View style={{ flexDirection: 'row', marginTop: 15, }}>
                             <View>
                                 <View style={styles.messagecard}>
@@ -271,13 +273,23 @@ thumbnail = async (uri) =>{
                                 {/* <Text style={[styles.technologytext, { fontSize: 12, marginLeft: 10, marginTop: 10, marginRight: 'auto' }]}>Available 3 times this month </Text> */}
                             </View>
                         </View>
+                        
+                        </View>
+                        :
+                        null
+                        }
                         <View style={styles.underline}></View>
                         <View style={{flexDirection:'row',justifyContent:'space-between' }}>
                         <Text style={styles.name}>Self Introduction</Text>
+                        {this.state.userId === this.state.loginuserId?
                         <Image source={ImagesWrapper.pencil} style={{marginTop: 20}}/>
+                        :
+                        null
+                        }
                         </View>
                         <ScrollView  horizontal={true} showsHorizontalScrollIndicator={false} >
                         <View style={{flexDirection:'row'}}>
+                            {this.state.selfIntroVideos.length >= 0 ?
                          <FlatList  
                           horizontal
                           data={this.state.selfIntroVideos}
@@ -305,6 +317,9 @@ thumbnail = async (uri) =>{
                        
                           )}
                         /> 
+                        :
+                        null
+                                }
                         
                         {/* <View style={{ width: 200, height: 110, borderWidth: 1 }}>
                             <View style={{ flex: 1 }}>
@@ -341,8 +356,9 @@ thumbnail = async (uri) =>{
                         <View style={[styles.underline, { marginTop: 20 }]}></View>
                         <Text style={[styles.name, { fontSize: 16 }]}>About</Text>
                         <Text style={[styles.technologytext, { fontSize: 14, marginTop: 10, marginRight: 'auto' }]}>{this.state.userData.about}</Text>
-                        {this.state.experience.length >= 1 ?
-                            <Text style={[styles.name, { fontSize: 16 }]}>Experience</Text> : null}
+                        {/* {this.state.experience.length >= 1 ? */}
+                            <Text style={[styles.name, { fontSize: 16 }]}>Experience</Text> 
+                            {/* : null} */}
                         {this.state.experienceall == false && this.state.experience.length >= 1 ?
 
                             <View>
@@ -583,14 +599,14 @@ const styles = StyleSheet.create({
         backgroundColor: '#FFFFFF',
         flex: 1,
         width: '100%',
-
-        marginTop:'45%',
         borderTopLeftRadius: 15,
         borderTopRightRadius: 15,
         shadowOpacity: 0.05,
         paddingLeft: '9%',
         paddingRight: '9%',
-        marginBottom: 30
+        marginBottom: 30,
+        borderTopRightRadius:20,
+        borderTopLeftRadius:20
 
     },
     name: {

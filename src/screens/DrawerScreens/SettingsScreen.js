@@ -62,7 +62,7 @@ export default class SettingsScreen extends React.Component {
                 </View>
                 </TouchableOpacity>
                 <View style={[styles.underline,{width:'85%',marginLeft:'auto',marginRight:'auto'}]}></View>
-                <TouchableOpacity>
+                <TouchableOpacity onPress={()=>{this.props.navigation.navigate('DrawerNotification')}}>
                 <Text style={styles.account}>Notifications</Text>
                 </TouchableOpacity>
                 

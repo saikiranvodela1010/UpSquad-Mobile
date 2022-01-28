@@ -4,10 +4,12 @@ import { TextInput } from 'react-native-gesture-handler';
 import LinearGradient from 'react-native-linear-gradient'
 import ImagesWrapper from '../res/ImagesWrapper';
 import Fonts from '../res/Fonts';
-
+// import {  NavigationActions,StackActions } from 'react-navigation';
 import ServiceUrls from '../network/ServiceUrls';
 import StoragePrefs from '../res/StoragePrefs';
 import APIHandler from '../network/NetWorkOperations';
+import { StackActions } from '@react-navigation/native'; 
+
 
 export default class LoginScreen extends React.Component {
 
@@ -35,7 +37,16 @@ export default class LoginScreen extends React.Component {
         }
        
     }
-
+    resetAction(){
+        console.log('reset');
+        StackActions.reset({
+            index: 0,
+            actions: [NavigationActions.navigate({routeName: 'BioSuccess'})],
+            key: null,
+          });
+    }
+     
+    
      onCheckBoxPressed ()  {
         // this.setState({checkmark:false)});
         this.setState({ checkmark: false})
@@ -88,7 +99,11 @@ export default class LoginScreen extends React.Component {
                     "isAdmin":response.user.isAdmin
                 }
                 const logindetails=await this.storagePrefs.setObjectValue("userDetails",userDetsils);
-                this.props.navigation.navigate('BioSuccess');
+                this.props.navigation.pop();
+                this.props.navigation.dispatch(StackActions.replace('BioSuccess'))
+                
+                
+               
             } else {
                if(response.msg === "Wrong password"){
                     this.setState({passworderr:response.msg})
