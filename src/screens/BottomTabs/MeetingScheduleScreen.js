@@ -20,19 +20,48 @@ export default class MeetingScheduleScreen extends React.Component {
         this.state = {
             show: false,
             on: false,
-            isChecked: false,
+
             selectedStartDate: null,
             selectedEndDate: null,
             showend: false,
             showtime: false,
+            meetingTitle: '',
+            meetingType: '',
+            guests: '',
+            teams: []
         }
         this.onDateChange = this.onDateChange.bind(this);
         this.onDate1Change = this.onDate1Change.bind(this);
     }
+    async componentDidMount() {
+        // const universityDetsils = await this.storagePrefs.getObjectValue("universityDetsils")
+
+        // this.setState({ universityId: universityDetsils._id })
+        // console.log('universityid', this.state.universityId)
+        // const userDetails = await this.storagePrefs.getObjectValue("userDetails")
+        // this.setState({
+        //     userId: userDetails.userId,
+        //     adminAccess: userDetails.isAdmin,
+        //     isProfessional: userDetails.isProfessional
+        // })
+        const meetingTitle = this.props.route.params.meetingTitle;
+        const guests = this.props.route.params.guests;
+        const teams = this.props.route.params.teams;
+        console.log("teams data:::", teams);
+        const meetingType = this.props.route.params.meetingType;
+        this.setState({
+            meetingTitle: meetingTitle,
+            guests: guests,
+            teams: teams,
+            meetingType: meetingType
+        })
+
+
+    }
     onDateChange(date) {
         this.setState({
             selectedStartDate: date,
-            show:false
+            show: false
 
         });
     }
@@ -40,8 +69,25 @@ export default class MeetingScheduleScreen extends React.Component {
         this.setState({
             //selectedStartDate: date,
             selectedEndDate: date,
-            showend:false
+            showend: false
         });
+    }
+    onNext() {
+        console.log('title', this.state.meetingTitle);
+        console.log('guests', this.state.guests);
+        console.log('teams', this.state.teams);
+        console.log('platform', this.state.meetingType);
+        console.log('start date', this.state.selectedStartDate);
+        console.log('end date', this.state.selectedEndDate);
+
+        // if (this.state.meetingtitle != '' && this.state.addguest != '') {
+        //     this.props.navigation.navigate('createmeetingsurvey',{
+        //         meetingTitle:this.state.meetingtitle,
+        //         guests:this.state.addguest,
+        //         teams:this.state.teamsData,
+        //         meetingType:this.state.value
+        //     })
+        // }
     }
 
     render() {
@@ -50,7 +96,7 @@ export default class MeetingScheduleScreen extends React.Component {
         const startDate = selectedStartDate ? selectedStartDate.toString() : '';
         const endDate = selectedEndDate ? selectedEndDate.toString() : '';
         const minDate = new Date();
-        const countries = ["12:00", "12:00", "12:00", "12:00"]
+        //const countries = ["12:00", "12:00", "12:00", "12:00"]
         return (
             <View style={{ flex: 1, backgroundColor: '#FFFFFF' }}>
                 <View style={{ flexDirection: 'row', marginTop: 20, marginBottom: 20, marginLeft: 30 }}>
@@ -79,9 +125,9 @@ export default class MeetingScheduleScreen extends React.Component {
                                 :
                                 <Text style={styles.textinputText}></Text>
                             }
-                            <Image 
-                            source={ImagesWrapper.datecalendar} 
-                            style = {{marginTop: -13}} 
+                            <Image
+                                source={ImagesWrapper.datecalendar}
+                                style={{ marginTop: -13 }}
                             />
                         </View>
                     </TouchableOpacity>
@@ -93,9 +139,9 @@ export default class MeetingScheduleScreen extends React.Component {
                     >
                         <View style={{ flexDirection: 'row' }}>
                             <Text style={styles.textinputText}></Text>
-                            <Image 
-                            source={ImagesWrapper.timer} 
-                            style = {{marginTop: -13}} 
+                            <Image
+                                source={ImagesWrapper.timer}
+                                style={{ marginTop: -13 }}
                             />
                         </View>
                     </TouchableOpacity>
@@ -112,9 +158,9 @@ export default class MeetingScheduleScreen extends React.Component {
                                 :
                                 <Text style={styles.textinputText}></Text>
                             }
-                           <Image 
-                            source={ImagesWrapper.datecalendar} 
-                            style = {{marginTop: -13}} 
+                            <Image
+                                source={ImagesWrapper.datecalendar}
+                                style={{ marginTop: -13 }}
                             />
                         </View>
                     </TouchableOpacity>
@@ -126,9 +172,9 @@ export default class MeetingScheduleScreen extends React.Component {
                     >
                         <View style={{ flexDirection: 'row' }}>
                             <Text style={styles.textinputText}></Text>
-                            <Image 
-                            source={ImagesWrapper.timer} 
-                            style = {{marginTop: -13}} 
+                            <Image
+                                source={ImagesWrapper.timer}
+                                style={{ marginTop: -13 }}
                             />
                         </View>
                     </TouchableOpacity>
@@ -164,19 +210,19 @@ export default class MeetingScheduleScreen extends React.Component {
                     </View>
                 </View>
                 <View style={{ flex: 1, justifyContent: 'flex-end', marginBottom: '10%' }}>
-                        <TouchableOpacity
-                            onPress={() => {
-                                // this.onSubmit();
-                                this.props.navigation.navigate('createmeetingsurvey')
-                            }}
-                        >
-                            <LinearGradient start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }} colors={['#212B68', '#58C4C6']} style={[styles.linearGradient, Platform.OS === "ios" ? { marginTop: '5%' } : { marginTop: '4%' }]}>
-                                <Text style={styles.buttonText}>
-                                    Next
-                                </Text>
-                            </LinearGradient>
-                        </TouchableOpacity>
-                    </View>
+                    <TouchableOpacity
+                        onPress={() => {
+                            this.onNext()
+
+                        }}
+                    >
+                        <LinearGradient start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }} colors={['#212B68', '#58C4C6']} style={[styles.linearGradient, Platform.OS === "ios" ? { marginTop: '5%' } : { marginTop: '4%' }]}>
+                            <Text style={styles.buttonText}>
+                                Next
+                            </Text>
+                        </LinearGradient>
+                    </TouchableOpacity>
+                </View>
                 <Modal
                     testID={'modal'}
                     isVisible={this.state.show}
@@ -189,7 +235,7 @@ export default class MeetingScheduleScreen extends React.Component {
                     transparent={true}
                     onRequestClose={() => {
                         this.setState({ show: false })
-                     }}
+                    }}
                 >
 
                     <View style={{ height: 470, width: '100%', backgroundColor: 'white', borderTopLeftRadius: 10, borderTopRightRadius: 10, bottom: 0, position: 'absolute' }}>
@@ -223,7 +269,7 @@ export default class MeetingScheduleScreen extends React.Component {
                                             fontSize: 16,
                                             fontWeight: '600',
                                             fontFamily: Fonts.mulishRegular,
-                                            marginLeft:5
+                                            marginLeft: 5
                                         }}
                                         yearTitleStyle={{
                                             fontSize: 16,
@@ -252,7 +298,7 @@ export default class MeetingScheduleScreen extends React.Component {
                     transparent={true}
                     onRequestClose={() => {
                         this.setState({ showend: false })
-                     }}
+                    }}
                 >
 
                     <View style={{ height: 470, width: '100%', backgroundColor: 'white', borderTopLeftRadius: 10, borderTopRightRadius: 10, bottom: 0, position: 'absolute' }}>
@@ -286,7 +332,7 @@ export default class MeetingScheduleScreen extends React.Component {
                                             fontSize: 16,
                                             fontWeight: '600',
                                             fontFamily: Fonts.mulishRegular,
-                                            marginLeft:5
+                                            marginLeft: 5
                                         }}
                                         yearTitleStyle={{
                                             fontSize: 16,
@@ -315,7 +361,7 @@ export default class MeetingScheduleScreen extends React.Component {
                     transparent={true}
                     onRequestClose={() => {
                         this.setState({ showtime: false })
-                     }}
+                    }}
                 >
 
                     <View style={{ height: 280, width: '100%', backgroundColor: 'white', borderTopLeftRadius: 10, borderTopRightRadius: 10, bottom: 0, position: 'absolute' }}>
@@ -329,7 +375,7 @@ export default class MeetingScheduleScreen extends React.Component {
                                     />
                                 </View>
                                 <View>
-                                    <SelectDropdown
+                                    {/* <SelectDropdown
                                         data={countries}
                                         onSelect={(selectedItem, index) => {
                                             console.log(selectedItem, index)
@@ -359,24 +405,32 @@ export default class MeetingScheduleScreen extends React.Component {
                                         dropdownIconPosition={"right"}
                                         buttonTextStyle={{ color: "rgba(88, 196, 198, 1)", textAlign: "left", fontSize: 14, fontFamily: Fonts.mulishRegular, fontWeight: '400' }}
                                         defaultButtonText={"Central Standard Time (CST)"}
-                                    />
+                                    /> */}
                                 </View>
                             </View>
                             <View style={{ flexDirection: 'row', marginLeft: 'auto', marginRight: 'auto', marginTop: 20 }}>
                                 <View style={{ borderWidth: 1, borderRadius: 5, height: 85, width: '17%', marginRight: 5, backgroundColor: 'rgba(235, 248, 248, 1)', borderColor: 'rgba(241, 241, 241, 1)', alignItems: 'center', justifyContent: 'center' }}>
-                                    <Text style = {styles.time}>07</Text>
+                                    <TextInput
+                                        style={styles.time}
+                                        keyboardType='numeric'
+                                    >
+                                    </TextInput>
                                 </View>
                                 <Image
                                     source={ImagesWrapper.separator}
                                     style={{ marginTop: 35 }}
                                 />
                                 <View style={{ borderWidth: 1, borderRadius: 5, height: 85, width: '17%', marginLeft: 5, borderColor: 'rgba(241, 241, 241, 1)', backgroundColor: 'rgba(241, 241, 241, 1)', alignItems: 'center', justifyContent: 'center' }}>
-                                    <Text style = {styles.time1}>00</Text>
+                                    <TextInput
+                                        style={styles.time1}
+                                        keyboardType='numeric'
+                                    >
+                                    </TextInput>
                                 </View>
-                                <View style={{ borderWidth: 1, borderRadius: 5, height: 85, width: '10%', marginRight: 10, marginLeft: 10, borderColor: 'rgba(241, 241, 241, 1)'}}>
-                                <Text style = {styles.timeText}>AM</Text>
-                                    <View style={{ borderWidth: 1, borderRadius: 5, height: 45, width: '100%', marginRight: 10, borderColor: 'rgba(241, 241, 241, 1)', marginTop: 23}}>
-                                    <Text style = {styles.timeText1}>PM</Text>
+                                <View style={{ borderWidth: 1, borderRadius: 5, height: 85, width: '10%', marginRight: 10, marginLeft: 10, borderColor: 'rgba(241, 241, 241, 1)' }}>
+                                    <Text style={styles.timeText}>AM</Text>
+                                    <View style={{ borderWidth: 1, borderRadius: 5, height: 45, width: '100%', marginRight: 10, borderColor: 'rgba(241, 241, 241, 1)', marginTop: 23 }}>
+                                        <Text style={styles.timeText1}>PM</Text>
                                     </View>
                                 </View>
                             </View>
@@ -485,10 +539,10 @@ const styles = StyleSheet.create({
         // marginBottom: 50
     },
     linearGradient: {
-        width:'85%',
-        borderRadius:30,
-        alignItems:"center",
-        justifyContent:'center',
+        width: '85%',
+        borderRadius: 30,
+        alignItems: "center",
+        justifyContent: 'center',
         marginLeft: 30,
         height: 55,
         marginRight: 30,

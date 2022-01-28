@@ -16,7 +16,7 @@ import axios from 'axios';
 import { SliderBox } from "react-native-image-slider-box";
 import FbGrid from "react-native-fb-image-grid";
 import { Center } from 'native-base';
-import Swiper from 'react-native-swipe-image';
+import GallerySwiper from "react-native-gallery-swiper";
 
 export class ImageView extends  React.Component {
     constructor(props){
@@ -28,10 +28,11 @@ export class ImageView extends  React.Component {
     }
     componentDidMount(){
         const imageURI = this.props.route.params.url
-        for(i=0;i<imageURI.length;i++){
-            
-        }
-        this.setState({imageURI: imageURI, viewImage: imageURI[0]})
+        var result = imageURI
+                .slice(0, -1)
+                .map((item) => ({url : item}));
+console.log(result);
+        this.setState({imageURI: result, viewImage: imageURI[0]})
     }
 
     bottom(e) {
@@ -65,35 +66,13 @@ export class ImageView extends  React.Component {
         return(
             <SafeAreaView style = {{backgroundColor : '#FFFFFF',flex: 1}}>
                 {this.renderHeader()}
-                <Swiper
+                <GallerySwiper
                 images={this.state.imageURI}
-                swipeBottom={(e) => this.bottom(e)}
-                swipeTop={(e) => this.top(e)}
-                imageHeight={'50%'}/>
-                {/* <Image source = {{uri: this.state.viewImage}}
-                    style = {{width : Dimensions.get('window').width,alignContent: 'center', height: '80%'}}/>
-                <View style = {{flexDirection: 'row',alignContent:'space-between',}}>
-                    <Image
-                        source={ImagesWrapper.back}
-                        style={{
-                            marginTop: 20,
-                            marginLeft:'25%',
-                            tintColor: '#000000', 
-                        }}
-                        onPress={()=>this.onNextPressed()}
-                    />
-                    <Image
-                        source={ImagesWrapper.back}
-                        style={{
-                            marginTop: 20,
-                            marginLeft: '35%',
-                            tintColor: '#000000',
-                            transform: [
-                                { scaleX: -1 }
-                              ]
-                        }}
-                    /> */}
-                
+                initialNumToRender={4}
+                sensitiveScroll={true}
+                pageMargin={30}
+                resizeMode="contain"
+                style= {{flex: 1, backgroundColor: "#FFFFFF"}}/> 
         </SafeAreaView>
         )
 

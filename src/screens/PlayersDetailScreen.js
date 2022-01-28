@@ -8,7 +8,6 @@ import Fonts from '../res/Fonts'
 import ServiceUrls from '../network/ServiceUrls';
 import APIHandler from '../network/NetWorkOperations';
 import moment from 'moment';
-// import RNThumbnail from 'react-native-thumbnail';
 import Modal from 'react-native-modal';
 import StoragePrefs from '../res/StoragePrefs';
 

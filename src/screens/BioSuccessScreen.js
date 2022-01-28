@@ -10,7 +10,7 @@ import MeetingsScreen from '../screens/BottomTabs/MeetingsScreen';
 import EventsScreen from '../screens/BottomTabs/EventsScreen';
 import ImagesWrapper from '../res/ImagesWrapper';
 import Fonts from '../res/Fonts';
-
+import Screen  from './Events/Pre_events/Screen';
 
 
 const Tab = createBottomTabNavigator();
@@ -147,7 +147,7 @@ class BioSuccessScreen extends React.Component{
           }} />
           <Tab.Screen
           name="Events"
-          component={EventsScreen}
+          component={Screen}
           options={{
             tabBarLabel: 'Events',
             tabBarIcon: ({focused}) => (
