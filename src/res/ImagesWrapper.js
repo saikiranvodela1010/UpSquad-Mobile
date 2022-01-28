@@ -137,6 +137,7 @@ const ImagesWrapper = {
     settings:require('../Images/settings.png'),
     question:require('../Images/question.png'),
     vectorcommunity:require('../Images/vectorcommunity.png'),
+    edit:require('../Images/edit.png'),
 
 }
 export default ImagesWrapper;

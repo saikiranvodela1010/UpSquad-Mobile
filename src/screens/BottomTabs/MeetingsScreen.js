@@ -101,7 +101,7 @@ class MeetingsScreen extends React.Component {
 
                       </Image>
                     </TouchableOpacity>
-                    <TouchableOpacity>
+                    <TouchableOpacity onPress = {() => this.props.navigation.navigate('schedulescreen')}>
                       <Text style={{ marginLeft: '6%', marginTop: 1, color: '#58C4C6', fontSize: 14, fontFamily: Fonts.mulishRegular, fontWeight: '600' }}>Schedule a 1:1</Text>
                     </TouchableOpacity>
                   </View>

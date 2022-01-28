@@ -1,5 +1,5 @@
 import React from 'react';
-import { Image, View, Text, StyleSheet, TextInput, TouchableOpacity, ImageBackground, ScrollView } from 'react-native';
+import { Image, View, Text, StyleSheet, TextInput, TouchableOpacity, ImageBackground, ScrollView, FlatList } from 'react-native';
 // import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import LinearGradient from 'react-native-linear-gradient';
 import ImagesWrapper from '../../res/ImagesWrapper';
@@ -10,6 +10,8 @@ import SwitchToggle from "react-native-switch-toggle";
 import RadioForm, {RadioButton, RadioButtonInput, RadioButtonLabel} from 'react-native-simple-radio-button';
 import CheckBox from 'react-native-check-box'
 import { ProgressBar, Colors } from 'react-native-paper';
+import ServiceUrls from '../../network/ServiceUrls';
+import APIHandler from '../../network/NetWorkOperations';
 
 
 
@@ -18,6 +20,10 @@ var radio_props = [
     {label: 'Microsoft Teams', value: 1 }
   ];
   export default class CreateMeetingScreen extends React.Component {
+
+    serviceUrls = new ServiceUrls();
+    apiHandler = new APIHandler();
+
     constructor(props) {
         super(props);
         this.textInput = React.createRef(null);
@@ -29,10 +35,19 @@ var radio_props = [
             on: false,
             isFundRaising: false,
             isMarketing: false,
-            value:1
+            value:1,
+            teamsData:null,
+            universityId: '',
+            isSelect:[],
+            selectedClass:'notselected',
+
+            // subscriptioncode: props.route.params.subscriptioncode,
            
         }
     }
+
+    
+    
 
     onNext(){
         if(this.state.meetingtitle==''){
@@ -140,7 +155,45 @@ var radio_props = [
                         </View>
                     </View>
                     <Text style={{ marginTop: '6%',marginBottom:'4%', fontFamily: Fonts.mulishSemiBold, fontWeight: '600', fontSize: 16, color: '#1E1C24', marginLeft: 25 }}>Select squad(s):</Text>                           
-                    <View style={{ flexDirection: 'row',marginLeft:'6%',marginTop:'1%' }}>
+                    <ScrollView style = {{marginTop: 20}}>            
+                    <View style={{ marginLeft: 30 }}>
+                        
+                         <FlatList
+                                        // horizontal
+                                        data={this.state.teamsData}
+                                        renderItem={item => (
+                                                
+                                                <View style={styles.text}>
+
+                                                     <CheckBox
+
+                                                        onClick={() => {
+                                                            
+                                                            const index = this.state.isSelect.indexOf(item.item._id);
+                                                            if(index > -1){
+                                                                this.state.isSelect.splice(index,1)
+                                                            }else{
+                                                                this.state.isSelect.push(item.item._id)
+                                                            }
+                                                            this.setState({isSelect:this.state.isSelect})
+                                                        }}
+                                                        
+                                                        isChecked={this.state.isSelect.includes(item.item._id)}
+                                                    
+                                                        //leftText={"CheckBox"}
+                                                        checkedImage={<Image source={ImagesWrapper.checkedbox} />}
+                                                        unCheckedImage={<Image source={ImagesWrapper.uncheckedbox} />}
+                                                        />
+                                                    <Text style={[styles.checkboxtxt1, this.state.selectedClass  ==='mark-on' ? {color: '#000000',fontFamily:Fonts.mulishSemiBold} : {color: '#868585'}]}>{item.item.teamTitle}</Text>
+                                                </View>
+                                               
+                                          
+                                        )}
+                                    />
+                    </View>
+                    </ScrollView>
+                    
+                    {/* <View style={{ flexDirection: 'row',marginLeft:'6%',marginTop:'1%' }}>
                     <CheckBox
                         
                         onClick={() => {
@@ -171,32 +224,9 @@ var radio_props = [
                     />
                     <Text style={{marginLeft:'4%',color:'#868585',fontWeight:'400',fontFamily:Fonts.mulishRegular,fontSize:14}}>Marketing</Text>
                     
-                </View>
+                </View> */}
                         <Text style={{ marginTop: '6%',marginBottom:'4%', fontFamily: Fonts.mulishSemiBold, fontWeight: '600', fontSize: 16, color: '#1E1C24', marginLeft: 25 }}>Event Meeting Platform </Text>                           
-                        {/* <View style = {{flexDirection: 'row',marginLeft:'6%'}}>
-                        <View >
-                    
-                <Image
-                  source={ImagesWrapper.radiobtn}
-                  
-                />
-                </View>
-                <Image source={ImagesWrapper.zoom} style={{marginLeft:'3%'}}/>
-                <Text style = {styles.popupText}>Zoom</Text>
-                
-
-              </View>
-              <View style = {{flexDirection: 'row', marginTop: 15,marginLeft:'6%'}}>
-              <View style = {{ }}>
-                <Image
-                  source={ImagesWrapper.radiobtn1}
-                  
-                />
-                </View>
-                <Image source={ImagesWrapper.microsoft} style={{marginLeft:'3%'}}/>
-                <Text style = {styles.popupText}>Microsoft Teams</Text>
-                
-              </View> */}
+                        
              <RadioForm
   formHorizontal={false}
   animation={true}
@@ -328,6 +358,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         marginBottom: 15
     },
+
     checkbox: {
         // marginLeft: 10,
         marginTop: 5,
@@ -361,6 +392,7 @@ const styles = StyleSheet.create({
         fontWeight: '600'
 
     },
+    
     popupText: {
         color: 'rgba(134, 133, 133, 1)',
         fontSize: 14,
