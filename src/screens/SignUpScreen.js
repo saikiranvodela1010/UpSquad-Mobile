@@ -407,7 +407,7 @@ export default class SignUpScreen extends React.Component {
               ) : null}
             </View>
 
-            <View style={styles.underline} />
+            <View style={[styles.underline,{marginTop:Platform.OS === 'ios' ? '-3%': '-3%'}]} />
             {this.state.codebelongs === true ? (
               <View style={{flexDirection: 'row'}}>
                 <Text

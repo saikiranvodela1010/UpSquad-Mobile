@@ -99,20 +99,6 @@ export default class LoginScreen extends React.Component {
           isProfessional: response.user.isProfessional,
           isAdmin: response.user.isAdmin,
         };
-       
-for(let i=0;i<20;i++)
-{
-  console.log("                       bhanu                    ");
-}
-console.log(userDetsils,"userDetsils");
-
-for(let i=0;i<20;i++)
-{
-  console.log("                       bhanu                    ");
-}
-
-
-
         try {
           await AsyncStorage.removeItem('userDetails');
           // alert("Removed");
