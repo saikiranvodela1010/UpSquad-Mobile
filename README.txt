@@ -23,6 +23,14 @@ total changes are required 2:
     alignContent: 'center',
     justifyContent: 'center',
   },
+   input: {
+    minHeight: 28,
+    color: '#000',
+    paddingVertical: 1,
+    paddingHorizontal: Platform.OS ==='ios'? 5:7,
+    flex: 1,
+    zIndex: 10,
+  },
 
  note 2.
   node_modules/react-native-floating-label-input/src/index.tsx 

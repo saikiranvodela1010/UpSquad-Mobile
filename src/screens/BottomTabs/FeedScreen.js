@@ -518,7 +518,7 @@ import FbGrid from "react-native-fb-image-grid";
                     )}/>: 
                     <View
           style={{
-              flex: 1,
+              flex: 4,
             justifyContent: 'center',
             backgroundColor: '#ffff',
             height: '100%',
