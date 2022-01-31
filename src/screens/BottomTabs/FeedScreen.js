@@ -46,7 +46,8 @@ import FbGrid from "react-native-fb-image-grid";
             likeColor: false,
             share: false,
             likedPosts: [],
-            communityLogo : "" , 
+            communityLogo : "" ,
+            dataAvailable: "" 
         }
        
     }
@@ -197,7 +198,7 @@ import FbGrid from "react-native-fb-image-grid";
             })
             this.setState({postData: response.posts});
         } else {
-            this.setState({postData:[]})
+            this.setState({postData:[],dataAvailable: "No Posts Found"})
         }
     }
 
@@ -369,6 +370,7 @@ import FbGrid from "react-native-fb-image-grid";
                     </View>
                 </View>
                 <View style={{ borderWidth: 1, borderColor: '#F1F1F1' }}></View>
+                {this.state.postData!=null && this.state.postData.length!=0?
                     <FlatList
                     data = {this.state.postData}
                     renderItem={({item})=> (
@@ -513,7 +515,24 @@ import FbGrid from "react-native-fb-image-grid";
                             </View>
                             <View style={{ borderWidth: 1, borderColor: '#F1F1F1',marginTop:22,marginRight:'5%'}}></View>
                         </View>
-                    )}/>
+                    )}/>: 
+                    <View
+          style={{
+              flex: 1,
+            justifyContent: 'center',
+            backgroundColor: '#ffff',
+            height: '100%',
+          }}>
+          <Text
+            style={{
+              textAlign: 'center',
+              color: '#868585',
+              fontFamily: Fonts.mulishSemiBold,
+              fontSize: 24
+            }}>
+            {this.state.dataAvailable}
+          </Text>
+        </View>}
                     {(this.state.isProfessional == true && this.state.coachCreatePost == true) || 
                     (this.state.isProfessional ==  false && this.state.playerCreatePost == true) ? 
                     <View style={{ flex: 1, justifyContent: 'flex-end', alignItems: 'flex-end' }}>
@@ -787,7 +806,7 @@ const styles = StyleSheet.create({
         color:'#000',
         fontSize: 20,
         marginTop: 10
-      }    
+      }
    
    
    
