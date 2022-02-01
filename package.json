@@ -49,6 +49,7 @@
     "react-native-screens": "^3.9.0",
     "react-native-scrollable-tab-view": "^1.0.0",
     "react-native-select-dropdown": "^1.6.0",
+    "react-native-shapes": "^0.1.0",
     "react-native-share": "^7.3.3",
     "react-native-simple-radio-button": "^2.7.4",
     "react-native-svg": "^12.1.1",

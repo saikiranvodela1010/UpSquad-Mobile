@@ -32,5 +32,6 @@ export default class ServiceUrls {
     selfIntroduction=this.mainUrl+'/users/uploadSelfIntroductoryVideo';
     getGroupTeams = this.mainUrl+'/teams/getGroupSessionTeams';
     deletePost = this.socialUrl+'/user/post'
+    myPosts = this.socialUrl+'/feed/myposts'
 
 }

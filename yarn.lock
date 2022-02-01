@@ -7410,6 +7410,11 @@
   "resolved" "https://registry.npmjs.org/react-native-select-dropdown/-/react-native-select-dropdown-1.6.0.tgz"
   "version" "1.6.0"
 
+"react-native-shapes@^0.1.0":
+  "integrity" "sha512-5EHcc/Burlvp2UdfzT+EkQqGn7WO6SQGxZ9w0/4BWYMB/bShA8/lnhuWgxQz+IxZwxnzPkYiR4zCS2NlQQJGig=="
+  "resolved" "https://registry.npmjs.org/react-native-shapes/-/react-native-shapes-0.1.0.tgz"
+  "version" "0.1.0"
+
 "react-native-share@^7.3.3":
   "integrity" "sha512-46JW7lfZMy7Xcw/wOXUtjgoioEJ0IAEmm4bK01M4wt/lVCntxZ0IVXUA6vWSnxN66p51bNywZMxPV1zqRSDxPQ=="
   "resolved" "https://registry.npmjs.org/react-native-share/-/react-native-share-7.3.3.tgz"
