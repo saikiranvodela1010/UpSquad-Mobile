@@ -43,9 +43,9 @@ export default class SwitchCommunityScreen extends React.Component {
      
     }
     async componentDidUpdate(){
-      const getuniversityDetsils = await this.storagePrefs.getObjectValue("universityDetsils")
+      const getuniversityDetails = await this.storagePrefs.getObjectValue("universityDetails")
       if(this.state.checked !== 0){
-     this.setState({checked:getuniversityDetsils.key})
+     this.setState({checked:getuniversityDetails.key})
       }
     }
 
@@ -75,8 +75,8 @@ export default class SwitchCommunityScreen extends React.Component {
     if(response.data!=null && response.data.length>0){
       this.setState({isLoading: false, isInternet: true})
       this.setState({radio:response.data})
-      const universityDetsils = await this.storagePrefs.getObjectValue("universityDetsils")
-      this.setState({checked:universityDetsils.key,key:universityDetsils.key })
+      const universityDetails = await this.storagePrefs.getObjectValue("universityDetails")
+      this.setState({checked:universityDetails.key,key:universityDetails.key })
     } else{
       this.setState({isLoading: false})
       this.setState({radio: []})
@@ -102,7 +102,7 @@ export default class SwitchCommunityScreen extends React.Component {
   }
 
   async checked(item,key){
-     const universityDetsils =  {
+     const universityDetails =  {
       "_id":item._id,
       "universityName":item.universityName,
       "universityLogo":item.universityLogo,
@@ -110,10 +110,10 @@ export default class SwitchCommunityScreen extends React.Component {
      }
      try
      {
-        await AsyncStorage.removeItem('universityDetsils');
-        const data = await this.storagePrefs.setObjectValue("universityDetsils",universityDetsils);
-        const getuniversityDetsils = await this.storagePrefs.getObjectValue("universityDetsils")
-        this.setState({checked:getuniversityDetsils.key, key: getuniversityDetsils.key})
+        await AsyncStorage.removeItem('universityDetails');
+        const data = await this.storagePrefs.setObjectValue("universityDetails",universityDetails);
+        const getuniversityDetails = await this.storagePrefs.getObjectValue("universityDetails")
+        this.setState({checked:getuniversityDetails.key, key: getuniversityDetails.key})
         DeviceEventEmitter.emit("UpdateFeed");
       } catch(exception) {
           console.log(exception);

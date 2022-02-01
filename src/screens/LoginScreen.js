@@ -101,6 +101,8 @@ export default class LoginScreen extends React.Component {
         };
         try {
           await AsyncStorage.removeItem('userDetails');
+          await AsyncStorage.removeItem('universityDetails');
+          await AsyncStorage.removeItem("signupdetails");
           // alert("Removed");
           const logindetails = await this.storagePrefs.setObjectValue(
             'userDetails',

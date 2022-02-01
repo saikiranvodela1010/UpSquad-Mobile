@@ -30,16 +30,16 @@ const Tab = createMaterialTopTabNavigator();
     }
     async componentDidMount() {
       
-        const universityDetsils = await this.storagePrefs.getObjectValue("universityDetsils")
-        console.log('universityDetsils123456',universityDetsils);
-        this.setState({communityName:universityDetsils.universityName, communityLogo:universityDetsils.universityLogo});
+        const universityDetails = await this.storagePrefs.getObjectValue("universityDetails")
+        console.log('universityDetails123456',universityDetails);
+        this.setState({communityName:universityDetails.universityName, communityLogo:universityDetails.universityLogo});
        
 
         }
         async componentDidUpdate(){
-            const universityDetsils = await this.storagePrefs.getObjectValue("universityDetsils")
-            // console.log('universityDetsils',universityDetsils);
-            this.setState({communityName:universityDetsils.universityName,communityLogo: universityDetsils.universityLogo});
+            const universityDetails = await this.storagePrefs.getObjectValue("universityDetails")
+            // console.log('universityDetails',universityDetails);
+            this.setState({communityName:universityDetails.universityName,communityLogo: universityDetails.universityLogo});
         }
 
    

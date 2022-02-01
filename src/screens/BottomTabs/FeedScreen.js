@@ -29,7 +29,6 @@ import { Chevron } from 'react-native-shapes';
     
     constructor(props){
         super(props);
-       
         this.state={
             leadercolor:'green',
             tapstate:false,
@@ -79,8 +78,8 @@ import { Chevron } from 'react-native-shapes';
         
     }
     async componentDidUpdate(){
-        const universityDetsils = await this.storagePrefs.getObjectValue("universityDetsils")
-        this.setState({communityName:universityDetsils.universityName});
+        const universityDetails = await this.storagePrefs.getObjectValue("universityDetails")
+        this.setState({communityName:universityDetails.universityName});
     }
 
     componentWillUnmount(){
@@ -89,13 +88,13 @@ import { Chevron } from 'react-native-shapes';
         }
     }
     updateFeed = async () => {
-        const universityDetsils = await this.storagePrefs.getObjectValue("universityDetsils")
+        const universityDetails = await this.storagePrefs.getObjectValue("universityDetails")
         const userDetails = await this.storagePrefs.getObjectValue("userDetails")
         this.setState({
-            universityName:universityDetsils.universityName,
-            universityId: universityDetsils._id,
-            communityName: universityDetsils.universityName,
-            communityLogo: universityDetsils.universityLogo,
+            universityName:universityDetails.universityName,
+            universityId: universityDetails._id,
+            communityName: universityDetails.universityName,
+            communityLogo: universityDetails.universityLogo,
             userId : userDetails.userId,
             email : userDetails.userEmail
         })
@@ -180,12 +179,12 @@ import { Chevron } from 'react-native-shapes';
               communityName: response.data[0].universityName,
               communityLogo : response.data[0].universityLogo, 
             });
-            const universityDetsils =  {
+            const universityDetails =  {
                 "_id":this.state.universityId,
                 "universityName":this.state.universityName,
                 "universityLogo":this.state.communityLogo,
                }
-               const data = await this.storagePrefs.setObjectValue("universityDetsils",universityDetsils);
+               const data = await this.storagePrefs.setObjectValue("universityDetails",universityDetails);
           } else{
             this.setState({
               universityName:"",
@@ -293,17 +292,6 @@ import { Chevron } from 'react-native-shapes';
         //     })
         //   }
 
-          onValueChange = (value) => {
-              console.log("value",value)
-              this.setState({categoryDropDown: value})
-              if(value === 'All posts'){
-                  this.getPosts();
-              } else{
-                  this.getMyPost()
-              }
-          }
-
-
     flowerWings=(width)=>{
         const initialArr = [];
         for (var i = 0; i < 9; i++) {
@@ -408,7 +396,12 @@ import { Chevron } from 'react-native-shapes';
                            items={[ { label: 'All posts', value: 'All posts' },
                            { label: 'My posts', value: 'My posts' },]}
                            onValueChange={value => {
-                            this.onValueChange(value)
+                            this.setState({categoryDropDown: value})
+                                if(value === 'All posts'){
+                                    this.getPosts();
+                                } else{
+                                    this.getMyPost()
+                                }
                             }}
                             style={{
                             inputAndroid: {
