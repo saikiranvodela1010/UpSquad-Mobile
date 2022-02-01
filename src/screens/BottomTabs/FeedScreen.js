@@ -200,7 +200,7 @@ import { Chevron } from 'react-native-shapes';
         const data = {
             "universityId" : this.state.universityId,
             "userId": this.state.userId,
-            "page":1,
+            "page":-1,
             "limit": 10
         }
         const response = await this.apiHandler.requestPost(data,this.serviceUrls.myPosts)

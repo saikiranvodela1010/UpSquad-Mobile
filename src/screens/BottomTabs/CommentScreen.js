@@ -268,7 +268,8 @@ const styles = StyleSheet.create({
         fontFamily:Fonts.mulishRegular,
         fontWeight:'600',
         padding:10,
-        marginTop: 30
+        marginTop: 30,
+        marginLeft: 24,
     },
     name: {
         color:'#1E1C24',
