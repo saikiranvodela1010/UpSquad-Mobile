@@ -1,6 +1,6 @@
 import React from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
+import {set_updateUserDetails} from './GetUserInfo';
 export default class StoragePref extends React.Component {
     async setValue(key, value) {
         await AsyncStorage.setItem(key, value);
@@ -15,6 +15,8 @@ export default class StoragePref extends React.Component {
     }
     async setObjectValue(key, value) {
         await AsyncStorage.setItem(key, JSON.stringify(value));
+       let value2=await this.getObjectValue('userDetails');
+        set_updateUserDetails(value2);
     }
     async getArrayValue(key, callback) {
         try {
@@ -35,5 +37,22 @@ export default class StoragePref extends React.Component {
 
         }
     }
+    async setIsLogedIn(value) {
+       
+        await AsyncStorage.setItem("logedin",value);
+    }
+
+    async getIsLogedIn() {
+        try {
+            const value = await AsyncStorage.getItem("logedin");
+            return value;
+        }
+        catch (e) {
+return "NO";
+        }
+    }
+
+
+      
 
 }

@@ -6,6 +6,7 @@ import Fonts from '../../res/Fonts';
 import APIHandler from '../../network/NetWorkOperations';
 import ServiceUrls from '../../network/ServiceUrls';
 import StoragePrefs from '../../res/StoragePrefs';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // var radio_props = [
 //     {label: 'Memphis Talks', value: 0 },
@@ -38,44 +39,44 @@ export default class SwitchCommunityScreen extends React.Component {
     async componentDidMount() {
       
       await this.getCommunityDetails();
-      DeviceEventEmitter.addListener("codeAddedSuccessfully",this.updateCommunityScreen)
+      this.subscription = DeviceEventEmitter.addListener("codeAddedSuccessfully",this.updateCommunityScreen)
      
     }
     async componentDidUpdate(){
-      const getuniversityDetsils = await this.storagePrefs.getObjectValue("universityDetsils")
+      const getuniversityDetails = await this.storagePrefs.getObjectValue("universityDetails")
       if(this.state.checked !== 0){
-     this.setState({checked:getuniversityDetsils.key})
+     this.setState({checked:getuniversityDetails.key})
       }
     }
-  updateCommunityScreen = () => {
 
+    componentWillUnmount(){
+      if(this.subscription){
+        this.subscription.remove()
+      }
+    }
+
+  updateCommunityScreen = () => {
     this.getCommunityDetails()
   }
 
   async getCommunityDetails() {
-    
     this.setState({
       isLoading: true
   })
     const userDetails = await this.storagePrefs.getObjectValue("userDetails")
-    // this.setState({
-    //   userId : userDetails.userId,
-    //   email : userDetails.userEmail
-    // })
     const communityData={
       "email": userDetails.userEmail,
       "userID": userDetails.userId,
     }
-    // const communityData={
-    //   "email": "rajkumar@thinkebiz.net",
-    //   "userID": "5ee21f3f5583d00022351037"
-    // }
     const response = await this.apiHandler.requestPost(communityData,this.serviceUrls.getCommunities);
     // const radio= response.data;
-    console.log('communitydata=====',response.data)
+
+    
     if(response.data!=null && response.data.length>0){
       this.setState({isLoading: false, isInternet: true})
       this.setState({radio:response.data})
+      const universityDetails = await this.storagePrefs.getObjectValue("universityDetails")
+      this.setState({checked:universityDetails.key,key:universityDetails.key })
     } else{
       this.setState({isLoading: false})
       this.setState({radio: []})
@@ -91,30 +92,34 @@ export default class SwitchCommunityScreen extends React.Component {
      
   }
   // console.log('communitydata',this.state.radio_props)
-  console.log('checked',this.state.checked)
   if(this.state.checked === undefined){
-    this.setState({checked:0});
+    this.setState({checked: 0,key: 0})
+    this.checked(this.state.radio_props[this.state.checked],this.state.key);
+  } else{
+    this.checked(this.state.radio_props[this.state.checked],this.state.key);
   }
-    if(this.state.checked === 0){
-      this.checked(this.state.radio_props[0]);
-    }
+    
   }
 
   async checked(item,key){
-    console.log('key',key)
-    console.log('item',item);
-    // if(this.)
-     const universityDetsils =  {
+     const universityDetails =  {
       "_id":item._id,
       "universityName":item.universityName,
       "universityLogo":item.universityLogo,
       "key":key
      }
-     const data = await this.storagePrefs.setObjectValue("universityDetsils",universityDetsils);
-     const getuniversityDetsils = await this.storagePrefs.getObjectValue("universityDetsils")
-    //  if(this.state.checked)
-     this.setState({checked:getuniversityDetsils.key})
-     DeviceEventEmitter.emit("UpdateFeed");
+     try
+     {
+        await AsyncStorage.removeItem('universityDetails');
+        const data = await this.storagePrefs.setObjectValue("universityDetails",universityDetails);
+        const getuniversityDetails = await this.storagePrefs.getObjectValue("universityDetails")
+        this.setState({checked:getuniversityDetails.key, key: getuniversityDetails.key})
+        DeviceEventEmitter.emit("UpdateFeed");
+      } catch(exception) {
+          console.log(exception);
+      }
+
+     
     
 
   }

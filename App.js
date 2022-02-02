@@ -2,7 +2,7 @@ import * as React from 'react';
 import { View, Text,StatusBar,Image, Tab } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import { createDrawerNavigator  } from '@react-navigation/drawer';
+import { createDrawerNavigator } from '@react-navigation/drawer';
 import DrawerContent from './src/res/DrawerContent';
 import NotificationScreen from './src/screens/NotificationScreen';
 import ChatScreen from './src/screens/ChatScreen';
@@ -53,6 +53,10 @@ import AddCommunityScreen from './src/screens/DrawerScreens/AddCommunityScreen';
 import AddCommunityScreenStep2 from './src/screens/DrawerScreens/AddCommunityScreemStep2'
 import SeetingScreen from './src/screens/DrawerScreens/SettingsScreen';
 import CreatePostScreen from './src/screens/BottomTabs/CreatePostScreen';
+import ScheduleScreen from './src/screens/BottomTabs/ScheduleScreen';
+import ScheduleTimeScreen from './src/screens/BottomTabs/ScheduleTimeScreen';
+import ScheduleDetailsScreen from './src/screens/BottomTabs/ScheduleDetailsScreen';
+import ViewScheduleScreen from './src/screens/BottomTabs/ViewScheduleScreen';
 import DefaultVisibilityScreen from './src/screens/DrawerScreens/DefaultVisibilityScreen';
 import PostVisibilityScreen from './src/screens/DrawerScreens/PostVisibilityScreen';
 import StorySettingsScreen from './src/screens/DrawerScreens/StorySettingsScreen';
@@ -65,7 +69,7 @@ import NotfctnPostComntScreen from './src/screens/DrawerScreens/NotfctnPostComnt
 
 import SocketTest from './src/screens/BottomTabs/SocketTest';
 import { ImageView } from './src/screens/BottomTabs/ImageView';
-
+import {getISUSERLOGEDIN,} from './src/res/GetUserInfo';
 
 
 
@@ -75,7 +79,7 @@ const Drawer = createDrawerNavigator();
 
 
 const MainScreens =()=>{
-  return(
+  return (
     <Stack.Navigator
     screenOptions={{
       headerShown: false,
@@ -121,6 +125,18 @@ const MainScreens =()=>{
         <Stack.Screen
           name="createeventscreen"
           component={CreateEventScreen} />
+          <Stack.Screen
+        name="schedulescreen"
+        component={ScheduleScreen} />
+      <Stack.Screen
+        name="scheduletimescreen"
+        component={ScheduleTimeScreen} />
+        <Stack.Screen
+        name="scheduledetailscreen"
+        component={ScheduleDetailsScreen} />
+        <Stack.Screen
+        name="viewschedulescreen"
+        component={ViewScheduleScreen} />
         <Stack.Screen
           name="eventsquadscreen"
           component={EventSquadScreen} />
@@ -209,6 +225,7 @@ const MainScreens =()=>{
 
 
 const App = () => {
+  
  return (
   <NavigationContainer>
      

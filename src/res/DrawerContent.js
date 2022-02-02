@@ -25,7 +25,7 @@ export default class DrawerContent extends React.Component {
     async componentDidMount(){
         // console.log('userDetails----',userDetails);
         const userDetails = await this.storagePrefs.getObjectValue("userDetails")
-        console.log('userDetails',userDetails);
+        console.log('userDetails',userDetails.progileImage);
         this.setState({userName:userDetails.userName, userImage: userDetails.progileImage,userId:userDetails.userId});
     }
     async componentDidUpdate() {

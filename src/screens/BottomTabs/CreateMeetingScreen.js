@@ -49,9 +49,9 @@ export default class CreateMeetingScreen extends React.Component {
         }
     }
     async componentDidMount() {
-        // const universityDetsils = await this.storagePrefs.getObjectValue("universityDetsils")
+        // const universityDetails = await this.storagePrefs.getObjectValue("universityDetails")
 
-        // this.setState({ universityId: universityDetsils._id })
+        // this.setState({ universityId: universityDetails._id })
         // console.log('universityid', this.state.universityId)
         // const userDetails = await this.storagePrefs.getObjectValue("userDetails")
         // this.setState({
@@ -431,6 +431,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         marginBottom: 15
     },
+
     checkbox: {
         // marginLeft: 10,
         marginTop: 5,
@@ -464,6 +465,7 @@ const styles = StyleSheet.create({
         fontWeight: '600'
 
     },
+    
     popupText: {
         color: 'rgba(134, 133, 133, 1)',
         fontSize: 14,

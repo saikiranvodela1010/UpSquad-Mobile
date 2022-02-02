@@ -13,14 +13,14 @@ export default class SettingsScreen extends React.Component {
 
     async logout(){
         console.log("logout")
-        // let keys = ["universityDetsils"];
+        // let keys = ["universityDetails"];
         // //    await AsyncStorage.removeItem(); 
         //    await AsyncStorage.multiRemove(keys).then((res) => {
         //     alert("Items removed from storage",res); 
         //         this.props.navigation.navigate('GetStarted')
         //     });
         try {
-            await AsyncStorage.removeItem("universityDetsils");
+            await AsyncStorage.removeItem("universityDetails");
             await AsyncStorage.removeItem("signupdetails");
             await AsyncStorage.removeItem("userDetails");
             this.props.navigation.navigate('GetStarted')
@@ -62,7 +62,7 @@ export default class SettingsScreen extends React.Component {
                 </View>
                 </TouchableOpacity>
                 <View style={[styles.underline,{width:'85%',marginLeft:'auto',marginRight:'auto'}]}></View>
-                <TouchableOpacity>
+                <TouchableOpacity onPress={()=>{this.props.navigation.navigate('DrawerNotification')}}>
                 <Text style={styles.account}>Notifications</Text>
                 </TouchableOpacity>
                 
