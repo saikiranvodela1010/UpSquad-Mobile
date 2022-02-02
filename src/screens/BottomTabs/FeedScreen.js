@@ -230,7 +230,7 @@ import { Chevron } from 'react-native-shapes';
         const data = this.state.universityId+'/All/'+this.state.isProfessional+"/"+this.state.userId+'/All'
         const response = await this.apiHandler.requestGet(data,this.serviceUrls.getPosts);
         for(i=0;i<response.posts.length;i++){
-            if(response.posts[i]._id == null || response.posts[i]._id == undefined){
+            if(!response.posts[i]._id){
                 response.posts.splice(i,1)
             }
         }

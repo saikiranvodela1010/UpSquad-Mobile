@@ -39,6 +39,7 @@ export default class SwitchCommunityScreen extends React.Component {
             teamDetailsarry:[],
             onPressteamDetails:[],
             onPressteamDetailsarry:[],
+            isclicked:false,
         }
     }
 
@@ -93,7 +94,7 @@ export default class SwitchCommunityScreen extends React.Component {
    return showUpSquad
  }
  onPressisProfessional(onPressteamdata){
-  console.log('teamData',onPressteamdata);
+  console.log('onPressteamdata',onPressteamdata);
   
   let showUpSquad = false;
   // loop1:
@@ -144,6 +145,7 @@ export default class SwitchCommunityScreen extends React.Component {
       this.setState({key:this.state.radio_props.length-1})
       this.setState({isLoading: false, isInternet: true})
     }else if(response.data!=null && response.data.length>0){
+      console.log("length---------------------",response.data.length)
       // // this.state.radio_props.pop();
       // this.setState({checked:0})
       // this.setState({key:0})
@@ -152,8 +154,18 @@ export default class SwitchCommunityScreen extends React.Component {
       this.setState({radio:response.data})
       const universityDetails = await this.storagePrefs.getObjectValue("universityDetails")
       console.log("ravikiran&&&&&&&&*&*&*&*&",universityDetails)
+      
       this.setState({checked:universityDetails.key,key:universityDetails.key })
-      if(this.state.radio[0].subscriptionsData.isAdmin === true){
+      // for(var i=0;i<this.state.radio.length;i++){
+      //   if(this.state.radio[i].subscriptionsData.isAdmin === true){
+
+      //   }
+      // }
+      if(this.state.checked === undefined){
+        this.setState({checked:0,key:0})
+      }
+      console.log("cheked",this.state.checked);
+      if(this.state.radio[this.state.checked].subscriptionsData.isAdmin === true){
         for (var i = 0; i < this.state.radio.length; i++) {
           this.state. radio_props[i] = {
             "universityName":this.state.radio[i].universityName,
@@ -170,7 +182,7 @@ export default class SwitchCommunityScreen extends React.Component {
           "_id":"5ee072287a57fb54881a81db",
         }
         this.state.radio_props.push(object);
-        console.log('upsquad',this.state.radio_props,this.state.radio_props.length);
+        // console.log('upsquad1-------->',this.state.radio_props,this.state.radio_props.length);
         // this.setState({checked:this.state.radio_props.length-1})
         // this.setState({key:this.state.radio_props.length-1})
   
@@ -181,18 +193,28 @@ export default class SwitchCommunityScreen extends React.Component {
       const data = userDetails.userId;
       
       const response = await this.apiHandler.requestGet(data,this.serviceUrls.getParticularUser);
-      console.log("flase response",response.data.isProfessional,response.data.visibleToOthers);
+      // console.log("flase response",response.data.isProfessional,response.data.visibleToOthers);
       this.setState({isProfessional:response.data.isProfessional,visibleToOthers:response.data.visibleToOthers})
       // this.setState({isLoading:true});
       if(response.status ==="Success"){
-        // this.setState({isLoading:false});
+        this.setState({isLoading:false});
+        for (var i = 0; i < this.state.radio.length; i++) {
+          this.state. radio_props[i] = {
+            "universityName":this.state.radio[i].universityName,
+            "universityLogo":this.state.radio[i].universityLogo,
+            "_id":this.state.radio[i]._id,
+            "subscriptionsData":this.state.radio[i].subscriptionsData,
+            "teamsData":this.state.radio[i].teamsData,
+          };
+          this.setState({ radio_props: this.state.radio_props });
+        }
       if(response.data.isProfessional === false){
         let j = 0;
-        for(var i = 0;i<this.state.radio[0].subscriptionsData.teamDetails.length;i++){
-          if(this.state.radio[0].subscriptionsData.teamDetails[i].isChecked){
+        for(var i = 0;i<this.state.radio[this.state.checked].subscriptionsData.teamDetails.length;i++){
+          if(this.state.radio[this.state.checked].subscriptionsData.teamDetails[i].isChecked){
 
             // console.log('teamdetails',this.state.radio[0].subscriptionsData.teamDetails[i].teamId);
-            this.state.teamDetails[j++]=this.state.radio[0].subscriptionsData.teamDetails[i].teamId;
+            this.state.teamDetails[j++]=this.state.radio[this.state.checked].subscriptionsData.teamDetails[i].teamId;
             
           }
         }
@@ -211,18 +233,26 @@ export default class SwitchCommunityScreen extends React.Component {
               "subscriptionsData":this.state.radio[i].subscriptionsData,
               "teamsData":this.state.radio[i].teamsData,
             };
-            // this.setState({ radio_props: this.state.radio_props });
+            this.setState({ radio_props: this.state.radio_props });
+            // console.log("radioprops",this.state.radio_props)
             // this.setState({checked:0})
             // this.setState({key:0})
           }
         }else{
+          console.log("showtrue--------")
           const object={
             "universityName":"UpSquad",
             "UpsquadLogo":'',
             "_id":"5ee072287a57fb54881a81db",
           }
-          this.state.radio_props.push(object);
-          console.log('upsquadtrue',this.state.radio_props,this.state.radio_props.length);
+          // for(i=0;i<this.state.radio_props;i++){
+          //   if(this.state.radio_props[i].universityName !== "UpSquad"){
+              this.state.radio_props.push(object);
+            // }
+          // }
+          this.setState({ radio_props: this.state.radio_props });
+
+          // console.log('showtrue',this.state.radio_props,this.state.radio_props.length);
         }
      
       }else if(response.data.isProfessional === true  && response.data.visibleToOthers ===true){
@@ -231,8 +261,11 @@ export default class SwitchCommunityScreen extends React.Component {
           "UpsquadLogo":'',
           "_id":"5ee072287a57fb54881a81db",
         }
+       
         this.state.radio_props.push(object);
-        console.log('upsquadtrue',this.state.radio_props,this.state.radio_props.length);
+        this.setState({ radio_props: this.state.radio_props });
+      
+        // console.log('upsquadtrue',this.state.radio_props,this.state.radio_props.length);
         // this.setState({checked:this.state.radio_props.length-1})
         // this.setState({key:this.state.radio_props.length-1})
       }
@@ -252,119 +285,41 @@ export default class SwitchCommunityScreen extends React.Component {
     
   }
 
+  
   async checked(item,key){
-    console.log('key',key)
-    console.log('item',item);
-    if(item.isAdmin === undefined){
-      this.setState({isLoading:false});
-      const universityDetails =  {
-        "_id":item._id,
-        "universityName":item.universityName,
-        "universityLogo":item.universityLogo,
-        "key":key
-       }
+    console.log(item,key);
+    this.setState({isLoading: false, isInternet: true})
+    const universityDetails =  {
+     "_id":item._id,
+     "universityName":item.universityName,
+     "universityLogo":item.universityLogo,
+     "key":key
+    }
+    try
+    {
        await AsyncStorage.removeItem('universityDetails');
        const data = await this.storagePrefs.setObjectValue("universityDetails",universityDetails);
        const getuniversityDetails = await this.storagePrefs.getObjectValue("universityDetails")
-      //  if(this.state.checked)
        this.setState({checked:getuniversityDetails.key, key: getuniversityDetails.key})
-       DeviceEventEmitter.emit("UpdateFeed");
-    }
-    if(item.isAdmin === true){
-    this.setState({isLoading:false});
-      const object={
-        "universityName":"Upsquad",
-        "universityLogo":'',
-        "_id":"5ee072287a57fb54881a81db",
-        "key":this.state.radio_props.length
-      }
-      this.state.radio_props.push(object);
-      console.log('upsquad',this.state.radio_props,this.state.radio_props.length);
-      await AsyncStorage.removeItem('universityDetails');
-      const data = await this.storagePrefs.setObjectValue("universityDetails",object);
-     const getuniversityDetails = await this.storagePrefs.getObjectValue("universityDetails")
-    //  if(this.state.checked)
-    // console.log("getuniversityDetails",getuniversityDetails.key)
-     this.setState({checked:getuniversityDetails.key, key: getuniversityDetails.key})
-     DeviceEventEmitter.emit("UpdateFeed");
-    }else if(item.isAdmin ===false){
-    this.setState({isLoading:false});
-        if(this.state.isProfessional=== false && this.state.visibleToOthers === false){
-      const object={
-        "universityName":"Upsquad",
-        "universityLogo":'',
-        "_id":"5ee072287a57fb54881a81db",
-        "key":this.state.radio_props.length
-      }
-      this.state.radio_props.push(object);
-      console.log('upsquad',this.state.radio_props,this.state.radio_props.length);
-      await AsyncStorage.removeItem('universityDetails');
-      const data = await this.storagePrefs.setObjectValue("universityDetails",object);
-     const getuniversityDetails = await this.storagePrefs.getObjectValue("universityDetails")
-    //  if(this.state.checked)
-    // console.log("getuniversityDetails",getuniversityDetails.key)
-     this.setState({checked:getuniversityDetails.key, key: getuniversityDetails.key})
-     DeviceEventEmitter.emit("UpdateFeed");
-    }else{
-      console.log("false data",item.teamsData)
-
-      let j = 0;
-      for(var i = 0;i<item.subscriptionsData.teamDetails.length;i++){
-        if(item.subscriptionsData.teamDetails[i].isChecked){
-
-          // console.log('teamdetails',this.state.radio[0].subscriptionsData.teamDetails[i].teamId);
-          this.state.onPressteamDetails[j++]=item.subscriptionsData.teamDetails[i].teamId;
-          
-        }
-      }
-      this.setState({onPressteamDetailsarry:this.state.onPressteamDetails});
-     console.log('teamDetailsarry',this.state.teamDetailsarry);
-     let onPressteamData = item.teamsData;
-    let showUpSquad = this.onPressisProfessional(onPressteamData);
-    console.log('showUpSquad',showUpSquad);
-    if(showUpSquad === false){
-      const universityDetails =  {
-        "_id":item._id,
-        "universityName":item.universityName,
-        "universityLogo":item.universityLogo,
-        "key":key
-       }
-       await AsyncStorage.removeItem('universityDetails');
-       const data = await this.storagePrefs.setObjectValue("universityDetails",universityDetails);
-       const getuniversityDetails = await this.storagePrefs.getObjectValue("universityDetails")
-      //  if(this.state.checked)
-       this.setState({checked:getuniversityDetails.key, key: getuniversityDetails.key})
-       DeviceEventEmitter.emit("UpdateFeed");
-    }else{
-      const universityDetails={
-        "universityName":"UpSquad",
-        "UpsquadLogo":'',
-        "_id":"5ee072287a57fb54881a81db",
-        "key":key
-      }
-      this.state.radio_props.push(universityDetails);
-      // console.log('upsquadtrue',this.state.radio_props,this.state.radio_props.length);
-      const object =  {
-        "_id":item._id,
-        "universityName":item.universityName,
-        "universityLogo":item.universityLogo,
-        "key":key
-       }
-       await AsyncStorage.removeItem('universityDetails');
-      const data = await this.storagePrefs.setObjectValue("universityDetails",object);
-       const getuniversityDetails = await this.storagePrefs.getObjectValue("universityDetails")
-      //  if(this.state.checked)
-       this.setState({checked:key, key: key})
-       DeviceEventEmitter.emit("UpdateFeed");
-    }
-    
       
-    }
-    }
-   
-    
+       if(this.state.isclicked === true){
+         this.setState({isclicked :false});
+         
+        const {navigate} = this.props.navigation;
+        setTimeout(() => {
+            navigate('BioSuccess'); 
+        }, 3000);
+       
+       }
+       DeviceEventEmitter.emit("UpdateFeed");
+     } catch(exception) {
+         console.log(exception);
+     }
 
-  }
+    //  this.props.navigation.navigate('BioSuccess');
+   
+
+ }
   renderLoader(){
     return(
         <Modal transparent={true}
@@ -437,6 +392,7 @@ export default class SwitchCommunityScreen extends React.Component {
                       <View style={{justifyContent:'space-between',flex:1}}>
                       <TouchableOpacity onPress={()=>{
                         this.setState({checked:key});
+                        this.setState({isclicked:true});
                         this.checked(item,key);
                     }} 
                     style={{flexDirection:'row',justifyContent:'space-between',flex:1}}
