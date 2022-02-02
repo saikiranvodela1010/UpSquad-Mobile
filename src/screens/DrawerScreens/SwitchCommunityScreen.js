@@ -32,6 +32,12 @@ export default class SwitchCommunityScreen extends React.Component {
             userId: '',
             isLoading: false,
             key:0,
+            isProfessional:'',
+            visibleToOthers:'',
+            teamDetails:[],
+            teamDetailsarry:[],
+            onPressteamDetails:[],
+            onPressteamDetailsarry:[],
         }
     }
 
@@ -52,6 +58,60 @@ export default class SwitchCommunityScreen extends React.Component {
     this.getCommunityDetails()
   }
 
+
+ isProfessional(){
+  let teamData = this.state.radio[0].teamsData;
+  console.log('teamData',teamData);
+  let showUpSquad = false;
+  // loop1:
+   for(var i=0;i<this.state.teamDetailsarry.length;i++){
+      
+       let teamId = this.state.teamDetailsarry[i];
+      //  loop2:
+       for(var l=0;l<teamData.length;l++){
+         if(teamData[l]._id === teamId){
+           let privateCommunities = teamData[l].privateCommunities;
+          //  loop3:
+           for(var k=0; k<privateCommunities.length;k++){
+            if(!privateCommunities[k].value){
+              return false;
+            }
+           }
+
+         }
+
+       }
+       showUpSquad=true;
+   }
+   return showUpSquad
+ }
+ onPressisProfessional(onPressteamdata){
+  console.log('teamData',onPressteamdata);
+  
+  let showUpSquad = false;
+  // loop1:
+   for(var i=0;i<this.state.onPressteamDetailsarry.length;i++){
+      
+       let teamId = this.state.onPressteamDetailsarry[i];
+      //  loop2:
+       for(var l=0;l<onPressteamdata.length;l++){
+         if(onPressteamdata[l]._id === teamId){
+           let privateCommunities = onPressteamdata[l].privateCommunities;
+          //  loop3:
+           for(var k=0; k<privateCommunities.length;k++){
+            if(!privateCommunities[k].value){
+              return false;
+            }
+           }
+
+         }
+
+       }
+       showUpSquad=true;
+   }
+   return showUpSquad
+ }
+
   async getCommunityDetails() {
     
     this.setState({
@@ -71,28 +131,119 @@ export default class SwitchCommunityScreen extends React.Component {
     //   "userID": "5ee21f3f5583d00022351037"
     // }
     const response = await this.apiHandler.requestPost(communityData,this.serviceUrls.getCommunities);
+    // const response = await this.apiHandler.requestPost(communityData,this.serviceUrls.getCommunities);
     // const radio= response.data;
     console.log('communitydata=====',response.data)
-    if(response.data!=null && response.data.length>0){
+    if(response.data.length === 0){
+      const object={
+        "universityName":"UpSquad",
+        "universityLogo":'',
+        "_id":"5ee072287a57fb54881a81db",
+      }
+      this.state.radio_props.push(object);
+      console.log('upsquad',this.state.radio_props,this.state.radio_props.length);
+      this.setState({checked:this.state.radio_props.length-1})
+      this.setState({key:this.state.radio_props.length-1})
       this.setState({isLoading: false, isInternet: true})
+    }else if(response.data!=null && response.data.length>0){
+      // // this.state.radio_props.pop();
+      // this.setState({checked:0})
+      // this.setState({key:0})
+      // // this.setState({isLoading: false, isInternet: true})
+
       this.setState({radio:response.data})
       const universityDetsils = await this.storagePrefs.getObjectValue("universityDetsils")
       console.log("ravikiran&&&&&&&&*&*&*&*&",universityDetsils)
       this.setState({checked:universityDetsils.key,key:universityDetsils.key })
-    } else{
-      this.setState({isLoading: false})
-      this.setState({radio: []})
-    }
-    
-    for (var i = 0; i < this.state.radio.length; i++) {
-      this.state. radio_props[i] = {
-        "universityName":this.state.radio[i].universityName,
-        "universityLogo":this.state.radio[i].universityLogo,
-        "_id":this.state.radio[i]._id,
-      };
-      this.setState({ radio_props: this.state.radio_props });
+      if(this.state.radio[0].subscriptionsData.isAdmin === true){
+        for (var i = 0; i < this.state.radio.length; i++) {
+          this.state. radio_props[i] = {
+            "universityName":this.state.radio[i].universityName,
+            "universityLogo":this.state.radio[i].universityLogo,
+            "_id":this.state.radio[i]._id,
+            "subscriptionsData":this.state.radio[i].subscriptionsData,
+            "teamsData":this.state.radio[i].teamsData,
+          };
+          this.setState({ radio_props: this.state.radio_props });
+        }
+        const object={
+          "universityName":"UpSquad",
+          "UpsquadLogo":'',
+          "_id":"5ee072287a57fb54881a81db",
+        }
+        this.state.radio_props.push(object);
+        console.log('upsquad',this.state.radio_props,this.state.radio_props.length);
+        // this.setState({checked:this.state.radio_props.length-1})
+        // this.setState({key:this.state.radio_props.length-1})
+  
+      }
+      else{
+      // this.setState({isLoading:true});
+      const userDetails = await this.storagePrefs.getObjectValue("userDetails");
+      const data = userDetails.userId;
+      
+      const response = await this.apiHandler.requestGet(data,this.serviceUrls.getParticularUser);
+      console.log("flase response",response.data.isProfessional,response.data.visibleToOthers);
+      this.setState({isProfessional:response.data.isProfessional,visibleToOthers:response.data.visibleToOthers})
+      // this.setState({isLoading:true});
+      if(response.status ==="Success"){
+        // this.setState({isLoading:false});
+      if(response.data.isProfessional === false){
+        let j = 0;
+        for(var i = 0;i<this.state.radio[0].subscriptionsData.teamDetails.length;i++){
+          if(this.state.radio[0].subscriptionsData.teamDetails[i].isChecked){
+
+            // console.log('teamdetails',this.state.radio[0].subscriptionsData.teamDetails[i].teamId);
+            this.state.teamDetails[j++]=this.state.radio[0].subscriptionsData.teamDetails[i].teamId;
+            
+          }
+        }
+        this.setState({teamDetailsarry:this.state.teamDetails});
+       console.log('teamDetailsarry',this.state.teamDetailsarry);
+       
+      let showUpSquad = this.isProfessional();
+        console.log('showUpSquad1',showUpSquad);
+        if(showUpSquad === false){
+          for (var i = 0; i < this.state.radio.length; i++) {
+            this.state. radio_props[i] = {
+              "universityName":this.state.radio[i].universityName,
+              "universityLogo":this.state.radio[i].universityLogo,
+              "_id":this.state.radio[i]._id,
+              "isAdmin":this.state.radio[i].subscriptionsData.isAdmin,
+              "subscriptionsData":this.state.radio[i].subscriptionsData,
+              "teamsData":this.state.radio[i].teamsData,
+            };
+            // this.setState({ radio_props: this.state.radio_props });
+            // this.setState({checked:0})
+            // this.setState({key:0})
+          }
+        }else{
+          const object={
+            "universityName":"UpSquad",
+            "UpsquadLogo":'',
+            "_id":"5ee072287a57fb54881a81db",
+          }
+          this.state.radio_props.push(object);
+          console.log('upsquadtrue',this.state.radio_props,this.state.radio_props.length);
+        }
      
-  }
+      }else if(response.data.isProfessional === true  && response.data.visibleToOthers ===true){
+        const object={
+          "universityName":"UpSquad",
+          "UpsquadLogo":'',
+          "_id":"5ee072287a57fb54881a81db",
+        }
+        this.state.radio_props.push(object);
+        console.log('upsquadtrue',this.state.radio_props,this.state.radio_props.length);
+        // this.setState({checked:this.state.radio_props.length-1})
+        // this.setState({key:this.state.radio_props.length-1})
+      }
+    }
+    }
+    } 
+
+    
+    
   // console.log('communitydata',this.state.radio_props)
   console.log('checked *************',this.state.checked)
   if(this.state.checked === undefined){
@@ -107,18 +258,108 @@ export default class SwitchCommunityScreen extends React.Component {
   async checked(item,key){
     console.log('key',key)
     console.log('item',item);
-    // if(this.)
-     const universityDetsils =  {
-      "_id":item._id,
-      "universityName":item.universityName,
-      "universityLogo":item.universityLogo,
-      "key":key
-     }
-     const data = await this.storagePrefs.setObjectValue("universityDetsils",universityDetsils);
+    if(item.isAdmin === undefined){
+      this.setState({isLoading:false});
+      const universityDetsils =  {
+        "_id":item._id,
+        "universityName":item.universityName,
+        "universityLogo":item.universityLogo,
+        "key":key
+       }
+       const data = await this.storagePrefs.setObjectValue("universityDetsils",universityDetsils);
+       const getuniversityDetsils = await this.storagePrefs.getObjectValue("universityDetsils")
+      //  if(this.state.checked)
+       this.setState({checked:getuniversityDetsils.key, key: getuniversityDetsils.key})
+       DeviceEventEmitter.emit("UpdateFeed");
+    }
+    if(item.isAdmin === true){
+    this.setState({isLoading:false});
+      const object={
+        "universityName":"Upsquad",
+        "universityLogo":'',
+        "_id":"5ee072287a57fb54881a81db",
+        "key":this.state.radio_props.length
+      }
+      this.state.radio_props.push(object);
+      console.log('upsquad',this.state.radio_props,this.state.radio_props.length);
+      const data = await this.storagePrefs.setObjectValue("universityDetsils",object);
      const getuniversityDetsils = await this.storagePrefs.getObjectValue("universityDetsils")
     //  if(this.state.checked)
+    // console.log("getuniversityDetsils",getuniversityDetsils.key)
      this.setState({checked:getuniversityDetsils.key, key: getuniversityDetsils.key})
      DeviceEventEmitter.emit("UpdateFeed");
+    }else if(item.isAdmin ===false){
+    this.setState({isLoading:false});
+        if(this.state.isProfessional=== false && this.state.visibleToOthers === false){
+      const object={
+        "universityName":"Upsquad",
+        "universityLogo":'',
+        "_id":"5ee072287a57fb54881a81db",
+        "key":this.state.radio_props.length
+      }
+      this.state.radio_props.push(object);
+      console.log('upsquad',this.state.radio_props,this.state.radio_props.length);
+      const data = await this.storagePrefs.setObjectValue("universityDetsils",object);
+     const getuniversityDetsils = await this.storagePrefs.getObjectValue("universityDetsils")
+    //  if(this.state.checked)
+    // console.log("getuniversityDetsils",getuniversityDetsils.key)
+     this.setState({checked:getuniversityDetsils.key, key: getuniversityDetsils.key})
+     DeviceEventEmitter.emit("UpdateFeed");
+    }else{
+      console.log("false data",item.teamsData)
+
+      let j = 0;
+      for(var i = 0;i<item.subscriptionsData.teamDetails.length;i++){
+        if(item.subscriptionsData.teamDetails[i].isChecked){
+
+          // console.log('teamdetails',this.state.radio[0].subscriptionsData.teamDetails[i].teamId);
+          this.state.onPressteamDetails[j++]=item.subscriptionsData.teamDetails[i].teamId;
+          
+        }
+      }
+      this.setState({onPressteamDetailsarry:this.state.onPressteamDetails});
+     console.log('teamDetailsarry',this.state.teamDetailsarry);
+     let onPressteamData = item.teamsData;
+    let showUpSquad = this.onPressisProfessional(onPressteamData);
+    console.log('showUpSquad',showUpSquad);
+    if(showUpSquad === false){
+      const universityDetsils =  {
+        "_id":item._id,
+        "universityName":item.universityName,
+        "universityLogo":item.universityLogo,
+        "key":key
+       }
+       const data = await this.storagePrefs.setObjectValue("universityDetsils",universityDetsils);
+       const getuniversityDetsils = await this.storagePrefs.getObjectValue("universityDetsils")
+      //  if(this.state.checked)
+       this.setState({checked:getuniversityDetsils.key, key: getuniversityDetsils.key})
+       DeviceEventEmitter.emit("UpdateFeed");
+    }else{
+      const universityDetsils={
+        "universityName":"UpSquad",
+        "UpsquadLogo":'',
+        "_id":"5ee072287a57fb54881a81db",
+        "key":key
+      }
+      this.state.radio_props.push(universityDetsils);
+      // console.log('upsquadtrue',this.state.radio_props,this.state.radio_props.length);
+      const object =  {
+        "_id":item._id,
+        "universityName":item.universityName,
+        "universityLogo":item.universityLogo,
+        "key":key
+       }
+      const data = await this.storagePrefs.setObjectValue("universityDetsils",object);
+       const getuniversityDetsils = await this.storagePrefs.getObjectValue("universityDetsils")
+      //  if(this.state.checked)
+       this.setState({checked:key, key: key})
+       DeviceEventEmitter.emit("UpdateFeed");
+    }
+    
+      
+    }
+    }
+   
     
 
   }
@@ -197,6 +438,7 @@ export default class SwitchCommunityScreen extends React.Component {
                         this.checked(item,key);
                     }} 
                     style={{flexDirection:'row',justifyContent:'space-between',flex:1}}
+
                     >
                           <Text style={styles.communitytext}>{item.universityName}</Text>
                         

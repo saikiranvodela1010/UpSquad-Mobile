@@ -14,7 +14,7 @@ import axios from 'axios';
 import eventsHandler from '../NetworkUtils/ApiHandler';
 import {getLoginDetails,getLoginDetails_update,getProgileImage,getTocken,
   getUserId,getUserName,getUserEmail} from '../../../res/GetUserInfo';
-import { event } from 'react-native-reanimated';
+// import { event } from 'react-native-reanimated';
 let dispatch;
 let typeofevent;
 let is_CallShowPB=false;

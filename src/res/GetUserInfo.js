@@ -1,7 +1,7 @@
 import StoragePrefs from './StoragePrefs';
 import {useEffect} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { log } from 'react-native-reanimated';
+// import { log } from 'react-native-reanimated';
 let  storagePrefs = new StoragePrefs();
 
 let   logindetails={};

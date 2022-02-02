@@ -175,10 +175,17 @@ import FbGrid from "react-native-fb-image-grid";
                const data = await this.storagePrefs.setObjectValue("universityDetsils",universityDetsils);
           } else{
             this.setState({
-              universityName:"",
-              universityId: "",
-              communityName: ""
+              universityName:"UpSquad",
+              universityId: "5ee072287a57fb54881a81db",
+              communityName: "UpSquad",
+              communityLogo:""
             });
+            const universityDetsils =  {
+                "_id":this.state.universityId,
+                "universityName":this.state.universityName,
+                "universityLogo":this.state.communityLogo,
+               }
+               const data = await this.storagePrefs.setObjectValue("universityDetsils",universityDetsils);
           }
           
     }
@@ -187,6 +194,11 @@ import FbGrid from "react-native-fb-image-grid";
         //const data = '5ed8d9509e623f00221761a1/All/true/5f5892a1b205b1387d5cafb/All'
         const data = this.state.universityId+'/All/'+this.state.isProfessional+"/"+this.state.userId+'/All'
         const response = await this.apiHandler.requestGet(data,this.serviceUrls.getPosts);
+        for(i=0;i<response.posts.length;i++){
+            if(response.posts[i]._id == null || response.posts[i]._id == undefined){
+                response.posts.splice(i,1)
+            }
+        }
         if(response.posts != null && response.posts.length != 0 ){
             response.posts.forEach((item,index)=> {
                  for(i=0;i<item.likes.length;i++){
