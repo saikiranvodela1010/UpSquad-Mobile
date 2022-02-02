@@ -13,14 +13,14 @@ export default class SettingsScreen extends React.Component {
 
     async logout(){
         console.log("logout")
-        // let keys = ["universityDetsils"];
+        // let keys = ["universityDetails"];
         // //    await AsyncStorage.removeItem(); 
         //    await AsyncStorage.multiRemove(keys).then((res) => {
         //     alert("Items removed from storage",res); 
         //         this.props.navigation.navigate('GetStarted')
         //     });
         try {
-            await AsyncStorage.removeItem("universityDetsils");
+            await AsyncStorage.removeItem("universityDetails");
             await AsyncStorage.removeItem("signupdetails");
             await AsyncStorage.removeItem("userDetails");
             this.props.navigation.navigate('GetStarted')

@@ -17,16 +17,16 @@ export default class EventsScreen extends React.Component {
   }
   async componentDidMount() {
       
-    const universityDetsils = await this.storagePrefs.getObjectValue("universityDetsils")
-    // console.log('universityDetsils',universityDetsils);
-    this.setState({communityName:universityDetsils.universityName});
+    const universityDetails = await this.storagePrefs.getObjectValue("universityDetails")
+    // console.log('universityDetails',universityDetails);
+    this.setState({communityName:universityDetails.universityName});
    
 
     }
     async componentDidUpdate(){
-        const universityDetsils = await this.storagePrefs.getObjectValue("universityDetsils")
-        // console.log('universityDetsils',universityDetsils);
-        this.setState({communityName:universityDetsils.universityName});
+        const universityDetails = await this.storagePrefs.getObjectValue("universityDetails")
+        // console.log('universityDetails',universityDetails);
+        this.setState({communityName:universityDetails.universityName});
     }
   render() {
     return (
