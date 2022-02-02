@@ -15,7 +15,7 @@ class MeetingsScreen extends React.Component {
        
         this.state={
             communityName:'',
-           
+            communityLogo:''
         }
        
     }
