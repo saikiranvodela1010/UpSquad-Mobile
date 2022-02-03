@@ -66,8 +66,6 @@ import EventNotificationScreen from './src/screens/DrawerScreens/EventNotificati
 import MeetingNotificationScreen from './src/screens/DrawerScreens/MeetingNotificationScreen';
 import MessageNotificationScreen from './src/screens/DrawerScreens/MessageNotificationScreen';
 import NotfctnPostComntScreen from './src/screens/DrawerScreens/NotfctnPostComntScreen';
-
-import SocketTest from './src/screens/BottomTabs/SocketTest';
 import { ImageView } from './src/screens/BottomTabs/ImageView';
 import {getISUSERLOGEDIN,} from './src/res/GetUserInfo';
 
@@ -210,9 +208,6 @@ const MainScreens =()=>{
       <Stack.Screen
         name="NotfctnPostComnt"
         component={NotfctnPostComntScreen} />
-          <Stack.Screen 
-          name = "SocketTest"
-          component = {SocketTest}/>
           <Stack.Screen
           name = "ImageView"
           component = {ImageView}/>
