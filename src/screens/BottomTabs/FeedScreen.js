@@ -217,7 +217,7 @@ import io from 'socket.io-client';
           "userID": this.state.userId
         }
         const response = await this.apiHandler.requestPost(communityData,this.serviceUrls.getCommunities);
-        if(response.data!=null && response.data.length>0){
+        if(response.data!=null && response.data.length>0 ){
             this.setState({
               universityName:response.data[0].universityName,
               universityId: response.data[0]._id,
@@ -541,11 +541,20 @@ import io from 'socket.io-client';
                                 {item.content}
                             </Text>  
                                                    
-                                <View style = {{ marginLeft :-25}}>
+                                <View style = {{ marginLeft :-10,marginRight:15}}>
                                     {item.postImage!=null && item.postImage.length!=0 ? 
                                     <FbGrid images = {item.postImage}
-                                    style = {{height : 300,width: Dimensions.get('window').width}}
-                                    onPress ={()=> {this.onPress(item.postImage)}}/>
+                                    style = {{height : 300,width:'100%'}}
+                                    onPress ={()=>  this.props.navigation.navigate('CommentScreen',{
+                                        content:item.content,
+                                        postID: item._id,
+                                        creatorImg : item.creator.profileImg !=null && item.creator.profileImg!="" ? item.creator.profileImg : "https://www.careerquo.com/assets/images/18.png",
+                                        firstName : item.creator.firstName,
+                                        lastName: item.creator.lastName,
+                                        postCreatedAt: item.createdAt,
+                                        comments: item.comments,
+                                        postImage: item.postImage
+                                    })}/>
                                     
                                     : null}
                                     
@@ -605,7 +614,21 @@ import io from 'socket.io-client';
 
                                     </Text>
                                 </View>
+                                <TouchableOpacity onPress = {()=>{
+                                    this.props.navigation.navigate('CommentScreen',{
+                                        content:item.content,
+                                        postID: item._id,
+                                        creatorImg : item.creator.profileImg !=null && item.creator.profileImg!="" ? item.creator.profileImg : "https://www.careerquo.com/assets/images/18.png",
+                                        firstName : item.creator.firstName,
+                                        lastName: item.creator.lastName,
+                                        postCreatedAt: item.createdAt,
+                                        comments: item.comments,
+                                        postImage: item.postImage
+                                    })
+                                }}>
                                 <Text style={{fontSize:12,color:'#868585',fontFamily:Fonts.mulishBold,fontWeight:'400',marginLeft:5,marginTop:2,marginRight:22}}>{item.comments.length } {item.comments.length > 1 ? "comments" : "comment"}</Text>
+                                </TouchableOpacity>
+                                
                             </View>
                             <View style={{ borderWidth: 1, borderColor: '#F1F1F1',marginTop:22,marginRight: '5%'}}></View>
                             <View style={{flexDirection:'row',marginTop:20,justifyContent:'space-around'}}>
@@ -673,7 +696,8 @@ import io from 'socket.io-client';
                                             firstName : item.creator.firstName,
                                             lastName: item.creator.lastName,
                                             postCreatedAt: item.createdAt,
-                                            comments: item.comments
+                                            comments: item.comments,
+                                            postImage: item.postImage
                                         })
                                     }}
                                 >
