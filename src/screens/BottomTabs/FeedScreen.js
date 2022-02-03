@@ -481,7 +481,7 @@ import io from 'socket.io-client';
                             }}
                         />
                         </View>
-            <View style={{ borderWidth: 1, borderColor: '#F1F1F1' }}></View>
+            <View style={{ borderWidth: 0.5, borderColor: '#959494' }}></View>
             </>
         )
     }
@@ -491,7 +491,7 @@ import io from 'socket.io-client';
         return(
             <SafeAreaView style={{flex:1,backgroundColor:'#FFFFFF'}}>
                 {this.renderLoader()}
-                    <View style={[styles.header]}>
+                <View style={[styles.header]}>
                     <TouchableOpacity onPress={()=> this.props.navigation.openDrawer()}>
                     <Image source= {{uri : this.state.communityLogo!=null && this.state.communityLogo!="" ? this.state.communityLogo: "https://www.careerquo.com/assets/images/18.png" }}
                             style={{marginLeft:25,height: 30,width: 30, borderRadius: 25}}
@@ -514,7 +514,7 @@ import io from 'socket.io-client';
                     </TouchableOpacity>
                     </View>
                 </View>
-                <View style={{ borderWidth: 1, borderColor: '#F1F1F1' }}></View>
+                <View style={{ borderWidth: 0.5, borderColor: '#959494' }}></View>
                 {this.state.postData!=null && this.state.postData.length!=0?
                     <FlatList
                     data = {this.state.postData}
@@ -916,9 +916,11 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         // paddingLeft: '9%',
-        marginTop: Platform.OS == 'ios'? 0 : 25,
-        marginBottom: 25,
+        marginTop: Platform.OS == 'ios'? 10 : 25,
+        marginBottom: Platform.OS == 'ios' ? 10 : 15,
         // borderBottomWidth:1
+        justifyContent: 'center',
+        alignItems: 'center'
       },
     subheader:{
         flexDirection:'row',
