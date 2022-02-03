@@ -13,7 +13,6 @@ import StoragePrefs from '../../res/StoragePrefs';
 import Share from 'react-native-share';
 import { forEach } from 'lodash';
 import axios from 'axios';
-import { SliderBox } from "react-native-image-slider-box";
 import FbGrid from "react-native-fb-image-grid";
 import AntDesignIcon from 'react-native-vector-icons/AntDesign';
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
@@ -108,29 +107,43 @@ import io from 'socket.io-client';
             this.socket.on("posts", (data) => {
                 switch(data.action) {
                     case "post like":
-
-                        if(data.post.university_ID === this.state.universityId){
-                            console.log("CHEKCING DATA",data.post._id)
-                            this.setState({likedPosts: [...this.state.likedPosts,data.post._id]})
-                            for(i=0;i<this.state.postData.length;i++){
-                                if(this.state.postData[i]._id == data.post._id){
-                                    this.state.postData.splice(i, 1, data.post);
-                                } 
+                        if(data.post.university_ID!=null & data.post.university_ID!=undefined){
+                            if(data.post.university_ID === this.state.universityId){
+                                console.log("CHEKCING DATA",data.post._id)
+                                this.setState({likedPosts: [...this.state.likedPosts,data.post._id]})
+                                for(i=0;i<this.state.postData.length;i++){
+                                    if(this.state.postData[i]._id == data.post._id){
+                                        this.state.postData.splice(i, 1, data.post);
+                                    } 
+                                }
                             }
                         }
                         
+                        
                     break;
                     case "remove post like":
-                        if(data.post.university_ID === this.state.universityId){
-                            let index = this.state.likedPosts.indexOf(data.post._id);
-                            if (index != -1) this.state.likedPosts.splice(index, 1);
-                            for(i=0;i<this.state.postData.length;i++){
-                                if(this.state.postData[i]._id == data.post._id){
-                                    this.state.postData.splice(i, 1, data.post);
-                                } 
+                        if(data.post.university_ID!=null & data.post.university_ID!=undefined){
+                            if(data.post.university_ID === this.state.universityId){
+                                let index = this.state.likedPosts.indexOf(data.post._id);
+                                if (index != -1) this.state.likedPosts.splice(index, 1);
+                                for(i=0;i<this.state.postData.length;i++){
+                                    if(this.state.postData[i]._id == data.post._id){
+                                        this.state.postData.splice(i, 1, data.post);
+                                    } 
+                                }
                             }
                         }
+                        
                     break; 
+                    case "delete post":
+                        for(i=0;i<this.state.postData.length;i++){
+                            if(this.state.postData[i]._id === data.postId){
+                                const filteredData = this.state.postData.filter(item => item._id !== data.postId);
+                                this.setState({ postData: filteredData});
+                            }
+                        }
+                        
+                        break;
                 }
             })
           
@@ -201,10 +214,9 @@ import io from 'socket.io-client';
         .then(response => {
             console.log("response.message",response.data.message)
             if(response.data.message === "Post successfully deleted"){
-                const filteredData = this.state.postData.filter(item => item._id !== postID);
-                console.log("filtered Data",filteredData)
-                this.setState({ postData: filteredData,dotsmemu: false  });
+                this.setState({dotsmemu: false})
             }
+
         })
         .catch(error=> {
             console.log("error herer",error);
@@ -217,7 +229,7 @@ import io from 'socket.io-client';
           "userID": this.state.userId
         }
         const response = await this.apiHandler.requestPost(communityData,this.serviceUrls.getCommunities);
-        if(response.data!=null && response.data.length>0){
+        if(response.data!=null && response.data.length>0 ){
             this.setState({
               universityName:response.data[0].universityName,
               universityId: response.data[0]._id,
@@ -481,7 +493,7 @@ import io from 'socket.io-client';
                             }}
                         />
                         </View>
-            <View style={{ borderWidth: 1, borderColor: '#F1F1F1' }}></View>
+            <View style={{ borderWidth: 0.5, borderColor: '#959494' }}></View>
             </>
         )
     }
@@ -491,7 +503,7 @@ import io from 'socket.io-client';
         return(
             <SafeAreaView style={{flex:1,backgroundColor:'#FFFFFF'}}>
                 {this.renderLoader()}
-                    <View style={[styles.header]}>
+                <View style={[styles.header]}>
                     <TouchableOpacity onPress={()=> this.props.navigation.openDrawer()}>
                     <Image source= {{uri : this.state.communityLogo!=null && this.state.communityLogo!="" ? this.state.communityLogo: "https://www.careerquo.com/assets/images/18.png" }}
                             style={{marginLeft:25,height: 30,width: 30, borderRadius: 25}}
@@ -514,7 +526,7 @@ import io from 'socket.io-client';
                     </TouchableOpacity>
                     </View>
                 </View>
-                <View style={{ borderWidth: 1, borderColor: '#F1F1F1' }}></View>
+                <View style={{ borderWidth: 0.5, borderColor: '#959494' }}></View>
                 {this.state.postData!=null && this.state.postData.length!=0?
                     <FlatList
                     data = {this.state.postData}
@@ -541,11 +553,20 @@ import io from 'socket.io-client';
                                 {item.content}
                             </Text>  
                                                    
-                                <View style = {{ marginLeft :-25}}>
+                                <View style = {{ marginLeft :-10,marginRight:15}}>
                                     {item.postImage!=null && item.postImage.length!=0 ? 
                                     <FbGrid images = {item.postImage}
-                                    style = {{height : 300,width: Dimensions.get('window').width}}
-                                    onPress ={()=> {this.onPress(item.postImage)}}/>
+                                    style = {{height : 300,width:'100%'}}
+                                    onPress ={()=>  this.props.navigation.navigate('CommentScreen',{
+                                        content:item.content,
+                                        postID: item._id,
+                                        creatorImg : item.creator.profileImg !=null && item.creator.profileImg!="" ? item.creator.profileImg : "https://www.careerquo.com/assets/images/18.png",
+                                        firstName : item.creator.firstName,
+                                        lastName: item.creator.lastName,
+                                        postCreatedAt: item.createdAt,
+                                        comments: item.comments,
+                                        postImage: item.postImage
+                                    })}/>
                                     
                                     : null}
                                     
@@ -605,7 +626,21 @@ import io from 'socket.io-client';
 
                                     </Text>
                                 </View>
+                                <TouchableOpacity onPress = {()=>{
+                                    this.props.navigation.navigate('CommentScreen',{
+                                        content:item.content,
+                                        postID: item._id,
+                                        creatorImg : item.creator.profileImg !=null && item.creator.profileImg!="" ? item.creator.profileImg : "https://www.careerquo.com/assets/images/18.png",
+                                        firstName : item.creator.firstName,
+                                        lastName: item.creator.lastName,
+                                        postCreatedAt: item.createdAt,
+                                        comments: item.comments,
+                                        postImage: item.postImage
+                                    })
+                                }}>
                                 <Text style={{fontSize:12,color:'#868585',fontFamily:Fonts.mulishBold,fontWeight:'400',marginLeft:5,marginTop:2,marginRight:22}}>{item.comments.length } {item.comments.length > 1 ? "comments" : "comment"}</Text>
+                                </TouchableOpacity>
+                                
                             </View>
                             <View style={{ borderWidth: 1, borderColor: '#F1F1F1',marginTop:22,marginRight: '5%'}}></View>
                             <View style={{flexDirection:'row',marginTop:20,justifyContent:'space-around'}}>
@@ -673,7 +708,8 @@ import io from 'socket.io-client';
                                             firstName : item.creator.firstName,
                                             lastName: item.creator.lastName,
                                             postCreatedAt: item.createdAt,
-                                            comments: item.comments
+                                            comments: item.comments,
+                                            postImage: item.postImage
                                         })
                                     }}
                                 >
@@ -916,9 +952,11 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         // paddingLeft: '9%',
-        marginTop: Platform.OS == 'ios'? 0 : 25,
-        marginBottom: 25,
+        marginTop: Platform.OS == 'ios'? 10 : 25,
+        marginBottom: Platform.OS == 'ios' ? 10 : 15,
         // borderBottomWidth:1
+        justifyContent: 'center',
+        alignItems: 'center'
       },
     subheader:{
         flexDirection:'row',
