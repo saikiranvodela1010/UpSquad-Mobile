@@ -1,14 +1,23 @@
 
 
 import React from 'react'
-import { View, Text, StyleSheet, TouchableOpacity, SafeAreaView, Image } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, SafeAreaView, Image,Modal,ActivityIndicator } from 'react-native';
 import ImagesWrapper from '../../res/ImagesWrapper';
 import Fonts from '../../res/Fonts';
 import { ScrollView } from 'react-native-gesture-handler';
 import CheckBox from 'react-native-check-box'
 import LinearGradient from 'react-native-linear-gradient';
+import ServiceUrls from '../../network/ServiceUrls';
+import APIHandler from '../../network/NetWorkOperations';
+import StoragePrefs from '../../res/StoragePrefs';
+
+
+
 export default class NotfctnPostComntScreen extends React.Component {
 
+    serviceUrls = new ServiceUrls();
+    apiHandler = new APIHandler();
+    storagePrefs = new StoragePrefs();
 
     constructor() {
         super();
@@ -16,18 +25,128 @@ export default class NotfctnPostComntScreen extends React.Component {
             isPushOnComments: false,
             isPushOnCommentReplies: false,
             isPushOnLikes: false,
-
-
             isEmailOnComments: false,
             isEmailOnCommentReplies: false,
-            isEmailOnLikes: false
+            isEmailOnLikes: false,
+            userId:'',
+            isLoading:false,
         }
     }
+
+    async componentDidMount(){
+        const userDetails = await this.storagePrefs.getObjectValue("userDetails")
+        console.log('userDetails',userDetails);
+        this.setState({userId:userDetails.userId});
+        this.getUserSettings();
+      
+    }
+
+    async getUserSettings(){
+        this.setState({isLoading:true})
+        const data = this.state.userId;
+        const response = await this.apiHandler.requestGet( data,this.serviceUrls.getUserSettings);
+        console.log("postCommentNotification response",response.data[0].notificationSettings.postCommentNotification);
+       if(response.status === true){
+           this.setState({isLoading:false})
+            if(response.data[0].notificationSettings.postCommentNotification.pushNotification[0] === 1 ){
+               this.setState({ isPushOnComments:true});
+            }
+            if(response.data[0].notificationSettings.postCommentNotification.pushNotification[1] === 2){
+                this.setState({ isPushOnCommentReplies:true});
+            }
+            if(response.data[0].notificationSettings.postCommentNotification.pushNotification[2] === 3){
+                this.setState({ isPushOnLikes:true});
+            }
+            if(response.data[0].notificationSettings.postCommentNotification.emailNotification[0] === 1 ){
+                this.setState({ isEmailOnComments:true});
+             }
+             if(response.data[0].notificationSettings.postCommentNotification.emailNotification[1] === 2){
+                 this.setState({ isEmailOnCommentReplies:true});
+             }
+             if(response.data[0].notificationSettings.postCommentNotification.emailNotification[2] === 3){
+                this.setState({ isEmailOnLikes:true});
+            }
+
+        }
+    }
+
+    async saveEventData(){
+        this.setState({isLoading:true});
+        let PushOnComments = 0;
+        let PushOnCommentReplies = 0;
+        let PushOnLikes = 0;
+        let EmailOnComments = 0;
+        let EmailOnCommentReplies = 0;
+        let EmailOnLikes = 0;
+        if(this.state.isPushOnComments === true){
+            PushOnComments = 1
+        }
+        if(this.state.isPushOnCommentReplies === true){
+            PushOnCommentReplies = 2
+        }
+        if(this.state.isPushOnLikes === true){
+            PushOnLikes = 3
+        }
+        if(this.state.isEmailOnComments === true){
+            EmailOnComments = 1
+        }
+        if(this.state.isEmailOnCommentReplies === true){
+            EmailOnCommentReplies = 2
+        }
+        if(this.state.isEmailOnLikes === true){
+            EmailOnLikes = 3
+        }
+        // console.log("EventData",EventPushNotifyCancel,EventPusgNotifyStart,EmailNotifyCancel,EmailNotifyStart)
+        const data ={
+            "pushNotification": [
+                PushOnComments,
+                PushOnCommentReplies,
+                PushOnLikes
+            ],
+            "emailNotification": [
+                EmailOnComments,
+                EmailOnCommentReplies,
+                EmailOnLikes
+            ],
+            "userId": this.state.userId,
+        }
+       
+
+        const response = await this.apiHandler.requestPost(data,this.serviceUrls.updatePostCommentNotificationSettings)
+        console.log("respose",response);
+        if(response.status === true){
+            this.setState({isLoading:false});
+            this.props.navigation.navigate('DrawerNotification');
+        }
+    }
+    renderLoader(){
+        return(
+            <Modal transparent={true}
+                visible={this.state.isLoading}>
+                <View style={{
+                    flex: 1,
+                    flexDirection: 'row',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    margin: 10
+                }}>
+                    <View style={{
+                        width: "25%",
+                        height: "10%",
+                        borderWidth: 1,
+                        borderRadius: 5,borderColor: "#58C4C6",marginBottom: 10 ,backgroundColor: '#58C4C6',justifyContent: 'center' }}>
+                        <ActivityIndicator size="large" color="#fff" />
+                    </View>
+                </View>
+            </Modal>
+        )
+      }
 
     render() {
         return (
 
             <SafeAreaView style={{ flex: 1, backgroundColor: '#FFFFFF' }}>
+                {this.renderLoader()}
                 <View style={styles.header}>
                     <TouchableOpacity onPress={() => {
                         this.props.navigation.pop();
@@ -179,7 +298,7 @@ export default class NotfctnPostComntScreen extends React.Component {
                         <TouchableOpacity
                             onPress={() => {
                                 // this.props.navigation.navigate('Account')
-                                // this.onSubmit();
+                                this.saveEventData();
                             }}  >
                             <LinearGradient start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }} colors={['rgba(33, 43, 104, 1)', 'rgba(88, 196, 198, 1)']} style={[styles.linearGradient1, { marginBottom: '6%' }]}>
 

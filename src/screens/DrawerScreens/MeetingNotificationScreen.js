@@ -1,19 +1,24 @@
 
 
 import React from 'react'
-import { View, Text, StyleSheet, TouchableOpacity, SafeAreaView, Image } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, SafeAreaView, Image,Modal,ActivityIndicator} from 'react-native';
 import ImagesWrapper from '../../res/ImagesWrapper';
 import Fonts from '../../res/Fonts';
 
 import { ScrollView } from 'react-native-gesture-handler';
 import LinearGradient from 'react-native-linear-gradient';
 import CheckBox from 'react-native-check-box'
+import ServiceUrls from '../../network/ServiceUrls';
+import APIHandler from '../../network/NetWorkOperations';
+import StoragePrefs from '../../res/StoragePrefs';
+
 
 export default class MeetingNotificationScreen extends React.Component {
 
 
-
-
+    serviceUrls = new ServiceUrls();
+    apiHandler = new APIHandler();
+    storagePrefs = new StoragePrefs();
 
     constructor() {
         super();
@@ -21,13 +26,105 @@ export default class MeetingNotificationScreen extends React.Component {
             isPushSomeOneCancelMeeting: false,
             isPushForMeetingStarting: false,
             isEmailForSomeOneCancelMeeting: false,
-            isEmailForMeetingStarting: false
+            isEmailForMeetingStarting: false,
+            userId:'',
+            isLoading:false,
         }
     }
 
+    async componentDidMount(){
+        const userDetails = await this.storagePrefs.getObjectValue("userDetails")
+        console.log('userDetails',userDetails);
+        this.setState({userId:userDetails.userId});
+        this.getUserSettings();
+      
+    }
 
+    async getUserSettings(){
+        this.setState({isLoading:true})
+        const data = this.state.userId;
+        const response = await this.apiHandler.requestGet( data,this.serviceUrls.getUserSettings);
+        console.log("settings response",response.data[0].notificationSettings.mettingNotification);
+       if(response.status === true){
+           this.setState({isLoading:false})
+            if(response.data[0].notificationSettings.mettingNotification.pushNotification[0] === 1 ){
+               this.setState({ isPushSomeOneCancelMeeting:true});
+            }
+            if(response.data[0].notificationSettings.mettingNotification.pushNotification[1] === 2){
+                this.setState({ isPushForMeetingStarting:true});
+            }
+            if(response.data[0].notificationSettings.mettingNotification.emailNotification[0] === 1 ){
+                this.setState({ isEmailForSomeOneCancelMeeting:true});
+             }
+             if(response.data[0].notificationSettings.mettingNotification.emailNotification[1] === 2){
+                 this.setState({ isEmailForMeetingStarting:true});
+             }
 
+        }
+    }
 
+    async saveEventData(){
+        this.setState({isLoading:true});
+        let EventPushNotifyCancel = 0;
+        let EventPusgNotifyStart = 0;
+        let EmailNotifyCancel = 0;
+        let EmailNotifyStart= 0;
+        if(this.state.isPushSomeOneCancelMeeting === true){
+            EventPushNotifyCancel = 1
+        }
+        if(this.state.isPushForMeetingStarting === true){
+            EventPusgNotifyStart = 2
+        }
+        if(this.state.isEmailForSomeOneCancelMeeting === true){
+            EmailNotifyCancel = 1
+        }
+        if(this.state.isEmailForMeetingStarting === true){
+            EmailNotifyStart = 2
+        }
+        console.log("EventData",EventPushNotifyCancel,EventPusgNotifyStart,EmailNotifyCancel,EmailNotifyStart)
+        const data ={
+            "pushNotification": [
+                EventPushNotifyCancel,
+                EventPusgNotifyStart
+            ],
+            "emailNotification": [
+                EmailNotifyCancel,
+                EmailNotifyStart
+            ],
+            "userId": this.state.userId,
+        }
+       
+
+        const response = await this.apiHandler.requestPost(data,this.serviceUrls.updateMettingNotificationSettings)
+        console.log("respose",response);
+        if(response.status === true){
+            this.setState({isLoading:false});
+            this.props.navigation.navigate('DrawerNotification');
+        }
+    }
+
+    renderLoader(){
+        return(
+            <Modal transparent={true}
+                visible={this.state.isLoading}>
+                <View style={{
+                    flex: 1,
+                    flexDirection: 'row',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    margin: 10
+                }}>
+                    <View style={{
+                        width: "25%",
+                        height: "10%",
+                        borderWidth: 1,
+                        borderRadius: 5,borderColor: "#58C4C6",marginBottom: 10 ,backgroundColor: '#58C4C6',justifyContent: 'center' }}>
+                        <ActivityIndicator size="large" color="#fff" />
+                    </View>
+                </View>
+            </Modal>
+        )
+      }
 
 
 
@@ -37,7 +134,7 @@ export default class MeetingNotificationScreen extends React.Component {
         return (
 
             <SafeAreaView style={{ flex: 1, backgroundColor: '#FFFFFF' }}>
-
+                 {this.renderLoader()}
                 <View style={styles.header}>
                     <TouchableOpacity onPress={() => {
                         //</View>  this.props.navigation.navigate('BioSuccess');
@@ -149,7 +246,7 @@ export default class MeetingNotificationScreen extends React.Component {
                         <TouchableOpacity
                             onPress={() => {
                                 // this.props.navigation.navigate('Account')
-                                // this.onSubmit();
+                                this.saveEventData();
                             }}  >
                             <LinearGradient start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }} colors={['rgba(33, 43, 104, 1)', 'rgba(88, 196, 198, 1)']} style={[styles.linearGradient1, { marginBottom: '6%' }]}>
 
