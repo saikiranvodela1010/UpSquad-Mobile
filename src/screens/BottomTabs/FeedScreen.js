@@ -13,7 +13,6 @@ import StoragePrefs from '../../res/StoragePrefs';
 import Share from 'react-native-share';
 import { forEach } from 'lodash';
 import axios from 'axios';
-import { SliderBox } from "react-native-image-slider-box";
 import FbGrid from "react-native-fb-image-grid";
 import AntDesignIcon from 'react-native-vector-icons/AntDesign';
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
@@ -214,6 +213,10 @@ import io from 'socket.io-client';
           })
         .then(response => {
             console.log("response.message",response.data.message)
+            if(response.data.message === "Post successfully deleted"){
+                this.setState({dotsmemu: false})
+            }
+
         })
         .catch(error=> {
             console.log("error herer",error);

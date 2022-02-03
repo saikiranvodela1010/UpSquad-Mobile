@@ -8,6 +8,7 @@ import moment from 'moment';
 import StoragePrefs from '../../res/StoragePrefs';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import FbGrid from "react-native-fb-image-grid";
+import io from 'socket.io-client';
 
 export default class CommentScreen extends React.Component {
     serviceUrls = new ServiceUrls();
@@ -49,6 +50,7 @@ export default class CommentScreen extends React.Component {
         const response = await this.apiHandler.requestGet(data,this.serviceUrls.getPost);
         console.log("response",response.post.creator.profileImage.imageUrl)
         if(response.message ==="Post fetched!"){
+            
             console.log("response",response.post.content)
             this.setState({
                 content : response.post.content,
@@ -62,36 +64,48 @@ export default class CommentScreen extends React.Component {
                 postId : response.post._id,
                 userId : userID
             })
+            this.socketConnect()
             
         }
         console.log("CHECKING FOR THE FIRST NAME", this.state.content,
         this.state.postImage);
-        // const comment = response.post
-        // const postId = response.post._id;
-        
-        // const firstName = response.post.creator.firstName,
-        // const lastName = response.post.creator.lastName;
-
-
-        
-        
-        
-        
-       
-        
         this.setState({isLoading: false})
-        this.subscription = DeviceEventEmitter.addListener("UpdateComments",this.updateComments)
+        // this.subscription = DeviceEventEmitter.addListener("UpdateComments",this.updateComments)
         
     }
 
     componentWillUnmount(){
         if(this.subscription){
             this.subscription.remove()
-        }
-        
+        }       
     }
 
-    
+    socketConnect()  {
+        this.socket = io(this.serviceUrls.socialUrl); 
+            if (!this.socket.connected) {
+                this.socket.connect();
+            }
+        this.socket.on("connect", () => {
+            console.log("socketID>>>>",this.socket.id); // x8WIv7-mJelg7on_ALbx
+        });
+        this.socket.on("disconnect", (reason) => {
+            console.log("DISCONNECTED SOCKET",reason)
+            // if (reason !== "forced close") {
+            //the disconnection was initiated by the server, you need to reconnect manually
+            this.socket.connect();
+            //}
+            // else the socket will automatically try to reconnect
+        });
+            this.socket.on("posts", (data) => {
+                switch(data.action) {
+                    case "comment":
+                        if(data.comment.postId === this.state.postId){
+                            this.state.comments.splice(0, 0, data.comment.comment)
+                        }
+
+                }
+            })
+    }
 
      sendComment = async ()=>{
         this.setState({isCommentLoading: true})
@@ -104,26 +118,26 @@ export default class CommentScreen extends React.Component {
             const postId = this.state.postId;
             const response = await this.apiHandler.requestPost(data,this.serviceUrls.postComment,postId);
             if(response.message == "Comment successfully added" ){
-                this.setState({CommentsContent: ""})
-                DeviceEventEmitter.emit("UpdateComments")
+                this.setState({CommentsContent: "",isCommentLoading: false})
+                // DeviceEventEmitter.emit("UpdateComments")
             }
         } else{
             this.setState({isCommentLoading: false})
         }
     }
 
-    updateComments = async () => {
-        const content = this.props.route.params.content;
-        const postID = this.props.route.params.postID;
-        const data = postID
-        const response = await this.apiHandler.requestGet(data,this.serviceUrls.getPost);
-        const comment = response.post.comments;
-        this.setState({
-            comments: comment,
-            isLoading: false,
-            isCommentLoading: false
-        })
-    }
+    // updateComments = async () => {
+    //     const content = this.props.route.params.content;
+    //     const postID = this.props.route.params.postID;
+    //     const data = postID
+    //     const response = await this.apiHandler.requestGet(data,this.serviceUrls.getPost);
+    //     const comment = response.post.comments;
+    //     this.setState({
+    //         comments: comment,
+    //         isLoading: false,
+    //         isCommentLoading: false
+    //     })
+    // }
 
     FlatListHeader = () => {
         return(
