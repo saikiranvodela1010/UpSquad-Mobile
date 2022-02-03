@@ -34,5 +34,6 @@ export default class ServiceUrls {
     deletePost = this.socialUrl+'/user/post'
     myPosts = this.socialUrl+'/feed/myposts'
     getUserAvailability = this.mainUrl+ '/userAvailability'
+    addUserAvailabilty = this.mainUrl+'/userAvailability/defualtAvailability'
 
 }

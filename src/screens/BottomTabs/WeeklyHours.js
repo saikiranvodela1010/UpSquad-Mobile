@@ -1,5 +1,6 @@
 import React from 'react';
-import { View, Text, StyleSheet, TextInput, Image, TouchableOpacity, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, TextInput, Image, TouchableOpacity, ScrollView, ActivityIndicator } from 'react-native';
+import Modal from 'react-native-modal';
 import ImagesWrapper from '../../res/ImagesWrapper';
 import LinearGradient from 'react-native-linear-gradient';
 import Fonts from '../../res/Fonts';
@@ -8,6 +9,9 @@ import ServiceUrls from '../../network/ServiceUrls';
 import APIHandler from '../../network/NetWorkOperations';
 import StoragePrefs from '../../res/StoragePrefs';
 import axios from 'axios'
+import TimePicker from '@react-native-community/datetimepicker';
+
+
 export default class WeeklyHours extends React.Component {
     serviceUrls = new ServiceUrls();
     apiHandler = new APIHandler();
@@ -25,7 +29,13 @@ export default class WeeklyHours extends React.Component {
             // isSaturday: false,
             isLoading: false,
             defaultAvailability: [],
-            userId: ''
+            userId: '',
+            showtime: false,
+            displayStartTimer: false,
+            displayEndTimer: false,
+            startTime: null,
+            endTime: null,
+
         }
     }
     async componentDidMount() {
@@ -43,11 +53,14 @@ export default class WeeklyHours extends React.Component {
             isLoading: true
         })
         const params = {
-            user_id: '612751ed03f7d0315adf3596',
-            //user_id: this.state.userId,
+            //user_id: '612751ed03f7d0315adf3596',
+            user_id: this.state.userId,
         };
 
         const res = await axios.get(this.serviceUrls.getUserAvailability, { params });
+        this.setState({
+            isLoading: false
+        })
         // console.log('UserAvailability', res.data[0].defaultAvailability)
         if (res.data != '') {
             this.setState({ defaultAvailability: res.data[0].defaultAvailability })
@@ -58,6 +71,54 @@ export default class WeeklyHours extends React.Component {
         }
 
         console.log('UserAvailability', this.state.defaultAvailability)
+
+    }
+    sunday() {
+        let defaultAvailability = []
+        let slots = []
+        var obj = {
+            "openTime": this.state.startTime.getHours()+ ':' + this.state.startTime.getMinutes(),
+            "closeTime": this.state.endTime.getHours()+ ':' + this.state.endTime.getMinutes()
+        }
+        slots.push(obj)
+
+        var obj1 = {
+            "slots": slots,
+            "day": "Sunday"
+        }
+        if (this.state.defaultAvailability.length >= 1) {
+            for (var i = 0; i < this.state.defaultAvailability.length; i++) {
+                if (this.state.defaultAvailability[i].day == 'Sunday') {
+                    this.state.defaultAvailability[i].slots.push(obj)
+                    this.setState({ defaultAvailability: this.state.defaultAvailability })
+
+                }
+
+            }
+            console.log('Pushged', this.state.defaultAvailability)
+
+        }
+        else {
+            this.state.defaultAvailability.push(obj1);
+            this.setState({ defaultAvailability: this.state.defaultAvailability })
+            console.log("sundayobject", this.state.defaultAvailability)
+        }
+
+        //     this.state.defaultAvailability.push(obj1);
+        //    // this.setState({defaultAvailability:})
+        //           this.setState({defaultAvailability: this.state.defaultAvailability})
+        //           console.log("sundayobject",this.state.defaultAvailability)
+
+
+
+    }
+  async onNext(){
+      const data1={
+        "defaultAvailability": this.state.defaultAvailability,
+        "user_id": this.state.userId
+    }
+        const response = await this.apiHandler.requestPost(data1, this.serviceUrls.addUserAvailabilty)
+        console.log('post status',response)
 
     }
     renderLoader() {
@@ -86,6 +147,7 @@ export default class WeeklyHours extends React.Component {
     render() {
         return (
             <View style={{ flex: 1, backgroundColor: '#FFFFFF' }}>
+                {this.renderLoader()}
                 <ScrollView>
                     {this.state.defaultAvailability.length >= 1 ?
                         this.state.defaultAvailability.map((data, key) => {
@@ -107,7 +169,9 @@ export default class WeeklyHours extends React.Component {
                                             unCheckedImage={<Image source={ImagesWrapper.uncheckedbox} />}
                                         />
                                         <Text style={{ marginLeft: '4%', color: '#1E1C24', fontWeight: '600', fontFamily: Fonts.mulishSemiBold, fontSize: 14 }}>SUNDAY</Text>
-                                        <TouchableOpacity style={{ flex: 1, alignItems: 'flex-end', marginRight: '6%' }}>
+                                        <TouchableOpacity style={{ flex: 1, alignItems: 'flex-end', marginRight: '6%' }}
+                                            onPress={() => { this.setState({ showtime: true }) }
+                                            }>
                                             {data.slots.length >= 1 && data.day == 'Sunday' ?
                                                 <Image source={ImagesWrapper.plus1} /> :
                                                 <Image source={ImagesWrapper.plus2} />}
@@ -158,10 +222,13 @@ export default class WeeklyHours extends React.Component {
                                     unCheckedImage={<Image source={ImagesWrapper.uncheckedbox} />}
                                 />
                                 <Text style={{ marginLeft: '4%', color: '#1E1C24', fontWeight: '600', fontFamily: Fonts.mulishSemiBold, fontSize: 14 }}>SUNDAY</Text>
-                                <TouchableOpacity style={{ flex: 1, alignItems: 'flex-end', marginRight: '6%' }}>
-                                    
-                                        <Image source={ImagesWrapper.plus2} /> 
-                                      
+                                <TouchableOpacity style={{ flex: 1, alignItems: 'flex-end', marginRight: '6%' }}
+                                    // onPress={()=>this.sunday()
+                                    onPress={() => { this.setState({ showtime: true }) }
+                                    }  >
+
+                                    <Image source={ImagesWrapper.plus2} />
+
                                 </TouchableOpacity>
                             </View>
                             <View>
@@ -172,61 +239,61 @@ export default class WeeklyHours extends React.Component {
 
                     }
                     {this.state.defaultAvailability.length >= 1 ?
-                    
-                    this.state.defaultAvailability.map((data, key) => {
 
-                        return (
-                            <View>
-                                <View style={{ flexDirection: 'row', marginLeft: '6%', marginTop: '7%' }}>
+                        this.state.defaultAvailability.map((data, key) => {
 
-                                    <CheckBox
+                            return (
+                                <View>
+                                    <View style={{ flexDirection: 'row', marginLeft: '6%', marginTop: '7%' }}>
 
-                                        // onClick={() => {
-                                        //     this.setState({
-                                        //         isChecked: !isChecked
-                                        //     })
-                                        // }}
-                                        isChecked={data.day == 'Monday' && data.slots.length >= 1 ? true : false}
-                                        //leftText={"CheckBox"}
-                                        checkedImage={<Image source={ImagesWrapper.checkedbox} />}
-                                        unCheckedImage={<Image source={ImagesWrapper.uncheckedbox} />}
-                                    />
-                                    <Text style={{ marginLeft: '4%', color: '#1E1C24', fontWeight: '600', fontFamily: Fonts.mulishSemiBold, fontSize: 14 }}>MONDAY</Text>
-                                    <TouchableOpacity style={{ flex: 1, alignItems: 'flex-end', marginRight: '6%' }}>
-                                        {data.slots.length >= 1 && data.day == 'Monday' ?
-                                            <Image source={ImagesWrapper.plus1} /> :
-                                            <Image source={ImagesWrapper.plus2} />}
-                                    </TouchableOpacity>
-                                </View>
-                                {data.slots.length >= 1 && data.day == 'Monday' ?
-                                    data.slots.map((data, key) => {
-                                        return (<View>
-                                            <View style={{ flexDirection: 'row', marginLeft: '14%', marginTop: '3%' }}>
-                                                <View style={{ width: '25%', height: 45, borderRadius: 25, borderColor: '#959494', borderWidth: 0.3, alignItems: 'center', justifyContent: 'center' }}>
-                                                    <Text style={{ color: '#868585', fontSize: 14, fontFamily: Fonts.mulishRegular, fontWeight: '400' }}>{data.openTime}</Text>
-                                                </View>
-                                                <Text style={{ fontSize: 14, fontWeight: '400', marginLeft: '3%', marginTop: '3%' }}>-</Text>
-                                                <View style={{ width: '25%', height: 45, borderRadius: 25, borderColor: '#959494', borderWidth: 0.3, marginLeft: '3%', alignItems: 'center', justifyContent: 'center' }}>
-                                                    <Text style={{ color: '#868585', fontSize: 14, fontFamily: Fonts.mulishRegular, fontWeight: '400' }}>{data.closeTime}</Text>
-                                                </View>
-                                            </View>
-                                            <TouchableOpacity style={{ flex: 1, alignItems: 'flex-end', marginRight: '6.5%' }}>
-                                                <Image source={ImagesWrapper.trashblack} />
-                                            </TouchableOpacity>
+                                        <CheckBox
 
-                                        </View>
-                                        )
-                                    }) :
-                                    <View>
-                                        <Text style={{ fontSize: 14, fontWeight: '400', color: '#999999', marginLeft: '15%', marginTop: '3%' }}>Unavailable</Text>
+                                            // onClick={() => {
+                                            //     this.setState({
+                                            //         isChecked: !isChecked
+                                            //     })
+                                            // }}
+                                            isChecked={data.day == 'Monday' && data.slots.length >= 1 ? true : false}
+                                            //leftText={"CheckBox"}
+                                            checkedImage={<Image source={ImagesWrapper.checkedbox} />}
+                                            unCheckedImage={<Image source={ImagesWrapper.uncheckedbox} />}
+                                        />
+                                        <Text style={{ marginLeft: '4%', color: '#1E1C24', fontWeight: '600', fontFamily: Fonts.mulishSemiBold, fontSize: 14 }}>MONDAY</Text>
+                                        <TouchableOpacity style={{ flex: 1, alignItems: 'flex-end', marginRight: '6%' }}>
+                                            {data.slots.length >= 1 && data.day == 'Monday' ?
+                                                <Image source={ImagesWrapper.plus1} /> :
+                                                <Image source={ImagesWrapper.plus2} />}
+                                        </TouchableOpacity>
                                     </View>
-                                }
+                                    {data.slots.length >= 1 && data.day == 'Monday' ?
+                                        data.slots.map((data, key) => {
+                                            return (<View>
+                                                <View style={{ flexDirection: 'row', marginLeft: '14%', marginTop: '3%' }}>
+                                                    <View style={{ width: '25%', height: 45, borderRadius: 25, borderColor: '#959494', borderWidth: 0.3, alignItems: 'center', justifyContent: 'center' }}>
+                                                        <Text style={{ color: '#868585', fontSize: 14, fontFamily: Fonts.mulishRegular, fontWeight: '400' }}>{data.openTime}</Text>
+                                                    </View>
+                                                    <Text style={{ fontSize: 14, fontWeight: '400', marginLeft: '3%', marginTop: '3%' }}>-</Text>
+                                                    <View style={{ width: '25%', height: 45, borderRadius: 25, borderColor: '#959494', borderWidth: 0.3, marginLeft: '3%', alignItems: 'center', justifyContent: 'center' }}>
+                                                        <Text style={{ color: '#868585', fontSize: 14, fontFamily: Fonts.mulishRegular, fontWeight: '400' }}>{data.closeTime}</Text>
+                                                    </View>
+                                                </View>
+                                                <TouchableOpacity style={{ flex: 1, alignItems: 'flex-end', marginRight: '6.5%' }}>
+                                                    <Image source={ImagesWrapper.trashblack} />
+                                                </TouchableOpacity>
+
+                                            </View>
+                                            )
+                                        }) :
+                                        <View>
+                                            <Text style={{ fontSize: 14, fontWeight: '400', color: '#999999', marginLeft: '15%', marginTop: '3%' }}>Unavailable</Text>
+                                        </View>
+                                    }
 
 
-                            </View>
-                        )
-                    }):
-                    <View>
+                                </View>
+                            )
+                        }) :
+                        <View>
                             <View style={{ flexDirection: 'row', marginLeft: '6%', marginTop: '7%' }}>
 
                                 <CheckBox
@@ -243,9 +310,9 @@ export default class WeeklyHours extends React.Component {
                                 />
                                 <Text style={{ marginLeft: '4%', color: '#1E1C24', fontWeight: '600', fontFamily: Fonts.mulishSemiBold, fontSize: 14 }}>MONDAY</Text>
                                 <TouchableOpacity style={{ flex: 1, alignItems: 'flex-end', marginRight: '6%' }}>
-                                    
-                                        <Image source={ImagesWrapper.plus2} /> 
-                                      
+
+                                    <Image source={ImagesWrapper.plus2} />
+
                                 </TouchableOpacity>
                             </View>
                             <View>
@@ -253,61 +320,61 @@ export default class WeeklyHours extends React.Component {
                             </View>
                         </View>}
 
-                    {this.state.defaultAvailability.length >= 1?
-                    this.state.defaultAvailability.map((data, key) => {
+                    {this.state.defaultAvailability.length >= 1 ?
+                        this.state.defaultAvailability.map((data, key) => {
 
-                        return (
-                            <View>
-                                <View style={{ flexDirection: 'row', marginLeft: '6%', marginTop: '7%' }}>
+                            return (
+                                <View>
+                                    <View style={{ flexDirection: 'row', marginLeft: '6%', marginTop: '7%' }}>
 
-                                    <CheckBox
+                                        <CheckBox
 
-                                        // onClick={() => {
-                                        //     this.setState({
-                                        //         isChecked: !isChecked
-                                        //     })
-                                        // }}
-                                        isChecked={data.day == 'Tuesday' && data.slots.length >= 1 ? true : false}
-                                        //leftText={"CheckBox"}
-                                        checkedImage={<Image source={ImagesWrapper.checkedbox} />}
-                                        unCheckedImage={<Image source={ImagesWrapper.uncheckedbox} />}
-                                    />
-                                    <Text style={{ marginLeft: '4%', color: '#1E1C24', fontWeight: '600', fontFamily: Fonts.mulishSemiBold, fontSize: 14 }}>TUESDAY</Text>
-                                    <TouchableOpacity style={{ flex: 1, alignItems: 'flex-end', marginRight: '6%' }}>
-                                        {data.slots.length >= 1 && data.day == 'Tuesday' ?
-                                            <Image source={ImagesWrapper.plus1} /> :
-                                            <Image source={ImagesWrapper.plus2} />}
-                                    </TouchableOpacity>
-                                </View>
-                                {data.slots.length >= 1 && data.day == 'Tuesday' ?
-                                    data.slots.map((data, key) => {
-                                        return (<View>
-                                            <View style={{ flexDirection: 'row', marginLeft: '14%', marginTop: '3%' }}>
-                                                <View style={{ width: '25%', height: 45, borderRadius: 25, borderColor: '#959494', borderWidth: 0.3, alignItems: 'center', justifyContent: 'center' }}>
-                                                    <Text style={{ color: '#868585', fontSize: 14, fontFamily: Fonts.mulishRegular, fontWeight: '400' }}>{data.openTime}</Text>
-                                                </View>
-                                                <Text style={{ fontSize: 14, fontWeight: '400', marginLeft: '3%', marginTop: '3%' }}>-</Text>
-                                                <View style={{ width: '25%', height: 45, borderRadius: 25, borderColor: '#959494', borderWidth: 0.3, marginLeft: '3%', alignItems: 'center', justifyContent: 'center' }}>
-                                                    <Text style={{ color: '#868585', fontSize: 14, fontFamily: Fonts.mulishRegular, fontWeight: '400' }}>{data.closeTime}</Text>
-                                                </View>
-                                                <TouchableOpacity style={{ flex: 1, alignItems: 'flex-end', marginRight: '6.5%' }}>
-                                                    <Image source={ImagesWrapper.trashblack} />
-                                                </TouchableOpacity>
-                                            </View>
-
-                                        </View>
-                                        )
-                                    }) :
-                                    <View>
-                                        <Text style={{ fontSize: 14, fontWeight: '400', color: '#999999', marginLeft: '15%', marginTop: '3%' }}>Unavailable</Text>
+                                            // onClick={() => {
+                                            //     this.setState({
+                                            //         isChecked: !isChecked
+                                            //     })
+                                            // }}
+                                            isChecked={data.day == 'Tuesday' && data.slots.length >= 1 ? true : false}
+                                            //leftText={"CheckBox"}
+                                            checkedImage={<Image source={ImagesWrapper.checkedbox} />}
+                                            unCheckedImage={<Image source={ImagesWrapper.uncheckedbox} />}
+                                        />
+                                        <Text style={{ marginLeft: '4%', color: '#1E1C24', fontWeight: '600', fontFamily: Fonts.mulishSemiBold, fontSize: 14 }}>TUESDAY</Text>
+                                        <TouchableOpacity style={{ flex: 1, alignItems: 'flex-end', marginRight: '6%' }}>
+                                            {data.slots.length >= 1 && data.day == 'Tuesday' ?
+                                                <Image source={ImagesWrapper.plus1} /> :
+                                                <Image source={ImagesWrapper.plus2} />}
+                                        </TouchableOpacity>
                                     </View>
-                                }
+                                    {data.slots.length >= 1 && data.day == 'Tuesday' ?
+                                        data.slots.map((data, key) => {
+                                            return (<View>
+                                                <View style={{ flexDirection: 'row', marginLeft: '14%', marginTop: '3%' }}>
+                                                    <View style={{ width: '25%', height: 45, borderRadius: 25, borderColor: '#959494', borderWidth: 0.3, alignItems: 'center', justifyContent: 'center' }}>
+                                                        <Text style={{ color: '#868585', fontSize: 14, fontFamily: Fonts.mulishRegular, fontWeight: '400' }}>{data.openTime}</Text>
+                                                    </View>
+                                                    <Text style={{ fontSize: 14, fontWeight: '400', marginLeft: '3%', marginTop: '3%' }}>-</Text>
+                                                    <View style={{ width: '25%', height: 45, borderRadius: 25, borderColor: '#959494', borderWidth: 0.3, marginLeft: '3%', alignItems: 'center', justifyContent: 'center' }}>
+                                                        <Text style={{ color: '#868585', fontSize: 14, fontFamily: Fonts.mulishRegular, fontWeight: '400' }}>{data.closeTime}</Text>
+                                                    </View>
+                                                    <TouchableOpacity style={{ flex: 1, alignItems: 'flex-end', marginRight: '6.5%' }}>
+                                                        <Image source={ImagesWrapper.trashblack} />
+                                                    </TouchableOpacity>
+                                                </View>
+
+                                            </View>
+                                            )
+                                        }) :
+                                        <View>
+                                            <Text style={{ fontSize: 14, fontWeight: '400', color: '#999999', marginLeft: '15%', marginTop: '3%' }}>Unavailable</Text>
+                                        </View>
+                                    }
 
 
-                            </View>
-                        )
-                    }):
-                    <View>
+                                </View>
+                            )
+                        }) :
+                        <View>
                             <View style={{ flexDirection: 'row', marginLeft: '6%', marginTop: '7%' }}>
 
                                 <CheckBox
@@ -324,9 +391,9 @@ export default class WeeklyHours extends React.Component {
                                 />
                                 <Text style={{ marginLeft: '4%', color: '#1E1C24', fontWeight: '600', fontFamily: Fonts.mulishSemiBold, fontSize: 14 }}>TUESDAY</Text>
                                 <TouchableOpacity style={{ flex: 1, alignItems: 'flex-end', marginRight: '6%' }}>
-                                    
-                                        <Image source={ImagesWrapper.plus2} /> 
-                                      
+
+                                    <Image source={ImagesWrapper.plus2} />
+
                                 </TouchableOpacity>
                             </View>
                             <View>
@@ -334,333 +401,333 @@ export default class WeeklyHours extends React.Component {
                             </View>
                         </View>}
 
-                    {this.state.defaultAvailability.length >= 1?
-                    
-                    this.state.defaultAvailability.map((data, key) => {
+                    {this.state.defaultAvailability.length >= 1 ?
 
-                        return (
-                            <View>
-                                <View style={{ flexDirection: 'row', marginLeft: '6%', marginTop: '7%' }}>
+                        this.state.defaultAvailability.map((data, key) => {
 
-                                    <CheckBox
+                            return (
+                                <View>
+                                    <View style={{ flexDirection: 'row', marginLeft: '6%', marginTop: '7%' }}>
 
-                                        // onClick={() => {
-                                        //     this.setState({
-                                        //         isChecked: !isChecked
-                                        //     })
-                                        // }}
-                                        isChecked={data.day == 'Wednesday' && data.slots.length >= 1 ? true : false}
-                                        //leftText={"CheckBox"}
-                                        checkedImage={<Image source={ImagesWrapper.checkedbox} />}
-                                        unCheckedImage={<Image source={ImagesWrapper.uncheckedbox} />}
-                                    />
-                                    <Text style={{ marginLeft: '4%', color: '#1E1C24', fontWeight: '600', fontFamily: Fonts.mulishSemiBold, fontSize: 14 }}>WEDNESDAY</Text>
-                                    <TouchableOpacity style={{ flex: 1, alignItems: 'flex-end', marginRight: '6%' }}>
-                                        {data.slots.length >= 1 && data.day == 'Wednesday' ?
+                                        <CheckBox
 
-                                            <Image source={ImagesWrapper.plus1} />
-                                            :
-                                            <Image source={ImagesWrapper.plus2} style={{}} />}
-                                    </TouchableOpacity>
-                                </View>
-                                {data.slots.length >= 1 && data.day == 'Wednesday' ?
-                                    data.slots.map((data, key) => {
-                                        return (<View>
-                                            <View style={{ flexDirection: 'row', marginLeft: '14%', marginTop: '3%' }}>
-                                                <View style={{ width: '25%', height: 45, borderRadius: 25, borderColor: '#959494', borderWidth: 0.3, alignItems: 'center', justifyContent: 'center' }}>
-                                                    <Text style={{ color: '#868585', fontSize: 14, fontFamily: Fonts.mulishRegular, fontWeight: '400' }}>{data.openTime}</Text>
-                                                </View>
-                                                <Text style={{ fontSize: 14, fontWeight: '400', marginLeft: '3%', marginTop: '3%' }}>-</Text>
-                                                <View style={{ width: '25%', height: 45, borderRadius: 25, borderColor: '#959494', borderWidth: 0.3, marginLeft: '3%', alignItems: 'center', justifyContent: 'center' }}>
-                                                    <Text style={{ color: '#868585', fontSize: 14, fontFamily: Fonts.mulishRegular, fontWeight: '400' }}>{data.closeTime}</Text>
-                                                </View>
-                                                <TouchableOpacity style={{ flex: 1, alignItems: 'flex-end', marginRight: '6.5%' }}>
-                                                    <Image source={ImagesWrapper.trashblack} />
-                                                </TouchableOpacity>
-                                            </View>
+                                            // onClick={() => {
+                                            //     this.setState({
+                                            //         isChecked: !isChecked
+                                            //     })
+                                            // }}
+                                            isChecked={data.day == 'Wednesday' && data.slots.length >= 1 ? true : false}
+                                            //leftText={"CheckBox"}
+                                            checkedImage={<Image source={ImagesWrapper.checkedbox} />}
+                                            unCheckedImage={<Image source={ImagesWrapper.uncheckedbox} />}
+                                        />
+                                        <Text style={{ marginLeft: '4%', color: '#1E1C24', fontWeight: '600', fontFamily: Fonts.mulishSemiBold, fontSize: 14 }}>WEDNESDAY</Text>
+                                        <TouchableOpacity style={{ flex: 1, alignItems: 'flex-end', marginRight: '6%' }}>
+                                            {data.slots.length >= 1 && data.day == 'Wednesday' ?
 
-                                        </View>
-                                        )
-                                    }) :
-                                    <View>
-                                        <Text style={{ fontSize: 14, fontWeight: '400', color: '#999999', marginLeft: '15%', marginTop: '3%' }}>Unavailable</Text>
+                                                <Image source={ImagesWrapper.plus1} />
+                                                :
+                                                <Image source={ImagesWrapper.plus2} style={{}} />}
+                                        </TouchableOpacity>
                                     </View>
-                                }
-
-
-                            </View>
-                        )
-                    }):
-                    <View>
-                    <View style={{ flexDirection: 'row', marginLeft: '6%', marginTop: '7%' }}>
-
-                        <CheckBox
-
-                            // onClick={() => {
-                            //     this.setState({
-                            //         isSunday: !this.state.isSunday
-                            //     })
-                            // }}
-                            isChecked={false}
-                            //leftText={"CheckBox"}
-                            checkedImage={<Image source={ImagesWrapper.checkedbox} />}
-                            unCheckedImage={<Image source={ImagesWrapper.uncheckedbox} />}
-                        />
-                        <Text style={{ marginLeft: '4%', color: '#1E1C24', fontWeight: '600', fontFamily: Fonts.mulishSemiBold, fontSize: 14 }}>WEDNESDAY</Text>
-                        <TouchableOpacity style={{ flex: 1, alignItems: 'flex-end', marginRight: '6%' }}>
-                            
-                                <Image source={ImagesWrapper.plus2} /> 
-                              
-                        </TouchableOpacity>
-                    </View>
-                    <View>
-                        <Text style={{ fontSize: 14, fontWeight: '400', color: '#999999', marginLeft: '15%', marginTop: '3%' }}>Unavailable</Text>
-                    </View>
-                </View>}
-                    {this.state.defaultAvailability.length >= 1?
-                    this.state.defaultAvailability.map((data, key) => {
-
-                        return (
-                            <View>
-                                <View style={{ flexDirection: 'row', marginLeft: '6%', marginTop: '7%' }}>
-
-                                    <CheckBox
-
-                                        // onClick={() => {
-                                        //     this.setState({
-                                        //         isChecked: !isChecked
-                                        //     })
-                                        // }}
-                                        isChecked={data.day == 'Thursday' && data.slots.length >= 1 ? true : false}
-                                        //leftText={"CheckBox"}
-                                        checkedImage={<Image source={ImagesWrapper.checkedbox} />}
-                                        unCheckedImage={<Image source={ImagesWrapper.uncheckedbox} />}
-                                    />
-                                    <Text style={{ marginLeft: '4%', color: '#1E1C24', fontWeight: '600', fontFamily: Fonts.mulishSemiBold, fontSize: 14 }}>THURSDAY</Text>
-                                    <TouchableOpacity style={{ flex: 1, alignItems: 'flex-end', marginRight: '6%' }}>
-                                        {data.slots.length >= 1 && data.day == 'Thursday' ?
-                                            <Image source={ImagesWrapper.plus1} /> :
-                                            <Image source={ImagesWrapper.plus2} />}
-                                    </TouchableOpacity>
-                                </View>
-                                {data.slots.length >= 1 && data.day == 'Thursday' ?
-                                    data.slots.map((data, key) => {
-                                        return (<View>
-                                            <View style={{ flexDirection: 'row', marginLeft: '14%', marginTop: '3%' }}>
-                                                <View style={{ width: '25%', height: 45, borderRadius: 25, borderColor: '#959494', borderWidth: 0.3, alignItems: 'center', justifyContent: 'center' }}>
-                                                    <Text style={{ color: '#868585', fontSize: 14, fontFamily: Fonts.mulishRegular, fontWeight: '400' }}>{data.openTime}</Text>
+                                    {data.slots.length >= 1 && data.day == 'Wednesday' ?
+                                        data.slots.map((data, key) => {
+                                            return (<View>
+                                                <View style={{ flexDirection: 'row', marginLeft: '14%', marginTop: '3%' }}>
+                                                    <View style={{ width: '25%', height: 45, borderRadius: 25, borderColor: '#959494', borderWidth: 0.3, alignItems: 'center', justifyContent: 'center' }}>
+                                                        <Text style={{ color: '#868585', fontSize: 14, fontFamily: Fonts.mulishRegular, fontWeight: '400' }}>{data.openTime}</Text>
+                                                    </View>
+                                                    <Text style={{ fontSize: 14, fontWeight: '400', marginLeft: '3%', marginTop: '3%' }}>-</Text>
+                                                    <View style={{ width: '25%', height: 45, borderRadius: 25, borderColor: '#959494', borderWidth: 0.3, marginLeft: '3%', alignItems: 'center', justifyContent: 'center' }}>
+                                                        <Text style={{ color: '#868585', fontSize: 14, fontFamily: Fonts.mulishRegular, fontWeight: '400' }}>{data.closeTime}</Text>
+                                                    </View>
+                                                    <TouchableOpacity style={{ flex: 1, alignItems: 'flex-end', marginRight: '6.5%' }}>
+                                                        <Image source={ImagesWrapper.trashblack} />
+                                                    </TouchableOpacity>
                                                 </View>
-                                                <Text style={{ fontSize: 14, fontWeight: '400', marginLeft: '3%', marginTop: '3%' }}>-</Text>
-                                                <View style={{ width: '25%', height: 45, borderRadius: 25, borderColor: '#959494', borderWidth: 0.3, marginLeft: '3%', alignItems: 'center', justifyContent: 'center' }}>
-                                                    <Text style={{ color: '#868585', fontSize: 14, fontFamily: Fonts.mulishRegular, fontWeight: '400' }}>{data.closeTime}</Text>
-                                                </View>
-                                                <TouchableOpacity style={{ flex: 1, alignItems: 'flex-end', marginRight: '6.5%' }}>
-                                                    <Image source={ImagesWrapper.trashblack} />
-                                                </TouchableOpacity>
+
                                             </View>
-
+                                            )
+                                        }) :
+                                        <View>
+                                            <Text style={{ fontSize: 14, fontWeight: '400', color: '#999999', marginLeft: '15%', marginTop: '3%' }}>Unavailable</Text>
                                         </View>
-                                        )
-                                    }) :
-                                    <View>
-                                        <Text style={{ fontSize: 14, fontWeight: '400', color: '#999999', marginLeft: '15%', marginTop: '3%' }}>Unavailable</Text>
-                                    </View>
-                                }
+                                    }
 
 
-                            </View>
-                        )
-                    }):
-                    <View>
-                    <View style={{ flexDirection: 'row', marginLeft: '6%', marginTop: '7%' }}>
-
-                        <CheckBox
-
-                            // onClick={() => {
-                            //     this.setState({
-                            //         isSunday: !this.state.isSunday
-                            //     })
-                            // }}
-                            isChecked={false}
-                            //leftText={"CheckBox"}
-                            checkedImage={<Image source={ImagesWrapper.checkedbox} />}
-                            unCheckedImage={<Image source={ImagesWrapper.uncheckedbox} />}
-                        />
-                        <Text style={{ marginLeft: '4%', color: '#1E1C24', fontWeight: '600', fontFamily: Fonts.mulishSemiBold, fontSize: 14 }}>THURSDAY</Text>
-                        <TouchableOpacity style={{ flex: 1, alignItems: 'flex-end', marginRight: '6%' }}>
-                            
-                                <Image source={ImagesWrapper.plus2} /> 
-                              
-                        </TouchableOpacity>
-                    </View>
-                    <View>
-                        <Text style={{ fontSize: 14, fontWeight: '400', color: '#999999', marginLeft: '15%', marginTop: '3%' }}>Unavailable</Text>
-                    </View>
-                </View>}
-                    {this.state.defaultAvailability.length >= 1?
-                      
-                    this.state.defaultAvailability.map((data, key) => {
-
-                        return (
-                            <View>
-                                <View style={{ flexDirection: 'row', marginLeft: '6%', marginTop: '7%' }}>
-
-                                    <CheckBox
-
-                                        // onClick={() => {
-                                        //     this.setState({
-                                        //         isChecked: !isChecked
-                                        //     })
-                                        // }}
-                                        isChecked={data.day == 'Friday' && data.slots.length >= 1 ? true : false}
-                                        //leftText={"CheckBox"}
-                                        checkedImage={<Image source={ImagesWrapper.checkedbox} />}
-                                        unCheckedImage={<Image source={ImagesWrapper.uncheckedbox} />}
-                                    />
-                                    <Text style={{ marginLeft: '4%', color: '#1E1C24', fontWeight: '600', fontFamily: Fonts.mulishSemiBold, fontSize: 14 }}>FRIDAY</Text>
-                                    <TouchableOpacity style={{ flex: 1, alignItems: 'flex-end', marginRight: '6%' }}>
-                                        {data.slots.length >= 1 && data.day == 'Friday' ?
-                                            <Image source={ImagesWrapper.plus1} /> :
-                                            <Image source={ImagesWrapper.plus2} />}
-                                    </TouchableOpacity>
                                 </View>
-                                {data.slots.length >= 1 && data.day == 'Friday' ?
-                                    data.slots.map((data, key) => {
-                                        return (<View>
-                                            <View style={{ flexDirection: 'row', marginLeft: '14%', marginTop: '3%' }}>
-                                                <View style={{ width: '25%', height: 45, borderRadius: 25, borderColor: '#959494', borderWidth: 0.3, alignItems: 'center', justifyContent: 'center' }}>
-                                                    <Text style={{ color: '#868585', fontSize: 14, fontFamily: Fonts.mulishRegular, fontWeight: '400' }}>{data.openTime}</Text>
-                                                </View>
-                                                <Text style={{ fontSize: 14, fontWeight: '400', marginLeft: '3%', marginTop: '3%' }}>-</Text>
-                                                <View style={{ width: '25%', height: 45, borderRadius: 25, borderColor: '#959494', borderWidth: 0.3, marginLeft: '3%', alignItems: 'center', justifyContent: 'center' }}>
-                                                    <Text style={{ color: '#868585', fontSize: 14, fontFamily: Fonts.mulishRegular, fontWeight: '400' }}>{data.closeTime}</Text>
-                                                </View>
-                                                <TouchableOpacity style={{ flex: 1, alignItems: 'flex-end', marginRight: '6.5%' }}>
-                                                    <Image source={ImagesWrapper.trashblack} />
-                                                </TouchableOpacity>
-                                            </View>
+                            )
+                        }) :
+                        <View>
+                            <View style={{ flexDirection: 'row', marginLeft: '6%', marginTop: '7%' }}>
 
-                                        </View>
-                                        )
-                                    }) :
-                                    <View>
-                                        <Text style={{ fontSize: 14, fontWeight: '400', color: '#999999', marginLeft: '15%', marginTop: '3%' }}>Unavailable</Text>
-                                    </View>
-                                }
+                                <CheckBox
 
+                                    // onClick={() => {
+                                    //     this.setState({
+                                    //         isSunday: !this.state.isSunday
+                                    //     })
+                                    // }}
+                                    isChecked={false}
+                                    //leftText={"CheckBox"}
+                                    checkedImage={<Image source={ImagesWrapper.checkedbox} />}
+                                    unCheckedImage={<Image source={ImagesWrapper.uncheckedbox} />}
+                                />
+                                <Text style={{ marginLeft: '4%', color: '#1E1C24', fontWeight: '600', fontFamily: Fonts.mulishSemiBold, fontSize: 14 }}>WEDNESDAY</Text>
+                                <TouchableOpacity style={{ flex: 1, alignItems: 'flex-end', marginRight: '6%' }}>
 
+                                    <Image source={ImagesWrapper.plus2} />
+
+                                </TouchableOpacity>
                             </View>
-                        )
-                    }):
-                    <View>
-                    <View style={{ flexDirection: 'row', marginLeft: '6%', marginTop: '7%' }}>
-
-                        <CheckBox
-
-                            // onClick={() => {
-                            //     this.setState({
-                            //         isSunday: !this.state.isSunday
-                            //     })
-                            // }}
-                            isChecked={false}
-                            //leftText={"CheckBox"}
-                            checkedImage={<Image source={ImagesWrapper.checkedbox} />}
-                            unCheckedImage={<Image source={ImagesWrapper.uncheckedbox} />}
-                        />
-                        <Text style={{ marginLeft: '4%', color: '#1E1C24', fontWeight: '600', fontFamily: Fonts.mulishSemiBold, fontSize: 14 }}>FRIDAY</Text>
-                        <TouchableOpacity style={{ flex: 1, alignItems: 'flex-end', marginRight: '6%' }}>
-                            
-                                <Image source={ImagesWrapper.plus2} /> 
-                              
-                        </TouchableOpacity>
-                    </View>
-                    <View>
-                        <Text style={{ fontSize: 14, fontWeight: '400', color: '#999999', marginLeft: '15%', marginTop: '3%' }}>Unavailable</Text>
-                    </View>
-                </View>}
-
-                     {this.state.defaultAvailability.length >= 1?
-                    
-                    this.state.defaultAvailability.map((data, key) => {
-
-                        return (
                             <View>
-                                <View style={{ flexDirection: 'row', marginLeft: '6%', marginTop: '7%' }}>
-
-                                    <CheckBox
-
-                                        // onClick={() => {
-                                        //     this.setState({
-                                        //         isChecked: !isChecked
-                                        //     })
-                                        // }}
-                                        isChecked={data.day == 'Saturday' && data.slots.length >= 1 ? true : false}
-                                        //leftText={"CheckBox"}
-                                        checkedImage={<Image source={ImagesWrapper.checkedbox} />}
-                                        unCheckedImage={<Image source={ImagesWrapper.uncheckedbox} />}
-                                    />
-                                    <Text style={{ marginLeft: '4%', color: '#1E1C24', fontWeight: '600', fontFamily: Fonts.mulishSemiBold, fontSize: 14 }}>SATURDAY</Text>
-                                    <TouchableOpacity style={{ flex: 1, alignItems: 'flex-end', marginRight: '6%' }}>
-                                        {data.slots.length >= 1 && data.day == 'Saturday' ?
-                                            <Image source={ImagesWrapper.plus1} /> :
-                                            <Image source={ImagesWrapper.plus2} />}
-                                    </TouchableOpacity>
-                                </View>
-                                {data.slots.length >= 1 && data.day == 'Saturday' ?
-                                    data.slots.map((data, key) => {
-                                        return (<View>
-                                            <View style={{ flexDirection: 'row', marginLeft: '14%', marginTop: '3%' }}>
-                                                <View style={{ width: '25%', height: 45, borderRadius: 25, borderColor: '#959494', borderWidth: 0.3, alignItems: 'center', justifyContent: 'center' }}>
-                                                    <Text style={{ color: '#868585', fontSize: 14, fontFamily: Fonts.mulishRegular, fontWeight: '400' }}>{data.openTime}</Text>
-                                                </View>
-                                                <Text style={{ fontSize: 14, fontWeight: '400', marginLeft: '3%', marginTop: '3%' }}>-</Text>
-                                                <View style={{ width: '25%', height: 45, borderRadius: 25, borderColor: '#959494', borderWidth: 0.3, marginLeft: '3%', alignItems: 'center', justifyContent: 'center' }}>
-                                                    <Text style={{ color: '#868585', fontSize: 14, fontFamily: Fonts.mulishRegular, fontWeight: '400' }}>{data.closeTime}</Text>
-                                                </View>
-                                                <TouchableOpacity style={{ flex: 1, alignItems: 'flex-end', marginRight: '6.5%' }}>
-                                                    <Image source={ImagesWrapper.trashblack} />
-                                                </TouchableOpacity>
-                                            </View>
-
-                                        </View>
-                                        )
-                                    }) :
-
-                                    <View>
-                                        <Text style={{ fontSize: 14, fontWeight: '400', color: '#999999', marginLeft: '15%', marginTop: '3%' }}>Unavailable</Text>
-                                    </View>
-                                }
-
-
+                                <Text style={{ fontSize: 14, fontWeight: '400', color: '#999999', marginLeft: '15%', marginTop: '3%' }}>Unavailable</Text>
                             </View>
-                        )
-                    }):
-                    <View>
-                    <View style={{ flexDirection: 'row', marginLeft: '6%', marginTop: '7%' }}>
+                        </View>}
+                    {this.state.defaultAvailability.length >= 1 ?
+                        this.state.defaultAvailability.map((data, key) => {
 
-                        <CheckBox
+                            return (
+                                <View>
+                                    <View style={{ flexDirection: 'row', marginLeft: '6%', marginTop: '7%' }}>
 
-                            // onClick={() => {
-                            //     this.setState({
-                            //         isSunday: !this.state.isSunday
-                            //     })
-                            // }}
-                            isChecked={false}
-                            //leftText={"CheckBox"}
-                            checkedImage={<Image source={ImagesWrapper.checkedbox} />}
-                            unCheckedImage={<Image source={ImagesWrapper.uncheckedbox} />}
-                        />
-                        <Text style={{ marginLeft: '4%', color: '#1E1C24', fontWeight: '600', fontFamily: Fonts.mulishSemiBold, fontSize: 14 }}>SATURDAY</Text>
-                        <TouchableOpacity style={{ flex: 1, alignItems: 'flex-end', marginRight: '6%' }}>
-                            
-                                <Image source={ImagesWrapper.plus2} /> 
-                              
-                        </TouchableOpacity>
-                    </View>
-                    <View>
-                        <Text style={{ fontSize: 14, fontWeight: '400', color: '#999999', marginLeft: '15%', marginTop: '3%' }}>Unavailable</Text>
-                    </View>
-                </View>}
+                                        <CheckBox
+
+                                            // onClick={() => {
+                                            //     this.setState({
+                                            //         isChecked: !isChecked
+                                            //     })
+                                            // }}
+                                            isChecked={data.day == 'Thursday' && data.slots.length >= 1 ? true : false}
+                                            //leftText={"CheckBox"}
+                                            checkedImage={<Image source={ImagesWrapper.checkedbox} />}
+                                            unCheckedImage={<Image source={ImagesWrapper.uncheckedbox} />}
+                                        />
+                                        <Text style={{ marginLeft: '4%', color: '#1E1C24', fontWeight: '600', fontFamily: Fonts.mulishSemiBold, fontSize: 14 }}>THURSDAY</Text>
+                                        <TouchableOpacity style={{ flex: 1, alignItems: 'flex-end', marginRight: '6%' }}>
+                                            {data.slots.length >= 1 && data.day == 'Thursday' ?
+                                                <Image source={ImagesWrapper.plus1} /> :
+                                                <Image source={ImagesWrapper.plus2} />}
+                                        </TouchableOpacity>
+                                    </View>
+                                    {data.slots.length >= 1 && data.day == 'Thursday' ?
+                                        data.slots.map((data, key) => {
+                                            return (<View>
+                                                <View style={{ flexDirection: 'row', marginLeft: '14%', marginTop: '3%' }}>
+                                                    <View style={{ width: '25%', height: 45, borderRadius: 25, borderColor: '#959494', borderWidth: 0.3, alignItems: 'center', justifyContent: 'center' }}>
+                                                        <Text style={{ color: '#868585', fontSize: 14, fontFamily: Fonts.mulishRegular, fontWeight: '400' }}>{data.openTime}</Text>
+                                                    </View>
+                                                    <Text style={{ fontSize: 14, fontWeight: '400', marginLeft: '3%', marginTop: '3%' }}>-</Text>
+                                                    <View style={{ width: '25%', height: 45, borderRadius: 25, borderColor: '#959494', borderWidth: 0.3, marginLeft: '3%', alignItems: 'center', justifyContent: 'center' }}>
+                                                        <Text style={{ color: '#868585', fontSize: 14, fontFamily: Fonts.mulishRegular, fontWeight: '400' }}>{data.closeTime}</Text>
+                                                    </View>
+                                                    <TouchableOpacity style={{ flex: 1, alignItems: 'flex-end', marginRight: '6.5%' }}>
+                                                        <Image source={ImagesWrapper.trashblack} />
+                                                    </TouchableOpacity>
+                                                </View>
+
+                                            </View>
+                                            )
+                                        }) :
+                                        <View>
+                                            <Text style={{ fontSize: 14, fontWeight: '400', color: '#999999', marginLeft: '15%', marginTop: '3%' }}>Unavailable</Text>
+                                        </View>
+                                    }
+
+
+                                </View>
+                            )
+                        }) :
+                        <View>
+                            <View style={{ flexDirection: 'row', marginLeft: '6%', marginTop: '7%' }}>
+
+                                <CheckBox
+
+                                    // onClick={() => {
+                                    //     this.setState({
+                                    //         isSunday: !this.state.isSunday
+                                    //     })
+                                    // }}
+                                    isChecked={false}
+                                    //leftText={"CheckBox"}
+                                    checkedImage={<Image source={ImagesWrapper.checkedbox} />}
+                                    unCheckedImage={<Image source={ImagesWrapper.uncheckedbox} />}
+                                />
+                                <Text style={{ marginLeft: '4%', color: '#1E1C24', fontWeight: '600', fontFamily: Fonts.mulishSemiBold, fontSize: 14 }}>THURSDAY</Text>
+                                <TouchableOpacity style={{ flex: 1, alignItems: 'flex-end', marginRight: '6%' }}>
+
+                                    <Image source={ImagesWrapper.plus2} />
+
+                                </TouchableOpacity>
+                            </View>
+                            <View>
+                                <Text style={{ fontSize: 14, fontWeight: '400', color: '#999999', marginLeft: '15%', marginTop: '3%' }}>Unavailable</Text>
+                            </View>
+                        </View>}
+                    {this.state.defaultAvailability.length >= 1 ?
+
+                        this.state.defaultAvailability.map((data, key) => {
+
+                            return (
+                                <View>
+                                    <View style={{ flexDirection: 'row', marginLeft: '6%', marginTop: '7%' }}>
+
+                                        <CheckBox
+
+                                            // onClick={() => {
+                                            //     this.setState({
+                                            //         isChecked: !isChecked
+                                            //     })
+                                            // }}
+                                            isChecked={data.day == 'Friday' && data.slots.length >= 1 ? true : false}
+                                            //leftText={"CheckBox"}
+                                            checkedImage={<Image source={ImagesWrapper.checkedbox} />}
+                                            unCheckedImage={<Image source={ImagesWrapper.uncheckedbox} />}
+                                        />
+                                        <Text style={{ marginLeft: '4%', color: '#1E1C24', fontWeight: '600', fontFamily: Fonts.mulishSemiBold, fontSize: 14 }}>FRIDAY</Text>
+                                        <TouchableOpacity style={{ flex: 1, alignItems: 'flex-end', marginRight: '6%' }}>
+                                            {data.slots.length >= 1 && data.day == 'Friday' ?
+                                                <Image source={ImagesWrapper.plus1} /> :
+                                                <Image source={ImagesWrapper.plus2} />}
+                                        </TouchableOpacity>
+                                    </View>
+                                    {data.slots.length >= 1 && data.day == 'Friday' ?
+                                        data.slots.map((data, key) => {
+                                            return (<View>
+                                                <View style={{ flexDirection: 'row', marginLeft: '14%', marginTop: '3%' }}>
+                                                    <View style={{ width: '25%', height: 45, borderRadius: 25, borderColor: '#959494', borderWidth: 0.3, alignItems: 'center', justifyContent: 'center' }}>
+                                                        <Text style={{ color: '#868585', fontSize: 14, fontFamily: Fonts.mulishRegular, fontWeight: '400' }}>{data.openTime}</Text>
+                                                    </View>
+                                                    <Text style={{ fontSize: 14, fontWeight: '400', marginLeft: '3%', marginTop: '3%' }}>-</Text>
+                                                    <View style={{ width: '25%', height: 45, borderRadius: 25, borderColor: '#959494', borderWidth: 0.3, marginLeft: '3%', alignItems: 'center', justifyContent: 'center' }}>
+                                                        <Text style={{ color: '#868585', fontSize: 14, fontFamily: Fonts.mulishRegular, fontWeight: '400' }}>{data.closeTime}</Text>
+                                                    </View>
+                                                    <TouchableOpacity style={{ flex: 1, alignItems: 'flex-end', marginRight: '6.5%' }}>
+                                                        <Image source={ImagesWrapper.trashblack} />
+                                                    </TouchableOpacity>
+                                                </View>
+
+                                            </View>
+                                            )
+                                        }) :
+                                        <View>
+                                            <Text style={{ fontSize: 14, fontWeight: '400', color: '#999999', marginLeft: '15%', marginTop: '3%' }}>Unavailable</Text>
+                                        </View>
+                                    }
+
+
+                                </View>
+                            )
+                        }) :
+                        <View>
+                            <View style={{ flexDirection: 'row', marginLeft: '6%', marginTop: '7%' }}>
+
+                                <CheckBox
+
+                                    // onClick={() => {
+                                    //     this.setState({
+                                    //         isSunday: !this.state.isSunday
+                                    //     })
+                                    // }}
+                                    isChecked={false}
+                                    //leftText={"CheckBox"}
+                                    checkedImage={<Image source={ImagesWrapper.checkedbox} />}
+                                    unCheckedImage={<Image source={ImagesWrapper.uncheckedbox} />}
+                                />
+                                <Text style={{ marginLeft: '4%', color: '#1E1C24', fontWeight: '600', fontFamily: Fonts.mulishSemiBold, fontSize: 14 }}>FRIDAY</Text>
+                                <TouchableOpacity style={{ flex: 1, alignItems: 'flex-end', marginRight: '6%' }}>
+
+                                    <Image source={ImagesWrapper.plus2} />
+
+                                </TouchableOpacity>
+                            </View>
+                            <View>
+                                <Text style={{ fontSize: 14, fontWeight: '400', color: '#999999', marginLeft: '15%', marginTop: '3%' }}>Unavailable</Text>
+                            </View>
+                        </View>}
+
+                    {this.state.defaultAvailability.length >= 1 ?
+
+                        this.state.defaultAvailability.map((data, key) => {
+
+                            return (
+                                <View>
+                                    <View style={{ flexDirection: 'row', marginLeft: '6%', marginTop: '7%' }}>
+
+                                        <CheckBox
+
+                                            // onClick={() => {
+                                            //     this.setState({
+                                            //         isChecked: !isChecked
+                                            //     })
+                                            // }}
+                                            isChecked={data.day == 'Saturday' && data.slots.length >= 1 ? true : false}
+                                            //leftText={"CheckBox"}
+                                            checkedImage={<Image source={ImagesWrapper.checkedbox} />}
+                                            unCheckedImage={<Image source={ImagesWrapper.uncheckedbox} />}
+                                        />
+                                        <Text style={{ marginLeft: '4%', color: '#1E1C24', fontWeight: '600', fontFamily: Fonts.mulishSemiBold, fontSize: 14 }}>SATURDAY</Text>
+                                        <TouchableOpacity style={{ flex: 1, alignItems: 'flex-end', marginRight: '6%' }}>
+                                            {data.slots.length >= 1 && data.day == 'Saturday' ?
+                                                <Image source={ImagesWrapper.plus1} /> :
+                                                <Image source={ImagesWrapper.plus2} />}
+                                        </TouchableOpacity>
+                                    </View>
+                                    {data.slots.length >= 1 && data.day == 'Saturday' ?
+                                        data.slots.map((data, key) => {
+                                            return (<View>
+                                                <View style={{ flexDirection: 'row', marginLeft: '14%', marginTop: '3%' }}>
+                                                    <View style={{ width: '25%', height: 45, borderRadius: 25, borderColor: '#959494', borderWidth: 0.3, alignItems: 'center', justifyContent: 'center' }}>
+                                                        <Text style={{ color: '#868585', fontSize: 14, fontFamily: Fonts.mulishRegular, fontWeight: '400' }}>{data.openTime}</Text>
+                                                    </View>
+                                                    <Text style={{ fontSize: 14, fontWeight: '400', marginLeft: '3%', marginTop: '3%' }}>-</Text>
+                                                    <View style={{ width: '25%', height: 45, borderRadius: 25, borderColor: '#959494', borderWidth: 0.3, marginLeft: '3%', alignItems: 'center', justifyContent: 'center' }}>
+                                                        <Text style={{ color: '#868585', fontSize: 14, fontFamily: Fonts.mulishRegular, fontWeight: '400' }}>{data.closeTime}</Text>
+                                                    </View>
+                                                    <TouchableOpacity style={{ flex: 1, alignItems: 'flex-end', marginRight: '6.5%' }}>
+                                                        <Image source={ImagesWrapper.trashblack} />
+                                                    </TouchableOpacity>
+                                                </View>
+
+                                            </View>
+                                            )
+                                        }) :
+
+                                        <View>
+                                            <Text style={{ fontSize: 14, fontWeight: '400', color: '#999999', marginLeft: '15%', marginTop: '3%' }}>Unavailable</Text>
+                                        </View>
+                                    }
+
+
+                                </View>
+                            )
+                        }) :
+                        <View>
+                            <View style={{ flexDirection: 'row', marginLeft: '6%', marginTop: '7%' }}>
+
+                                <CheckBox
+
+                                    // onClick={() => {
+                                    //     this.setState({
+                                    //         isSunday: !this.state.isSunday
+                                    //     })
+                                    // }}
+                                    isChecked={false}
+                                    //leftText={"CheckBox"}
+                                    checkedImage={<Image source={ImagesWrapper.checkedbox} />}
+                                    unCheckedImage={<Image source={ImagesWrapper.uncheckedbox} />}
+                                />
+                                <Text style={{ marginLeft: '4%', color: '#1E1C24', fontWeight: '600', fontFamily: Fonts.mulishSemiBold, fontSize: 14 }}>SATURDAY</Text>
+                                <TouchableOpacity style={{ flex: 1, alignItems: 'flex-end', marginRight: '6%' }}>
+
+                                    <Image source={ImagesWrapper.plus2} />
+
+                                </TouchableOpacity>
+                            </View>
+                            <View>
+                                <Text style={{ fontSize: 14, fontWeight: '400', color: '#999999', marginLeft: '15%', marginTop: '3%' }}>Unavailable</Text>
+                            </View>
+                        </View>}
 
 
 
@@ -1035,6 +1102,110 @@ export default class WeeklyHours extends React.Component {
 
                     </View>
 
+                    <Modal
+                        testID={'modal'}
+                        isVisible={this.state.showtime}
+                        onBackdropPress={() => this.setState({ showtime: false })}
+                        style={{
+                            justifyContent: 'flex-end',
+                            margin: 0
+                        }}
+                        transparent={true}
+                        onRequestClose={() => {
+                            this.setState({ showtime: false })
+                        }}
+                    >
+
+                        <View style={{ height: 320, width: '100%', backgroundColor: 'white', borderTopLeftRadius: 10, borderTopRightRadius: 10, bottom: 0, position: 'absolute' }}>
+                            <View style={{ paddingLeft: 20, paddingTop: 30 }}>
+
+                                <View style={{ marginLeft: 'auto', marginRight: 'auto', marginTop: 20 }}>
+
+                                    <Text style={{ fontFamily: Fonts.mulishSemiBold, fontSize: 18, marginBottom: 15, color: '#1E1C24' }}>Select start time</Text>
+                                    <TouchableOpacity
+                                        onPress={() => this.setState({ displayStartTimer: true })}
+
+                                    >
+                                        <View style={{ borderWidth: 1, borderRadius: 50, height: 50, width: '80%', marginRight: 5, borderColor: '#000000', alignItems: 'center', justifyContent: 'center' }}>
+                                            {/* <TextInput 
+                                    style = {styles.time}
+                                    keyboardType='numeric'
+                                    onChangeText={(startTime) => {
+
+                                        this.setState({ start_time: startTime });
+                                                                            }}
+                                    value={this.state.start_time}
+
+                                    ></TextInput> */}
+
+                                            <Text>
+                                                {this.state.startTime != null ? this.state.startTime.getHours() + ':' + this.state.startTime.getMinutes() : ''}
+                                            </Text>
+
+                                            {this.state.displayStartTimer ?
+
+                                                <TimePicker
+                                                    value={this.state.startTime == null ? new Date() : this.state.startTime}
+                                                    mode={"time"}
+                                                    is24Hour={true}
+                                                    display={"default"}
+                                                    onChange={(event, date) => {
+                                                        this.setState({ startTime: date });
+                                                        console.log(this.state.startTime.getHours(), this.state.startTime.getMinutes());
+                                                        this.setState({ displayStartTimer: false })
+                                                    }}
+                                                />
+                                                : null}
+                                        </View>
+                                    </TouchableOpacity>
+
+                                    <Text style={{ fontFamily: Fonts.mulishSemiBold, fontSize: 18, marginBottom: 15, color: '#1E1C24', marginTop: 20 }}>Select end time</Text>
+                                    <TouchableOpacity
+                                        onPress={() => this.setState({ displayEndTimer: true })}
+
+                                    >
+                                        <View style={{ borderWidth: 1, borderRadius: 50, height: 50, width: '80%', marginRight: 5, borderColor: '#000000', alignItems: 'center', justifyContent: 'center' }}>
+
+                                            <Text>
+                                                {this.state.endTime != null ? this.state.endTime.getHours() + ':' + this.state.endTime.getMinutes() : ''}
+                                            </Text>
+
+                                            {this.state.displayEndTimer ?
+
+                                                <TimePicker
+                                                    value={this.state.endTime == null ? new Date() : this.state.endTime}
+                                                    mode={"time"}
+                                                    is24Hour={false}
+                                                    display={"default"}
+                                                    onChange={(event, date) => {
+                                                        this.setState({ endTime: date });
+                                                        // console.log(endTime);
+                                                        this.setState({ displayEndTimer: false })
+                                                    }}
+                                                />
+                                                : null}
+                                        </View>
+                                    </TouchableOpacity>
+
+                                    <TouchableOpacity
+                                        style={{ borderWidth: 1, borderRadius: 5, height: 30, width: 80, marginRight: 10, marginLeft: 10, borderColor: '#000000', marginTop: 15, justifyContent: 'center', alignItems: 'center' }}
+                                        onPress={() => {
+                                            this.setState({showtime: false}),
+                                            this.sunday()
+                                        }
+                                        }
+                                    >
+                                        <View>
+                                            <Text style = {{fontSize: 15, fontFamily: Fonts.mulishSemiBold, fontWeight: '600', color: '#000000'}}>Done</Text>
+                                        </View>
+                                    </TouchableOpacity>
+                                     
+                                </View>
+
+                            </View>
+                        </View>
+                    </Modal>
+
 
                 </ScrollView>
             </View>
@@ -1123,5 +1294,30 @@ const styles = StyleSheet.create({
         height: 55,
         marginRight: 30,
 
+    },
+    
+    time: {
+        fontFamily: Fonts.mulishRegular,
+        fontWeight: '600',
+        fontSize: 20,
+        color: 'rgba(88, 196, 198, 1)',
+    },
+    time1: {
+        fontFamily: Fonts.mulishRegular,
+        fontWeight: '400',
+        fontSize: 20,
+        color: 'rgba(134, 133, 133, 1)',
+    },
+    timeText: {
+        fontFamily: Fonts.mulishRegular,
+        fontWeight: '600',
+        fontSize: 12,
+        color: 'rgba(177, 170, 170, 1)',
+    },
+    timeText1: {
+        fontFamily: Fonts.mulishRegular,
+        fontWeight: '400',
+        fontSize: 12,
+        color: 'rgba(88, 196, 198, 1)',
     },
 })
