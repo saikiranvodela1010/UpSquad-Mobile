@@ -1,5 +1,5 @@
 import React from 'react'
-import {  View, Text, StyleSheet, TouchableOpacity, Image,TextInput,SafeAreaView,Platform,FlatList, ScrollView, DeviceEventEmitter,Modal,ActivityIndicator} from 'react-native';
+import {  View, Text, StyleSheet, TouchableOpacity, Image,TextInput,SafeAreaView,Platform,FlatList, ScrollView, DeviceEventEmitter,Modal,ActivityIndicator,Dimensions} from 'react-native';
 import ImagesWrapper from '../../res/ImagesWrapper';
 import Fonts from '../../res/Fonts';
 import ServiceUrls from '../../network/ServiceUrls';
@@ -7,6 +7,8 @@ import APIHandler from '../../network/NetWorkOperations';
 import moment from 'moment';
 import StoragePrefs from '../../res/StoragePrefs';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import FbGrid from "react-native-fb-image-grid";
+import io from 'socket.io-client';
 
 export default class CommentScreen extends React.Component {
     serviceUrls = new ServiceUrls();
@@ -27,6 +29,7 @@ export default class CommentScreen extends React.Component {
             CommentsContent: "",
             isLoading: false,
             isCommentLoading: false,
+            postImage: []
         }
        
     }
@@ -34,42 +37,75 @@ export default class CommentScreen extends React.Component {
     async componentDidMount() {
         this.setState({isLoading: true})
         const userDetails = await this.storagePrefs.getObjectValue("userDetails")
-        const content = this.props.route.params.content;
-        const postID = this.props.route.params.postID;
-        const creatorImg = this.props.route.params.creatorImg
-        const firstName = this.props.route.params.firstName;
-        const lastName = this.props.route.params.lastName;
-        const postCreatedAt = this.props.route.params.postCreatedAt;
-        const data = postID
-        const response = await this.apiHandler.requestGet(data,this.serviceUrls.getPost);
-        const comment = response.post.comments;
-        const postId = response.post._id;
-        //const userID = "6138c38d4cfd1f6ccac4af0d"
         const userID = userDetails.userId
-
-        this.setState({
-            content : content,
-            creatorImg : creatorImg,
-            firstName : firstName,
-            lastName: lastName,
-            postCreatedAt: postCreatedAt,
-            comments: comment,
-            postId : postId,
-            userId : userID
-        })
+       
+        // const content = this.props.route.params.content;
+         const postID = this.props.route.params.postID;
+         //const creatorImg = this.props.route.params.creatorImg
+         
+         
+        // const postCreatedAt = this.props.route.params.postCreatedAt;
+        const data = postID
+        console.log("CHECKING FOR POST ID",data)
+        const response = await this.apiHandler.requestGet(data,this.serviceUrls.getPost);
+        console.log("response",response.post.creator.profileImage.imageUrl)
+        if(response.message ==="Post fetched!"){
+            
+            console.log("response",response.post.content)
+            this.setState({
+                content : response.post.content,
+                creatorImg : response.post.creator.profileImage.imageUrl!=null && response.post.creator.profileImage.imageUrl!=undefined?
+                response.post.creator.profileImage.imageUrl : 'https://www.careerquo.com/assets/images/18.png',
+                firstName : response.post.creator.firstName,
+                lastName: response.post.creator.lastName,
+                postCreatedAt: response.post.createdAt,
+                comments: response.post.comments,
+                postImage : response.post.postImage,
+                postId : response.post._id,
+                userId : userID
+            })
+            this.socketConnect()
+            
+        }
+        console.log("CHECKING FOR THE FIRST NAME", this.state.content,
+        this.state.postImage);
         this.setState({isLoading: false})
-        this.subscription = DeviceEventEmitter.addListener("UpdateComments",this.updateComments)
+        // this.subscription = DeviceEventEmitter.addListener("UpdateComments",this.updateComments)
         
     }
 
     componentWillUnmount(){
         if(this.subscription){
             this.subscription.remove()
-        }
-        
+        }       
     }
 
-    
+    socketConnect()  {
+        this.socket = io(this.serviceUrls.socialUrl); 
+            if (!this.socket.connected) {
+                this.socket.connect();
+            }
+        this.socket.on("connect", () => {
+            console.log("socketID>>>>",this.socket.id); // x8WIv7-mJelg7on_ALbx
+        });
+        this.socket.on("disconnect", (reason) => {
+            console.log("DISCONNECTED SOCKET",reason)
+            // if (reason !== "forced close") {
+            //the disconnection was initiated by the server, you need to reconnect manually
+            this.socket.connect();
+            //}
+            // else the socket will automatically try to reconnect
+        });
+            this.socket.on("posts", (data) => {
+                switch(data.action) {
+                    case "comment":
+                        if(data.comment.postId === this.state.postId){
+                            this.state.comments.splice(0, 0, data.comment.comment)
+                        }
+
+                }
+            })
+    }
 
      sendComment = async ()=>{
         this.setState({isCommentLoading: true})
@@ -82,25 +118,73 @@ export default class CommentScreen extends React.Component {
             const postId = this.state.postId;
             const response = await this.apiHandler.requestPost(data,this.serviceUrls.postComment,postId);
             if(response.message == "Comment successfully added" ){
-                this.setState({CommentsContent: ""})
-                DeviceEventEmitter.emit("UpdateComments")
+                this.setState({CommentsContent: "",isCommentLoading: false})
+                // DeviceEventEmitter.emit("UpdateComments")
             }
         } else{
             this.setState({isCommentLoading: false})
         }
     }
 
-    updateComments = async () => {
-        const content = this.props.route.params.content;
-        const postID = this.props.route.params.postID;
-        const data = postID
-        const response = await this.apiHandler.requestGet(data,this.serviceUrls.getPost);
-        const comment = response.post.comments;
-        this.setState({
-            comments: comment,
-            isLoading: false,
-            isCommentLoading: false
-        })
+    // updateComments = async () => {
+    //     const content = this.props.route.params.content;
+    //     const postID = this.props.route.params.postID;
+    //     const data = postID
+    //     const response = await this.apiHandler.requestGet(data,this.serviceUrls.getPost);
+    //     const comment = response.post.comments;
+    //     this.setState({
+    //         comments: comment,
+    //         isLoading: false,
+    //         isCommentLoading: false
+    //     })
+    // }
+
+    FlatListHeader = () => {
+        return(
+            <>
+            {this.state.isLoading==false ? 
+            <View style={{flexDirection:'row',marginTop:30,marginLeft:24,}}>
+                <Image source={{uri : this.state.creatorImg}}
+                style = {{height: 30,width: 30, borderRadius: 25}}/> 
+                <Text style = {styles.name}>{this.state.firstName} {this.state.lastName}</Text>
+                <Text style  = {styles.createdAT}>{moment(this.state.postCreatedAt).fromNow() == 'Invalid date' ? null  : moment(this.state.postCreatedAt).fromNow()}</Text>
+            </View> : null }
+            {this.state.isLoading === false? <Text style = {[styles.commentContent,{marginLeft: 24,marginTop:12}]}>{this.state.content}</Text>: null}
+            <View style = {{ marginLeft: 20,marginRight: 18}}>
+            {this.state.postImage!=null && this.state.postImage!=0 ?    
+                <FbGrid images = {this.state.postImage}
+                style = {{height : 300,width: '100%'}}
+                onPress ={()=> {this.onPress(item.postImage)}}
+                />: null }
+            </View>
+            
+
+            {this.state.isLoading==false ? 
+            <View style={{ borderWidth: 1, borderColor: '#F1F1F1',marginTop:22}}/> : null}
+            {this.state.isLoading==false  ? 
+            <View style = {{flexDirection:'row',alignContent: 'center'}}>
+                    <View style = {{borderRadius: 20,borderWidth : 3,width :'75%' ,height : 50,borderColor: "#F1F1F1",marginTop:27,marginLeft:24,justifyContent: 'center',color:'#F1F1F1'}}>
+                        <TextInput style = {{marginLeft: 10}}
+                            placeholder="Add Comment"
+                            placeholderTextColor= '#868585'
+                            placeholderStyle= {{fontFamily: Fonts.mulishRegular,fontWeight:400,fontSize:14}}
+                            value={this.state.CommentsContent}
+                            onChangeText = {text => this.setState({CommentsContent:text })}
+                            //multiline = {true}
+                            keyboardType={Platform.OS === 'ios' ? 'ascii-capable' : 'visible-password'}
+                            returnKeyType='done'
+                        />
+                    </View>
+                    
+                        <Icon name="send-circle" size={60} color="#58C4C6" backgroundColor= "#fff" style = {{marginTop: 20}}
+                        onPress={()=>
+                        this.sendComment()}/>
+                    
+                </View>:null}
+                
+                {this.state.isLoading==false  ? <Text style={styles.comment}>{this.state.comments.length > 1 || this.state.comments.length == 0 ? this.state.comments.length + " comments" : this.state.comments.length + " comment"}</Text>:null}
+            </>
+        )
     }
 
     renderHeader = ()=> {
@@ -117,7 +201,7 @@ export default class CommentScreen extends React.Component {
                         }}
                     />
                     </TouchableOpacity>
-                    <Text style={{ fontSize: 20, fontFamily: Fonts.mulishRegular, fontWeight: "600" ,color:'#1E1C24',lineHeight:25.1,marginLeft: '5%',marginTop: '1%' }}>Post Comments</Text>
+                    <Text style={{ fontSize: 20, fontFamily: Fonts.mulishRegular, fontWeight: "600" ,color:'#1E1C24',lineHeight:25.1,marginLeft: '5%',marginTop: '1%' }}>Post Details</Text>
                     
             </View>
             <View style={{ borderWidth: 1, borderColor: '#F1F1F1',marginTop:22}}></View>
@@ -175,48 +259,16 @@ export default class CommentScreen extends React.Component {
         return(
             
         <SafeAreaView style = {{backgroundColor : '#FFFFFF',flex: 1}}>
-            <ScrollView>
             {this.renderHeader()}
             {this.renderLoader()}
             {this.renderCommentLoader()}
-            {this.state.isLoading==false ? 
-            <View style={{flexDirection:'row',marginTop:30,marginLeft:24,}}>
-                <Image source={{uri : this.state.creatorImg}}
-                style = {{height: 30,width: 30, borderRadius: 25}}/> 
-                <Text style = {styles.name}>{this.state.firstName} {this.state.lastName}</Text>
-                <Text style  = {styles.createdAT}>{moment(this.state.postCreatedAt).fromNow() == 'Invalid date' ? null  : moment(this.state.postCreatedAt).fromNow()}</Text>
-            </View> : null }
-            {this.state.isLoading==false ? 
-            <View style={{ borderWidth: 1, borderColor: '#F1F1F1',marginTop:22}}/> : null}
-            {this.state.isLoading==false  ? 
-            <View style = {{flexDirection:'row',alignContent: 'center'}}>
-                    <View style = {{borderRadius: 20,borderWidth : 3,width :'70%' ,height : 50,borderColor: "#F1F1F1",marginTop:27,marginLeft:24,justifyContent: 'center',color:'#F1F1F1'}}>
-                        <TextInput style = {{marginLeft: 10}}
-                            placeholder="Add Comment"
-                            placeholderTextColor= '#868585'
-                            placeholderStyle= {{fontFamily: Fonts.mulishRegular,fontWeight:400,fontSize:14}}
-                            value={this.state.CommentsContent}
-                            onChangeText = {text => this.setState({CommentsContent:text })}
-                            //multiline = {true}
-                            keyboardType={Platform.OS === 'ios' ? 'ascii-capable' : 'visible-password'}
-                            returnKeyType='done'
-                        />
-                    </View>
-                    
-                        <Icon name="send-circle" size={60} color="#58C4C6" backgroundColor= "#fff" style = {{marginTop: 20}}
-                        onPress={()=>
-                        this.sendComment()}/>
-                    
-                </View>:null}
+            
                 
-                {this.state.isLoading==false  ? <Text style={styles.comment}>{this.state.comments.length > 1 || this.state.comments.length == 0 ? this.state.comments.length + " comments" : this.state.comments.length + " comment"}</Text>:null}
-                <View style = {{ marginLeft: 24}}>
-                    {this.state.comments.length != 0 ? 
                         <FlatList
                             data = {this.state.comments}
-                            inverted={true}
+                            ListHeaderComponent = { this.FlatListHeader } 
                                 renderItem={({item})=> (
-                                    <View>
+                                    <View style= {{marginLeft: 24}}>
                                     <View style = {{marginTop:16, marginLeft :10, flexDirection: 'row'}}>
                                         <Image source={{uri : "https://www.careerquo.com/assets/images/18.png"}}
                                         style = {{width: 24, height: 24,borderRadius:10}}
@@ -227,10 +279,10 @@ export default class CommentScreen extends React.Component {
                                     <Text style = {styles.commentContent}>{item.content}</Text>
                                     </View>
                                 )}
-                        />:null}
-                </View>
+                        />
+                
             
-            </ScrollView>
+           
         </SafeAreaView>
         )
     }

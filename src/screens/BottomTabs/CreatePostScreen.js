@@ -19,8 +19,8 @@ import ServiceUrls from '../../network/ServiceUrls';
 import APIHandler from '../../network/NetWorkOperations';
 import moment from 'moment';
 import StoragePrefs from '../../res/StoragePrefs';
-import {Icon} from 'native-base';
 import RNPickerSelect, {defaultStyles} from 'react-native-picker-select';
+import { Chevron } from 'react-native-shapes';
 export default class CreatePostScreen extends React.Component {
     serviceUrls = new ServiceUrls();
     apiHandler = new APIHandler();
@@ -124,6 +124,9 @@ export default class CreatePostScreen extends React.Component {
                             });
                             }}
                             style={pickerSelectStyles}
+                            Icon={() => {
+                                return <Chevron size={2} color="#58C4C6" style = {{marginTop: Platform.OS === 'ios'? 10 : 10}}/>;
+                            }}
             
                         />
                     </View>
@@ -144,8 +147,9 @@ export default class CreatePostScreen extends React.Component {
                         <View style={styles.underline}/>
                     </View>
                     <View style = {{ marginTop: 32,flexDirection: 'row',justifyContent: 'space-between',alignItems: 'center'}}>
-                        <Text style = {[styles.name,{fontSize: 20,lineHeight:20.08}]}>{"Publish post as anonymous"}</Text>
+                        <Text style = {[styles.name,{fontSize: 20,lineHeight:20.08,marginTop: 32}]}>{"Publish post as anonymous"}</Text>
                         <Switch
+                            style={{marginTop: 32}}
                             trackColor={{ false: "#B1AAAA", true: "#81b0ff" }}
                             thumbColor={this.state.isEnabled ? "#f5dd4b" : "#B1AAAA"}
                             //ios_backgroundColor="#B1AAAA"
@@ -153,6 +157,10 @@ export default class CreatePostScreen extends React.Component {
                             value={this.state.isEnabled}
                         />
                     </View>
+                    <TouchableOpacity >
+                    <Text style = {{marginTop:24,marginLeft:8,fontSize:16,lineHeight:20.08,fontFamily:Fonts.mulishRegular,color:'#58C4C6'}}>Visibility Settings</Text>
+                    </TouchableOpacity>
+                    
                 </View>
                 
 
@@ -212,6 +220,11 @@ const pickerSelectStyles = StyleSheet.create({
       borderRadius: 8,
       color: '#9F9F9F',
       paddingRight: 30, // to ensure the text is never behind the icon
+    },
+    iconContainer: {
+        top: 5,
+        right: 15,
+        
     },
   });
   

@@ -39,6 +39,7 @@ export default class ServiceUrls {
     updateMettingNotificationSettings= this.mainUrl +'/settings/updateMettingNotificationSettings';
     updateMessageNotificationSettings= this.mainUrl +'/settings/updateMessageNotificationSettings';
     updatePostCommentNotificationSettings= this.mainUrl +'/settings/updatePostCommentNotificationSettings';
-
+    getUserAvailability = this.mainUrl+ '/userAvailability'
+    addUserAvailabilty = this.mainUrl+'/userAvailability/defualtAvailability'
 
 }
