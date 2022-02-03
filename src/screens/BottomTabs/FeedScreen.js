@@ -108,29 +108,43 @@ import io from 'socket.io-client';
             this.socket.on("posts", (data) => {
                 switch(data.action) {
                     case "post like":
-
-                        if(data.post.university_ID === this.state.universityId){
-                            console.log("CHEKCING DATA",data.post._id)
-                            this.setState({likedPosts: [...this.state.likedPosts,data.post._id]})
-                            for(i=0;i<this.state.postData.length;i++){
-                                if(this.state.postData[i]._id == data.post._id){
-                                    this.state.postData.splice(i, 1, data.post);
-                                } 
+                        if(data.post.university_ID!=null & data.post.university_ID!=undefined){
+                            if(data.post.university_ID === this.state.universityId){
+                                console.log("CHEKCING DATA",data.post._id)
+                                this.setState({likedPosts: [...this.state.likedPosts,data.post._id]})
+                                for(i=0;i<this.state.postData.length;i++){
+                                    if(this.state.postData[i]._id == data.post._id){
+                                        this.state.postData.splice(i, 1, data.post);
+                                    } 
+                                }
                             }
                         }
                         
+                        
                     break;
                     case "remove post like":
-                        if(data.post.university_ID === this.state.universityId){
-                            let index = this.state.likedPosts.indexOf(data.post._id);
-                            if (index != -1) this.state.likedPosts.splice(index, 1);
-                            for(i=0;i<this.state.postData.length;i++){
-                                if(this.state.postData[i]._id == data.post._id){
-                                    this.state.postData.splice(i, 1, data.post);
-                                } 
+                        if(data.post.university_ID!=null & data.post.university_ID!=undefined){
+                            if(data.post.university_ID === this.state.universityId){
+                                let index = this.state.likedPosts.indexOf(data.post._id);
+                                if (index != -1) this.state.likedPosts.splice(index, 1);
+                                for(i=0;i<this.state.postData.length;i++){
+                                    if(this.state.postData[i]._id == data.post._id){
+                                        this.state.postData.splice(i, 1, data.post);
+                                    } 
+                                }
                             }
                         }
+                        
                     break; 
+                    case "delete post":
+                        for(i=0;i<this.state.postData.length;i++){
+                            if(this.state.postData[i]._id === data.postId){
+                                const filteredData = this.state.postData.filter(item => item._id !== data.postId);
+                                this.setState({ postData: filteredData});
+                            }
+                        }
+                        
+                        break;
                 }
             })
           
@@ -200,11 +214,6 @@ import io from 'socket.io-client';
           })
         .then(response => {
             console.log("response.message",response.data.message)
-            if(response.data.message === "Post successfully deleted"){
-                const filteredData = this.state.postData.filter(item => item._id !== postID);
-                console.log("filtered Data",filteredData)
-                this.setState({ postData: filteredData,dotsmemu: false  });
-            }
         })
         .catch(error=> {
             console.log("error herer",error);
