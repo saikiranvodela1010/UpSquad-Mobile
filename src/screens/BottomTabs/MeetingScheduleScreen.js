@@ -34,9 +34,9 @@ export default class MeetingScheduleScreen extends React.Component {
         this.onDate1Change = this.onDate1Change.bind(this);
     }
     async componentDidMount() {
-        // const universityDetsils = await this.storagePrefs.getObjectValue("universityDetsils")
+        // const universityDetails = await this.storagePrefs.getObjectValue("universityDetails")
 
-        // this.setState({ universityId: universityDetsils._id })
+        // this.setState({ universityId: universityDetails._id })
         // console.log('universityid', this.state.universityId)
         // const userDetails = await this.storagePrefs.getObjectValue("userDetails")
         // this.setState({

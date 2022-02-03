@@ -49,9 +49,9 @@ export default class CreateMeetingScreen extends React.Component {
         }
     }
     async componentDidMount() {
-        // const universityDetsils = await this.storagePrefs.getObjectValue("universityDetsils")
+        // const universityDetails = await this.storagePrefs.getObjectValue("universityDetails")
 
-        // this.setState({ universityId: universityDetsils._id })
+        // this.setState({ universityId: universityDetails._id })
         // console.log('universityid', this.state.universityId)
         // const userDetails = await this.storagePrefs.getObjectValue("userDetails")
         // this.setState({

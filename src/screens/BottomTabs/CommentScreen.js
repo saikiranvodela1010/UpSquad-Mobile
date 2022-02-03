@@ -190,7 +190,7 @@ export default class CommentScreen extends React.Component {
             <View style={{ borderWidth: 1, borderColor: '#F1F1F1',marginTop:22}}/> : null}
             {this.state.isLoading==false  ? 
             <View style = {{flexDirection:'row',alignContent: 'center'}}>
-                    <View style = {{borderRadius: 20,borderWidth : 1,width :'70%' ,height : 50,borderColor: "#F1F1F1",marginTop:27,marginLeft:24,justifyContent: 'center',}}>
+                    <View style = {{borderRadius: 20,borderWidth : 3,width :'70%' ,height : 50,borderColor: "#F1F1F1",marginTop:27,marginLeft:24,justifyContent: 'center',color:'#F1F1F1'}}>
                         <TextInput style = {{marginLeft: 10}}
                             placeholder="Add Comment"
                             placeholderTextColor= '#868585'

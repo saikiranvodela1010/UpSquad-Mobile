@@ -42,9 +42,9 @@ export default class PlayersScreen extends React.Component {
 
   async componentDidMount() {
 
-    const universityDetsils = await this.storagePrefs.getObjectValue("universityDetsils")
+    const universityDetails = await this.storagePrefs.getObjectValue("universityDetails")
 
-    this.setState({ universityId: universityDetsils._id })
+    this.setState({ universityId: universityDetails._id })
     const userDetails = await this.storagePrefs.getObjectValue("userDetails")
     this.setState({ userId: userDetails.userId })
     this.getUserInfo();
@@ -52,9 +52,9 @@ export default class PlayersScreen extends React.Component {
   }
 
   updateCoachScreen = async () => {
-    const universityDetsils = await this.storagePrefs.getObjectValue("universityDetsils");
+    const universityDetails = await this.storagePrefs.getObjectValue("universityDetails");
     const userDetails = await this.storagePrefs.getObjectValue("userDetails")
-    this.setState({ universityId: universityDetsils._id, userId: userDetails.userId })
+    this.setState({ universityId: universityDetails._id, userId: userDetails.userId })
     this.getUserInfo();
   }
   async getUserInfo() {
