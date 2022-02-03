@@ -33,5 +33,6 @@ export default class ServiceUrls {
     getGroupTeams = this.mainUrl+'/teams/getGroupSessionTeams';
     deletePost = this.socialUrl+'/user/post'
     myPosts = this.socialUrl+'/feed/myposts'
+    getUserAvailability = this.mainUrl+ '/userAvailability'
 
 }
