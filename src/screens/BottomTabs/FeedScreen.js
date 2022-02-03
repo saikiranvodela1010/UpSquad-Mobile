@@ -142,8 +142,18 @@ import io from 'socket.io-client';
                                 this.setState({ postData: filteredData});
                             }
                         }
-                        
-                        break;
+                    break;
+                    // case "comment":
+                    //     for(i=0;i<this.state.postData.length;i++){
+                    //         if(this.state.postData[i]._id === data.comment.postId){
+                    //             console.log("RAVIKIRAN AVASARALA",data.comment.comment);
+                    //             console.log("RavikiranChecking",this.state.postData[i].comments) 
+                    //             this.state.postData[i].comments.push(data.comment.comment)
+                    //             console.log(this.state.postData[i].comments)
+                    //         }
+                    //     }
+                    //     break;
+
                 }
             })
           
@@ -224,38 +234,48 @@ import io from 'socket.io-client';
     }
 
     async getCommunityDetails() {
-        const communityData={
-          "email": this.state.email,
-          "userID": this.state.userId
+        const universityDetails = await this.storagePrefs.getObjectValue("universityDetails")
+        if(universityDetails!=null && universityDetails!=undefined){
+            const communityData={
+                "email": this.state.email,
+                "userID": this.state.userId
+              }
+              const response = await this.apiHandler.requestPost(communityData,this.serviceUrls.getCommunities);
+              if(response.data!=null && response.data.length>0 ){
+                  this.setState({
+                    universityName:response.data[0].universityName,
+                    universityId: response.data[0]._id,
+                    communityName: response.data[0].universityName,
+                    communityLogo : response.data[0].universityLogo, 
+                  });
+                  const universityDetails =  {
+                      "_id":this.state.universityId,
+                      "universityName":this.state.universityName,
+                      "universityLogo":this.state.communityLogo,
+                     }
+                     const data = await this.storagePrefs.setObjectValue("universityDetails",universityDetails);
+                } else{
+                  this.setState({
+                    universityName:"UpSquad",
+                    universityId: "5ee072287a57fb54881a81db",
+                    communityName: "UpSquad",
+                    communityLogo:""
+                  });
+                  const universityDetails =  {
+                      "_id":this.state.universityId,
+                      "universityName":this.state.universityName,
+                      "universityLogo":this.state.communityLogo,
+                     }
+                     const data = await this.storagePrefs.setObjectValue("universityDetails",universityDetails);
+                }
+        } else{
+            this.setState({universityName:universityDetails.universityName,
+                universityId: universityDetails._id,
+                communityName:universityDetails.universityName,
+                communityLogo:universityDetails.universityLogo
+            })
         }
-        const response = await this.apiHandler.requestPost(communityData,this.serviceUrls.getCommunities);
-        if(response.data!=null && response.data.length>0 ){
-            this.setState({
-              universityName:response.data[0].universityName,
-              universityId: response.data[0]._id,
-              communityName: response.data[0].universityName,
-              communityLogo : response.data[0].universityLogo, 
-            });
-            const universityDetails =  {
-                "_id":this.state.universityId,
-                "universityName":this.state.universityName,
-                "universityLogo":this.state.communityLogo,
-               }
-               const data = await this.storagePrefs.setObjectValue("universityDetails",universityDetails);
-          } else{
-            this.setState({
-              universityName:"UpSquad",
-              universityId: "5ee072287a57fb54881a81db",
-              communityName: "UpSquad",
-              communityLogo:""
-            });
-            const universityDetails =  {
-                "_id":this.state.universityId,
-                "universityName":this.state.universityName,
-                "universityLogo":this.state.communityLogo,
-               }
-               const data = await this.storagePrefs.setObjectValue("universityDetails",universityDetails);
-          }
+        
           
     }
 
@@ -643,7 +663,7 @@ import io from 'socket.io-client';
                                 
                             </View>
                             <View style={{ borderWidth: 1, borderColor: '#F1F1F1',marginTop:22,marginRight: '5%'}}></View>
-                            <View style={{flexDirection:'row',marginTop:20,justifyContent:'space-around'}}>
+                            <View style={{flexDirection:'row',marginTop:20,justifyContent:'space-around',marginLeft:-25}}>
                                 {/* <TouchableOpacity 
                                 onPress ={()=> {
                                 {this.state.likedPosts.indexOf(item._id) > -1 ? 
