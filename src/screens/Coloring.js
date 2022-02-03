@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { StyleSheet, Dimensions, Text, View, ScrollView, ViewPropTypes } from 'react-native';
 import PropTypes from 'prop-types';
 import { Asset } from 'expo-asset';
-import { color } from "react-native-reanimated";
+// import { color } from "react-native-reanimated";
 import Svg, { G, Circle, Defs, ClipPath, Path, Rect, Line } from "react-native-svg";
 import { backgroundColor } from 'react-native/Libraries/Components/View/ReactNativeStyleAttributes';
 

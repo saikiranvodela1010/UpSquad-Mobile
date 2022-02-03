@@ -33,6 +33,13 @@ export default class SwitchCommunityScreen extends React.Component {
             userId: '',
             isLoading: false,
             key:0,
+            isProfessional:'',
+            visibleToOthers:'',
+            teamDetails:[],
+            teamDetailsarry:[],
+            onPressteamDetails:[],
+            onPressteamDetailsarry:[],
+            isclicked:false,
         }
     }
 
@@ -59,6 +66,60 @@ export default class SwitchCommunityScreen extends React.Component {
     this.getCommunityDetails()
   }
 
+
+ isProfessional(){
+  let teamData = this.state.radio[0].teamsData;
+  console.log('teamData',teamData);
+  let showUpSquad = false;
+  // loop1:
+   for(var i=0;i<this.state.teamDetailsarry.length;i++){
+      
+       let teamId = this.state.teamDetailsarry[i];
+      //  loop2:
+       for(var l=0;l<teamData.length;l++){
+         if(teamData[l]._id === teamId){
+           let privateCommunities = teamData[l].privateCommunities;
+          //  loop3:
+           for(var k=0; k<privateCommunities.length;k++){
+            if(!privateCommunities[k].value){
+              return false;
+            }
+           }
+
+         }
+
+       }
+       showUpSquad=true;
+   }
+   return showUpSquad
+ }
+ onPressisProfessional(onPressteamdata){
+  console.log('onPressteamdata',onPressteamdata);
+  
+  let showUpSquad = false;
+  // loop1:
+   for(var i=0;i<this.state.onPressteamDetailsarry.length;i++){
+      
+       let teamId = this.state.onPressteamDetailsarry[i];
+      //  loop2:
+       for(var l=0;l<onPressteamdata.length;l++){
+         if(onPressteamdata[l]._id === teamId){
+           let privateCommunities = onPressteamdata[l].privateCommunities;
+          //  loop3:
+           for(var k=0; k<privateCommunities.length;k++){
+            if(!privateCommunities[k].value){
+              return false;
+            }
+           }
+
+         }
+
+       }
+       showUpSquad=true;
+   }
+   return showUpSquad
+ }
+
   async getCommunityDetails() {
     this.setState({
       isLoading: true
@@ -69,28 +130,151 @@ export default class SwitchCommunityScreen extends React.Component {
       "userID": userDetails.userId,
     }
     const response = await this.apiHandler.requestPost(communityData,this.serviceUrls.getCommunities);
+    // const response = await this.apiHandler.requestPost(communityData,this.serviceUrls.getCommunities);
     // const radio= response.data;
-
-    
-    if(response.data!=null && response.data.length>0){
+    console.log('communitydata=====',response.data)
+    if(response.data.length === 0){
+      const object={
+        "universityName":"UpSquad",
+        "universityLogo":'',
+        "_id":"5ee072287a57fb54881a81db",
+      }
+      this.state.radio_props.push(object);
+      console.log('upsquad',this.state.radio_props,this.state.radio_props.length);
+      this.setState({checked:this.state.radio_props.length-1})
+      this.setState({key:this.state.radio_props.length-1})
       this.setState({isLoading: false, isInternet: true})
+    }else if(response.data!=null && response.data.length>0){
+      console.log("length---------------------",response.data.length)
+      // // this.state.radio_props.pop();
+      // this.setState({checked:0})
+      // this.setState({key:0})
+      // // this.setState({isLoading: false, isInternet: true})
+
       this.setState({radio:response.data})
       const universityDetails = await this.storagePrefs.getObjectValue("universityDetails")
+      console.log("ravikiran&&&&&&&&*&*&*&*&",universityDetails)
+      
       this.setState({checked:universityDetails.key,key:universityDetails.key })
-    } else{
-      this.setState({isLoading: false})
-      this.setState({radio: []})
-    }
-    
-    for (var i = 0; i < this.state.radio.length; i++) {
-      this.state. radio_props[i] = {
-        "universityName":this.state.radio[i].universityName,
-        "universityLogo":this.state.radio[i].universityLogo,
-        "_id":this.state.radio[i]._id,
-      };
-      this.setState({ radio_props: this.state.radio_props });
+      // for(var i=0;i<this.state.radio.length;i++){
+      //   if(this.state.radio[i].subscriptionsData.isAdmin === true){
+
+      //   }
+      // }
+      if(this.state.checked === undefined){
+        this.setState({checked:0,key:0})
+      }
+      console.log("cheked",this.state.checked);
+      if(this.state.radio[this.state.checked].subscriptionsData.isAdmin === true){
+        for (var i = 0; i < this.state.radio.length; i++) {
+          this.state. radio_props[i] = {
+            "universityName":this.state.radio[i].universityName,
+            "universityLogo":this.state.radio[i].universityLogo,
+            "_id":this.state.radio[i]._id,
+            "subscriptionsData":this.state.radio[i].subscriptionsData,
+            "teamsData":this.state.radio[i].teamsData,
+          };
+          this.setState({ radio_props: this.state.radio_props });
+        }
+        const object={
+          "universityName":"UpSquad",
+          "UpsquadLogo":'',
+          "_id":"5ee072287a57fb54881a81db",
+        }
+        this.state.radio_props.push(object);
+        // console.log('upsquad1-------->',this.state.radio_props,this.state.radio_props.length);
+        // this.setState({checked:this.state.radio_props.length-1})
+        // this.setState({key:this.state.radio_props.length-1})
+  
+      }
+      else{
+      // this.setState({isLoading:true});
+      const userDetails = await this.storagePrefs.getObjectValue("userDetails");
+      const data = userDetails.userId;
+      
+      const response = await this.apiHandler.requestGet(data,this.serviceUrls.getParticularUser);
+      // console.log("flase response",response.data.isProfessional,response.data.visibleToOthers);
+      this.setState({isProfessional:response.data.isProfessional,visibleToOthers:response.data.visibleToOthers})
+      // this.setState({isLoading:true});
+      if(response.status ==="Success"){
+        this.setState({isLoading:false});
+        for (var i = 0; i < this.state.radio.length; i++) {
+          this.state. radio_props[i] = {
+            "universityName":this.state.radio[i].universityName,
+            "universityLogo":this.state.radio[i].universityLogo,
+            "_id":this.state.radio[i]._id,
+            "subscriptionsData":this.state.radio[i].subscriptionsData,
+            "teamsData":this.state.radio[i].teamsData,
+          };
+          this.setState({ radio_props: this.state.radio_props });
+        }
+      if(response.data.isProfessional === false){
+        let j = 0;
+        for(var i = 0;i<this.state.radio[this.state.checked].subscriptionsData.teamDetails.length;i++){
+          if(this.state.radio[this.state.checked].subscriptionsData.teamDetails[i].isChecked){
+
+            // console.log('teamdetails',this.state.radio[0].subscriptionsData.teamDetails[i].teamId);
+            this.state.teamDetails[j++]=this.state.radio[this.state.checked].subscriptionsData.teamDetails[i].teamId;
+            
+          }
+        }
+        this.setState({teamDetailsarry:this.state.teamDetails});
+       console.log('teamDetailsarry',this.state.teamDetailsarry);
+       
+      let showUpSquad = this.isProfessional();
+        console.log('showUpSquad1',showUpSquad);
+        if(showUpSquad === false){
+          for (var i = 0; i < this.state.radio.length; i++) {
+            this.state. radio_props[i] = {
+              "universityName":this.state.radio[i].universityName,
+              "universityLogo":this.state.radio[i].universityLogo,
+              "_id":this.state.radio[i]._id,
+              "isAdmin":this.state.radio[i].subscriptionsData.isAdmin,
+              "subscriptionsData":this.state.radio[i].subscriptionsData,
+              "teamsData":this.state.radio[i].teamsData,
+            };
+            this.setState({ radio_props: this.state.radio_props });
+            // console.log("radioprops",this.state.radio_props)
+            // this.setState({checked:0})
+            // this.setState({key:0})
+          }
+        }else{
+          console.log("showtrue--------")
+          const object={
+            "universityName":"UpSquad",
+            "UpsquadLogo":'',
+            "_id":"5ee072287a57fb54881a81db",
+          }
+          // for(i=0;i<this.state.radio_props;i++){
+          //   if(this.state.radio_props[i].universityName !== "UpSquad"){
+              this.state.radio_props.push(object);
+            // }
+          // }
+          this.setState({ radio_props: this.state.radio_props });
+
+          // console.log('showtrue',this.state.radio_props,this.state.radio_props.length);
+        }
      
-  }
+      }else if(response.data.isProfessional === true  && response.data.visibleToOthers ===true){
+        const object={
+          "universityName":"UpSquad",
+          "UpsquadLogo":'',
+          "_id":"5ee072287a57fb54881a81db",
+        }
+       
+        this.state.radio_props.push(object);
+        this.setState({ radio_props: this.state.radio_props });
+      
+        // console.log('upsquadtrue',this.state.radio_props,this.state.radio_props.length);
+        // this.setState({checked:this.state.radio_props.length-1})
+        // this.setState({key:this.state.radio_props.length-1})
+      }
+    }
+    }
+    } 
+
+    
+    
   // console.log('communitydata',this.state.radio_props)
   if(this.state.checked === undefined){
     this.setState({checked: 0,key: 0})
@@ -101,28 +285,41 @@ export default class SwitchCommunityScreen extends React.Component {
     
   }
 
+  
   async checked(item,key){
-     const universityDetails =  {
-      "_id":item._id,
-      "universityName":item.universityName,
-      "universityLogo":item.universityLogo,
-      "key":key
+    console.log(item,key);
+    this.setState({isLoading: false, isInternet: true})
+    const universityDetails =  {
+     "_id":item._id,
+     "universityName":item.universityName,
+     "universityLogo":item.universityLogo,
+     "key":key
+    }
+    try
+    {
+       await AsyncStorage.removeItem('universityDetails');
+       const data = await this.storagePrefs.setObjectValue("universityDetails",universityDetails);
+       const getuniversityDetails = await this.storagePrefs.getObjectValue("universityDetails")
+       this.setState({checked:getuniversityDetails.key, key: getuniversityDetails.key})
+      
+       if(this.state.isclicked === true){
+         this.setState({isclicked :false});
+         
+        const {navigate} = this.props.navigation;
+        setTimeout(() => {
+            navigate('BioSuccess'); 
+        }, 3000);
+       
+       }
+       DeviceEventEmitter.emit("UpdateFeed");
+     } catch(exception) {
+         console.log(exception);
      }
-     try
-     {
-        await AsyncStorage.removeItem('universityDetails');
-        const data = await this.storagePrefs.setObjectValue("universityDetails",universityDetails);
-        const getuniversityDetails = await this.storagePrefs.getObjectValue("universityDetails")
-        this.setState({checked:getuniversityDetails.key, key: getuniversityDetails.key})
-        DeviceEventEmitter.emit("UpdateFeed");
-      } catch(exception) {
-          console.log(exception);
-      }
 
-     
-    
+    //  this.props.navigation.navigate('BioSuccess');
+   
 
-  }
+ }
   renderLoader(){
     return(
         <Modal transparent={true}
@@ -195,9 +392,11 @@ export default class SwitchCommunityScreen extends React.Component {
                       <View style={{justifyContent:'space-between',flex:1}}>
                       <TouchableOpacity onPress={()=>{
                         this.setState({checked:key});
+                        this.setState({isclicked:true});
                         this.checked(item,key);
                     }} 
                     style={{flexDirection:'row',justifyContent:'space-between',flex:1}}
+
                     >
                           <Text style={styles.communitytext}>{item.universityName}</Text>
                         

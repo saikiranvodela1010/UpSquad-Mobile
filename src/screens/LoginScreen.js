@@ -88,7 +88,7 @@ export default class LoginScreen extends React.Component {
     } else {
       this.setState({isLoading: false});
       if (response.success === true) {
-        const userDetsils = {
+        const userDetails = {
           token: response.token,
           userId: response.user._id,
           userName: response.user.firstName + ' ' + response.user.lastName,
@@ -106,7 +106,7 @@ export default class LoginScreen extends React.Component {
           // alert("Removed");
           const logindetails = await this.storagePrefs.setObjectValue(
             'userDetails',
-            userDetsils,
+            userDetails,
           );
           const logg = await this.storagePrefs.setIsLogedIn("YES");
 
