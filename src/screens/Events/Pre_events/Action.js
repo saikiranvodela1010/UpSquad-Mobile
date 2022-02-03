@@ -18,7 +18,10 @@ import { event } from 'react-native-reanimated';
 let dispatch;
 let typeofevent;
 let is_CallShowPB=false;
-
+const instance = axios.create({
+ 
+  timeout:2000,
+});
 const API =
   'https://devapi.upsquad.com/users/validateEmail/rajkumar@thinkebiz.net';
 
@@ -48,6 +51,7 @@ export const CallShowPB = (parameter) => {
     payload:parameter
   };
 };
+// CallEventDetailsAPI
 
 
 export function updateEventType(param) {
@@ -68,6 +72,45 @@ export function updateEventType(param) {
       payload: resp,
     });
   };
+}
+
+
+export function CallEventDetailsAPI(param,b,c) 
+{
+ // alert(param+"  bhanu");
+  return dispatched => {
+    
+  return instance.get("https://devapi.upsquad.com/events/getEventDetails/"+param)//param)
+  .then(response => {
+    GetSpaces();
+    console.log(response.data,"Event details");
+   if(response.data.success==true)
+   {
+    b.navigate('eventDetails',{ eventData:{
+      "data":response.data.data[0],
+      "obj":c
+
+    }});
+   }
+   dispatch({
+    type: SHOW_PB,
+    payload: false//response.data.data.favoriteEvents,
+  });
+  })
+  .catch(error => {
+
+    dispatch({
+      type: SHOW_PB,
+      payload: false//response.data.data.favoriteEvents,
+    });
+ 
+ alert(error+"DAMN");                     
+
+  })
+  ;
+
+};
+
 }
 
 
@@ -169,7 +212,7 @@ export function CallAddFavEvent(eventid,userid)
       id: eventid,
       userId:userid
     };
-    return axios
+    return instance
       .patch(eventsHandler.addToFavorite,params,headers)
       .then(response => {
         GetSpaces();
@@ -210,11 +253,14 @@ export function CallAddFavEvent(eventid,userid)
        }
        catch(error)
        {
+
         dispatch({
           type: SHOW_PB,
           payload: false//response.data.data.favoriteEvents,
         });
         alert(error);
+
+        
        }
        }
           
@@ -247,7 +293,7 @@ export function CallRemoveFavEvent(eventid,userid)
       id: eventid,
       userId:userid
     };
-    return axios
+    return instance
       .patch(eventsHandler.removeToFavorite,params,headers)
       .then(response => {
         GetSpaces();
@@ -323,7 +369,7 @@ export function CallPublicEvents()
 {
 console.log("Came........");
  
-    return  axios
+    return  instance
     .get(eventsHandler.publicEvents)
     .then(response => {
       GetSpaces();
@@ -390,7 +436,7 @@ export function CallPrivateEvents(email) {
     let headers = {
       'Content-Type': 'application/json',
     };
-    return axios
+    return instance
       .get(eventsHandler.privateEvents + email)
       .then(response => {
         GetSpaces();
@@ -464,7 +510,7 @@ export function CallFavEvents(userID,events) {
     let headers = {
       'Content-Type': 'application/json',
     };
-    return axios
+    return instance
     .post(eventsHandler.favEvents, params, headers)
 
     .then(response => {
@@ -540,7 +586,7 @@ export function CallregisteredEvents(email) {
     };
     //  alert(eventsHandler.addEvents);
 
-    return axios
+    return instance
       .get(eventsHandler.registeredEvents + email)
       .then(response => {
         GetSpaces();
@@ -642,7 +688,7 @@ export function fetchData() {
     let headers = {
       'Content-Type': 'application/json',
     };
-    return axios
+    return instance
       .get(API, headers)
       .then(data => {
         console.log(data.data, ' dataXXXXXXXX');
