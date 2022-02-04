@@ -29,15 +29,15 @@ class MeetingsScreen extends React.Component {
   async componentDidMount() {
       
     const universityDetails = await this.storagePrefs.getObjectValue("universityDetails")
-    // console.log('universityDetails',universityDetails);
-    this.setState({communityName:universityDetails.universityName,communityLogo:universityDetails.universityLog});
+     //console.log('universityDetails',universityDetails);
+    this.setState({communityName:universityDetails.universityName,communityLogo:universityDetails.universityLogo});
    
 
     }
     async componentDidUpdate(){
         const universityDetails = await this.storagePrefs.getObjectValue("universityDetails")
         // console.log('universityDetails',universityDetails);
-        this.setState({communityName:universityDetails.universityName,communityLogo:universityDetails.universityLog});
+        this.setState({communityName:universityDetails.universityName,communityLogo:universityDetails.universityLogo});
     }
   onDateChange(date) {
     this.setState({

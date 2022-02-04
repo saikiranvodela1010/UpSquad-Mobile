@@ -46,15 +46,24 @@ export default class WeeklyHours extends React.Component {
 
         this.getUserAvailability();
 
-        // DeviceEventEmitter.addListener("UpdateFeed",this.updatePlayerScreen)
+         DeviceEventEmitter.addListener("UpdateFeed",this.updateWeeklyHourScreen)
     }
+    updateWeeklyHourScreen = async () => {
+
+        const userDetails = await this.storagePrefs.getObjectValue("userDetails")
+        this.setState({ userId: userDetails.userId })
+        console.log('id', this.state.userId);
+
+        this.getUserAvailability();
+        
+      }
     async getUserAvailability() {
         this.setState({
             isLoading: true
         })
         const params = {
             //user_id: '612751ed03f7d0315adf3596',
-            user_id: this.state.userId,
+           user_id: this.state.userId,
         };
 
         const res = await axios.get(this.serviceUrls.getUserAvailability, { params });
@@ -104,21 +113,40 @@ export default class WeeklyHours extends React.Component {
             console.log("sundayobject", this.state.defaultAvailability)
         }
 
-        //     this.state.defaultAvailability.push(obj1);
-        //    // this.setState({defaultAvailability:})
-        //           this.setState({defaultAvailability: this.state.defaultAvailability})
-        //           console.log("sundayobject",this.state.defaultAvailability)
+       
 
 
+    }
+    delete(index){
+       // alert(index)
+            for (var i = 0; i < this.state.defaultAvailability.length; i++) {
+                if (this.state.defaultAvailability[i].day == 'Sunday') {
+                    for(var j = 0; j < this.state.defaultAvailability[i].slots.length; j++){
+                        if(j==index){
+                            this.state.defaultAvailability[i].slots.splice(j, 1); 
+                            //delete this.state.defaultAvailability[i].slots[j]
+                            this.setState({ defaultAvailability: this.state.defaultAvailability })
+                            // const filteredItems = this.state.defaultAvailability[i].slots.filter(item =>item[j] != item[index])
+                            //console.log('deleted',filteredItems)
+                           // this.state.defaultAvailability[i].slots.remove(this.state.defaultAvailability[i].slots[j])
+                        }
+                    }
+                }
+
+            }
+            console.log('deleted', this.state.defaultAvailability)
+
+        
 
     }
   async onNext(){
       const data1={
         "defaultAvailability": this.state.defaultAvailability,
-        "user_id": this.state.userId
+        "user_id":  this.state.userId
     }
         const response = await this.apiHandler.requestPost(data1, this.serviceUrls.addUserAvailabilty)
         console.log('post status',response)
+        console.log('useravailabity',this.state.defaultAvailability)
 
     }
     renderLoader() {
@@ -146,9 +174,10 @@ export default class WeeklyHours extends React.Component {
     }
     render() {
         return (
+            <ScrollView>
             <View style={{ flex: 1, backgroundColor: '#FFFFFF' }}>
                 {this.renderLoader()}
-                <ScrollView>
+               
                     {this.state.defaultAvailability.length >= 1 ?
                         this.state.defaultAvailability.map((data, key) => {
 
@@ -188,7 +217,8 @@ export default class WeeklyHours extends React.Component {
                                                     <View style={{ width: '25%', height: 45, borderRadius: 25, borderColor: '#959494', borderWidth: 0.3, marginLeft: '3%', alignItems: 'center', justifyContent: 'center' }}>
                                                         <Text style={{ color: '#868585', fontSize: 14, fontFamily: Fonts.mulishRegular, fontWeight: '400' }}>{data.closeTime}</Text>
                                                     </View>
-                                                    <TouchableOpacity style={{ flex: 1, alignItems: 'flex-end', marginRight: '6.5%' }}>
+                                                    <TouchableOpacity style={{ flex: 1, alignItems: 'flex-end', marginRight: '6.5%' }}
+                                                    onPress={()=>this.delete(key)}>
                                                         <Image source={ImagesWrapper.trashblack} />
                                                     </TouchableOpacity>
                                                 </View>
@@ -1207,8 +1237,9 @@ export default class WeeklyHours extends React.Component {
                     </Modal>
 
 
-                </ScrollView>
+              
             </View>
+            </ScrollView>
         )
     }
 }
