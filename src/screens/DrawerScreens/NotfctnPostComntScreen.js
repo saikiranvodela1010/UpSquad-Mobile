@@ -67,6 +67,8 @@ export default class NotfctnPostComntScreen extends React.Component {
                 this.setState({ isEmailOnLikes:true});
             }
 
+        }else{
+            this.setState({isLoading:false});
         }
     }
 
@@ -157,7 +159,7 @@ export default class NotfctnPostComntScreen extends React.Component {
                         // style={{marginLeft:25}}
                         />
                     </TouchableOpacity>
-                    <Text style={styles.memphistalk}>Post & Comment Notifications</Text>
+                    <Text style={styles.memphistalk}>Post & Comment Notification</Text>
 
 
                 </View>

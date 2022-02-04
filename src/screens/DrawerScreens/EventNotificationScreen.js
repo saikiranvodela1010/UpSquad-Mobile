@@ -100,6 +100,8 @@ export default class EventNotificationScreen extends React.Component {
         if(response.status === true){
             this.setState({isLoading:false});
             this.props.navigation.navigate('DrawerNotification');
+        }else{
+            this.setState({isLoading:false});
         }
     }
 

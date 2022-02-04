@@ -60,7 +60,9 @@ export default class MeetingNotificationScreen extends React.Component {
                  this.setState({ isEmailForMeetingStarting:true});
              }
 
-        }
+            }else{
+                this.setState({isLoading:false});
+            }
     }
 
     async saveEventData(){

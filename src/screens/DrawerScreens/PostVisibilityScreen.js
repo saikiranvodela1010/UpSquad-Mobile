@@ -62,6 +62,8 @@ export default class PostVisibiltyScreen extends React.Component {
     }else if(response.data[0].visibilitySettings.social.responsesPost === 2){
         this.setState({onlyme:1});
     }
+    }else{
+        this.setState({isLoading:false});
     }
     }
 

@@ -58,7 +58,9 @@ export default class MessageNotificationScreen extends React.Component {
                  this.setState({ isEmailWhenSomeoneMsg2Group:true});
              }
 
-        }
+            }else{
+                this.setState({isLoading:false});
+            }
     }
 
     async saveEventData(){
