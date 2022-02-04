@@ -31,9 +31,9 @@ import tabbar3 from './src/screens/tabbar3';
 import tabbar4 from './src/screens/tabbar4';
 import BioSuccessScreen from './src/screens/BioSuccessScreen';
 import damn from './src/screens/damn';
-import NewStory from './src/screens/NewStoryScreen'
-
-import colour from './src/screens/Coloring'
+import NewStory from './src/screens/NewStoryScreen';
+import SplashScreen from './SplashScreen';
+import colour from './src/screens/Coloring';
 import PlayersScreen from './src/screens/BottomTabs/PlayersScreen';
 import PlayesDetailScreen from './src/screens/PlayersDetailScreen';
 import PlayerSearchScreen from './src/screens/BottomTabs/PlayerSearchScreen'
@@ -68,9 +68,9 @@ import MessageNotificationScreen from './src/screens/DrawerScreens/MessageNotifi
 import NotfctnPostComntScreen from './src/screens/DrawerScreens/NotfctnPostComntScreen';
 import { ImageView } from './src/screens/BottomTabs/ImageView';
 import {getISUSERLOGEDIN,} from './src/res/GetUserInfo';
+import EventDetails from './src/screens/Events/Pre_events/EventDetails';
 
-
-
+import ImageViewer from './src/screens/Events/Pre_events/ImageViewer';
 
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -82,9 +82,11 @@ const MainScreens =()=>{
     screenOptions={{
       headerShown: false,
     }}
-      initialRouteName='GetStarted'
+    initialRouteName='SplashScreen'
     >
-      
+       <Stack.Screen  name="ImageViewer" component={ImageViewer} />
+       <Stack.Screen  name="SplashScreen" component={SplashScreen} />
+       
       <Stack.Screen  name="GetStarted" component={GetStartedScreen} />
       <Stack.Screen  name="profilesuccess" component={ProfileSuccess} />       
       <Stack.Screen name="chatscreen"  component={ChatScreen}/>    
@@ -165,6 +167,9 @@ const MainScreens =()=>{
           <Stack.Screen
           name="coachSearch"
           component={CoachSearchScreen} />
+          <Stack.Screen
+        name="eventDetails"
+        component={EventDetails} />
           <Stack.Screen
           name = "CommentScreen"
           component = {CommentScreen}/>

@@ -3,12 +3,6 @@ import {Provider} from 'react-redux';
   
 import store from './BaseStore';
 import App from './App'
-  
-
-  
-
-
-
 
 const Redux= () => {
   return (

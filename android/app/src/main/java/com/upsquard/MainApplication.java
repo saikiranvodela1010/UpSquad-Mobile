@@ -1,18 +1,21 @@
 package com.upsquard;
-
 import android.app.Application;
 import android.content.Context;
 import com.facebook.react.PackageList;
 import com.facebook.react.ReactApplication;
+import com.rnfs.RNFSPackage;
+import com.vinzscam.reactnativefileviewer.RNFileViewerPackage;
+import com.vinzscam.reactnativefileviewer.RNFileViewerPackage;
+import com.christopherdro.htmltopdf.RNHTMLtoPDFPackage;
 import com.reactnativecommunity.asyncstorage.AsyncStoragePackage;
-import com.rnfs.RNFSPackage;
-import com.rnfs.RNFSPackage;
 import com.reactnativecommunity.asyncstorage.AsyncStoragePackage;
 import com.oblador.vectoricons.VectorIconsPackage;
 import com.reactnativecommunity.netinfo.NetInfoPackage;
 import com.reactnativecommunity.netinfo.NetInfoPackage;
 import com.brentvatne.react.ReactVideoPackage;
 import com.horcrux.svg.SvgPackage;
+import cl.json.ShareApplication;
+import cl.json.RNSharePackage;
 import com.facebook.react.ReactInstanceManager;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;

@@ -126,6 +126,14 @@ export default class CommentScreen extends React.Component {
         }
     }
 
+    onPress = (url) => {
+        // url and index of the image you have clicked alongwith onPress event.
+        console.log("url",url);
+        this.props.navigation.navigate('ImageView',{
+            url : url
+        })
+      }
+
     // updateComments = async () => {
     //     const content = this.props.route.params.content;
     //     const postID = this.props.route.params.postID;
@@ -154,7 +162,7 @@ export default class CommentScreen extends React.Component {
             {this.state.postImage!=null && this.state.postImage!=0 ?    
                 <FbGrid images = {this.state.postImage}
                 style = {{height : 300,width: '100%'}}
-                onPress ={()=> {this.onPress(item.postImage)}}
+                onPress ={()=> {this.onPress(this.state.postImage)}}
                 />: null }
             </View>
             
@@ -388,4 +396,5 @@ const styles = StyleSheet.create({
         marginTop: 10
       }
 })
+
 
