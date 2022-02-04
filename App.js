@@ -34,7 +34,6 @@ import damn from './src/screens/damn';
 import NewStory from './src/screens/NewStoryScreen'
 import SplashScreen from './SplashScreen';
 import colour from './src/screens/Coloring';
-import colour from './src/screens/Coloring'
 import PlayersScreen from './src/screens/BottomTabs/PlayersScreen';
 import PlayesDetailScreen from './src/screens/PlayersDetailScreen';
 import PlayerSearchScreen from './src/screens/BottomTabs/PlayerSearchScreen'
