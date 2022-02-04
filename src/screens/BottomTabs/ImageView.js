@@ -1,22 +1,11 @@
 import React from 'react'
 import {  View, Text, StyleSheet, TouchableOpacity, Image,TextInput,SafeAreaView,Platform,FlatList, DeviceEventEmitter,ActivityIndicator,Dimensions} from 'react-native';
 import ImagesWrapper from '../../res/ImagesWrapper';
-import Fonts from '../../res/Fonts';
-import { ScrollView, TouchableHighlight } from 'react-native-gesture-handler';
-import Svg, { G, Circle } from "react-native-svg";
-import LinearGradient from 'react-native-linear-gradient'
-import Modal from 'react-native-modal';
-import ServiceUrls from '../../network/ServiceUrls';
-import APIHandler from '../../network/NetWorkOperations';
-import moment from 'moment';
-import StoragePrefs from '../../res/StoragePrefs';
-import Share from 'react-native-share';
-import { forEach } from 'lodash';
-import axios from 'axios';
-import { SliderBox } from "react-native-image-slider-box";
+
 import FbGrid from "react-native-fb-image-grid";
 import GallerySwiper from "react-native-gallery-swiper";
 import Swiper from 'react-native-swipe-image';
+
 
 
 export class ImageView extends  React.Component {
