@@ -20,7 +20,7 @@ let typeofevent;
 let is_CallShowPB=false;
 const instance = axios.create({
  
-  timeout:2000,
+
 });
 const API =
   'https://devapi.upsquad.com/users/validateEmail/rajkumar@thinkebiz.net';
@@ -80,7 +80,7 @@ export function CallEventDetailsAPI(param,b,c)
  // alert(param+"  bhanu");
   return dispatched => {
     
-  return instance.get("https://devapi.upsquad.com/events/getEventDetails/"+param)//param)
+  return instance.get("https://devapi.upsquad.com/events/getEventDetails/"+param)//param) //61ceb36a79a11d229aed5d3d
   .then(response => {
     GetSpaces();
     console.log(response.data,"Event details");

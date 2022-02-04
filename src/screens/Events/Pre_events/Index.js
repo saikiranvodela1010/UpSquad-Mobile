@@ -14,3 +14,4 @@ export {CallShowPB} from './Action';
 export {CallGetFavListOfIDS} from './Action';
 export {CallAddFavEvent} from './Action';
 export {CallRemoveFavEvent} from './Action';
+export {CallEventDetailsAPI} from './Action';

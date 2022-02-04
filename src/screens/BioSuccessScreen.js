@@ -50,7 +50,7 @@ class BioSuccessScreen extends React.Component{
     render() {
         return(
             <Tab.Navigator 
-            initialRouteName='Feed'
+            initialRouteName= 'Feed' //'Feed'
             screenOptions={{
               headerShown: false,
               tabBarStyle: {backgroundColor: 'white',

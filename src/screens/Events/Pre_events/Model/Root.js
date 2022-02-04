@@ -1,45 +1,5 @@
-import { Type, plainToClass,Expose } from 'class-transformer';
-import { ZoomDetails } from './ZoomDetails';
-import { EventLocation } from './EventLocation';
-import { RegisterInvites} from'./RegisterInvites' 
-import { UserRegisterEvent } from './UserRegisterEvent';
-export class Root {
-  success=null;
-  msg=null;
-  data= null;
- 
 
 
-  
-  getSuccess()
-  {  
-    return this.success;
-  }
-  
-  setSuccess(value) 
-  {   
-     this.success=value;
-  }
-  
-  getMsg()
-  {  
-    return this.msg;
-  }
-  
-  setMsg(value) 
-  {   
-     this.msg=value;
-  }
-  
-  setData(value) {
- this.data=value;
-  }
-  
-  getData() {
- return this.data;
-  }
-
-}
 
 
  export  class Data {
@@ -80,14 +40,22 @@ export class Root {
   surveyStatus=null;
   surveyDescription=null;
   __v=null;
-
+  firstName= null;
+            lastName=null;
+            profileImg= null;
   getTotalAttendences()
   {
     return this.signupInvitees.length+this.registerInvites.length+this.userRegisterEvent.length;
   }
 
-
-
+getHostName()
+{
+  return this.firstName+" "+this.lastName;
+}
+getHostProfilePic()
+{
+  return this.profileImg;
+}
 
  
   getEventID() {

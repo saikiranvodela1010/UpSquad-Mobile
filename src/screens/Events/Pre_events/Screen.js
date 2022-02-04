@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import {
+  // eslint-disable-next-line prettier/prettier
   Text,
   View,
   Button,
@@ -8,7 +9,8 @@ import {
   TextInput,
   TouchableOpacity,
   ActivityIndicator,
-  Alert,RefreshControl
+  Alert,
+  RefreshControl,
 } from 'react-native';
 import Modal from 'react-native-modal';
 import {connect} from 'react-redux';
@@ -22,7 +24,7 @@ import {
   getTocken,
   getUserId,
   getUserName,
-  getUserEmail,
+  getUserEmail,getUniversityDetails
 } from '../../../res/GetUserInfo';
 import {
   increaseBurgerAction,
@@ -37,24 +39,27 @@ import {
   CallPublicEvents,
   CallLoadMore,
   CallShowPB,
-  CallGetFavListOfIDS,CallAddFavEvent,CallRemoveFavEvent,
+  CallGetFavListOfIDS,
+  CallAddFavEvent,
+  CallRemoveFavEvent,
+  CallEventDetailsAPI
 } from './Index';
+import eventsHandler from '../NetworkUtils/ApiHandler';
 import {Person} from './Model/model';
 import {RecyclerListView, DataProvider, LayoutProvider} from 'recyclerlistview';
 import Icon from 'react-native-vector-icons/Fontisto';
 import IconAnt from 'react-native-vector-icons/AntDesign';
 import IconMesage from 'react-native-vector-icons/MaterialCommunityIcons';
-import IconGrid from 'react-native-vector-icons/MaterialIcons';
+import ICONMaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import IconFeather from 'react-native-vector-icons/Feather';
 import StoragePrefs from '../../../res/StoragePrefs';
 import {Data} from './Model/Root';
-import {ZoomDetails} from './Model/ZoomDetails';
-import { stubTrue } from 'lodash';
-const profilepic =
-  'https://firebasestorage.googleapis.com/v0/b/bhanu-fd7cd.appspot.com/o/images%2Fbalarama%2FWhatsApp%20Image%202021-12-15%20at%208.43.15%20PM.jpeg?alt=media&token=19ac6f26-f3eb-4c8e-b82a-a81aad68120c';
+import {stubTrue} from 'lodash';
+
+
 const iconcolor = '#868585';
-const textColor="#1E1C24";
+const textColor = '#1E1C24';
 const windowWidth = Dimensions.get('window').width;
 const ViewTypes = {
   FULL: 0,
@@ -65,7 +70,7 @@ const ViewTypes = {
 const headerLeftmargin = 20;
 const containerHeight = 200;
 let modelData = 0;
-let globalY=0;
+let globalY = 0;
 const monthNames = [
   'Jan',
   'Feb',
@@ -81,182 +86,255 @@ const monthNames = [
   'Dec',
 ];
 
+
+
+//{"_id": "5ee072287a57fb54881a81db", "universityLogo": "", "universityName": "UpSquad"} DAMN
+// Create a new PDF in your app's private Documents directory
+
 class CellContainer extends React.Component {
   constructor(args) {
     super(args);
   }
   render() {
-    const {item, listOfEventsToItem, onRequired, onAddFav, onRemoveFav} =
+    const {item, listOfEventsToItem, onRequired, onAddFav, onRemoveFav,onEventPressed} =
       this.props;
 
     let root = plainToClass(Data, item);
-    var bh = new Date(root.getEventStartDate());
-    var bh1 = new Date(root.getEventEndDate());
-   console.log(root.getEventID(),"getEventID");
+    var bh1 = new Date(root.getEventStartDate());
+    var bh = new Date(root.getEventEndDate());
+    console.log(root.getEventID(), 'getEventID');
     return (
       <View {...this.props}>
-         
-        <Image
-          source={{
-            uri:
-              root.getImageURLS().length > root.getImageURLS()[0] !=
-                undefined && root.getImageURLS()[0] != null
-                ? root.getImageURLS()[0]
-                : profilepic,
-          }}
-          style={{
-            width: '33%',
-            height: '100%',
-            borderBottomLeftRadius: 10,
-            borderTopLeftRadius: 10,
-          }}
-        />
-        <View
-          style={{
-            flex: 1,
-            flexDirection: 'column',
-            marginHorizontal: 10,
-            marginVertical: 7,
+        <TouchableOpacity
+          style={{flex: 1}}
+          onPress={() => {
+            onEventPressed(root);
           }}>
-          <View
-            style={{
-              flex: 1,
-              alignContent: 'center',
-              justifyContent: 'center',
-              alignItems: 'center',
-              flexDirection: 'row',
-              height: '20%',
-            }}>
-            <Text
-              numberOfLines={1}
-              style={{flex: 1, fontSize: 16,color:textColor, fontWeight: '600',  fontFamily: Fonts.mulishSemiBold,}}>
-              {root.getEventTitle()}
-            </Text>
+          <View style={{ flexDirection: 'row',flex: 1,}}>
 
-            {listOfEventsToItem.includes(root.getEventID()) ? (
-              <IconAnt
+  <View     style={{   width: '33%',
+                  height: '100%',
+                  borderBottomLeftRadius: 10,
+                  borderTopLeftRadius: 10,}}
+                  > 
+                  {root.getImageURLS().length > 0 ? (
+              <Image
                 onPress={() => {
-                  // onRequired();
-                  onRemoveFav(root.getEventID());
-                  
+                  alert(root.getUserId());
                 }}
-                name="heart"
-                size={23}
-                color={'red'}
+                source={{
+                  uri: root.getImageURLS()[0],
+                }}
+                style={{
+                 flex:1,
+                  borderBottomLeftRadius: 10,
+                  borderTopLeftRadius: 10,
+                }}
               />
             ) : (
-              <IconMesage
-                onPress={() => {
-                  // onRequired();
-
-onAddFav(root.getEventID());  
-                  
-                }}
-                name="heart-outline"
-                size={23}
+              <ICONMaterialIcons style={{flex:1}}
+                name="insert-photo"
+                size={windowWidth*0.30}
                 color={iconcolor}
               />
             )}
-          </View>
 
-          <View
-            style={{
-              flex: 1,
-              alignContent: 'center',
-              justifyContent: 'center',
-              alignItems: 'center',
-              flexDirection: 'row',
-              height: '20%',
-            }}>
-            <Text numberOfLines={1} style={{fontSize: 16, fontWeight: '600',fontFamily:Fonts.mulishRegular,color:textColor}}>
-              By
-            </Text>
-            <Image
-              source={{uri: profilepic}}
-              onPress={() => {
-                console.log('bahnu');
+{root.getImageURLS().length > 1 ? (
+
+<View style={{position:'absolute',right:0,margin:15,
+  alignContent:'center',
+justifyContent:'center',backgroundColor:'#00000030',borderRadius:999
+}}>
+
+<Text numberOfLines={1} style={{color:'white',margin:3,textAlign:'center',fontSize:12}}>
++{root.getImageURLS().length-1}
+
+</Text>
+</View>
+
+           
+          ) : null}
+
+  </View>
+
+
+
+            
+
+
+            
+
+
+
+            <View
+              style={{
+                width: '33%',
+                height: '100%',
+                borderBottomLeftRadius: 10,
+                borderTopLeftRadius: 10,
               }}
               style={{
-                height: (containerHeight) * 0.2-14,
-                width: (containerHeight) * 0.2-14,
-                borderRadius: 999,
-                marginHorizontal: 5,
-              }}
-            />
-            <Text
-              numberOfLines={1}
-              style={{flex: 1, fontSize: 16,  fontWeight: '600',marginHorizontal:5,  fontFamily: Fonts.mulishRegular,color:textColor}}>
-              Ben Thompson
-            </Text>
-          </View>
+                flex: 1,
+                flexDirection: 'column',
+                marginHorizontal: 10,
+                backgroundColor: 'white',
+                marginVertical: 7,
+              }}>
+              <View
+                style={{
+                  flex: 1,
+                  alignContent: 'center',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  flexDirection: 'row',
+                  height: '20%',
+                }}>
+                <Text
+                  numberOfLines={1}
+                  style={{
+                    flex: 1,
+                    fontSize: 16,
+                    color: textColor,
+                    fontWeight: '600',
+                    fontFamily: Fonts.mulishSemiBold,
+                  }}>
+                  {root.getEventTitle()}
+                </Text>
+              </View>
 
-          <View
-            style={{
-              flex: 1,
-              alignContent: 'center',
-              justifyContent: 'center',
-              alignItems: 'center',
-              flexDirection: 'row',
-              height: '20%',
-            }}>
-            <IconFeather
-              style={{marginHorizontal: 2}}
-              name="calendar"
-              size={23}
-              color={iconcolor}
-            />
-            <Text numberOfLines={1} style={{flex: 1, color: iconcolor,marginHorizontal:5,fontFamily:Fonts.mulishRegular}}>
-              {bh.getDate() +
-                ' ' +
-                monthNames[bh.getMonth()] +
-                ' ' +
-                bh.getFullYear()}
-            </Text>
-          </View>
+              <View
+                style={{
+                  flex: 1,
+                  alignContent: 'center',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  flexDirection: 'row',
+                  height: '20%',
+                }}>
+                <Text
+                  numberOfLines={1}
+                  style={{
+                    fontSize: 16,
+                    fontWeight: '600',
+                    fontFamily: Fonts.mulishRegular,
+                    color: textColor,
+                  }}>
+                  By
+                </Text>
+                <Image
+                  source={{uri:root.getHostProfilePic()==null||root.getHostProfilePic()==undefined||root.getHostProfilePic()==""? eventsHandler.dummyProfilepic:root.getHostProfilePic() }}
+                  onPress={() => {
+                    console.log('bahnu');
+                  }}
+                  style={{
+                    height: containerHeight * 0.2 - 14,
+                    width: containerHeight * 0.2 - 14,
+                    borderRadius: 999,
+                    marginHorizontal: 5,
+                  }}
+                />
+                <Text
+                  numberOfLines={1}
+                  style={{
+                    flex: 1,
+                    fontSize: 16,
+                    fontWeight: '600',
+                    marginHorizontal: 5,
+                    fontFamily: Fonts.mulishRegular,
+                    color: textColor,
+                  }}>
+                  {root.getHostName()}
+                </Text>
+              </View>
 
-          <View
-            style={{
-              flex: 1,
-              alignContent: 'center',
-              justifyContent: 'center',
-              alignItems: 'center',
-              flexDirection: 'row',
-              height: '20%',
-            }}>
-            <Image
-              source={ImagesWrapper.timer}
-              style={{width: 23, height: 23, marginHorizontal: 2}}
-            />
+              <View
+                style={{
+                  flex: 1,
+                  alignContent: 'center',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  flexDirection: 'row',
+                  height: '20%',
+                }}>
+                <IconFeather
+                  style={{marginHorizontal: 2}}
+                  name="calendar"
+                  size={23}
+                  color={iconcolor}
+                />
+                <Text
+                  numberOfLines={1}
+                  style={{
+                    flex: 1,
+                    color: iconcolor,
+                    marginHorizontal: 5,
+                    fontFamily: Fonts.mulishRegular,
+                  }}>
+                  {bh.getDate() +
+                    ' ' +
+                    monthNames[bh.getMonth()] +
+                    ' ' +
+                    bh.getFullYear()}
+                </Text>
+              </View>
 
-            <Text numberOfLines={1} style={{flex: 1, color: iconcolor,marginHorizontal:5,fontFamily:Fonts.mulishRegular}}>
-              {bh.getHours() >= 12
-                ? 24 - bh.getHours() + 'pm'
-                : bh.getHours() + 'am'}{' '}
-              -
-              {bh1.getHours() >= 12
-                ? 24 - bh1.getHours() + 'pm'
-                : bh1.getHours() + 'am'}
-            </Text>
-          </View>
+              <View
+                style={{
+                  flex: 1,
+                  alignContent: 'center',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  flexDirection: 'row',
+                  height: '20%',
+                }}>
+                <Image
+                  source={ImagesWrapper.timer}
+                  style={{width: 23, height: 23, marginHorizontal: 2}}
+                />
 
-          <View
-            style={{
-              flex: 1,
-              alignContent: 'center',
-              justifyContent: 'center',
-              alignItems: 'center',
-              flexDirection: 'row',
-              height: '20%',
-            }}>
-            <Image
-              source={ImagesWrapper.video}
-              style={{width: 23, height: 23, marginHorizontal: 2}}
-            />
-            <Text numberOfLines={1} style={{flex: 1, color: iconcolor,marginHorizontal:5,fontFamily:Fonts.mulishRegular}}>
-              Zoom
-            </Text>
-          </View>
-          {/* <View
+                <Text
+                  numberOfLines={1}
+                  style={{
+                    flex: 1,
+                    color: iconcolor,
+                    marginHorizontal: 5,
+                    fontFamily: Fonts.mulishRegular,
+                  }}>
+                  {bh.getHours() >= 12
+                    ? 24 - bh.getHours() + 'pm'
+                    : bh.getHours() + 'am'}{' '}
+                  -
+                  {bh1.getHours() >= 12
+                    ? 24 - bh1.getHours() + 'pm'
+                    : bh1.getHours() + 'am'}
+                </Text>
+              </View>
+
+              <View
+                style={{
+                  flex: 1,
+                  alignContent: 'center',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  flexDirection: 'row',
+                  height: '20%',
+                }}>
+                <Image
+                  source={ImagesWrapper.video}
+                  style={{width: 23, height: 23, marginHorizontal: 2}}
+                />
+                <Text
+                  numberOfLines={1}
+                  style={{
+                    flex: 1,
+                    color: iconcolor,
+                    marginHorizontal: 5,
+                    fontFamily: Fonts.mulishRegular,
+                  }}>
+                  Zoom
+                </Text>
+              </View>
+              {/* <View
             style={{
               flex: 1,
               alignContent: 'center',
@@ -270,50 +348,87 @@ onAddFav(root.getEventID());
               {root.getEventID()}
             </Text>
           </View> */}
-        </View>
-        {/* {this.props.children} */}
-        <View
-          style={{
-            alignSelf: 'flex-end',
-            width: '33%',
-            height: 30,
-            backgroundColor: '#F1F1F1',
-            opacity: 0.6,
-            borderBottomLeftRadius: 10,
-            flexDirection: 'row',
-            position: 'absolute',
-          }}></View>
-        <View
-          style={{
-            alignSelf: 'flex-end',
-            width: '33%',
-            height: 30,
-            justifyContent: 'center',
-            alignItems: 'center',
-            backgroundColor: '#00000000',
-            opacity: 0.6,
-            marginLeft: 10,
-            borderBottomLeftRadius: 10,
-            flexDirection: 'row',
-            position: 'absolute',
-          }}>
-          <IconAnt onPress={() => {}} name="user" size={14} color={'black'} />
+            </View>
+            {/* {this.props.children} */}
+            <View
+              style={{
+                alignSelf: 'flex-end',
+                width: '33%',
+                height: 30,
+                backgroundColor: '#F1F1F1',
+                opacity: 0.6,
+                borderBottomLeftRadius: 10,
+                flexDirection: 'row',
+                position: 'absolute',
+              }}></View>
+            <View
+              style={{
+                alignSelf: 'flex-end',
+                width: '33%',
+                height: 30,
+                justifyContent: 'center',
+                alignItems: 'center',
+                backgroundColor: '#00000000',
+                opacity: 0.6,
+                marginLeft: 10,
+                borderBottomLeftRadius: 10,
+                flexDirection: 'row',
+                position: 'absolute',
+              }}>
+              <IconAnt
+                onPress={() => {}}
+                name="user"
+                size={14}
+                color={'black'}
+              />
 
-          <Text
-            numberOfLines={1}
-            style={{
-              flex: 1,
-              color: 'black',
-              marginTop: 'auto',
-              marginBottom: 'auto',
-              fontFamily:Fonts.mulishRegular
-            }}>
-            {root.getTotalAttendences() - 1} attending
-          </Text>
-        </View>
+              <Text
+                numberOfLines={1}
+                style={{
+                  flex: 1,
+                  color: 'black',
+                  marginTop: 'auto',
+                  marginBottom: 'auto',
+                  fontFamily: Fonts.mulishRegular,
+                }}>
+                {root.getTotalAttendences() - 1} attending
+              </Text>
+            </View>
+          </View>
+          
+        </TouchableOpacity>
+           {listOfEventsToItem.includes(root.getEventID()) ? (
+              <IconAnt  style={{position:'absolute',alignSelf:'flex-end',right:10,top:10}}
+                onPress={() => {
+                  // onRequired();
+                  onRemoveFav(root.getEventID());
+
+                }}
+                name="heart"
+                size={23}
+                color={'red'}
+              />
+            ) : (
+              <IconMesage style={{position:'absolute',alignSelf:'flex-end',right:10,top:10}}
+                onPress={() => {
+                  // onRequired();
+                  onAddFav(root.getEventID());
+                }}
+                name="heart-outline"
+                size={23}
+                color={iconcolor}
+              />
+            )}
       </View>
+
     );
   }
+}
+
+export function RetriveDetailofEvents(params) {
+
+     
+    
 }
 
 class Screen extends Component {
@@ -341,7 +456,7 @@ class Screen extends Component {
       (type, dim) => {
         switch (type) {
           case ViewTypes.FULL:
-            dim.width = width-headerLeftmargin;
+            dim.width = width - headerLeftmargin;
             dim.height =
               this.props.infoData.response.length == 0
                 ? Dimensions.get('window').height -
@@ -370,6 +485,7 @@ class Screen extends Component {
     };
   }
 
+
   //Given type and data return the view component
   _rowRenderer(type, data, index) {
     console.log(index, 'INDEXXXXXXXXXXXXXXXXXXXXXX');
@@ -382,6 +498,21 @@ class Screen extends Component {
           style={styles.container}
           item={this.props.infoData.response[index]}
           listOfEventsToItem={this.props.listofevents}
+          onEventPressed={(root)=>{
+
+         
+    
+
+          this.props.CallShowPB(true) ;
+          let obj={
+            "profilepic":root.getHostProfilePic(),
+            "name":root.getHostName()
+          };
+            this.props.CallEventDetailsAPI(root.getEventID(),this.props.navigation,obj);
+          }
+
+          }
+
           onRequired={() => {
             console.log('required damn');
             alert('Required DAMN');
@@ -394,24 +525,18 @@ class Screen extends Component {
               };
             });
           }}
-          onAddFav=
-          {(value) => {
-            console.log('Add fav',value);
+          onAddFav={value => {
+            console.log('Add fav', value);
             this.props.CallShowPB(true);
-              this.props.CallAddFavEvent(value,getUserId());
-             // this.props.CallGetFavListOfIDS(modelData);
-
-
+            this.props.CallAddFavEvent(value, getUserId());
+            // this.props.CallGetFavListOfIDS(modelData);
           }}
-          
-          onRemoveFav=
-          {(value) => {
-         
-            console.log('remove fav',value);
+          onRemoveFav={value => {
+            console.log('remove fav', value);
             this.props.CallShowPB(true);
-            this.props.CallRemoveFavEvent(value,getUserId());
-          }}
-          >{/* <Text>Data: {data}</Text> */}
+            this.props.CallRemoveFavEvent(value, getUserId());
+          }}>
+          {/* <Text>Data: {data}</Text> */}
         </CellContainer>
       );
     } else {
@@ -441,6 +566,7 @@ class Screen extends Component {
     }
   }
 
+ 
   render() {
     return (
       <View
@@ -453,7 +579,6 @@ class Screen extends Component {
           flexDirection: 'column',
           backgroundColor: 'white',
         }}>
-            
         <View
           style={{
             height: 55,
@@ -465,19 +590,22 @@ class Screen extends Component {
             alignItems: 'center',
             paddingHorizontal: headerLeftmargin,
           }}>
-          {getProfileImage() == null || undefined ? (
-            <IconAnt
-              onPress={() => {}}
-              name="user"
-              size={23}
-              color={iconcolor}
-            />
-          ) : (
-            <Image
-              source={{uri: getProfileImage()}}
+
+          {
+            <TouchableOpacity
+            
+            onPress={()=>{ 
+              this.props.navigation.openDrawer();
+            }}
+            >
+            <Image 
+              source={{uri:getUniversityDetails().universityLogo==null||getUniversityDetails().universityLogo==undefined||getUniversityDetails().universityLogo==""? eventsHandler.dummyProfilepic:getUniversityDetails().universityLogo}}
               style={{width: 30, height: 30, borderRadius: 30}}
             />
-          )}
+            </TouchableOpacity>
+          }
+
+
           {/* <Image
             source={{uri: getProgileImage()}}
             style={{width: 30, height: 30, borderRadius: 30}}
@@ -494,7 +622,7 @@ class Screen extends Component {
                 fontWeight: '600',
                 fontFamily: Fonts.mulishSemiBold,
               }}>
-              {getUserName()}
+              {getUniversityDetails().universityName}
             </Text>
           </View>
           <Icon
@@ -527,7 +655,13 @@ class Screen extends Component {
           }}>
           <Text
             numberOfLines={1}
-            style={{fontSize: 18, fontWeight: '600', flex: 1,fontFamily:Fonts.mulishSemiBold,color:textColor}}>
+            style={{
+              fontSize: 18,
+              fontWeight: '600',
+              flex: 1,
+              fontFamily: Fonts.mulishSemiBold,
+              color: textColor,
+            }}>
             {this.props.statusOfEvents}
           </Text>
           <TouchableOpacity
@@ -598,24 +732,26 @@ class Screen extends Component {
         {/* <Text numberOfLines={1} style={{fontSize:18,fontWeight:'900',marginTop:10}}>
 					{this.props.infoData.status}</Text> */}
 
-        {this.props.loadMore?   <ActivityIndicator   onLayout={(event) => {
-this.props.CallGetFavListOfIDS(modelData);
+        {this.props.loadMore ? (
+          <ActivityIndicator
+            onLayout={event => {
+              this.props.CallGetFavListOfIDS(modelData);
 
-// this.props.CallShowPB(true);
+              // this.props.CallShowPB(true);
               // alert("Layout is done");
+            }}
+            size="large"
+          />
+        ) : null}
 
-
-            }} size="large" />  :null}
-
-        <RecyclerListView 
-          style={{flex: 1, width: '100%', marginTop: 10,}}
+        <RecyclerListView
+          style={{flex: 1, width: '100%', marginTop: 10}}
           layoutProvider={this._layoutProvider}
-          
           // scrollViewProps={{
           //   refreshControl: (
           //     <RefreshControl
           //       refreshing={true}
-              
+
           //     />
           //   )
           // }}
@@ -628,20 +764,14 @@ this.props.CallGetFavListOfIDS(modelData);
           onEndReached={() => {
             // alert("end Reached");
           }}
-        
-          
-          onScroll={(event) => {
-         
+          onScroll={event => {
             const positionY = event.nativeEvent.contentOffset.y;
-     if(positionY<1&&globalY==0)
-     {
-    //  alert(positionY);
-      this.props.CallLoadMore(true);
-     }
-     globalY=positionY;
+            if (positionY < 1 && globalY == 0) {
+              //  alert(positionY);
+              this.props.CallLoadMore(true);
+            }
+            globalY = positionY;
           }}
-             
-         
           renderFooter={() => {
             if (this.props.loadMore) {
               return (
@@ -796,84 +926,86 @@ this.props.CallGetFavListOfIDS(modelData);
                           ? ImagesWrapper.radiobtn1
                           : ImagesWrapper.radiobtn
                       }
-                      style={{marginRight: 30,height:20,width:20}}
+                      style={{marginRight: 30, height: 20, width: 20}}
                     />
                   </TouchableOpacity>
                 </View>
               </View>
               <View style={{flexDirection: 'row', marginTop: 20}}>
-                <Text style={styles.popupText,{flex:1}}>Private events</Text>
-                
-                  <TouchableOpacity
-                    onPress={() => {
-                      if (modelData != 1) {
-                        this.props.CallShowPB(true);
-                        modelData = 1;
-                        this.props.updateEventType(modelData);
-                        this.props.CallGetFavListOfIDS(modelData);
-                      }
-                      this.props.toggleShowSort();
-                    }}>
-                    <Image
-                      source={
-                        modelData == 1
-                          ? ImagesWrapper.radiobtn1
-                          : ImagesWrapper.radiobtn
-                      }
-                      style={{marginRight: 30,height:20,width:20}}
-                    />
-                  </TouchableOpacity>
+                <Text style={(styles.popupText, {flex: 1})}>
+                  Private events
+                </Text>
 
-           
+                <TouchableOpacity
+                  onPress={() => {
+                    if (modelData != 1) {
+                      this.props.CallShowPB(true);
+                      modelData = 1;
+                      this.props.updateEventType(modelData);
+                      this.props.CallGetFavListOfIDS(modelData);
+                    }
+                    this.props.toggleShowSort();
+                  }}>
+                  <Image
+                    source={
+                      modelData == 1
+                        ? ImagesWrapper.radiobtn1
+                        : ImagesWrapper.radiobtn
+                    }
+                    style={{marginRight: 30, height: 20, width: 20}}
+                  />
+                </TouchableOpacity>
               </View>
               <View style={{flexDirection: 'row', marginTop: 20}}>
-                <Text style={styles.popupText,{flex:1}}>My registered events</Text>
-                
-                  <TouchableOpacity
-                    onPress={() => {
-                      if (modelData != 2) {
-                        this.props.CallShowPB(true);
-                        this.props.CallShowPB();
-                        modelData = 2;
-                        this.props.updateEventType(modelData);
-                        this.props.CallGetFavListOfIDS(modelData);
-                      }
-                      this.props.toggleShowSort();
-                    }}>
-                    <Image
-                      source={
-                        modelData == 2
-                          ? ImagesWrapper.radiobtn1
-                          : ImagesWrapper.radiobtn
-                      }
-                      style={{marginRight: 30,height:20,width:20}}
-                    />
-                  </TouchableOpacity>
-             
+                <Text style={(styles.popupText, {flex: 1})}>
+                  My registered events
+                </Text>
+
+                <TouchableOpacity
+                  onPress={() => {
+                    if (modelData != 2) {
+                      this.props.CallShowPB(true);
+                      this.props.CallShowPB();
+                      modelData = 2;
+                      this.props.updateEventType(modelData);
+                      this.props.CallGetFavListOfIDS(modelData);
+                    }
+                    this.props.toggleShowSort();
+                  }}>
+                  <Image
+                    source={
+                      modelData == 2
+                        ? ImagesWrapper.radiobtn1
+                        : ImagesWrapper.radiobtn
+                    }
+                    style={{marginRight: 30, height: 20, width: 20}}
+                  />
+                </TouchableOpacity>
               </View>
               <View style={{flexDirection: 'row', marginTop: 20}}>
-                <Text style={styles.popupText,{flex:1}}>My favorite events</Text>
-             
-                  <TouchableOpacity
-                    onPress={() => {
-                      if (modelData != 3) {
-                        this.props.CallShowPB(true);
-                        modelData = 3;
-                        this.props.updateEventType(modelData);
-                        this.props.CallGetFavListOfIDS(modelData);
-                      }
-                      this.props.toggleShowSort();
-                    }}>
-                    <Image
-                      source={
-                        modelData == 3
-                          ? ImagesWrapper.radiobtn1
-                          : ImagesWrapper.radiobtn
-                      }
-                      style={{marginRight: 30,height:20,width:20}}
-                    />
-                  </TouchableOpacity>
-              
+                <Text style={(styles.popupText, {flex: 1})}>
+                  My favorite events
+                </Text>
+
+                <TouchableOpacity
+                  onPress={() => {
+                    if (modelData != 3) {
+                      this.props.CallShowPB(true);
+                      modelData = 3;
+                      this.props.updateEventType(modelData);
+                      this.props.CallGetFavListOfIDS(modelData);
+                    }
+                    this.props.toggleShowSort();
+                  }}>
+                  <Image
+                    source={
+                      modelData == 3
+                        ? ImagesWrapper.radiobtn1
+                        : ImagesWrapper.radiobtn
+                    }
+                    style={{marginRight: 30, height: 20, width: 20}}
+                  />
+                </TouchableOpacity>
               </View>
             </View>
           </View>
@@ -936,7 +1068,7 @@ const mapDispatchToProps = dispatch => {
       dispatch(CallFavEvents(parameter));
     },
 
-    CallLoadMore: (param) => {
+    CallLoadMore: param => {
       dispatch(CallLoadMore(param));
     },
 
@@ -946,11 +1078,14 @@ const mapDispatchToProps = dispatch => {
     CallGetFavListOfIDS: p => {
       dispatch(CallGetFavListOfIDS(p));
     },
-    CallAddFavEvent: (a,b) => {
-      dispatch(CallAddFavEvent(a,b));
+    CallAddFavEvent: (a, b) => {
+      dispatch(CallAddFavEvent(a, b));
     },
-    CallRemoveFavEvent: (a,b) => {
-      dispatch(CallRemoveFavEvent(a,b));
+    CallRemoveFavEvent: (a, b) => {
+      dispatch(CallRemoveFavEvent(a, b));
+    },
+    CallEventDetailsAPI: (a, b,c) => {
+      dispatch(CallEventDetailsAPI(a,b,c));
     },
   };
 };
@@ -964,9 +1099,8 @@ const styles = {
     flex: 1,
     borderRadius: 10,
     marginVertical: 5,
-    alignContent:'center',
-    marginLeft:headerLeftmargin,
-    marginHorizontal: 0,
+    alignContent: 'center',
+    marginLeft: headerLeftmargin,
     backgroundColor: 'white',
     shadowColor: '#000',
     shadowOffset: {

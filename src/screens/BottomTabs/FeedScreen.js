@@ -19,7 +19,7 @@ import AntDesignIcon from 'react-native-vector-icons/AntDesign';
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
 import RNPickerSelect, {defaultStyles} from 'react-native-picker-select';
 import { Chevron } from 'react-native-shapes';
-
+import { setUniversityDetails } from '../../res/GetUserInfo';
 
 
  class MeetingsScreen extends React.Component {
@@ -184,6 +184,7 @@ import { Chevron } from 'react-native-shapes';
                 "universityName":this.state.universityName,
                 "universityLogo":this.state.communityLogo,
                }
+               setUniversityDetails(universityDetails); 
                const data = await this.storagePrefs.setObjectValue("universityDetails",universityDetails);
           } else{
             this.setState({
@@ -197,6 +198,9 @@ import { Chevron } from 'react-native-shapes';
                 "universityName":this.state.universityName,
                 "universityLogo":this.state.communityLogo,
                }
+
+               setUniversityDetails(universityDetails); 
+
                const data = await this.storagePrefs.setObjectValue("universityDetails",universityDetails);
           }
           
