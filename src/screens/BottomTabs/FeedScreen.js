@@ -13,14 +13,15 @@ import StoragePrefs from '../../res/StoragePrefs';
 import Share from 'react-native-share';
 import { forEach } from 'lodash';
 import axios from 'axios';
-import { SliderBox } from "react-native-image-slider-box";
 import FbGrid from "react-native-fb-image-grid";
 import AntDesignIcon from 'react-native-vector-icons/AntDesign';
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
 import RNPickerSelect, {defaultStyles} from 'react-native-picker-select';
 import { Chevron } from 'react-native-shapes';
+
 import { setUniversityDetails } from '../../res/GetUserInfo';
 
+import io from 'socket.io-client';
 
  class MeetingsScreen extends React.Component {
     serviceUrls = new ServiceUrls();
@@ -87,6 +88,77 @@ import { setUniversityDetails } from '../../res/GetUserInfo';
             this.subscription.remove()
         }
     }
+
+    socketConnect()  {
+        this.socket = io(this.serviceUrls.socialUrl); 
+            if (!this.socket.connected) {
+                this.socket.connect();
+            }
+        this.socket.on("connect", () => {
+            console.log("socketID>>>>",this.socket.id); // x8WIv7-mJelg7on_ALbx
+        });
+        this.socket.on("disconnect", (reason) => {
+            console.log("DISCONNECTED SOCKET",reason)
+            // if (reason !== "forced close") {
+            //the disconnection was initiated by the server, you need to reconnect manually
+            this.socket.connect();
+            //}
+            // else the socket will automatically try to reconnect
+        });
+            this.socket.on("posts", (data) => {
+                switch(data.action) {
+                    case "post like":
+                        if(data.post.university_ID!=null & data.post.university_ID!=undefined){
+                            if(data.post.university_ID === this.state.universityId){
+                                console.log("CHEKCING DATA",data.post._id)
+                                this.setState({likedPosts: [...this.state.likedPosts,data.post._id]})
+                                for(i=0;i<this.state.postData.length;i++){
+                                    if(this.state.postData[i]._id == data.post._id){
+                                        this.state.postData.splice(i, 1, data.post);
+                                    } 
+                                }
+                            }
+                        }
+                        
+                        
+                    break;
+                    case "remove post like":
+                        if(data.post.university_ID!=null & data.post.university_ID!=undefined){
+                            if(data.post.university_ID === this.state.universityId){
+                                let index = this.state.likedPosts.indexOf(data.post._id);
+                                if (index != -1) this.state.likedPosts.splice(index, 1);
+                                for(i=0;i<this.state.postData.length;i++){
+                                    if(this.state.postData[i]._id == data.post._id){
+                                        this.state.postData.splice(i, 1, data.post);
+                                    } 
+                                }
+                            }
+                        }
+                        
+                    break; 
+                    case "delete post":
+                        for(i=0;i<this.state.postData.length;i++){
+                            if(this.state.postData[i]._id === data.postId){
+                                const filteredData = this.state.postData.filter(item => item._id !== data.postId);
+                                this.setState({ postData: filteredData});
+                            }
+                        }
+                    break;
+                    // case "comment":
+                    //     for(i=0;i<this.state.postData.length;i++){
+                    //         if(this.state.postData[i]._id === data.comment.postId){
+                    //             console.log("RAVIKIRAN AVASARALA",data.comment.comment);
+                    //             console.log("RavikiranChecking",this.state.postData[i].comments) 
+                    //             this.state.postData[i].comments.push(data.comment.comment)
+                    //             console.log(this.state.postData[i].comments)
+                    //         }
+                    //     }
+                    //     break;
+
+                }
+            })
+          
+    }
     updateFeed = async () => {
         const universityDetails = await this.storagePrefs.getObjectValue("universityDetails")
         const userDetails = await this.storagePrefs.getObjectValue("userDetails")
@@ -117,9 +189,6 @@ import { setUniversityDetails } from '../../res/GetUserInfo';
             "userId" : userID
         }
         const response = await this.apiHandler.requestPost(data,this.serviceUrls.postLike);
-        if(response.message == "You have liked this post"){
-            this.setState({likedPosts: [...this.state.likedPosts, postID]})
-        }
     }
 
     async disLikePost(postID, userID){
@@ -136,8 +205,8 @@ import { setUniversityDetails } from '../../res/GetUserInfo';
           })
         .then(response => {
             if(response.data.message === "Liked removed!"){
-                let index = this.state.likedPosts.indexOf(postID);
-                if (index != -1) this.state.likedPosts.splice(index, 1);
+                //let index = this.state.likedPosts.indexOf(postID);
+                //if (index != -1) this.state.likedPosts.splice(index, 1);
             }
         })
         .catch(error=> {
@@ -156,10 +225,9 @@ import { setUniversityDetails } from '../../res/GetUserInfo';
         .then(response => {
             console.log("response.message",response.data.message)
             if(response.data.message === "Post successfully deleted"){
-                const filteredData = this.state.postData.filter(item => item._id !== postID);
-                console.log("filtered Data",filteredData)
-                this.setState({ postData: filteredData,dotsmemu: false  });
+                this.setState({dotsmemu: false})
             }
+
         })
         .catch(error=> {
             console.log("error herer",error);
@@ -167,10 +235,48 @@ import { setUniversityDetails } from '../../res/GetUserInfo';
     }
 
     async getCommunityDetails() {
-        const communityData={
-          "email": this.state.email,
-          "userID": this.state.userId
+        const universityDetails = await this.storagePrefs.getObjectValue("universityDetails")
+        if(universityDetails!=null && universityDetails!=undefined){
+            const communityData={
+                "email": this.state.email,
+                "userID": this.state.userId
+              }
+              const response = await this.apiHandler.requestPost(communityData,this.serviceUrls.getCommunities);
+              if(response.data!=null && response.data.length>0 ){
+                  this.setState({
+                    universityName:response.data[0].universityName,
+                    universityId: response.data[0]._id,
+                    communityName: response.data[0].universityName,
+                    communityLogo : response.data[0].universityLogo, 
+                  });
+                  const universityDetails =  {
+                      "_id":this.state.universityId,
+                      "universityName":this.state.universityName,
+                      "universityLogo":this.state.communityLogo,
+                     }
+                     const data = await this.storagePrefs.setObjectValue("universityDetails",universityDetails);
+                } else{
+                  this.setState({
+                    universityName:"UpSquad",
+                    universityId: "5ee072287a57fb54881a81db",
+                    communityName: "UpSquad",
+                    communityLogo:""
+                  });
+                  const universityDetails =  {
+                      "_id":this.state.universityId,
+                      "universityName":this.state.universityName,
+                      "universityLogo":this.state.communityLogo,
+                     }
+                     const data = await this.storagePrefs.setObjectValue("universityDetails",universityDetails);
+                }
+        } else{
+            this.setState({universityName:universityDetails.universityName,
+                universityId: universityDetails._id,
+                communityName:universityDetails.universityName,
+                communityLogo:universityDetails.universityLogo
+            })
         }
+
         const response = await this.apiHandler.requestPost(communityData,this.serviceUrls.getCommunities);
         if(response.data!=null && response.data.length>0){
             this.setState({
@@ -203,6 +309,7 @@ import { setUniversityDetails } from '../../res/GetUserInfo';
 
                const data = await this.storagePrefs.setObjectValue("universityDetails",universityDetails);
           }
+
           
     }
 
@@ -215,6 +322,9 @@ import { setUniversityDetails } from '../../res/GetUserInfo';
         }
         const response = await this.apiHandler.requestPost(data,this.serviceUrls.myPosts)
         console.log("response",response);
+        if(response.posts){
+            this.socketConnect();
+        }
         if(response.posts != null && response.posts.length != 0 ){
             response.posts.forEach((item,index)=> {
                  for(i=0;i<item.likes.length;i++){
@@ -233,6 +343,9 @@ import { setUniversityDetails } from '../../res/GetUserInfo';
         //const data = '5ed8d9509e623f00221761a1/All/true/5f5892a1b205b1387d5cafb/All'
         const data = this.state.universityId+'/All/'+this.state.isProfessional+"/"+this.state.userId+'/All'
         const response = await this.apiHandler.requestGet(data,this.serviceUrls.getPosts);
+        if(response.posts){
+            this.socketConnect();
+        }
         for(i=0;i<response.posts.length;i++){
             if(!response.posts[i]._id){
                 response.posts.splice(i,1)
@@ -300,13 +413,13 @@ import { setUniversityDetails } from '../../res/GetUserInfo';
         //         err && console.log(err);
         //     });
         // }
-        //  onPress = (url) => {
-        //     // url and index of the image you have clicked alongwith onPress event.
-        //     console.log("url",url);
-        //     this.props.navigation.navigate('ImageView',{
-        //         url : url
-        //     })
-        //   }
+         onPress = (url) => {
+            // url and index of the image you have clicked alongwith onPress event.
+            console.log("url",url);
+            this.props.navigation.navigate('ImageView',{
+                url : url
+            })
+          }
 
     flowerWings=(width)=>{
         const initialArr = [];
@@ -349,23 +462,6 @@ import { setUniversityDetails } from '../../res/GetUserInfo';
     changetextColor=()=>{
         this.state.leadercolor !== 'green'
             ?(this.setState({leadercolor:'green'})):(this.setState({leadercolor:'black'}))
-    }
-
-    renderShareModal() {
-        return(
-            <Modal
-                transparent={true}
-                isVisible={this.state.share}
-                onBackdropPress={() => this.setState({share:false})}
-                onRequestClose={() => {
-                    this.setState({share:false})
-                }}  
-            >
-                    <View style={{backgroundColor:'white',borderTopLeftRadius: 20,borderTopRightRadius:20,height:'50%',marginTop:660,width:'110%',marginLeft:-18}}>
-                        
-                    </View>
-                    </Modal>
-        )
     }
 
     renderLoader(){
@@ -451,7 +547,7 @@ import { setUniversityDetails } from '../../res/GetUserInfo';
                             }}
                         />
                         </View>
-            <View style={{ borderWidth: 1, borderColor: '#F1F1F1' }}></View>
+            <View style={{ borderWidth: 0.5, borderColor: '#959494' }}></View>
             </>
         )
     }
@@ -461,7 +557,7 @@ import { setUniversityDetails } from '../../res/GetUserInfo';
         return(
             <SafeAreaView style={{flex:1,backgroundColor:'#FFFFFF'}}>
                 {this.renderLoader()}
-                    <View style={[styles.header]}>
+                <View style={[styles.header]}>
                     <TouchableOpacity onPress={()=> this.props.navigation.openDrawer()}>
                     <Image source= {{uri : this.state.communityLogo!=null && this.state.communityLogo!="" ? this.state.communityLogo: "https://www.careerquo.com/assets/images/18.png" }}
                             style={{marginLeft:25,height: 30,width: 30, borderRadius: 25}}
@@ -484,7 +580,7 @@ import { setUniversityDetails } from '../../res/GetUserInfo';
                     </TouchableOpacity>
                     </View>
                 </View>
-                <View style={{ borderWidth: 1, borderColor: '#F1F1F1' }}></View>
+                <View style={{ borderWidth: 0.5, borderColor: '#959494' }}></View>
                 {this.state.postData!=null && this.state.postData.length!=0?
                     <FlatList
                     data = {this.state.postData}
@@ -511,11 +607,20 @@ import { setUniversityDetails } from '../../res/GetUserInfo';
                                 {item.content}
                             </Text>  
                                                    
-                                <View style = {{ marginLeft :-25}}>
+                                <View style = {{ marginLeft :-10,marginRight:15}}>
                                     {item.postImage!=null && item.postImage.length!=0 ? 
                                     <FbGrid images = {item.postImage}
-                                    style = {{height : 300,width: Dimensions.get('window').width}}
-                                    onPress ={()=> {this.onPress(item.postImage)}}/>
+                                    style = {{height : 300,width:'100%'}}
+                                    onPress ={()=>  this.props.navigation.navigate('CommentScreen',{
+                                        content:item.content,
+                                        postID: item._id,
+                                        creatorImg : item.creator.profileImg !=null && item.creator.profileImg!="" ? item.creator.profileImg : "https://www.careerquo.com/assets/images/18.png",
+                                        firstName : item.creator.firstName,
+                                        lastName: item.creator.lastName,
+                                        postCreatedAt: item.createdAt,
+                                        comments: item.comments,
+                                        postImage: item.postImage
+                                    })}/>
                                     
                                     : null}
                                     
@@ -571,13 +676,28 @@ import { setUniversityDetails } from '../../res/GetUserInfo';
                                 : null}
                                     {item.likes.length>0 ? <Text style={{fontSize:12,color:'#868585',fontFamily:Fonts.mulishBold,fontWeight:'400',marginLeft:5,marginTop:2}}>Like by</Text>: null}
                                     <Text style={{fontSize:12,color:'#1E1C24',fontFamily:Fonts.mulishBold,fontWeight:'400',marginLeft:5,marginTop:2}}>
-                                        {item.likes[0].firstName} {item.likes[0].lastName} {item.likes.length >1 ? "and": null } {item.likes.length >1 ? item.likes.length-1 : null } {item.likes.length >1 ? "others" : null}
+                                    {item.likes.some(obj=>obj._id === this.state.userId) ? "You": item.likes[0].firstName!=undefined ? item.likes[0].firstName: null  + " " + item.likes[0].lastName!=undefined ? item.likes[0].lastName: null} {item.likes.length >1 ? "and": null } {item.likes.length >1 ? item.likes.length-1 : null } {item.likes.length >1 ? "others" : null}
+
                                     </Text>
                                 </View>
+                                <TouchableOpacity onPress = {()=>{
+                                    this.props.navigation.navigate('CommentScreen',{
+                                        content:item.content,
+                                        postID: item._id,
+                                        creatorImg : item.creator.profileImg !=null && item.creator.profileImg!="" ? item.creator.profileImg : "https://www.careerquo.com/assets/images/18.png",
+                                        firstName : item.creator.firstName,
+                                        lastName: item.creator.lastName,
+                                        postCreatedAt: item.createdAt,
+                                        comments: item.comments,
+                                        postImage: item.postImage
+                                    })
+                                }}>
                                 <Text style={{fontSize:12,color:'#868585',fontFamily:Fonts.mulishBold,fontWeight:'400',marginLeft:5,marginTop:2,marginRight:22}}>{item.comments.length } {item.comments.length > 1 ? "comments" : "comment"}</Text>
+                                </TouchableOpacity>
+                                
                             </View>
                             <View style={{ borderWidth: 1, borderColor: '#F1F1F1',marginTop:22,marginRight: '5%'}}></View>
-                            <View style={{flexDirection:'row',marginTop:20,justifyContent:'space-around'}}>
+                            <View style={{flexDirection:'row',marginTop:20,justifyContent:'space-around',marginLeft:-25}}>
                                 {/* <TouchableOpacity 
                                 onPress ={()=> {
                                 {this.state.likedPosts.indexOf(item._id) > -1 ? 
@@ -642,7 +762,8 @@ import { setUniversityDetails } from '../../res/GetUserInfo';
                                             firstName : item.creator.firstName,
                                             lastName: item.creator.lastName,
                                             postCreatedAt: item.createdAt,
-                                            comments: item.comments
+                                            comments: item.comments,
+                                            postImage: item.postImage
                                         })
                                     }}
                                 >
@@ -709,7 +830,7 @@ import { setUniversityDetails } from '../../res/GetUserInfo';
                             style={{
                             textAlign: 'center',
                             color: '#868585',
-                            fontFamily: Fonts.mulishSemiBold,
+                            fontFamily: Fonts.mulishSemiRegular,
                             fontSize: 24
                             }}>
                             {this.state.dataAvailable}
@@ -885,9 +1006,11 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         // paddingLeft: '9%',
-        marginTop: Platform.OS == 'ios'? 0 : 25,
-        marginBottom: 25,
+        marginTop: Platform.OS == 'ios'? 10 : 25,
+        marginBottom: Platform.OS == 'ios' ? 10 : 15,
         // borderBottomWidth:1
+        justifyContent: 'center',
+        alignItems: 'center'
       },
     subheader:{
         flexDirection:'row',
@@ -999,5 +1122,6 @@ const styles = StyleSheet.create({
 
 
 export default MeetingsScreen;
+
 
 

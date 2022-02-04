@@ -185,8 +185,8 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         // paddingLeft: '9%',
-        marginTop: Platform.OS == 'ios'? 0 : 25,
-        marginBottom: 25,
+        marginTop: Platform.OS == 'ios'? 10 : 25,
+        marginBottom: Platform.OS == 'ios' ? 10 : 15,
         // borderBottomWidth:1
       },
       underline:{
