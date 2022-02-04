@@ -236,46 +236,11 @@ import io from 'socket.io-client';
 
     async getCommunityDetails() {
         const universityDetails = await this.storagePrefs.getObjectValue("universityDetails")
-        if(universityDetails!=null && universityDetails!=undefined){
-            const communityData={
-                "email": this.state.email,
-                "userID": this.state.userId
-              }
-              const response = await this.apiHandler.requestPost(communityData,this.serviceUrls.getCommunities);
-              if(response.data!=null && response.data.length>0 ){
-                  this.setState({
-                    universityName:response.data[0].universityName,
-                    universityId: response.data[0]._id,
-                    communityName: response.data[0].universityName,
-                    communityLogo : response.data[0].universityLogo, 
-                  });
-                  const universityDetails =  {
-                      "_id":this.state.universityId,
-                      "universityName":this.state.universityName,
-                      "universityLogo":this.state.communityLogo,
-                     }
-                     const data = await this.storagePrefs.setObjectValue("universityDetails",universityDetails);
-                } else{
-                  this.setState({
-                    universityName:"UpSquad",
-                    universityId: "5ee072287a57fb54881a81db",
-                    communityName: "UpSquad",
-                    communityLogo:""
-                  });
-                  const universityDetails =  {
-                      "_id":this.state.universityId,
-                      "universityName":this.state.universityName,
-                      "universityLogo":this.state.communityLogo,
-                     }
-                     const data = await this.storagePrefs.setObjectValue("universityDetails",universityDetails);
-                }
-        } else{
-            this.setState({universityName:universityDetails.universityName,
-                universityId: universityDetails._id,
-                communityName:universityDetails.universityName,
-                communityLogo:universityDetails.universityLogo
-            })
-        }
+        const communityData={
+            "email": this.state.email,
+            "userID": this.state.userId
+          }
+        
 
         const response = await this.apiHandler.requestPost(communityData,this.serviceUrls.getCommunities);
         if(response.data!=null && response.data.length>0){

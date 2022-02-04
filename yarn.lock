@@ -2188,15 +2188,15 @@
     "@react-stately/utils" "^3.2.2"
     "@react-types/slider" "^3.0.2"
 
-"@react-stately/tabs@^3.0.0-alpha.1":
-  "integrity" "sha512-XhF/5mt8eme3mu0+4nC7Du+e5OWSu0W8SeKfbH9JmTWTCayZpPtui68nRStJK6OkgHs28gA+j55RSsTqT/N1Fg=="
-  "resolved" "https://registry.npmjs.org/@react-stately/tabs/-/tabs-3.0.1.tgz"
-  "version" "3.0.1"
+"@react-stately/tabs@^3.0.0-alpha.1", "@react-stately/tabs@3.0.0-alpha.1":
+  "integrity" "sha512-aEG5lVLqmfx7A/dS5gkPXmD2ERAo69RtC0aHPo/Dw1XjzalYyo6QbQ5WtiuQxsCVx/naWGEJCcMEAD5/vt+cUQ=="
+  "resolved" "https://registry.npmjs.org/@react-stately/tabs/-/tabs-3.0.0-alpha.1.tgz"
+  "version" "3.0.0-alpha.1"
   dependencies:
     "@babel/runtime" "^7.6.2"
-    "@react-stately/list" "^3.3.0"
-    "@react-stately/utils" "^3.2.2"
-    "@react-types/tabs" "^3.0.1"
+    "@react-stately/list" "^3.2.2"
+    "@react-stately/utils" "^3.2.0"
+    "@react-types/tabs" "3.0.0-alpha.2"
 
 "@react-stately/tabs@3.0.0-alpha.0":
   "integrity" "sha512-QJZ9N7DT89RkP18btvQhJvxWuv/JkSwtm14ftfk+5LBbzyxyLsD2KP6jDrNhXgmkRMmIyEaMt2w2VmI6fQ6UAA=="
@@ -2206,16 +2206,6 @@
     "@babel/runtime" "^7.6.2"
     "@react-stately/list" "^3.2.2"
     "@react-stately/utils" "^3.0.0-alpha.1"
-    "@react-types/tabs" "3.0.0-alpha.2"
-
-"@react-stately/tabs@3.0.0-alpha.1":
-  "integrity" "sha512-aEG5lVLqmfx7A/dS5gkPXmD2ERAo69RtC0aHPo/Dw1XjzalYyo6QbQ5WtiuQxsCVx/naWGEJCcMEAD5/vt+cUQ=="
-  "resolved" "https://registry.npmjs.org/@react-stately/tabs/-/tabs-3.0.0-alpha.1.tgz"
-  "version" "3.0.0-alpha.1"
-  dependencies:
-    "@babel/runtime" "^7.6.2"
-    "@react-stately/list" "^3.2.2"
-    "@react-stately/utils" "^3.2.0"
     "@react-types/tabs" "3.0.0-alpha.2"
 
 "@react-stately/toggle@^3.2.1", "@react-stately/toggle@^3.2.3":
@@ -2353,13 +2343,6 @@
   dependencies:
     "@react-types/grid" "^3.0.0"
     "@react-types/shared" "^3.10.0"
-
-"@react-types/tabs@^3.0.1":
-  "integrity" "sha512-GvPVU9GAqImHFhU+Do+pdGK/vZA4kqA699Gly1V95DUmtdG3GSwTnwlvM/Sy80/F9fKZDGokZnQmBFo8MFZyIw=="
-  "resolved" "https://registry.npmjs.org/@react-types/tabs/-/tabs-3.0.1.tgz"
-  "version" "3.0.1"
-  dependencies:
-    "@react-types/shared" "^3.8.0"
 
 "@react-types/tabs@3.0.0-alpha.2":
   "integrity" "sha512-HQNS2plzuNhKPo88OGEW2Ja9aLeiWqgNqEemSxh0KAjkA8IsvDGaoQEpr9ZQIyBZ3PQIljvOpEJ/IwHU5LztrQ=="
