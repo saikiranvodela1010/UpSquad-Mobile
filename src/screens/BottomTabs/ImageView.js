@@ -4,7 +4,6 @@ import ImagesWrapper from '../../res/ImagesWrapper';
 
 import FbGrid from "react-native-fb-image-grid";
 import GallerySwiper from "react-native-gallery-swiper";
-import Swiper from 'react-native-swipe-image';
 
 
 
