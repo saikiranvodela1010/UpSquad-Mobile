@@ -144,7 +144,7 @@ const ImagesWrapper = {
     addvideoplus:require('../Images/addvideoplus.png'),
 
     dislike: require('../Images/dislike.png'),
-    
+    videoSample:require('../Images/video.mp4'),
 
 }
 export default ImagesWrapper;

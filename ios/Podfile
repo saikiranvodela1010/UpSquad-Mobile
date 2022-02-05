@@ -24,6 +24,10 @@ target 'Upsquad' do
 
   pod 'RNFS', :path => '../node_modules/react-native-fs'
 
+  pod 'RNVideoCompression', :path => '../node_modules/react-native-sili-video-compression'
+
+  pod 'react-native-compressor', :path => '../node_modules/react-native-compressor'
+
   target 'UpsquadTests' do
     inherit! :complete
     # Pods for testing

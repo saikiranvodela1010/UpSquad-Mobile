@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, Text, StyleSheet, TouchableOpacity, ImageBackground, Image, Dimensions, TextInput,ActivityIndicator, Platform,ScrollView,FlatList,DeviceEventEmitter } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ImageBackground, Image, Dimensions, TextInput, ActivityIndicator, Platform, ScrollView, FlatList, DeviceEventEmitter } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import Video, { FilterType } from 'react-native-video';
 import ImagesWrapper from '../res/ImagesWrapper';
@@ -52,26 +52,26 @@ export default class playersDetailScreen extends React.Component {
             organizationData: [],
             teamData: [],
             isLoading: false,
-            selfIntroVideos:[],
-            userId:'',
-            loginuserId:'',
-            url:''
+            selfIntroVideos: [],
+            userId: '',
+            loginuserId: '',
+            url: ''
 
         }
 
     }
-   async componentDidMount() {
+    async componentDidMount() {
 
         const userid = this.props.route.params.id;
-        this.setState({userId:userid});
+        this.setState({ userId: userid });
         const userDetails = await this.storagePrefs.getObjectValue("userDetails")
-        console.log('userDetails',userDetails,this.state.userId);
-        this.setState({loginuserId:userDetails.userId});
+        console.log('userDetails', userDetails, this.state.userId);
+        this.setState({ loginuserId: userDetails.userId });
         this.getUserInfo(userid);
-    
+
 
     }
-   
+
 
     async getUserInfo(userid) {
         this.setState({
@@ -82,11 +82,11 @@ export default class playersDetailScreen extends React.Component {
         //const data = '5e3bfad3cf7d530022e90429'
         const response = await this.apiHandler.requestGet(data, this.serviceUrls.getParticularUser)
         //console.log("User response", response)
-       
+
 
         this.setState({ userData: response.data })
 
-     
+
         this.setState({
             bannerImage: response.data.bannerImage.imageUrl,
             experience: response.data.experience,
@@ -96,8 +96,8 @@ export default class playersDetailScreen extends React.Component {
             posts: response.data.posts,
             friends: response.data.friends,
             request: response.data.requests,
-            selfIntroVideos:response.data.selfIntroductoryVideos,
-          
+            selfIntroVideos: response.data.selfIntroductoryVideos,
+
         })
         // console.log('selfIntroVideos', this.state.selfIntroVideos[0].videoUrl)
         const data1 = this.state.experience[0]
@@ -142,26 +142,26 @@ export default class playersDetailScreen extends React.Component {
         const team = this.state.organizationData[0]
         const data = this.state.organizationData.length >= 1 ? this.state.organizationData[0].teamsData : ''
         const data1 = data != '' ? data[0] : ''
-       // console.log('teamtile', data1)
-      //  console.log('Team data', this.state.organizationData[0])
+        // console.log('teamtile', data1)
+        //  console.log('Team data', this.state.organizationData[0])
         this.setState({
             data5: team,
             data6: data1
         })
     }
-thumbnail = async (uri) =>{
-    try {
-        RNThumbnail.get(uri).then((result) => {
-           console.log("Thumbnail path: " + result.path); // thumbnail path
-           this.setState({ thumbUri: result.path });
-        });
-    //   }
-    } catch (exp) {
-      console.log(exp);
+    thumbnail = async (uri) => {
+        try {
+            RNThumbnail.get(uri).then((result) => {
+                console.log("Thumbnail path: " + result.path); // thumbnail path
+                this.setState({ thumbUri: result.path });
+            });
+            //   }
+        } catch (exp) {
+            console.log(exp);
+        }
     }
-    }
-    renderLoader(){
-        return(
+    renderLoader() {
+        return (
             <Modal transparent={true}
                 visible={this.state.isLoading}>
                 <View style={{
@@ -175,7 +175,8 @@ thumbnail = async (uri) =>{
                         width: "25%",
                         height: "10%",
                         borderWidth: 1,
-                        borderRadius: 5,borderColor: "#58C4C6",marginBottom: 10 ,backgroundColor: '#58C4C6',justifyContent: 'center' }}>
+                        borderRadius: 5, borderColor: "#58C4C6", marginBottom: 10, backgroundColor: '#58C4C6', justifyContent: 'center'
+                    }}>
                         <ActivityIndicator size="large" color="#fff" />
                     </View>
                 </View>
@@ -199,16 +200,16 @@ thumbnail = async (uri) =>{
                 </View>
                 <ScrollView >
                     <View>
-                    <Image source={{ uri: this.state.bannerImage }} style={{ width: '100%', height: 250,marginTop:this.state.userId === this.state.loginuserId ? "0%":"0%" }} />
-                    {this.state.userId === this.state.loginuserId ?
-                    <View style={{marginTop:'-58%',alignItems:'flex-end',marginRight:'8%'}}>
-                    <Image source={ImagesWrapper.pencil} />
+                        <Image source={{ uri: this.state.bannerImage }} style={{ width: '100%', height: 250, marginTop: this.state.userId === this.state.loginuserId ? "0%" : "0%" }} />
+                        {this.state.userId === this.state.loginuserId ?
+                            <View style={{ marginTop: '-58%', alignItems: 'flex-end', marginRight: '8%' }}>
+                                <Image source={ImagesWrapper.pencil} />
+                            </View>
+                            :
+                            null
+                        }
                     </View>
-                    :
-                    null
-                    }
-                    </View>
-                    <View style={[styles.card,{ marginTop:this.state.userId===this.state.loginuserId?'45%':'-10%',}]}>
+                    <View style={[styles.card, { marginTop: this.state.userId === this.state.loginuserId ? '45%' : '-10%', }]}>
                         <Text style={styles.name}>{this.state.userData.firstName} {this.state.userData.lastName}</Text>
                         <Text style={styles.technologytext}>{this.state.userData.fieldOfstudyOrSpecialty} </Text>
                         <Text style={[styles.technologytext, { color: '#58C4C6' }]}>See more</Text>
@@ -253,111 +254,103 @@ thumbnail = async (uri) =>{
                         </View> */}
                         {/* <View style={styles.underline}></View> */}
                         {this.state.userId !== this.state.loginuserId ?
-                        <View>
-                        <Text style={styles.name}>Get in touch</Text>
-                        
-                        <View style={{ flexDirection: 'row', marginTop: 15, }}>
                             <View>
-                                <View style={styles.messagecard}>
-                                    <Image source={ImagesWrapper.sendmsg} style={{ marginLeft: 10 }} />
-                                    <Text style={[styles.technologytext, { color: '#58C4C6', marginLeft: 10, marginTop: 5, marginRight: 10 }]}>Send message</Text>
+                                <Text style={styles.name}>Get in touch</Text>
+
+                                <View style={{ flexDirection: 'row', marginTop: 15, }}>
+                                    <View>
+                                        <View style={styles.messagecard}>
+                                            <Image source={ImagesWrapper.sendmsg} style={{ marginLeft: 10 }} />
+                                            <Text style={[styles.technologytext, { color: '#58C4C6', marginLeft: 10, marginTop: 5, marginRight: 10 }]}>Send message</Text>
+                                        </View>
+                                        {/* <Text style={[styles.technologytext, { fontSize: 12, marginLeft: 10, marginTop: 10, marginLeft: 'auto' }]}>Usually replies the next day</Text> */}
+                                    </View>
+                                    <View>
+                                        <View style={[styles.messagecard, { marginLeft: 10 }]}>
+                                            <Image source={ImagesWrapper.scalendar} style={{ marginLeft: 10 }} />
+                                            <Text style={[styles.technologytext, { color: '#58C4C6', marginLeft: 10, marginTop: 5, marginRight: 10 }]}>Schedule a 1:1</Text>
+                                        </View>
+                                        {/* <Text style={[styles.technologytext, { fontSize: 12, marginLeft: 10, marginTop: 10, marginRight: 'auto' }]}>Available 3 times this month </Text> */}
+                                    </View>
                                 </View>
-                                {/* <Text style={[styles.technologytext, { fontSize: 12, marginLeft: 10, marginTop: 10, marginLeft: 'auto' }]}>Usually replies the next day</Text> */}
+
                             </View>
-                            <View>
-                                <View style={[styles.messagecard, { marginLeft: 10 }]}>
-                                    <Image source={ImagesWrapper.scalendar} style={{ marginLeft: 10 }} />
-                                    <Text style={[styles.technologytext, { color: '#58C4C6', marginLeft: 10, marginTop: 5, marginRight: 10 }]}>Schedule a 1:1</Text>
-                                </View>
-                                {/* <Text style={[styles.technologytext, { fontSize: 12, marginLeft: 10, marginTop: 10, marginRight: 'auto' }]}>Available 3 times this month </Text> */}
-                            </View>
-                        </View>
-                        
-                        </View>
-                        :
-                        null
+                            :
+                            null
                         }
                         <View style={styles.underline}></View>
-                        <View style={{flexDirection:'row',justifyContent:'space-between' }}>
-                        <Text style={styles.name}>Self Introduction</Text>
-                        {this.state.userId === this.state.loginuserId?
-                        <Image source={ImagesWrapper.pencil} style={{marginTop: 20}}/>
-                        :
-                        null
-                        }
+                        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                            <Text style={styles.name}>Self Introduction</Text>
+                            {this.state.userId === this.state.loginuserId ?
+                                <TouchableOpacity
+                                onPress={() => {
+                                    this.props.navigation.navigate('selfIntrosListScreen',{videosList:this.state.selfIntroVideos})
+                                }}>
+                                    <Image source={ImagesWrapper.pencil} style={{ marginTop: 20 }} />
+                                </TouchableOpacity>
+                                :
+                                null
+                            }
                         </View>
-                        <ScrollView  horizontal={true} showsHorizontalScrollIndicator={false} >
-                        <View style={{flexDirection:'row'}}>
-                            {this.state.selfIntroVideos.length >= 0 ?
-                         <FlatList  
-                          horizontal
-                          data={this.state.selfIntroVideos}
-                          renderItem={item => (
-                             
-                            <View style={{ width: 180, height: 130, borderWidth: 1, borderColor:'#F1F1F1',borderRadius:5, }}>
-                            <View style={{ flex: 1 }}>
-                           
-                                <Video
-                                    source={{ uri: item.item.videoUrl }}
-                                    style={{ flex: 1 }}
-                                    resizeMode='contain'
-                                    controls={false}
-                                    paused={false}
-                                    pictureInPicture={true}
-                                    ref={(ref) => {
-                                        this.player = ref
-                                    }}
-                                >
+                        <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} >
+                            <View style={{ flexDirection: 'row' }}>
+                                {this.state.selfIntroVideos.length >= 0 ?
+                                    <FlatList
+                                        horizontal
+                                        data={this.state.selfIntroVideos}
+                                        renderItem={item => (
 
-                                </Video>
-                            </View>
-                         
-                        </View>
-                       
-                          )}
-                        /> 
-                        :
-                        null
+                                            <View style={{ width: 180, height: 130, borderWidth: 1, borderColor: '#F1F1F1', borderRadius: 5, }}>
+
+                                        
+                                                <Image
+                                                    style={{ flex: 1, borderRadius: 5 }}
+                                                    source={{ uri: item.item.thumbnailUrl }}
+                                                />
+
+
+
+                                            </View>
+
+                                        )}
+                                    />
+                                    :
+                                    null
                                 }
-                        
-                        {/* <View style={{ width: 200, height: 110, borderWidth: 1 }}>
-                            <View style={{ flex: 1 }}>
-                                <Video
-                                    source={{ uri: "https://careerquoadmin.s3.amazonaws.com/self_introductory_videos/61f2264664f850104d245445_1643279953762.mp4" }}
-                                    style={{ flex: 1 }}
-                                    resizeMode='contain'
-                                    controls={false}
-                                    paused={false}
-                                    pictureInPicture={true}
-                                    ref={(ref) => {
-                                        this.player = ref
-                                    }}
-                                >
 
-                                </Video>
+
+                                {/* {this.state.userId === this.state.loginuserId ?
+                                    <TouchableOpacity onPress={() => {
+                                        this.props.navigation.navigate('SelfIntroduction')
+                                    }}>
+                                        <View style={[styles.addvideo, { marginLeft: 10 }]}>
+                                            <Image source={ImagesWrapper.addvideoplus} />
+                                        </View>
+                                    </TouchableOpacity>
+                                    :
+                                    null
+                                } */}
+                                {
+                                    this.state.userId === this.state.loginuserId && this.state.selfIntroVideos.length <= 4 ? <TouchableOpacity onPress={() => {
+                                        this.props.navigation.navigate('SelfIntroduction')
+                                    }}>
+                                        <View style={[styles.addvideo, { marginLeft: 10 }]}>
+                                            <Image source={ImagesWrapper.addvideoplus} />
+                                        </View>
+                                    </TouchableOpacity> : null
+                                }
+
+
+
+
                             </View>
-                        </View> */}
-
-                        {/* <Image source={ImagesWrapper.addvideo}/> */}
-                        {this.state.userId === this.state.loginuserId ?
-                        <TouchableOpacity onPress={()=>{
-                             this.props.navigation.navigate('SelfIntroduction')
-                        }}>
-                        <View style={[styles.addvideo,{marginLeft:10}]}>
-                            <Image source={ImagesWrapper.addvideoplus}/>
-                        </View>
-                        </TouchableOpacity>
-                        :
-                        null
-                        }
-                        </View>
                         </ScrollView>
                         <View style={[styles.underline, { marginTop: 20 }]}></View>
                         <Text style={[styles.name, { fontSize: 16 }]}>About</Text>
                         <Text style={[styles.technologytext, { fontSize: 14, marginTop: 10, marginRight: 'auto' }]}>{this.state.userData.about}</Text>
                         {/* {this.state.experience.length >= 1 ? */}
-                            <Text style={[styles.name, { fontSize: 16 }]}>Experience</Text> 
-                            {/* : null} */}
+                        <Text style={[styles.name, { fontSize: 16 }]}>Experience</Text>
+                        {/* : null} */}
                         {this.state.experienceall == false && this.state.experience.length >= 1 ?
 
                             <View>
@@ -489,7 +482,7 @@ thumbnail = async (uri) =>{
                                 </View> : null
 
                         }
-                        {this.state.communityall==true && this.state.organizationData.length>=1?
+                        {this.state.communityall == true && this.state.organizationData.length >= 1 ?
                             this.state.organizationData.map((data, key) => {
                                 return (<View>
                                     <Text style={[styles.name, { fontSize: 14, marginTop: 10 }]}>{data.universityName}</Text>
@@ -498,8 +491,8 @@ thumbnail = async (uri) =>{
                                             <Text style={[styles.technologytext, { fontSize: 14, marginTop: 10, }]}>{data.teamTitle}</Text>)
                                     })}
                                 </View>)
-                            }) :null}
-                        
+                            }) : null}
+
                         {this.state.organizationData.length >= 1 && this.state.communityall == false ?
                             <Text style={[styles.technologytext, { color: '#58C4C6', marginTop: 5, marginRight: 20 }]} onPress={() => this.setState({ communityall: true })}>See all</Text> : null}
                         {/* Modal code here */}
@@ -604,8 +597,8 @@ const styles = StyleSheet.create({
         paddingLeft: '9%',
         paddingRight: '9%',
         marginBottom: 30,
-        borderTopRightRadius:20,
-        borderTopLeftRadius:20
+        borderTopRightRadius: 20,
+        borderTopLeftRadius: 20
 
     },
     name: {
@@ -671,7 +664,7 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         borderWidth: 1,
         borderColor: '#F1F1F1',
-        shadowOpacity: Platform.OS=='ios'?null:0.3,
+        shadowOpacity: Platform.OS == 'ios' ? null : 0.3,
         flexDirection: 'row',
         alignItems: 'center',
         //  marginLeft:20
@@ -684,15 +677,15 @@ const styles = StyleSheet.create({
         fontSize: 14,
         color: '#1E1C24',
     },
-    addvideo:{ 
-        width: 180, 
+    addvideo: {
+        width: 180,
         height: 130,
-         borderWidth: 1 ,
-         backgroundColor:'#F1F1F1',
-         borderColor:'#F1F1F1',
-         borderRadius:5,
-         alignItems:'center',
-         justifyContent:'center'
-        }
+        borderWidth: 1,
+        backgroundColor: '#F1F1F1',
+        borderColor: '#F1F1F1',
+        borderRadius: 5,
+        alignItems: 'center',
+        justifyContent: 'center'
+    }
 
 });

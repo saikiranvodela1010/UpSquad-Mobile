@@ -161,7 +161,7 @@ const ProfilePicScreen = (props) => {
                     const imgUpload = {
                         // 'profileImg': 'data:image/jpeg;base64,'+imgBase64,
                         // 'profileImg': imgBase64,
-                        'profileImg': 'data:image/jpeg;base64,'+res,
+                        'profileImg': 'data:image/jpeg;base64,' + res,
                         'email': signupdetails.email,
                         'firstName': signupdetails.firstName,
                         'lastName': signupdetails.lastName,
@@ -177,7 +177,7 @@ const ProfilePicScreen = (props) => {
                         .then(response => {
                             console.log("Check1234", response.data.user.profileImg);
                             // console.log("updateuserinfo", response);
-            
+
                         })
                         .catch(error => {
                             console.log(error);
@@ -193,7 +193,7 @@ const ProfilePicScreen = (props) => {
                     const imgUpload = {
                         // 'profileImg': 'data:image/jpeg;base64,'+imgBase64,
                         // 'profileImg': imgBase64,
-                        'profileImg': 'data:image/jpeg;base64,'+res,
+                        'profileImg': 'data:image/jpeg;base64,' + res,
                         'email': signupdetails.email,
                         'firstName': signupdetails.firstName,
                         'lastName': signupdetails.lastName,
@@ -209,20 +209,20 @@ const ProfilePicScreen = (props) => {
                         .then(response => {
                             console.log("Check1234", response.data.user.profileImg);
                             // console.log("updateuserinfo", response);
-            
+
                         })
                         .catch(error => {
                             console.log(error);
                         });
                 });
-                
+
         }
         else {
             setimgBase64("Sowmini")
-            
+
         }
 
-       
+
         props.navigation.navigate('BioData')
 
     }
@@ -237,7 +237,7 @@ const ProfilePicScreen = (props) => {
                     <Image style={styles.backarrow} source={ImagesWrapper.back} />
                 </TouchableOpacity>
 
-                <View style={{ flex: 1, alignItems: 'flex-end', marginRight: 15,marginTop:5 }}>
+                <View style={{ flex: 1, alignItems: 'flex-end', marginRight: 15, marginTop: 5 }}>
                     {/* <TouchableOpacity onPress={()=>props.navigation.navigate('BioData')}> */}
 
                     <Text style={styles.skip} onPress={() => props.navigation.navigate('BioData')} >Skip</Text>

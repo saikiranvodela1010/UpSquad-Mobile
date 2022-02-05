@@ -1,4 +1,12 @@
 rootProject.name = 'Upsquard'
+include ':react-native-compressor'
+project(':react-native-compressor').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-compressor/android')
+include ':react-native-compressor'
+project(':react-native-compressor').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-compressor/android')
+include ':react-native-sili-video-compression'
+project(':react-native-sili-video-compression').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-sili-video-compression/android')
+include ':react-native-sili-video-compression'
+project(':react-native-sili-video-compression').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-sili-video-compression/android')
 include ':react-native-create-thumbnail'
 project(':react-native-create-thumbnail').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-create-thumbnail/android')
 include ':@react-native-async-storage_async-storage'

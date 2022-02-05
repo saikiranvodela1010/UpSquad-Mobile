@@ -45,7 +45,6 @@ export default class EventNotificationScreen extends React.Component {
                 <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
                     <View style={{ flex: 1, flexDirection: 'column' }}>
                         <Text style={styles.who}>Push notification when</Text>
-
                         <View style={styles.text}>
                             <CheckBox
                                 onClick={() => {
@@ -80,11 +79,8 @@ export default class EventNotificationScreen extends React.Component {
                                     ? '#1E1C24' : '#B1AAAA'
                             }]}>A event is starting in the next 30m</Text>
                         </View>
-
                         <View style={[styles.underline, { width: '85%', marginLeft: 'auto', marginRight: 'auto' }]}></View>
-
                         <Text style={styles.who}>Email notification when</Text>
-
 
                         <View style={styles.text}>
                             <CheckBox
@@ -103,9 +99,6 @@ export default class EventNotificationScreen extends React.Component {
                                     ? '#1E1C24' : '#B1AAAA'
                             }]}>Someone schedules or cancels a event</Text>
                         </View>
-
-
-
                         <View style={styles.text}>
                             <CheckBox
                                 onClick={() => {
@@ -123,6 +116,10 @@ export default class EventNotificationScreen extends React.Component {
                                     ? '#1E1C24' : '#B1AAAA'
                             }]}>A event is starting in the next 30m </Text>
                         </View>
+
+
+
+
                     </View>
 
 
