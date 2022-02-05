@@ -17,6 +17,8 @@ const ImagesWrapper = {
     gallery:require('../Images/gallery.png'),
     camera:require('../Images/camera.png'),
     manpic:require('../Images/manpic.png'),
+	 folder:require('../Images/Folders.png'),
+    clouddownloadImage:require('../Images/CloudArrowDown.png'),
     // choosebox:require('../Images/choosebox.png'),
     attachment:require('../Images/attachment.png'),
     camerablack:require('../Images/camerablack.png'),

@@ -32,9 +32,8 @@ import tabbar4 from './src/screens/tabbar4';
 import BioSuccessScreen from './src/screens/BioSuccessScreen';
 import damn from './src/screens/damn';
 import NewStory from './src/screens/NewStoryScreen'
-
-
-import colour from './src/screens/Coloring'
+import SplashScreen from './SplashScreen';
+import colour from './src/screens/Coloring';
 import PlayersScreen from './src/screens/BottomTabs/PlayersScreen';
 import PlayesDetailScreen from './src/screens/PlayersDetailScreen';
 import PlayerSearchScreen from './src/screens/BottomTabs/PlayerSearchScreen'
@@ -70,7 +69,10 @@ import NotfctnPostComntScreen from './src/screens/DrawerScreens/NotfctnPostComnt
 import SelfIntroVideosListScreen from './src/screens/SelfIntroVideosListScreen';
 import SocketTest from './src/screens/BottomTabs/SocketTest';
 import { ImageView } from './src/screens/BottomTabs/ImageView';
-import { getISUSERLOGEDIN, } from './src/res/GetUserInfo';
+import DateTimeScreen from './src/screens/BottomTabs/DateTimeScreen';
+import {getISUSERLOGEDIN,} from './src/res/GetUserInfo';
+import EventDetails from './src/screens/Events/Pre_events/EventDetails';
+import ImageViewer from './src/screens/Events/Pre_events/ImageViewer';
 
 
 
@@ -82,27 +84,29 @@ const Drawer = createDrawerNavigator();
 const MainScreens = () => {
   return (
     <Stack.Navigator
-      screenOptions={{
-        headerShown: false,
-      }}
-      initialRouteName='GetStarted'
-    // initialRouteName='playersDetail'
+    screenOptions={{
+      headerShown: false,
+    }}
+      initialRouteName='SplashScreen'
     >
-
-      <Stack.Screen name="GetStarted" component={GetStartedScreen} />
-      <Stack.Screen name="profilesuccess" component={ProfileSuccess} />
-      <Stack.Screen name="chatscreen" component={ChatScreen} />
-      <Stack.Screen name="chatsearch" component={ChatSearch} />
-      <Stack.Screen name="groupsearch" component={GroupSearch} />
-      <Stack.Screen name="createchatscreen" component={CreateChatScreen} />
-      <Stack.Screen name="groupscreen1" component={GroupScreen1} />
-      <Stack.Screen name="groupscreen2" component={GroupScreen2} />
-      <Stack.Screen name="removeuser" component={RemoveUser} />
-      <Stack.Screen name="notificationscreen" component={NotificationScreen} />
-      <Stack.Screen name="messagescreen" component={MessageScreen} />
-      <Stack.Screen name="SignUp" component={SignUpScreen} />
-      <Stack.Screen name="Account" component={AccountScreen} />
-      <Stack.Screen name="Team" component={TeamScreen} />
+       <Stack.Screen  name="ImageViewer" component={ImageViewer} />
+       <Stack.Screen  name="SplashScreen" component={SplashScreen} />
+       
+      
+      <Stack.Screen  name="GetStarted" component={GetStartedScreen} />
+      <Stack.Screen  name="profilesuccess" component={ProfileSuccess} />       
+      <Stack.Screen name="chatscreen"  component={ChatScreen}/>    
+      <Stack.Screen  name="chatsearch"  component={ChatSearch} />
+      <Stack.Screen name="groupsearch"component={GroupSearch} />
+      <Stack.Screen name="createchatscreen" component={CreateChatScreen}/>
+      <Stack.Screen name="groupscreen1" component={GroupScreen1}/>
+      <Stack.Screen  name="groupscreen2" component={GroupScreen2} />      
+      <Stack.Screen name="removeuser" component={RemoveUser}/>
+      <Stack.Screen name="notificationscreen"component={NotificationScreen}/> 
+      <Stack.Screen  name="messagescreen"component={MessageScreen} />
+      <Stack.Screen  name="SignUp"  component={SignUpScreen} />
+      <Stack.Screen  name="Account"  component={AccountScreen} />
+      <Stack.Screen name="Team"  component={TeamScreen} />
       <Stack.Screen name="Login" component={LoginScreen} />
       <Stack.Screen name="Forgot" component={ForgotPwdScreen} />
       <Stack.Screen name="Otp" component={OTPScreen} />
@@ -121,13 +125,15 @@ const MainScreens = () => {
       <Stack.Screen name="players" component={PlayersScreen} />
       <Stack.Screen name="playersDetail" component={PlayesDetailScreen} />
       <Stack.Screen
-        name="playerSearch"
-        component={PlayerSearchScreen} />
-
-      <Stack.Screen
-        name="createeventscreen"
-        component={CreateEventScreen} />
-      <Stack.Screen
+          name="playerSearch"
+          component={PlayerSearchScreen} />
+<Stack.Screen
+          name = "datetimescreen"
+          component = {DateTimeScreen}/>
+        <Stack.Screen
+          name="createeventscreen"
+          component={CreateEventScreen} />
+          <Stack.Screen
         name="schedulescreen"
         component={ScheduleScreen} />
       <Stack.Screen
@@ -139,60 +145,63 @@ const MainScreens = () => {
       <Stack.Screen
         name="viewschedulescreen"
         component={ViewScheduleScreen} />
-      <Stack.Screen
-        name="eventsquadscreen"
-        component={EventSquadScreen} />
-      <Stack.Screen
-        name="eventschedulescreen"
-        component={EventScheduleScreen} />
-      <Stack.Screen
-        name="meetingschedulescreen"
-        component={MeetingScheduleScreen} />
-      <Stack.Screen
-        name="createmeetingscreen"
-        component={CreateMeetingScreen} />
-      <Stack.Screen
-        name="createmeetingsurvey"
-        component={CreateMeetingSurvey} />
-      <Stack.Screen
-        name="setavailabilityscreen"
-        component={SetAvailabilityScreen} />
-      <Stack.Screen
-        name="eventselectionscreen"
-        component={EventSelectionScreen} />
-      <Stack.Screen
-        name="createventsurvey"
-        component={CreateEventSurvey} />
-      <Stack.Screen
-        name="switchcommunity"
-        component={SwitchCommunityScreen} />
-      <Stack.Screen
-        name="coachSearch"
-        component={CoachSearchScreen} />
-      <Stack.Screen
-        name="CommentScreen"
-        component={CommentScreen} />
-      <Stack.Screen
-        name="AddCommunityScren"
-        component={AddCommunityScreen} />
-      <Stack.Screen
-        name="AddCommunityScreenStep2"
-        component={AddCommunityScreenStep2} />
-      <Stack.Screen
-        name="SeetingScreen"
-        component={SeetingScreen} />
-      <Stack.Screen
-        name="CreatePostScreen"
-        component={CreatePostScreen} />
-      <Stack.Screen
-        name="DefaultVisibility"
-        component={DefaultVisibilityScreen} />
-      <Stack.Screen
-        name="PostVisibility"
-        component={PostVisibilityScreen} />
-      <Stack.Screen name="StorySetting" component={StorySettingsScreen} />
-      <Stack.Screen name="SelfIntroduction" component={SelfIntroductionVideoScreen} />
-      <Stack.Screen
+        <Stack.Screen
+          name="eventsquadscreen"
+          component={EventSquadScreen} />
+        <Stack.Screen
+          name="eventschedulescreen"
+          component={EventScheduleScreen} />
+        <Stack.Screen
+          name="meetingschedulescreen"
+          component={MeetingScheduleScreen} />
+        <Stack.Screen
+          name="createmeetingscreen"
+          component={CreateMeetingScreen} />
+        <Stack.Screen
+          name="createmeetingsurvey"
+          component={CreateMeetingSurvey} />
+        <Stack.Screen
+          name="setavailabilityscreen"
+          component={SetAvailabilityScreen} />
+        <Stack.Screen
+          name="eventselectionscreen"
+          component={EventSelectionScreen} />
+        <Stack.Screen
+          name="createventsurvey"
+          component={CreateEventSurvey} />
+           <Stack.Screen
+          name="switchcommunity"
+          component={SwitchCommunityScreen} />
+          <Stack.Screen
+          name="coachSearch"
+          component={CoachSearchScreen} />
+          <Stack.Screen
+          name="eventDetails"
+          component={EventDetails} />
+            <Stack.Screen
+          name = "CommentScreen"
+          component = {CommentScreen}/>
+          <Stack.Screen
+          name = "AddCommunityScren"
+          component = {AddCommunityScreen}/>
+           <Stack.Screen
+          name = "AddCommunityScreenStep2"
+          component = {AddCommunityScreenStep2}/>
+            <Stack.Screen
+          name = "SeetingScreen"
+          component = {SeetingScreen}/>
+          <Stack.Screen
+          name = "CreatePostScreen"
+          component = {CreatePostScreen}/>
+           <Stack.Screen
+          name = "DefaultVisibility"
+          component = {DefaultVisibilityScreen}/>
+          <Stack.Screen
+          name = "PostVisibility"
+          component = {PostVisibilityScreen}/>
+          <Stack.Screen name="StorySetting" component={StorySettingsScreen}/>
+         <Stack.Screen  name="SelfIntroduction"component={SelfIntroductionVideoScreen} />
+         <Stack.Screen
         name="DrawerNotification"
         component={DrawerNotificationScreen} />
       <Stack.Screen
@@ -217,13 +226,10 @@ const MainScreens = () => {
       <Stack.Screen
         name="NotfctnPostComnt"
         component={NotfctnPostComntScreen} />
-      <Stack.Screen
-        name="SocketTest"
-        component={SocketTest} />
-      <Stack.Screen
-        name="ImageView"
-        component={ImageView} />
-
+          <Stack.Screen
+          name = "ImageView"
+          component = {ImageView}/>
+          
     </Stack.Navigator>
   )
 }

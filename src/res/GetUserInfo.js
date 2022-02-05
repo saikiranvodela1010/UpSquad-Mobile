@@ -1,18 +1,44 @@
 import StoragePrefs from './StoragePrefs';
 import {useEffect} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { log } from 'react-native-reanimated';
+// import { log } from 'react-native-reanimated';
 let  storagePrefs = new StoragePrefs();
 
 let   logindetails={};
-let logedin="UNDEFINED";
+let loggedin="UNDEFINED";
+let universityDetails;
 
   async function  getuserLogedIn()
 {
 
-    logedin= await storagePrefs.getIsLogedIn(); 
+    loggedin= await storagePrefs.getIsLogedIn(); 
 }
 getuserLogedIn();
+
+storagePrefs.getObjectValue("universityDetails").then((val)=>{
+    universityDetails=val;
+    console.log(val,"DAMN");
+});
+
+export function  getUniversityDetails()
+{
+  return universityDetails;
+    
+}
+
+
+export function  setUniversityDetails(val)
+{
+  universityDetails=val;
+    
+}
+
+
+
+
+
+
+
 
 
 export function getISUSERLOGEDIN()

@@ -33,4 +33,14 @@ export default class ServiceUrls {
     getGroupTeams = this.mainUrl + '/teams/getGroupSessionTeams';
     deletePost = this.socialUrl + '/user/post'
     deleteSelfIntroVideo = this.mainUrl + '/users/deleteSelfIntroductoryVideo'
+    myPosts = this.socialUrl+'/feed/myposts';
+    getUserSettings=this.mainUrl+'/settings/getUserSettings/';
+    updateVisibilitySocialSettings = this.mainUrl+'/settings/updateVisibilitySocialSettings';
+    updateEventNotificationSettings = this.mainUrl + '/settings/updateEventNotificationSettings';
+    updateMettingNotificationSettings= this.mainUrl +'/settings/updateMettingNotificationSettings';
+    updateMessageNotificationSettings= this.mainUrl +'/settings/updateMessageNotificationSettings';
+    updatePostCommentNotificationSettings= this.mainUrl +'/settings/updatePostCommentNotificationSettings';
+    getUserAvailability = this.mainUrl+ '/userAvailability'
+    addUserAvailabilty = this.mainUrl+'/userAvailability/defualtAvailability'
+
 }

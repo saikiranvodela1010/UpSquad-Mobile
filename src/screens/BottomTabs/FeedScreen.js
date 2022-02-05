@@ -1,5 +1,5 @@
 import React from 'react'
-import {  View, Text, StyleSheet, TouchableOpacity, Image,TextInput,SafeAreaView,Platform,FlatList, DeviceEventEmitter,ActivityIndicator,Dimensions} from 'react-native';
+import {  View, Text, StyleSheet, TouchableOpacity, Image,TextInput,SafeAreaView,Platform,FlatList, DeviceEventEmitter,ActivityIndicator,Dimensions,RefreshControl} from 'react-native';
 import ImagesWrapper from '../../res/ImagesWrapper';
 import Fonts from '../../res/Fonts';
 import { ScrollView, TouchableHighlight } from 'react-native-gesture-handler';
@@ -13,10 +13,15 @@ import StoragePrefs from '../../res/StoragePrefs';
 import Share from 'react-native-share';
 import { forEach } from 'lodash';
 import axios from 'axios';
-import { SliderBox } from "react-native-image-slider-box";
 import FbGrid from "react-native-fb-image-grid";
+import AntDesignIcon from 'react-native-vector-icons/AntDesign';
+import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
+import RNPickerSelect, {defaultStyles} from 'react-native-picker-select';
+import { Chevron } from 'react-native-shapes';
 
+import { setUniversityDetails } from '../../res/GetUserInfo';
 
+import io from 'socket.io-client';
 
  class MeetingsScreen extends React.Component {
     serviceUrls = new ServiceUrls();
@@ -25,7 +30,6 @@ import FbGrid from "react-native-fb-image-grid";
     
     constructor(props){
         super(props);
-       
         this.state={
             leadercolor:'green',
             tapstate:false,
@@ -47,7 +51,8 @@ import FbGrid from "react-native-fb-image-grid";
             share: false,
             likedPosts: [],
             communityLogo : "" ,
-            dataAvailable: "" 
+            dataAvailable: "" ,
+            categoryDropDown: "All posts",
         }
        
     }
@@ -60,10 +65,10 @@ import FbGrid from "react-native-fb-image-grid";
             email : userDetails.userEmail
         })
         DeviceEventEmitter.addListener("refresh",this.getPosts);
-        DeviceEventEmitter.addListener("UpdateFeed",this.updateFeed);
+        this.subscription = DeviceEventEmitter.addListener("UpdateFeed",this.updateFeed);
         return new Promise((resolve, reject) => {
             this.getCommunityDetails()
-            .then(()=>  {return this.getPosts();})
+            .then(()=>  {return this.state.categoryDropDown === "All posts"? this.getPosts(): this.getMyPost();})
             .then(()=>  {return this.getUniversityImages();})
             .then(() => {return this.getUserProfile();})
             .then(() => {return  this.setState({isLoading: false})})
@@ -74,23 +79,101 @@ import FbGrid from "react-native-fb-image-grid";
         
     }
     async componentDidUpdate(){
-        const universityDetsils = await this.storagePrefs.getObjectValue("universityDetsils")
-        this.setState({communityName:universityDetsils.universityName});
+        const universityDetails = await this.storagePrefs.getObjectValue("universityDetails")
+        this.setState({communityName:universityDetails.universityName});
     }
 
+    componentWillUnmount(){
+        if(this.subscription){
+            this.subscription.remove()
+        }
+    }
+
+    socketConnect()  {
+        this.socket = io(this.serviceUrls.socialUrl); 
+            if (!this.socket.connected) {
+                this.socket.connect();
+            }
+        this.socket.on("connect", () => {
+            console.log("socketID>>>>",this.socket.id); // x8WIv7-mJelg7on_ALbx
+        });
+        this.socket.on("disconnect", (reason) => {
+            console.log("DISCONNECTED SOCKET",reason)
+            // if (reason !== "forced close") {
+            //the disconnection was initiated by the server, you need to reconnect manually
+            this.socket.connect();
+            //}
+            // else the socket will automatically try to reconnect
+        });
+            this.socket.on("posts", (data) => {
+                switch(data.action) {
+                    case "post like":
+                        if(data.post.university_ID!=null & data.post.university_ID!=undefined){
+                            if(data.post.university_ID === this.state.universityId){
+                                console.log("CHEKCING DATA",data.post._id)
+                                this.setState({likedPosts: [...this.state.likedPosts,data.post._id]})
+                                for(i=0;i<this.state.postData.length;i++){
+                                    if(this.state.postData[i]._id == data.post._id){
+                                        this.state.postData.splice(i, 1, data.post);
+                                    } 
+                                }
+                            }
+                        }
+                        
+                        
+                    break;
+                    case "remove post like":
+                        if(data.post.university_ID!=null & data.post.university_ID!=undefined){
+                            if(data.post.university_ID === this.state.universityId){
+                                let index = this.state.likedPosts.indexOf(data.post._id);
+                                if (index != -1) this.state.likedPosts.splice(index, 1);
+                                for(i=0;i<this.state.postData.length;i++){
+                                    if(this.state.postData[i]._id == data.post._id){
+                                        this.state.postData.splice(i, 1, data.post);
+                                    } 
+                                }
+                            }
+                        }
+                        
+                    break; 
+                    case "delete post":
+                        for(i=0;i<this.state.postData.length;i++){
+                            if(this.state.postData[i]._id === data.postId){
+                                const filteredData = this.state.postData.filter(item => item._id !== data.postId);
+                                this.setState({ postData: filteredData});
+                            }
+                        }
+                    break;
+                    // case "comment":
+                    //     for(i=0;i<this.state.postData.length;i++){
+                    //         if(this.state.postData[i]._id === data.comment.postId){
+                    //             console.log("RAVIKIRAN AVASARALA",data.comment.comment);
+                    //             console.log("RavikiranChecking",this.state.postData[i].comments) 
+                    //             this.state.postData[i].comments.push(data.comment.comment)
+                    //             console.log(this.state.postData[i].comments)
+                    //         }
+                    //     }
+                    //     break;
+
+                }
+            })
+          
+    }
     updateFeed = async () => {
-        const universityDetsils = await this.storagePrefs.getObjectValue("universityDetsils")
+        const universityDetails = await this.storagePrefs.getObjectValue("universityDetails")
         const userDetails = await this.storagePrefs.getObjectValue("userDetails")
         this.setState({
-            universityName:universityDetsils.universityName,
-            universityId: universityDetsils._id,
-            communityName: universityDetsils.universityName,
-            communityLogo: universityDetsils.universityLogo,
+            universityName:universityDetails.universityName,
+            universityId: universityDetails._id,
+            communityName: universityDetails.universityName,
+            communityLogo: universityDetails.universityLogo,
             userId : userDetails.userId,
             email : userDetails.userEmail
         })
         return new Promise((resolve, reject) => {
+        this.state.categoryDropDown === "All posts"? 
         this.getPosts()
+        : this.getMyPost()
         .then(() =>  {return this.getUniversityImages();})
         .then(() => {return this.getUserProfile();})
         .then(() => {return  this.setState({isLoading: false})})
@@ -106,9 +189,6 @@ import FbGrid from "react-native-fb-image-grid";
             "userId" : userID
         }
         const response = await this.apiHandler.requestPost(data,this.serviceUrls.postLike);
-        if(response.message == "You have liked this post"){
-            this.setState({likedPosts: [...this.state.likedPosts, postID]})
-        }
     }
 
     async disLikePost(postID, userID){
@@ -125,8 +205,8 @@ import FbGrid from "react-native-fb-image-grid";
           })
         .then(response => {
             if(response.data.message === "Liked removed!"){
-                let index = this.state.likedPosts.indexOf(postID);
-                if (index != -1) this.state.likedPosts.splice(index, 1);
+                //let index = this.state.likedPosts.indexOf(postID);
+                //if (index != -1) this.state.likedPosts.splice(index, 1);
             }
         })
         .catch(error=> {
@@ -145,10 +225,9 @@ import FbGrid from "react-native-fb-image-grid";
         .then(response => {
             console.log("response.message",response.data.message)
             if(response.data.message === "Post successfully deleted"){
-                const filteredData = this.state.postData.filter(item => item._id !== postID);
-                console.log("filtered Data",filteredData)
-                this.setState({ postData: filteredData,dotsmemu: false  });
+                this.setState({dotsmemu: false})
             }
+
         })
         .catch(error=> {
             console.log("error herer",error);
@@ -156,10 +235,13 @@ import FbGrid from "react-native-fb-image-grid";
     }
 
     async getCommunityDetails() {
+        const universityDetails = await this.storagePrefs.getObjectValue("universityDetails")
         const communityData={
-          "email": this.state.email,
-          "userID": this.state.userId
-        }
+            "email": this.state.email,
+            "userID": this.state.userId
+          }
+        
+
         const response = await this.apiHandler.requestPost(communityData,this.serviceUrls.getCommunities);
         if(response.data!=null && response.data.length>0){
             this.setState({
@@ -168,26 +250,72 @@ import FbGrid from "react-native-fb-image-grid";
               communityName: response.data[0].universityName,
               communityLogo : response.data[0].universityLogo, 
             });
-            const universityDetsils =  {
+            const universityDetails =  {
                 "_id":this.state.universityId,
                 "universityName":this.state.universityName,
                 "universityLogo":this.state.communityLogo,
                }
-               const data = await this.storagePrefs.setObjectValue("universityDetsils",universityDetsils);
+               setUniversityDetails(universityDetails); 
+               const data = await this.storagePrefs.setObjectValue("universityDetails",universityDetails);
           } else{
             this.setState({
-              universityName:"",
-              universityId: "",
-              communityName: ""
+              universityName:"UpSquad",
+              universityId: "5ee072287a57fb54881a81db",
+              communityName: "UpSquad",
+              communityLogo:""
             });
+            const universityDetails =  {
+                "_id":this.state.universityId,
+                "universityName":this.state.universityName,
+                "universityLogo":this.state.communityLogo,
+               }
+
+               setUniversityDetails(universityDetails); 
+
+               const data = await this.storagePrefs.setObjectValue("universityDetails",universityDetails);
           }
+
           
+    }
+
+    getMyPost = async ()=>{
+        const data = {
+            "universityId" : this.state.universityId,
+            "userId": this.state.userId,
+            "page":-1,
+            "limit": 10
+        }
+        const response = await this.apiHandler.requestPost(data,this.serviceUrls.myPosts)
+        console.log("response",response);
+        if(response.posts){
+            this.socketConnect();
+        }
+        if(response.posts != null && response.posts.length != 0 ){
+            response.posts.forEach((item,index)=> {
+                 for(i=0;i<item.likes.length;i++){
+                     if(item.likes[i]._id === this.state.userId){
+                         this.setState({likedPosts: [...this.state.likedPosts, item._id]})
+                     }
+                 }
+            })
+            this.setState({postData: response.posts});
+        } else {
+            this.setState({postData:[],dataAvailable: "No Posts Found"})
+        }
     }
 
     getPosts = async () => {
         //const data = '5ed8d9509e623f00221761a1/All/true/5f5892a1b205b1387d5cafb/All'
         const data = this.state.universityId+'/All/'+this.state.isProfessional+"/"+this.state.userId+'/All'
         const response = await this.apiHandler.requestGet(data,this.serviceUrls.getPosts);
+        if(response.posts){
+            this.socketConnect();
+        }
+        for(i=0;i<response.posts.length;i++){
+            if(!response.posts[i]._id){
+                response.posts.splice(i,1)
+            }
+        }
         if(response.posts != null && response.posts.length != 0 ){
             response.posts.forEach((item,index)=> {
                  for(i=0;i<item.likes.length;i++){
@@ -236,20 +364,20 @@ import FbGrid from "react-native-fb-image-grid";
         }
     }
 
-        customShare = async (postID,category,content,postImage) =>  {
-            const shareOptions  =  {
-                urls:['https://social.upsquad.com/postmetainfo/'+postID, postImage],
-                title:category,
-                message:content,
-            }
-            Share.open(shareOptions)
-            .then((res) => {
-                console.log(res);
-            })
-            .catch((err) => {
-                err && console.log(err);
-            });
-        }
+        // customShare = async (postID,category,content,postImage) =>  {
+        //     const shareOptions  =  {
+        //         urls:['https://social.upsquad.com/postmetainfo/'+postID, postImage],
+        //         title:category,
+        //         message:content,
+        //     }
+        //     Share.open(shareOptions)
+        //     .then((res) => {
+        //         console.log(res);
+        //     })
+        //     .catch((err) => {
+        //         err && console.log(err);
+        //     });
+        // }
          onPress = (url) => {
             // url and index of the image you have clicked alongwith onPress event.
             console.log("url",url);
@@ -301,23 +429,6 @@ import FbGrid from "react-native-fb-image-grid";
             ?(this.setState({leadercolor:'green'})):(this.setState({leadercolor:'black'}))
     }
 
-    renderShareModal() {
-        return(
-            <Modal
-                transparent={true}
-                isVisible={this.state.share}
-                onBackdropPress={() => this.setState({share:false})}
-                onRequestClose={() => {
-                    this.setState({share:false})
-                }}  
-            >
-                    <View style={{backgroundColor:'white',borderTopLeftRadius: 20,borderTopRightRadius:20,height:'50%',marginTop:660,width:'110%',marginLeft:-18}}>
-                        
-                    </View>
-                    </Modal>
-        )
-    }
-
     renderLoader(){
         return(
             <Modal transparent={true}
@@ -341,12 +452,77 @@ import FbGrid from "react-native-fb-image-grid";
         )
     }
 
+    FlatListHeader = () => {
+        const placeholder = {};
+        return (
+            <>
+            <View style={{ borderWidth: 1, borderColor: '#F1F1F1' }}></View>
+                
+            <View style = {{
+                marginTop: 16,
+                marginLeft: 24,
+                width: '30%',
+                height: Platform.OS === 'ios' ? 40 : 40,
+                borderWidth: 1,
+                borderColor: '#F1F1F1',
+                borderRadius: 2,
+                marginBottom:16
+            }}>
+                        <RNPickerSelect
+                        placeholder={placeholder}
+                           items={[ { label: 'All posts', value: 'All posts' },
+                           { label: 'My posts', value: 'My posts' },]}
+                           onValueChange={value => {
+                            this.setState({categoryDropDown: value})
+                                if(value === 'All posts'){
+                                    this.getPosts();
+                                } else{
+                                    this.getMyPost()
+                                }
+                            }}
+                            style={{
+                            inputAndroid: {
+                                backgroundColor: '#F1F1F1',
+                                justifyContent: 'space-around',
+                                fontFamily: Fonts.mulishRegular,
+                                fontSize:14,
+                                fontWeight:'400',
+                                color:"#1E1C24"
+                            },
+                            inputIOS : {
+                                backgroundColor: '#F1F1F1',
+                                justifyContent: 'space-around',
+                                padding: 15,
+                                fontFamily: Fonts.mulishRegular,
+                                fontSize:14,
+                                fontWeight:'400',
+                                color:"#1E1C24"
+                            },
+                            iconContainer: {
+                                top: 5,
+                                right: 15,
+                                
+                            },
+                            }}
+                            value={this.state.categoryDropDown}
+                            useNativeAndroidPickerStyle={false}
+                            textInputProps={{ justifyContent:"center" }}
+                            Icon={() => {
+                                return <Chevron size={1.5} color="#1E1C24" style = {{marginTop: Platform.OS === 'ios'? 10 : 10}}/>;
+                            }}
+                        />
+                        </View>
+            <View style={{ borderWidth: 0.5, borderColor: '#959494' }}></View>
+            </>
+        )
+    }
+
     
     render(){
         return(
             <SafeAreaView style={{flex:1,backgroundColor:'#FFFFFF'}}>
                 {this.renderLoader()}
-                    <View style={[styles.header]}>
+                <View style={[styles.header]}>
                     <TouchableOpacity onPress={()=> this.props.navigation.openDrawer()}>
                     <Image source= {{uri : this.state.communityLogo!=null && this.state.communityLogo!="" ? this.state.communityLogo: "https://www.careerquo.com/assets/images/18.png" }}
                             style={{marginLeft:25,height: 30,width: 30, borderRadius: 25}}
@@ -369,10 +545,11 @@ import FbGrid from "react-native-fb-image-grid";
                     </TouchableOpacity>
                     </View>
                 </View>
-                <View style={{ borderWidth: 1, borderColor: '#F1F1F1' }}></View>
+                <View style={{ borderWidth: 0.5, borderColor: '#959494' }}></View>
                 {this.state.postData!=null && this.state.postData.length!=0?
                     <FlatList
                     data = {this.state.postData}
+                    ListHeaderComponent = { this.FlatListHeader } 
                     renderItem={({item})=> (
                         <View style = {{ marginLeft : 25}}>
                             <View style={{flexDirection:'row',justifyContent:'space-between',marginTop:15,alignContent: 'center'}}>
@@ -395,11 +572,20 @@ import FbGrid from "react-native-fb-image-grid";
                                 {item.content}
                             </Text>  
                                                    
-                                <View style = {{ marginLeft :-25}}>
+                                <View style = {{ marginLeft :-10,marginRight:15}}>
                                     {item.postImage!=null && item.postImage.length!=0 ? 
                                     <FbGrid images = {item.postImage}
-                                    style = {{height : 300,width: Dimensions.get('window').width}}
-                                    onPress ={()=> {this.onPress(item.postImage)}}/>
+                                    style = {{height : 300,width:'100%'}}
+                                    onPress ={()=>  this.props.navigation.navigate('CommentScreen',{
+                                        content:item.content,
+                                        postID: item._id,
+                                        creatorImg : item.creator.profileImg !=null && item.creator.profileImg!="" ? item.creator.profileImg : "https://www.careerquo.com/assets/images/18.png",
+                                        firstName : item.creator.firstName,
+                                        lastName: item.creator.lastName,
+                                        postCreatedAt: item.createdAt,
+                                        comments: item.comments,
+                                        postImage: item.postImage
+                                    })}/>
                                     
                                     : null}
                                     
@@ -455,14 +641,29 @@ import FbGrid from "react-native-fb-image-grid";
                                 : null}
                                     {item.likes.length>0 ? <Text style={{fontSize:12,color:'#868585',fontFamily:Fonts.mulishBold,fontWeight:'400',marginLeft:5,marginTop:2}}>Like by</Text>: null}
                                     <Text style={{fontSize:12,color:'#1E1C24',fontFamily:Fonts.mulishBold,fontWeight:'400',marginLeft:5,marginTop:2}}>
-                                        {item.likes[0].firstName} {item.likes[0].lastName} {item.likes.length >1 ? "and": null } {item.likes.length >1 ? item.likes.length-1 : null } {item.likes.length >1 ? "others" : null}
+                                    {item.likes.some(obj=>obj._id === this.state.userId) ? "You": item.likes[0].firstName!=undefined ? item.likes[0].firstName: null  + " " + item.likes[0].lastName!=undefined ? item.likes[0].lastName: null} {item.likes.length >1 ? "and": null } {item.likes.length >1 ? item.likes.length-1 : null } {item.likes.length >1 ? "others" : null}
+
                                     </Text>
                                 </View>
+                                <TouchableOpacity onPress = {()=>{
+                                    this.props.navigation.navigate('CommentScreen',{
+                                        content:item.content,
+                                        postID: item._id,
+                                        creatorImg : item.creator.profileImg !=null && item.creator.profileImg!="" ? item.creator.profileImg : "https://www.careerquo.com/assets/images/18.png",
+                                        firstName : item.creator.firstName,
+                                        lastName: item.creator.lastName,
+                                        postCreatedAt: item.createdAt,
+                                        comments: item.comments,
+                                        postImage: item.postImage
+                                    })
+                                }}>
                                 <Text style={{fontSize:12,color:'#868585',fontFamily:Fonts.mulishBold,fontWeight:'400',marginLeft:5,marginTop:2,marginRight:22}}>{item.comments.length } {item.comments.length > 1 ? "comments" : "comment"}</Text>
+                                </TouchableOpacity>
+                                
                             </View>
                             <View style={{ borderWidth: 1, borderColor: '#F1F1F1',marginTop:22,marginRight: '5%'}}></View>
-                            <View style={{flexDirection:'row',marginTop:20,}}>
-                                <TouchableOpacity
+                            <View style={{flexDirection:'row',marginTop:20,justifyContent:'space-around',marginLeft:-25}}>
+                                {/* <TouchableOpacity 
                                 onPress ={()=> {
                                 {this.state.likedPosts.indexOf(item._id) > -1 ? 
                                 this.disLikePost(item._id,this.state.userId) : 
@@ -478,9 +679,22 @@ import FbGrid from "react-native-fb-image-grid";
                                         />}
                                         <Text style={{color: this.state.likedPosts.indexOf(item._id) > -1 ?  '#58C4C6' :'#868585' ,fontSize:14,marginTop:3,fontFamily:Fonts.mulishRegular,fontWeight:'600'}}>Like</Text>
                                     </View>
-                                </TouchableOpacity>
+                                </TouchableOpacity> */}
+                                <AntDesignIcon.Button
+                                    name="like1"
+                                    color={this.state.likedPosts.indexOf(item._id) > -1 ?  '#58C4C6' :'#868585'}
+                                    backgroundColor={this.state.likedPosts.indexOf(item._id) > -1 ?  '#FFFFFF' :'#FFFFFF'}
+                                    onPress={()=>{this.state.likedPosts.indexOf(item._id) > -1 ? 
+                                        this.disLikePost(item._id,this.state.userId) : 
+                                        this.postLike(item._id,this.state.userId)}}
+                                >
+                                    <Text style={{ fontFamily: Fonts.mulishRegular, fontSize: 14, fontWeight:'600',color: this.state.likedPosts.indexOf(item._id) > -1 ?  '#58C4C6' :'#868585'
+                                }}>
+                                        Like
+                                    </Text>
+                                </AntDesignIcon.Button>
                                 
-                                <TouchableOpacity 
+                                {/* <TouchableOpacity style = {{backgroundColor:'#000'}}
                                 onPress={() => {
                                     this.props.navigation.navigate('CommentScreen',{
                                         content:item.content,
@@ -499,9 +713,33 @@ import FbGrid from "react-native-fb-image-grid";
                                     />
                                     <Text style={{color:'#868585',fontSize:14,marginTop:3,fontFamily:Fonts.mulishRegular,fontWeight:'600'}}>Comment</Text> 
                                 </View>
-                                </TouchableOpacity>
+                                </TouchableOpacity> */}
+                                <FontAwesomeIcon.Button
+                                    name="commenting"
+                                    color= {'#868585'}
+                                    backgroundColor={'#FFFFFF'}
+                                    //style={{marginLeft:'25%'}}
+                                    onPress={()=>{
+                                        this.props.navigation.navigate('CommentScreen',{
+                                            content:item.content,
+                                            postID: item._id,
+                                            creatorImg : item.creator.profileImg !=null && item.creator.profileImg!="" ? item.creator.profileImg : "https://www.careerquo.com/assets/images/18.png",
+                                            firstName : item.creator.firstName,
+                                            lastName: item.creator.lastName,
+                                            postCreatedAt: item.createdAt,
+                                            comments: item.comments,
+                                            postImage: item.postImage
+                                        })
+                                    }}
+                                >
+                                    <Text style={{ fontFamily: Fonts.mulishRegular, fontSize: 14, fontWeight:'600',color: '#868585'
+                                }}>
+                                        Comment
+                                    </Text>
+                                </FontAwesomeIcon.Button>
 
-                                <TouchableOpacity onPress = {() => {
+
+                                {/* <TouchableOpacity  onPress = {() => {
                                     this.customShare(item._id,item.category,item.content,item.postImage[0])
 
                                 }} >
@@ -511,28 +749,63 @@ import FbGrid from "react-native-fb-image-grid";
                                 />
                                 <Text style={{color:'#868585',fontSize:14,marginTop:3,fontFamily:Fonts.mulishRegular,fontWeight:'600'}}>Share</Text>
                                 </View>
-                                </TouchableOpacity>
+                                </TouchableOpacity> */}
+                                <FontAwesomeIcon.Button
+                                    name="share"
+                                    color= {'#868585'}
+                                    backgroundColor={'#FFFFFF'}
+                                    //style = {{marginLeft:'10%'}}
+                                    onPress={()=>{
+                                        const shareOptions  =  {
+                                            urls:['https://social.upsquad.com/postmetainfo/'+item._id, item.postImage[0]],
+                                            title:item.category,
+                                            message:item.content,
+                                        }
+                                        Share.open(shareOptions)
+                                        .then((res) => {
+                                            console.log(res);
+                                        })
+                                        .catch((err) => {
+                                            err && console.log(err);
+                                        });
+                                    }}
+                                >
+                                    <Text style={{ fontFamily: Fonts.mulishRegular, fontSize: 14, fontWeight:'600',color: '#868585'
+                                }}>
+                                     Share
+                                    </Text>
+                                </FontAwesomeIcon.Button>
                             </View>
                             <View style={{ borderWidth: 1, borderColor: '#F1F1F1',marginTop:22,marginRight:'5%'}}></View>
                         </View>
-                    )}/>: 
+                    )}/> : 
+                    <>
+                    <FlatList
+                    data = {this.state.postData}
+                    ListHeaderComponent = { this.FlatListHeader } 
+                    />
                     <View
-          style={{
-              flex: 4,
-            justifyContent: 'center',
-            backgroundColor: '#ffff',
-            height: '100%',
-          }}>
-          <Text
-            style={{
-              textAlign: 'center',
-              color: '#868585',
-              fontFamily: Fonts.mulishSemiBold,
-              fontSize: 24
-            }}>
-            {this.state.dataAvailable}
-          </Text>
-        </View>}
+                        style={{
+                            flex: 1,
+                            justifyContent: 'center',
+                            backgroundColor: '#ffff',
+                            //height: '100%',
+                        }}>
+                        <Text
+                            style={{
+                            textAlign: 'center',
+                            color: '#868585',
+                            fontFamily: Fonts.mulishSemiRegular,
+                            fontSize: 24
+                            }}>
+                            {this.state.dataAvailable}
+                        </Text>
+                    </View>
+                    </>
+                    
+                    
+                    
+                    }
                     {(this.state.isProfessional == true && this.state.coachCreatePost == true) || 
                     (this.state.isProfessional ==  false && this.state.playerCreatePost == true) ? 
                     <View style={{ flex: 1, justifyContent: 'flex-end', alignItems: 'flex-end' }}>
@@ -698,9 +971,11 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         // paddingLeft: '9%',
-        marginTop: Platform.OS == 'ios'? 0 : 25,
-        marginBottom: 25,
+        marginTop: Platform.OS == 'ios'? 10 : 25,
+        marginBottom: Platform.OS == 'ios' ? 10 : 15,
         // borderBottomWidth:1
+        justifyContent: 'center',
+        alignItems: 'center'
       },
     subheader:{
         flexDirection:'row',
@@ -807,13 +1082,11 @@ const styles = StyleSheet.create({
         fontSize: 20,
         marginTop: 10
       }
-   
-   
-   
 })
 
 
 
 export default MeetingsScreen;
+
 
 
